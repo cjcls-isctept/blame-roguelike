@@ -1,0 +1,1 @@
+java -Djava.library.path=res/lwjgl/native/windows -jar Blame.jar
