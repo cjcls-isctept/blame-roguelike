@@ -1,4 +1,4 @@
-package su.msk.dunno.blame.listeners;
+package su.msk.dunno.blame.main.support.listeners;
 
 public abstract class Listener 
 {

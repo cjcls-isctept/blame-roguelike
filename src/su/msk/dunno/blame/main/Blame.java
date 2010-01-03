@@ -2,7 +2,6 @@ package su.msk.dunno.blame.main;
 
 import java.util.Calendar;
 
-
 import org.lwjgl.LWJGLException;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.Display;
@@ -12,13 +11,13 @@ import org.lwjgl.util.glu.GLU;
 
 import su.msk.dunno.blame.containers.LivingList;
 import su.msk.dunno.blame.field.Field;
-import su.msk.dunno.blame.listeners.EventManager;
-import su.msk.dunno.blame.listeners.KeyListener;
 import su.msk.dunno.blame.livings.Cibo;
 import su.msk.dunno.blame.livings.Killy;
 import su.msk.dunno.blame.main.support.Color;
 import su.msk.dunno.blame.main.support.Messages;
 import su.msk.dunno.blame.main.support.MyFont;
+import su.msk.dunno.blame.main.support.listeners.EventManager;
+import su.msk.dunno.blame.main.support.listeners.KeyListener;
 
 public class Blame 
 {
@@ -105,6 +104,7 @@ public class Blame
 		Messages.instance().showMessages();
 		MyFont.instance().drawString((playCibo?"Cibo":"Killy"), 450, 460, 0.2f, Color.WHITE);
 		MyFont.instance().drawString("HP: "+(playCibo?cibo:killy).getHealth(), 450, 450, 0.2f, Color.WHITE);
+		MyFont.instance().drawString(""+scale, 450, 440, 0.2f, Color.WHITE);
         
 		Display.sync(framerate);
 		Display.update();
@@ -507,14 +507,14 @@ public class Blame
         {
         	public void onKeyDown()
         	{
-        		scale++;
+        		if(scale < 80)scale++;
         	}
         });
 		EventManager.instance().addListener(Keyboard.KEY_SUBTRACT, new KeyListener()
         {
         	public void onKeyDown()
         	{
-        		scale--;
+        		if(scale > 5)scale--;
         	}
         });
 		EventManager.instance().addListener(Keyboard.KEY_1, new KeyListener()

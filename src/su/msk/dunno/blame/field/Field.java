@@ -2,7 +2,6 @@ package su.msk.dunno.blame.field;
 
 import java.util.LinkedList;
 
-
 import org.lwjgl.opengl.GL11;
 
 import su.msk.dunno.blame.field.gen_algorithmes.RecursiveDivisionMethod;
@@ -77,6 +76,11 @@ public class Field
 		}
 	}
 	
+	public void setMapTile(Point p, AObject ao)
+	{
+		objects[p.x][p.y].set(0, ao);
+	}
+	
 	public void draw()
 	{
 		GL11.glPushMatrix();
@@ -103,7 +107,11 @@ public class Field
 		{
 			for(int j = 0; j < N_y; j++)
 			{
-				if(objects[i][j].getLast().isAlwaysDraw() || isLocationEnlighted(player, i, j))
+				if(objects[i][j].getLast().isAlwaysDraw())
+				{
+					MyFont.instance().drawChar(objects[i][j].getLast().getSymbol(), i*Blame.scale, j*Blame.scale, Blame.scale*0.01f, objects[i][j].getLast().getColor());
+				}
+				if(isLocationEnlighted(player, i, j))
 				{
 					MyFont.instance().drawChar(objects[i][j].getLast().getSymbol(), i*Blame.scale, j*Blame.scale, Blame.scale*0.01f, objects[i][j].getLast().getColor());
 					objects[i][j].getFirst().wasDrawed = true;
@@ -121,7 +129,7 @@ public class Field
 	{
 		for(AObject source: lightSources)
 		{
-			if(isVisible(player.cur_pos, source.cur_pos, player.getDov()) && isVisible(source.cur_pos, new Point(i, j), source.getDov()))
+			if(/*isVisible(player.cur_pos, source.cur_pos, player.getDov()) && */isVisible(source.cur_pos, new Point(i, j), source.getDov()))
 			{
 				return true;
 			}

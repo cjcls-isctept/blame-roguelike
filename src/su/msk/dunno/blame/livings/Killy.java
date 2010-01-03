@@ -174,7 +174,7 @@ public class Killy extends ALiving
 			if(selectLine.size() > 0)
 			{
 				clearLine();
-				Shoot sh = new Shoot(this, selectPoint);
+				Shoot sh = new Shoot(this, selectPoint, field);
 				selectPoint = null;
 				return sh;
 			}
