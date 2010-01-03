@@ -1,6 +1,5 @@
 package su.msk.dunno.blame.field.symbols;
 
-import su.msk.dunno.blame.main.support.Color;
 import su.msk.dunno.blame.main.support.Point;
 import su.msk.dunno.blame.prototypes.AObject;
 
@@ -41,8 +40,8 @@ public class MinorSelector extends AObject
 		return true;
 	}
 	
-	@Override public Color getColor() 
+/*	@Override public Color getColor() 
 	{
 		return Color.CYAN;
-	}
+	}*/
 }

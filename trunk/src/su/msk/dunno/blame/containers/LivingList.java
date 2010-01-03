@@ -5,7 +5,6 @@ import java.util.ListIterator;
 
 import su.msk.dunno.blame.field.Field;
 import su.msk.dunno.blame.livings.SiliconCreature;
-import su.msk.dunno.blame.main.Blame;
 import su.msk.dunno.blame.prototypes.ALiving;
 
 

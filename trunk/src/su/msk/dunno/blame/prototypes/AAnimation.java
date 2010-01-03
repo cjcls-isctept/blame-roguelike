@@ -23,4 +23,9 @@ public abstract class AAnimation
 	{
 		isEnded = true;
 	}
+	
+	public int getDuration()
+	{
+		return duration;
+	}
 }
