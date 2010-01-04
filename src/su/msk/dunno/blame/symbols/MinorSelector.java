@@ -27,7 +27,7 @@ public class MinorSelector extends AObject
 
 	@Override public boolean getPassability() 
 	{
-		return false;
+		return true;
 	}
 
 	@Override public boolean getTransparency() 

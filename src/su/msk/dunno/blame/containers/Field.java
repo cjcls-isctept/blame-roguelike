@@ -6,6 +6,8 @@ import java.util.ListIterator;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
 
+import rlforj.los.ILosBoard;
+import rlforj.los.PrecisePermissive;
 import su.msk.dunno.blame.gen.RecursiveDivisionMethod;
 import su.msk.dunno.blame.main.Blame;
 import su.msk.dunno.blame.main.support.Color;
@@ -128,7 +130,22 @@ public class Field
 				{
 					MyFont.instance().drawChar(objects[i][j].getLast().getSymbol(), i*Blame.scale, j*Blame.scale, Blame.scale*0.01f, objects[i][j].getLast().getColor());
 				}
-				if(isLocationEnlighted(/*player_point, */i, j))
+				else if(objects[i][j].getFirst().wasDrawed)MyFont.instance().drawChar(objects[i][j].getFirst().getSymbol(), i*Blame.scale, j*Blame.scale, Blame.scale*0.01f, Color.GRAY);
+			}
+		}
+		for(AObject source: lightSources)
+		{
+			new PrecisePermissive().visitFieldOfView(getRl4JMapView(), source.cur_pos.x, source.cur_pos.y, source.getDov());
+		}
+		/*for(int i = 0; i < N_x; i++)
+		{
+			for(int j = 0; j < N_y; j++)
+			{
+				if(objects[i][j].getLast().isAlwaysDraw())
+				{
+					MyFont.instance().drawChar(objects[i][j].getLast().getSymbol(), i*Blame.scale, j*Blame.scale, Blame.scale*0.01f, objects[i][j].getLast().getColor());
+				}
+				if(isLocationEnlighted(player_point, i, j))
 				{
 					MyFont.instance().drawChar(objects[i][j].getLast().getSymbol(), i*Blame.scale, j*Blame.scale, Blame.scale*0.01f, objects[i][j].getLast().getColor());
 					objects[i][j].getFirst().wasDrawed = true;
@@ -138,7 +155,7 @@ public class Field
 					if(objects[i][j].getFirst().wasDrawed)MyFont.instance().drawChar(objects[i][j].getFirst().getSymbol(), i*Blame.scale, j*Blame.scale, Blame.scale*0.01f, Color.GRAY);
 				}				
 			}
-		}
+		}*/
 		GL11.glPopMatrix();
 	}
 	
@@ -522,4 +539,26 @@ public class Field
 	    }
 		return false;
 	}
+    
+    public ILosBoard getRl4JMapView()
+    {
+    	return new ILosBoard()
+    	{
+			public boolean contains(int x, int y) 
+			{
+				return x >= 0 && x < N_x && y >= 0 && y < N_y;
+			}
+
+			public boolean isObstacle(int x, int y) 
+			{
+				return !getTransparency(x, y);
+			}
+
+			public void visit(int x, int y) 
+			{
+				MyFont.instance().drawChar(objects[x][y].getLast().getSymbol(), x*Blame.scale, y*Blame.scale, Blame.scale*0.01f, objects[x][y].getLast().getColor());
+				objects[x][y].getFirst().wasDrawed = true;
+			}
+    	};
+    }
 }
