@@ -1,7 +1,5 @@
 package su.msk.dunno.blame.prototypes;
 
-import java.util.Calendar;
-
 import su.msk.dunno.blame.containers.Field;
 
 public abstract class AAnimation 
