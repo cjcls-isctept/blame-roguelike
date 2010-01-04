@@ -1,6 +1,6 @@
 package su.msk.dunno.blame.livings;
 
-import su.msk.dunno.blame.field.Field;
+import su.msk.dunno.blame.containers.Field;
 import su.msk.dunno.blame.main.support.Color;
 import su.msk.dunno.blame.main.support.Point;
 

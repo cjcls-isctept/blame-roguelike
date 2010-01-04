@@ -2,7 +2,8 @@ package su.msk.dunno.blame.decisions;
 
 import java.util.LinkedList;
 
-import su.msk.dunno.blame.field.Field;
+import su.msk.dunno.blame.animations.BulletFlight;
+import su.msk.dunno.blame.containers.Field;
 import su.msk.dunno.blame.main.support.Messages;
 import su.msk.dunno.blame.main.support.Point;
 import su.msk.dunno.blame.prototypes.ADecision;
@@ -35,6 +36,8 @@ public class Shoot extends ADecision
 				}
 			}
 		}
+		// animation
+		field.playAnimation(new BulletFlight(al.cur_pos, shootTo, field, false));		
 		// kickback
 		LinkedList<Point> line = field.getLine(al.cur_pos, shootTo);
 		if(line.size() > 1)al.cur_pos = al.cur_pos.mul(2).minus(line.get(1)); 

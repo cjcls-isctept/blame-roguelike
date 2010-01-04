@@ -3,20 +3,20 @@ package su.msk.dunno.blame.livings;
 import java.util.HashMap;
 import java.util.LinkedList;
 
+import su.msk.dunno.blame.containers.Field;
 import su.msk.dunno.blame.decisions.Attack;
 import su.msk.dunno.blame.decisions.Close;
 import su.msk.dunno.blame.decisions.Move;
 import su.msk.dunno.blame.decisions.Open;
 import su.msk.dunno.blame.decisions.Shoot;
 import su.msk.dunno.blame.decisions.Take;
-import su.msk.dunno.blame.field.Field;
-import su.msk.dunno.blame.field.symbols.MainSelector;
-import su.msk.dunno.blame.field.symbols.MinorSelector;
 import su.msk.dunno.blame.main.support.Color;
 import su.msk.dunno.blame.main.support.Point;
 import su.msk.dunno.blame.prototypes.ADecision;
 import su.msk.dunno.blame.prototypes.ALiving;
 import su.msk.dunno.blame.prototypes.AObject;
+import su.msk.dunno.blame.symbols.MainSelector;
+import su.msk.dunno.blame.symbols.MinorSelector;
 
 
 public class Killy extends ALiving 
