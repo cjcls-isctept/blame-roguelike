@@ -21,8 +21,8 @@ public class BulletFlight extends AAnimation
 		this.to = to;
 		line = field.getLine(from, to);
 		b = new Bullet(line.getFirst());
-		field.addObject(b);
-		duration = 10*Blame.fps;
+		//field.addObject(b);
+		duration = 20*Blame.fps;
 		frames = line.size();
 	}
 

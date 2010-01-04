@@ -3,6 +3,7 @@ package su.msk.dunno.blame.containers;
 import java.util.LinkedList;
 import java.util.ListIterator;
 
+import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
 
 import su.msk.dunno.blame.gen.RecursiveDivisionMethod;
@@ -11,6 +12,7 @@ import su.msk.dunno.blame.main.support.Color;
 import su.msk.dunno.blame.main.support.LinkObject;
 import su.msk.dunno.blame.main.support.MyFont;
 import su.msk.dunno.blame.main.support.Point;
+import su.msk.dunno.blame.main.support.Vector2D;
 import su.msk.dunno.blame.prototypes.AAnimation;
 import su.msk.dunno.blame.prototypes.ALiving;
 import su.msk.dunno.blame.prototypes.AObject;
@@ -24,8 +26,6 @@ public class Field
 	private LinkedList<AAnimation> animations;
 	private LinkedList<AObject> lightSources;
 	private int N_x, N_y;
-	
-	public boolean isAnimationPlaying;
 	
 	public Field(int N_x, int N_y, String mapname)	// constructor for map generation or map loading
 	{
@@ -92,6 +92,12 @@ public class Field
 		objects[p.x][p.y].set(0, ao);
 	}
 	
+	public Vector2D getCoordForPoint(Point player_point, Point p)
+	{
+		return new Vector2D(220-player_point.x*Blame.scale, 240-player_point.y*Blame.scale).plus
+		      (new Vector2D(p.x*20, p.y*20));
+	}
+	
 	public void draw()
 	{
 		GL11.glPushMatrix();
@@ -108,11 +114,11 @@ public class Field
 		GL11.glPopMatrix();
 	}
 	
-	public void draw(ALiving player)
+	public void draw(Point player_point)
 	{
 		GL11.glPushMatrix();
-		GL11.glTranslatef(220-player.cur_pos.x*Blame.scale, 
-				  		  240-player.cur_pos.y*Blame.scale, 
+		GL11.glTranslatef(220-player_point.x*Blame.scale, 
+				  		  240-player_point.y*Blame.scale, 
 				  		  0.0f);
 		for(int i = 0; i < N_x; i++)
 		{
@@ -122,7 +128,7 @@ public class Field
 				{
 					MyFont.instance().drawChar(objects[i][j].getLast().getSymbol(), i*Blame.scale, j*Blame.scale, Blame.scale*0.01f, objects[i][j].getLast().getColor());
 				}
-				if(isLocationEnlighted(player, i, j))
+				if(isLocationEnlighted(/*player_point, */i, j))
 				{
 					MyFont.instance().drawChar(objects[i][j].getLast().getSymbol(), i*Blame.scale, j*Blame.scale, Blame.scale*0.01f, objects[i][j].getLast().getColor());
 					objects[i][j].getFirst().wasDrawed = true;
@@ -136,11 +142,11 @@ public class Field
 		GL11.glPopMatrix();
 	}
 	
-	public boolean isLocationEnlighted(ALiving player, int i, int j)
+	public boolean isLocationEnlighted(/*Point player_point, */int i, int j)
 	{
 		for(AObject source: lightSources)
 		{
-			if(/*isVisible(player.cur_pos, source.cur_pos, player.getDov()) && */isVisible(source.cur_pos, new Point(i, j), source.getDov()))
+			if(/*isVisible(player_point, source.cur_pos, player.getDov()) && */isVisible(source.cur_pos, new Point(i, j), source.getDov()))
 			{
 				return true;
 			}
@@ -150,12 +156,15 @@ public class Field
 	
 	public void playAnimation(AAnimation a)
 	{
-		isAnimationPlaying = true;
 		while(!a.isEnded)
 		{
+			GL11.glClear(GL11.GL_COLOR_BUFFER_BIT/* | GL11.GL_DEPTH_BUFFER_BIT*/);		
+			GL11.glLoadIdentity();
+			draw((Blame.playCibo?Blame.cibo.cur_pos:Blame.killy.cur_pos));
 			a.play();
-		}
-		isAnimationPlaying = false;
+			Display.sync(Blame.framerate);
+			Display.update();
+		}		
 	}
 	
 	public void playAnimations()
