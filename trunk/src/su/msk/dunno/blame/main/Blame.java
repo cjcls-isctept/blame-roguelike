@@ -32,10 +32,10 @@ public class Blame
 	private boolean isRunning;
 	
 	public static int scale = 20;
-	private int framerate = 75;
+	public static int framerate = 75;
 	
-	Killy killy;
-	Cibo cibo;
+	public static Killy killy;
+	public static Cibo cibo;
 	public static boolean playCibo;
 	
 	Field field;
@@ -100,7 +100,7 @@ public class Blame
 		GL11.glClear(GL11.GL_COLOR_BUFFER_BIT/* | GL11.GL_DEPTH_BUFFER_BIT*/);		
 		GL11.glLoadIdentity();
 		
-		field.draw((playCibo?cibo:killy));
+		field.draw((playCibo?cibo.cur_pos:killy.cur_pos));
 		field.playAnimations();
 		Messages.instance().showMessages();
 		MyFont.instance().drawString((playCibo?"Cibo":"Killy"), 450, 460, 0.2f, Color.WHITE);

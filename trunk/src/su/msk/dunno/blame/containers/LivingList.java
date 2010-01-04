@@ -36,16 +36,13 @@ public class LivingList extends LinkedList<ALiving>
 	
 	public void nextStep()
 	{
-		if(!field.isAnimationPlaying)
+		for(ListIterator<ALiving> li = this.listIterator(); li.hasNext();)
 		{
-			for(ListIterator<ALiving> li = this.listIterator(); li.hasNext();)
-			{
-				ALiving al = li.next();
-				al.updateOldPos();
-				al.nextStep();
-				if(al.getState().containsKey("CancelMove")) return;
-				al.checkStatus(li);
-			}
+			ALiving al = li.next();
+			al.updateOldPos();
+			al.nextStep();
+			if(al.getState().containsKey("CancelMove")) return;
+			al.checkStatus(li);
 		}
 	}
 }
