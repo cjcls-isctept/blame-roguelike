@@ -105,7 +105,6 @@ public class Blame
 		Messages.instance().showMessages();
 		MyFont.instance().drawString((playCibo?"Cibo":"Killy"), 450, 460, 0.2f, Color.WHITE);
 		MyFont.instance().drawString("HP: "+(playCibo?cibo:killy).getHealth(), 450, 450, 0.2f, Color.WHITE);
-		MyFont.instance().drawString(""+scale, 450, 440, 0.2f, Color.WHITE);
         
 		Display.sync(framerate);
 		Display.update();
@@ -163,7 +162,7 @@ public class Blame
         		{
         			isStepDone = false;
         			count = 0;
-        			period = Math.max(3, period-4);
+        			period = fps/10;
         		}
          	}
         	
@@ -185,7 +184,7 @@ public class Blame
         		{
         			isStepDone = false;
         			count = 0;
-        			period = Math.max(3, period-4);
+        			period = fps/10;
         		}
          	}
         	
@@ -207,7 +206,7 @@ public class Blame
         		{
         			isStepDone = false;
         			count = 0;
-        			period = Math.max(3, period-4);
+        			period = fps/10;
         		}
         	}
         	
@@ -229,7 +228,7 @@ public class Blame
         		{
         			isStepDone = false;
         			count = 0;
-        			period = Math.max(3, period-4);
+        			period = fps/10;
         		}
         	}
         	
@@ -251,7 +250,7 @@ public class Blame
         		{
         			isStepDone = false;
         			count = 0;
-        			period = Math.max(3, period-4);
+        			period = fps/10;
         		}
         	}
         	
@@ -273,7 +272,7 @@ public class Blame
         		{
         			isStepDone = false;
         			count = 0;
-        			period = Math.max(3, period-4);
+        			period = fps/10;
         		}
         	}
         	
@@ -295,7 +294,7 @@ public class Blame
         		{
         			isStepDone = false;
         			count = 0;
-        			period = Math.max(3, period-4);
+        			period = fps/10;
         		}
         	}
         	
@@ -317,7 +316,7 @@ public class Blame
         		{
         			isStepDone = false;
         			count = 0;
-        			period = Math.max(3, period-4);
+        			period = fps/10;
         		}
         	}
         	
@@ -339,7 +338,7 @@ public class Blame
         		{
         			isStepDone = false;
         			count = 0;
-        			period = Math.max(3, period-4);
+        			period = fps/10;
         		}
         	}
         	
@@ -361,7 +360,7 @@ public class Blame
         		{
         			isStepDone = false;
         			count = 0;
-        			period = Math.max(3, period-4);
+        			period = fps/10;
         		}
         	}
         	
@@ -383,7 +382,7 @@ public class Blame
         		{
         			isStepDone = false;
         			count = 0;
-        			period = Math.max(3, period-4);
+        			period = fps/10;
         		}
         	}
         	
@@ -405,7 +404,7 @@ public class Blame
         		{
         			isStepDone = false;
         			count = 0;
-        			period = Math.max(3, period-4);
+        			period = fps/10;
         		}
         	}
         	
@@ -427,7 +426,7 @@ public class Blame
         		{
         			isStepDone = false;
         			count = 0;
-        			period = Math.max(3, period-4);
+        			period = fps/10;
         		}
         	}
         	
