@@ -9,8 +9,8 @@ import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.glu.GLU;
 
+import su.msk.dunno.blame.containers.Field;
 import su.msk.dunno.blame.containers.LivingList;
-import su.msk.dunno.blame.field.Field;
 import su.msk.dunno.blame.livings.Cibo;
 import su.msk.dunno.blame.livings.Killy;
 import su.msk.dunno.blame.main.support.Color;
@@ -47,7 +47,7 @@ public class Blame
 	// variables below are for infinite (with pushed key) moving purposes
 	private int frames;
 	private long msek = Calendar.getInstance().getTimeInMillis();
-	private int fps;	
+	public static int fps;	
 	private int period = framerate/2;
 	private int count = period;
 	
@@ -101,6 +101,7 @@ public class Blame
 		GL11.glLoadIdentity();
 		
 		field.draw((playCibo?cibo:killy));
+		field.playAnimations();
 		Messages.instance().showMessages();
 		MyFont.instance().drawString((playCibo?"Cibo":"Killy"), 450, 460, 0.2f, Color.WHITE);
 		MyFont.instance().drawString("HP: "+(playCibo?cibo:killy).getHealth(), 450, 450, 0.2f, Color.WHITE);

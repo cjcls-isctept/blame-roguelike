@@ -50,7 +50,7 @@ public abstract class AObject
 		return false;
 	}
 	
-	public boolean isLightSource()
+	public boolean isLightSource()	// if true dov must be more than 0 to effect take place!
 	{
 		return false;
 	}
