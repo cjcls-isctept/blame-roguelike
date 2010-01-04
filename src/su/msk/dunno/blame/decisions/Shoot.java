@@ -25,9 +25,9 @@ public class Shoot extends ADecision
 
 	@Override public void doAction() 
 	{
-		for(AObject ao: al.getMyNeighbours())
+		for(AObject ao: field.getObjectsAtPoint(shootTo))
 		{
-			if(ao.cur_pos.equals(shootTo) && ao.isEnemy())
+			if(ao.isEnemy())
 			{
 				ao.changeState(args);
 				if(al.isNearPlayer())

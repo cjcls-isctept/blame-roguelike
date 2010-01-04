@@ -1,13 +1,17 @@
 package su.msk.dunno.blame.containers;
 
 import java.util.LinkedList;
+import java.util.List;
 import java.util.ListIterator;
 
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
 
+import rlforj.los.BresLos;
+import rlforj.los.ILosAlgorithm;
 import rlforj.los.ILosBoard;
 import rlforj.los.PrecisePermissive;
+import rlforj.math.Point2I;
 import su.msk.dunno.blame.gen.RecursiveDivisionMethod;
 import su.msk.dunno.blame.main.Blame;
 import su.msk.dunno.blame.main.support.Color;
@@ -135,40 +139,24 @@ public class Field
 		}
 		for(AObject source: lightSources)
 		{
-			new PrecisePermissive().visitFieldOfView(getRl4JMapView(), source.cur_pos.x, source.cur_pos.y, source.getDov());
+			new PrecisePermissive().visitFieldOfView(
+					new Rl4JMapView()
+					{
+						public boolean isObstacle(int x, int y) 
+						{
+							return !getTransparency(x, y);
+						}
+		
+						public void visit(int x, int y)
+						{
+							MyFont.instance().drawChar(objects[x][y].getLast().getSymbol(), x*Blame.scale, y*Blame.scale, Blame.scale*0.01f, objects[x][y].getLast().getColor());
+							objects[x][y].getFirst().wasDrawed = true;							
+						}
+						
+					}, 
+					source.cur_pos.x, source.cur_pos.y, source.getDov());
 		}
-		/*for(int i = 0; i < N_x; i++)
-		{
-			for(int j = 0; j < N_y; j++)
-			{
-				if(objects[i][j].getLast().isAlwaysDraw())
-				{
-					MyFont.instance().drawChar(objects[i][j].getLast().getSymbol(), i*Blame.scale, j*Blame.scale, Blame.scale*0.01f, objects[i][j].getLast().getColor());
-				}
-				if(isLocationEnlighted(player_point, i, j))
-				{
-					MyFont.instance().drawChar(objects[i][j].getLast().getSymbol(), i*Blame.scale, j*Blame.scale, Blame.scale*0.01f, objects[i][j].getLast().getColor());
-					objects[i][j].getFirst().wasDrawed = true;
-				}
-				else
-				{
-					if(objects[i][j].getFirst().wasDrawed)MyFont.instance().drawChar(objects[i][j].getFirst().getSymbol(), i*Blame.scale, j*Blame.scale, Blame.scale*0.01f, Color.GRAY);
-				}				
-			}
-		}*/
 		GL11.glPopMatrix();
-	}
-	
-	public boolean isLocationEnlighted(/*Point player_point, */int i, int j)
-	{
-		for(AObject source: lightSources)
-		{
-			if(/*isVisible(player_point, source.cur_pos, player.getDov()) && */isVisible(source.cur_pos, new Point(i, j), source.getDov()))
-			{
-				return true;
-			}
-		}
-		return false;
 	}
 	
 	public void playAnimation(AAnimation a)
@@ -385,180 +373,63 @@ public class Field
 	{
     	if(p2.getDist2(p1) > dov*dov)return false;
     	if(p2.equals(p1))return true;
-		return !isIntersectionBresenham(p1.x, p1.y, p2.x, p2.y, false, false);
+    	return new BresLos(false).existsLineOfSight(
+    			new Rl4JMapView()
+    			{
+					public boolean isObstacle(int x, int y) 
+					{
+						return !getTransparency(x, y);
+					}
+
+					public void visit(int x, int y){}    				
+    			}, 
+    			p1.x, p1.y, p2.x, p2.y, false);
 	}
 	
 	public boolean isMapVisible(Point p1, Point p2, int dov)
 	{
 		//if(p2.getDist2(p1) > dov*dov)return false;
     	if(p2.equals(p1))return true;
-		return !isIntersectionBresenham(p1.x, p1.y, p2.x, p2.y, false, true);
+    	return new BresLos(false).existsLineOfSight(
+    			new Rl4JMapView()
+    			{
+					public boolean isObstacle(int x, int y) 
+					{
+						return !getTransparency(x, y);
+					}
+
+					public void visit(int x, int y){}    				
+    			}, 
+    			p1.x, p1.y, p2.x, p2.y, false);
 	}
 	
 	public LinkedList<Point> getLine(Point p1, Point p2)
 	{
+		ILosAlgorithm ila = new BresLos(false);
+		ila.existsLineOfSight(
+				new Rl4JMapView()
+				{
+					public boolean isObstacle(int x, int y) 
+					{
+						return !getTransparency(x, y);
+					}
+		
+					public void visit(int x, int y){}    				
+				}, 
+				p1.x, p1.y, p2.x, p2.y, true);
 		LinkedList<Point> line = new LinkedList<Point>();
-		int delta_x = Math.abs(p2.x - p1.x) << 1;
-	    int delta_y = Math.abs(p2.y - p1.y) << 1;
-	    int x = p1.x; int y = p1.y;
-
-	    int ix = p2.x > p1.x?1:-1;
-	    int iy = p2.y > p1.y?1:-1;
-	    
-	    if (delta_x >= delta_y)
-	    {
-	    	int error = delta_y - (delta_x >> 1);
-	    	while (x != p2.x)
-	        {
-	    		line.add(new Point(x, y));
-	        	if (error >= 0)
-		        {
-	        		if (error != 0 || ix > 0)
-		            {
-	        			y += iy;
-		                error -= delta_x;
-		            }
-		        }
-		        x += ix;
-		        error += delta_y;
-	        }
-	    }
-	    else
-	    {
-	    	 int error = delta_x - (delta_y >> 1);
-		     while (y != p2.y)
-		     {
-		    	 line.add(new Point(x, y));
-		    	 if (error >= 0)
-		         {
-		    		 if (error != 0 || iy > 0)
-		             {
-		    			 x += ix;
-		                 error -= delta_y;
-		             }
-		         }
-		         y += iy;
-		         error += delta_x;
-		     }
-	    }
-	    line.add(p2);
+		for(Point2I p2i: ila.getProjectPath())
+		{
+			line.add(new Point(p2i.x, p2i.y));
+		}
 		return line;
 	}
-	
-    public boolean isIntersectionBresenham(int x1, int y1, int x2, int y2, boolean isPassabilityCheck, boolean isMapCheck)
-	{
-    	int delta_x = Math.abs(x2 - x1) << 1;
-	    int delta_y = Math.abs(y2 - y1) << 1;
-	    int x = x1; int y = y1;
-
-	    int ix = x2 > x1?1:-1;
-	    int iy = y2 > y1?1:-1;
-
-	    if (delta_x >= delta_y)
-	    {
-	        // error may go below zero
-	        int error = delta_y - (delta_x >> 1);
-            if (error >= 0)
-            {
-            	if (error != 0 || ix > 0)
-                {
-                    y += iy;
-                    error -= delta_x;
-                }
-            }
-            x += ix;
-            error += delta_y;
-	        while (x != x2)
-	        {
-	    	    if(isPassabilityCheck)
-	    	    {
-	    		    if(x >= 0 && x < N_x && y >= 0 && y < N_y)
-	    		    {
-	    		    	if(isMapCheck)if(!getMapPassability(x, y))return true;
-	    		    	else if(!getPassability(x, y))return true;
-	    		    }
-	    	    }
-	    	    else
-	    	    {
-	    		    if(x >= 0 && x < N_x &&
-	    		       y >= 0 && y < N_y &&
-	    		 	   !getTransparency(x, y))return true;	    	
-	    	    }
-	            if (error >= 0)
-	            {
-	            	if (error != 0 || ix > 0)
-	                {
-	                    y += iy;
-	                    error -= delta_x;
-	                }
-	            }
-	            x += ix;
-	            error += delta_y;
-	        }
-	    }
-	    else
-	    {
-	        int error = delta_x - (delta_y >> 1);
-            if (error >= 0)
-            {
-            	if (error != 0 || iy > 0)
-                {
-                    x += ix;
-                    error -= delta_y;
-                }
-            }
-            y += iy;
-            error += delta_x;
-	        while (y != y2)
-	        {
-	    	    if(isPassabilityCheck)
-	    	    {
-	    		    if(x >= 0 && x < N_x && y >= 0 && y < N_y)
-	    		    {
-	    		    	if(isMapCheck)if(!getMapPassability(x, y))return true;
-	    		    	else if(!getPassability(x, y))return true;
-	    		    }
-	    	    }
-	    	    else
-	    	    {
-	    		    if(x >= 0 && x < N_x &&
-	    		       y >= 0 && y < N_y &&
-	    		 	   !getTransparency(x, y))return true;	    	
-	    	    }
-	            if (error >= 0)
-	            {
-	            	if (error != 0 || iy > 0)
-	                {
-	                    x += ix;
-	                    error -= delta_y;
-	                }
-	            }
-	            y += iy;
-	            error += delta_x;
-	        }
-	    }
-		return false;
-	}
     
-    public ILosBoard getRl4JMapView()
+    abstract class Rl4JMapView implements ILosBoard
     {
-    	return new ILosBoard()
-    	{
-			public boolean contains(int x, int y) 
-			{
-				return x >= 0 && x < N_x && y >= 0 && y < N_y;
-			}
-
-			public boolean isObstacle(int x, int y) 
-			{
-				return !getTransparency(x, y);
-			}
-
-			public void visit(int x, int y) 
-			{
-				MyFont.instance().drawChar(objects[x][y].getLast().getSymbol(), x*Blame.scale, y*Blame.scale, Blame.scale*0.01f, objects[x][y].getLast().getColor());
-				objects[x][y].getFirst().wasDrawed = true;
-			}
-    	};
+		public boolean contains(int x, int y) 
+		{
+			return x >= 0 && x < N_x && y >= 0 && y < N_y;
+		}
     }
 }
