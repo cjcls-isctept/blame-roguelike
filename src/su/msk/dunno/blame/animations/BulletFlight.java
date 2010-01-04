@@ -22,7 +22,7 @@ public class BulletFlight extends AAnimation
 		line = field.getLine(from, to);
 		b = new Bullet(line.getFirst());
 		//field.addObject(b);
-		duration = 20*Blame.fps;
+		duration = Blame.fps/3;
 		frames = line.size();
 	}
 
