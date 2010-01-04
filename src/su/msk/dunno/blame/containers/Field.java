@@ -1,7 +1,6 @@
 package su.msk.dunno.blame.containers;
 
 import java.util.LinkedList;
-import java.util.List;
 import java.util.ListIterator;
 
 import org.lwjgl.opengl.Display;
