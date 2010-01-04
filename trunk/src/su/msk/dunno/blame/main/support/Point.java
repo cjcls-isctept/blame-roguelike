@@ -1,6 +1,6 @@
 package su.msk.dunno.blame.main.support;
 
-public class Point 
+public class Point
 {
 	public int x;
 	public int y;
