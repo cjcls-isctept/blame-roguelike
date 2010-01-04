@@ -7,13 +7,12 @@ import su.msk.dunno.blame.containers.Field;
 public abstract class AAnimation 
 {
 	protected Field field;
-	
-	protected long start_time;	// in msecs
-	protected long time;
-	protected long duration;
+
+	protected int time;
+	protected int duration;
 	
 	protected int frames;
-	protected long cur_frame;	
+	protected int cur_frame;	
 	
 	protected boolean isRepeatable;
 	public boolean isEnded;
@@ -22,15 +21,14 @@ public abstract class AAnimation
 	{
 		this.field = field;
 		this.isRepeatable = isRepeatable;
-		start_time = Calendar.getInstance().getTimeInMillis();
 	}
 	
 	public abstract void nextFrame();
 	
 	public void play()
 	{
-		time = Calendar.getInstance().getTimeInMillis(); 
-		if(time - start_time > duration)
+		time++;
+		if(time > duration)
 		{
 			if(isRepeatable)restart();
 			else 
@@ -41,7 +39,7 @@ public abstract class AAnimation
 		}
 		else
 		{
-			long i = (time - start_time)*frames/duration;
+			int i = time*frames/duration;
 			if(i > cur_frame)
 			{
 				nextFrame();

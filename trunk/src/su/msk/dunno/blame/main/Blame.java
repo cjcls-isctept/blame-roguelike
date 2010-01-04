@@ -26,8 +26,8 @@ public class Blame
 	public static int width = 640;
 	public static int height = 480;
 	
-	public static int N_x = 100;
-	public static int N_y = 100;
+	public static int N_x = 50;
+	public static int N_y = 50;
 	
 	private boolean isRunning;
 	

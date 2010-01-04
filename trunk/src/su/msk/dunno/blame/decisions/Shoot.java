@@ -40,10 +40,10 @@ public class Shoot extends ADecision
 		LinkedList<Point> line = field.getLine(al.cur_pos, shootTo);
 		if(line.size() > 1)
 		{
-			al.cur_pos = al.cur_pos.mul(2).minus(line.get(1));
-			field.changeLocation(al);
 			// animation
 			field.playAnimation(new BulletFlight(line.get(1), shootTo, field, false));
+			al.cur_pos = al.cur_pos.mul(2).minus(line.get(1));
+			field.changeLocation(al);
 		}
 	}
 }
