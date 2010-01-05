@@ -36,14 +36,15 @@ public class Shoot extends ADecision
 				}
 			}
 		}
-		// kickback
 		LinkedList<Point> line = field.getLine(al.cur_pos, shootTo);
 		if(line.size() > 1)
 		{
 			// animation
 			field.playAnimation(new BulletFlight(line.get(1), shootTo, field, false));
+			// kickback
 			al.cur_pos = al.cur_pos.mul(2).minus(line.get(1));
 			field.changeLocation(al);
 		}
+		wasExecuted = true;
 	}
 }

@@ -26,6 +26,7 @@ public class Close extends ADecision
 				ao.changeState(args);
 				if(al.isNearPlayer())Messages.instance().addMessage(al.getName()+" closes a door");
 			}
-		}		
+		}
+		wasExecuted = true;
 	}
 }

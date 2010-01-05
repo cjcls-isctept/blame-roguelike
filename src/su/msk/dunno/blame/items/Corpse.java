@@ -36,6 +36,7 @@ public class Corpse extends AItem
 	@Override public HashMap<String, Integer> getState() 
 	{
 		HashMap<String, Integer> state = new HashMap<String, Integer>();
+		state.put("Item", 1);
 		state.put("Health", 10);
 		return state;
 	}

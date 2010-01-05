@@ -32,6 +32,9 @@ public class Field
 	private LinkedList<AObject> lightSources;
 	private int N_x, N_y;
 	
+	private RL4JMapView drawView;
+	private RL4JMapView lineView;
+	
 	public Field(int N_x, int N_y, String mapname)	// constructor for map generation or map loading
 	{
 		this(N_x, N_y);
@@ -68,6 +71,28 @@ public class Field
 		}
 		lightSources = new LinkedList<AObject>();
 		animations = new LinkedList<AAnimation>();
+		drawView = new RL4JMapView()
+		{
+			public boolean isObstacle(int x, int y) 
+			{
+				return !getTransparency(x, y);
+			}
+
+			public void visit(int x, int y) 
+			{
+				MyFont.instance().drawChar(objects[x][y].getLast().getSymbol(), x*Blame.scale, y*Blame.scale, Blame.scale*0.01f, objects[x][y].getLast().getColor());
+				objects[x][y].getFirst().wasDrawed = true;				
+			}			
+		};
+		lineView = new RL4JMapView()
+		{
+			public boolean isObstacle(int x, int y) 
+			{
+				return !getTransparency(x, y);
+			}
+
+			public void visit(int x, int y){}			
+		};
 	}
 	
 	public void addObject(AObject ao)
@@ -138,22 +163,7 @@ public class Field
 		}
 		for(AObject source: lightSources)
 		{
-			new PrecisePermissive().visitFieldOfView(
-					new Rl4JMapView()
-					{
-						public boolean isObstacle(int x, int y) 
-						{
-							return !getTransparency(x, y);
-						}
-		
-						public void visit(int x, int y)
-						{
-							MyFont.instance().drawChar(objects[x][y].getLast().getSymbol(), x*Blame.scale, y*Blame.scale, Blame.scale*0.01f, objects[x][y].getLast().getColor());
-							objects[x][y].getFirst().wasDrawed = true;							
-						}
-						
-					}, 
-					source.cur_pos.x, source.cur_pos.y, source.getDov());
+			new PrecisePermissive().visitFieldOfView(drawView, source.cur_pos.x, source.cur_pos.y, source.getDov());
 		}
 		GL11.glPopMatrix();
 	}
@@ -373,7 +383,7 @@ public class Field
     	if(p2.getDist2(p1) > dov*dov)return false;
     	if(p2.equals(p1))return true;
     	return new BresLos(false).existsLineOfSight(
-    			new Rl4JMapView()
+    			new RL4JMapView()
     			{
 					public boolean isObstacle(int x, int y) 
 					{
@@ -390,7 +400,7 @@ public class Field
 		//if(p2.getDist2(p1) > dov*dov)return false;
     	if(p2.equals(p1))return true;
     	return new BresLos(false).existsLineOfSight(
-    			new Rl4JMapView()
+    			new RL4JMapView()
     			{
 					public boolean isObstacle(int x, int y) 
 					{
@@ -405,17 +415,7 @@ public class Field
 	public LinkedList<Point> getLine(Point p1, Point p2)
 	{
 		ILosAlgorithm ila = new BresLos(false);
-		ila.existsLineOfSight(
-				new Rl4JMapView()
-				{
-					public boolean isObstacle(int x, int y) 
-					{
-						return !getTransparency(x, y);
-					}
-		
-					public void visit(int x, int y){}    				
-				}, 
-				p1.x, p1.y, p2.x, p2.y, true);
+		ila.existsLineOfSight(lineView, p1.x, p1.y, p2.x, p2.y, true);
 		LinkedList<Point> line = new LinkedList<Point>();
 		for(Point2I p2i: ila.getProjectPath())
 		{
@@ -424,7 +424,7 @@ public class Field
 		return line;
 	}
     
-    abstract class Rl4JMapView implements ILosBoard
+    abstract class RL4JMapView implements ILosBoard
     {
 		public boolean contains(int x, int y) 
 		{
