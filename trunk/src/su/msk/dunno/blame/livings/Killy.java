@@ -246,11 +246,7 @@ public class Killy extends ALiving
 	@Override public HashMap<String, Integer> getState() 
 	{
 		HashMap<String, Integer> state = new HashMap<String, Integer>();
-		if(isSelectTarget)
-		{
-			state.put("CancelMove", 1);
-		}
-		if(isCancelMove)
+		if(isSelectTarget || isCancelMove)
 		{
 			state.put("CancelMove", 1);
 			isCancelMove = false;

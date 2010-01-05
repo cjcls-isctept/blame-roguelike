@@ -50,12 +50,22 @@ public abstract class ALiving extends AObject
 	
 	public void nextStep()
 	{
-		if(getHealth() <= 0)isDead = true;
+		if(health <= 0)isDead = true;
+		if(decision == null)
+		{
+			decision = livingAI();
+			if(decision != null)time_remain = action_period;
+		}
 		if(decision != null)
 		{
-			time_remain--;
+			if(time_remain == 0)
+			{
+				decision.doAction();
+				if(decision.wasExecuted())decision = null;
+			}
+			else time_remain--;
 		}
-		else 
+		/*else 
 		{
 			decision = livingAI();
 			if(decision != null)time_remain = action_period;
@@ -63,8 +73,8 @@ public abstract class ALiving extends AObject
 		if(time_remain == 0 && decision != null)
 		{
 			decision.doAction();
-			decision = null;
-		}
+			if(decision.wasExecuted())decision = null;
+		}*/
 	}
 	
 	public boolean isEnemyAtDir(int dir)

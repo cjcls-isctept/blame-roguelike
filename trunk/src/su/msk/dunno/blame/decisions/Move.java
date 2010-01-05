@@ -69,5 +69,6 @@ public class Move extends ADecision
 			args.put("MoveFail", 1);
 			al.changeState(args);
 		}
+		wasExecuted = true;
 	}
 }

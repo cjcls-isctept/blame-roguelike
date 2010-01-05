@@ -27,5 +27,6 @@ public class Open extends ADecision
 				if(al.isNearPlayer())Messages.instance().addMessage(al.getName()+" opens a door");
 			}
 		}
+		wasExecuted = true;
 	}
 }

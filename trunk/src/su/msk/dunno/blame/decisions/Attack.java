@@ -29,5 +29,6 @@ public class Attack extends ADecision
 				}
 			}
 		}
+		wasExecuted = true;
 	}
 }

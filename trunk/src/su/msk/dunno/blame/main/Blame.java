@@ -53,10 +53,7 @@ public class Blame
 	
 	public Blame()
 	{
-		/*char ch = 'a';
-		System.out.println(Integer.valueOf(ch));*/
-		
-		initGL();
+		initGL();				
 		initEvents();
 
 		field = new Field(N_x, N_y, "random");
@@ -100,11 +97,14 @@ public class Blame
 		GL11.glClear(GL11.GL_COLOR_BUFFER_BIT/* | GL11.GL_DEPTH_BUFFER_BIT*/);		
 		GL11.glLoadIdentity();
 		
+		/*char ch = '@';
+		MyFont.instance().drawChar(ch, new Vector2D(320,240), 0.2f, Color.WHITE);*/
+		
 		field.draw((playCibo?cibo.cur_pos:killy.cur_pos));
 		field.playAnimations();
 		Messages.instance().showMessages();
 		MyFont.instance().drawString((playCibo?"Cibo":"Killy"), 450, 460, 0.2f, Color.WHITE);
-		MyFont.instance().drawString("HP: "+(playCibo?cibo:killy).getHealth(), 450, 450, 0.2f, Color.WHITE);
+		MyFont.instance().drawString("HP: "+(playCibo?cibo:killy).getHealth(), 450, 445, 0.2f, Color.WHITE);
         
 		Display.sync(framerate);
 		Display.update();

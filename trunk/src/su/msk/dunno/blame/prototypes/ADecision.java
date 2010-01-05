@@ -6,6 +6,7 @@ public abstract class ADecision
 {
 	protected ALiving al;
 	protected HashMap<String, Integer> args;
+	protected boolean wasExecuted;
 	
 	public ADecision(ALiving al)
 	{
@@ -14,4 +15,9 @@ public abstract class ADecision
 	}
 	
 	public abstract void doAction();
+	
+	public boolean wasExecuted()
+	{
+		return wasExecuted;
+	}
 }
