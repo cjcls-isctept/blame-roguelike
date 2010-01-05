@@ -114,7 +114,7 @@ public abstract class ALiving extends AObject
 	
 	public LinkedList<AObject> getMyNeighbours() // dov = depth of vision
 	{
-		return field.getNeighbours(this, getDov());
+		return field.getNeighbours(this, getDov()+1);	// +1 because of the rlforj fov algorithm
 	}
 
 	public void checkStatus(ListIterator<ALiving> li) 
