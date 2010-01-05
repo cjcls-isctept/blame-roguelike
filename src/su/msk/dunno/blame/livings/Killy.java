@@ -233,9 +233,9 @@ public class Killy extends ALiving
 		{
 			health -= args.get("Damage");
 		}
-		if(args.containsKey("Health"))
+		if(args.containsKey("HealthPlus"))
 		{
-			health += args.get("Health");
+			health += args.get("HealthPlus");
 		}
 		if(args.containsKey("MoveFail"))
 		{

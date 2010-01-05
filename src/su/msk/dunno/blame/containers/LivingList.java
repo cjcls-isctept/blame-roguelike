@@ -11,7 +11,6 @@ public class LivingList extends LinkedList<ALiving>
 {
 	private static final long serialVersionUID = 7325672295995481834L;
 	private Field field;
-	private int time;
 	
 	public LivingList(Field field)
 	{
