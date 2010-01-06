@@ -32,7 +32,7 @@ public class Blame
 	private boolean isRunning;
 	
 	public static int scale = 20;
-	public static int framerate = 75;
+	public static int framerate = 70;
 	
 	public static Killy killy;
 	public static Cibo cibo;
@@ -62,7 +62,7 @@ public class Blame
 		objects = new LivingList(field, killy, cibo);
 		//objects.addObject(killy);	// killy must be first in the list
 		//objects.addObject(cibo);	// and cibo too
-		objects.addCreatures(40);
+		objects.addCreatures(20);
 		
 		isRunning = true;
 		run();
@@ -101,7 +101,6 @@ public class Blame
 		MyFont.instance().drawChar(ch, new Vector2D(320,240), 0.2f, Color.WHITE);*/
 		
 		field.draw((playCibo?cibo.cur_pos:killy.cur_pos));
-		field.playAnimations();
 		Messages.instance().showMessages();
 		MyFont.instance().drawString((playCibo?"Cibo":"Killy"), 450, 460, 0.2f, Color.WHITE);
 		MyFont.instance().drawString("HP: "+(playCibo?cibo:killy).getHealth(), 450, 445, 0.2f, Color.WHITE);

@@ -28,7 +28,7 @@ public class Shoot extends ADecision
 	{
 		for(AObject ao: field.getObjectsAtPoint(shootTo))
 		{
-			if(ao.isEnemy())
+			if(al.isEnemy(ao))
 			{
 				ao.changeState(args);
 				if(al.isNearPlayer())
@@ -41,7 +41,7 @@ public class Shoot extends ADecision
 		if(line.size() > 1)
 		{
 			// animation
-			field.playAnimation(new BulletFlight(line.get(1), shootTo, field));
+			field.addAnimation(new BulletFlight(line.get(1), shootTo, field));
 			// kickback
 			Point old = al.cur_pos;
 			al.cur_pos = al.cur_pos.mul(2).minus(line.get(1));

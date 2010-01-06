@@ -18,6 +18,7 @@ public class Cibo extends Killy
 
 	@Override public Color getColor() 
 	{
-		return Color.BLUE;
+		/*if(isDead) return Color.WHITE;
+		else */return Color.BLUE;
 	}
 }
