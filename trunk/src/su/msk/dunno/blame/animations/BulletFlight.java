@@ -14,9 +14,9 @@ public class BulletFlight extends AAnimation
 	LinkedList<Point> line;
 	Bullet b;
 	
-	public BulletFlight(Point from, Point to, Field field, boolean isRepeatable) 
+	public BulletFlight(Point from, Point to, Field field) 
 	{
-		super(field, isRepeatable);
+		super(field, false);
 		this.from = from;
 		this.to = to;
 		line = field.getLine(from, to);

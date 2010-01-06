@@ -17,7 +17,7 @@ public class SiliconCreature extends ALiving
 		super(p, field);
 		health = 20;
 		dov = 5;
-		action_period = 0;
+		actionPeriod = 2;
 	}
 
 	@Override public ADecision livingAI() 
