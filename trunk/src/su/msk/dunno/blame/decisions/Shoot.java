@@ -48,7 +48,7 @@ public class Shoot extends ADecision
 			//field.changeLocation(al);
 			if(field.changeLocation(al) && al.isNearPlayer())
 			{
-				field.playAnimation(new Moving(field, al, old, al.cur_pos));
+				field.addAnimation(new Moving(field, al, old, al.cur_pos));
 			}			
 		}
 		wasExecuted = true;

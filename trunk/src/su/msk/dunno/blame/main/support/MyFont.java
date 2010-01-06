@@ -103,10 +103,10 @@ public class MyFont
 		float t_height = myFont.getTextureHeight();
 		GL11.glBegin(GL11.GL_QUADS);
 			GL11.glTexCoord2f(startx/t_width, starty/t_height);
-	    	GL11.glVertex2f(-charWidth, charHeight+30);
+	    	GL11.glVertex2f(-charWidth, charHeight+40);
 	    	
 			GL11.glTexCoord2f((startx+charWidth)/t_width, starty/t_height);
-			GL11.glVertex2f(charWidth, charHeight+30);
+			GL11.glVertex2f(charWidth, charHeight+40);
 			
 			GL11.glTexCoord2f((startx+charWidth)/t_width, (starty+charHeight)/t_height);
 			GL11.glVertex2f(charWidth, -charHeight);			
