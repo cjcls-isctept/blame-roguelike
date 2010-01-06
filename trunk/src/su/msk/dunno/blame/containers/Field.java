@@ -11,6 +11,7 @@ import rlforj.los.ILosAlgorithm;
 import rlforj.los.ILosBoard;
 import rlforj.los.PrecisePermissive;
 import rlforj.math.Point2I;
+import su.msk.dunno.blame.decisions.Move;
 import su.msk.dunno.blame.gen.RecursiveDivisionMethod;
 import su.msk.dunno.blame.main.Blame;
 import su.msk.dunno.blame.main.support.Color;
@@ -144,6 +145,7 @@ public class Field
 				MyFont.instance().drawChar(objects[i][j].getLast().getSymbol(), i*20, j*20, 0.2f, objects[i][j].getLast().getColor());
 			}
 		}
+		playAnimations();
 		GL11.glPopMatrix();
 	}
 	
@@ -153,9 +155,9 @@ public class Field
 		GL11.glTranslatef(220-player_point.x*Blame.scale, 
 				  		  240-player_point.y*Blame.scale, 
 				  		  0.0f);
-		for(int i = Math.max(0, player_point.x-20*7/Blame.scale); i < Math.min(player_point.x+20*7/Blame.scale, N_x); i++)
+		for(int i = /*Math.max(0, player_point.x-20*7/Blame.scale)*/0; i < Math.min(player_point.x+20*10/Blame.scale, N_x); i++)
 		{
-			for(int j = Math.max(0, player_point.y-20*7/Blame.scale); j < Math.min(player_point.y+20*7/Blame.scale, N_y); j++)
+			for(int j = Math.max(0, player_point.y-20*7/Blame.scale); j < /*Math.min(player_point.y+20*7/Blame.scale, N_y)*/N_y; j++)
 			{
 				if(objects[i][j].getLast().isAlwaysDraw())
 				{
@@ -194,6 +196,12 @@ public class Field
 			a.play();
 			if(a.isEnded)li.remove();
 		}
+		/*if(animations.size() > 0)
+		{
+			AAnimation a = animations.getFirst();
+			a.play();
+			if(a.isEnded)animations.remove(a);
+		}*/
 	}
 	
 	public boolean changeLocation(ALiving al)	// add checks for edges and passability!
@@ -216,7 +224,7 @@ public class Field
 		return true;
 	}
 	
-	public String getDirection(Point from, Point to)
+	/*public String getDirection(Point from, Point to)
 	{
 		if(from.equals(to))return "stays still";
 		int x = to.x - from.x;
@@ -225,18 +233,41 @@ public class Field
 		{
 			if(x > 0)return "up/right";
 			else if(x == 0)return "up";
-			else/* if(x < 0)*/return "up/left";
+			else if(x < 0)return "up/left";
 		}
 		else if(y == 0)
 		{
 			if(x > 0)return "right";
-			else/* if(x < 0)*/return "left";
+			else if(x < 0)return "left";
 		}
-		else/* if(y < 0)*/
+		else if(y < 0)
 		{
 			if(x > 0)return "down/right";
 			else if(x == 0)return "down";
-			else/* if(x < 0)*/return "down/left";
+			else if(x < 0)return "down/left";
+		}
+	}*/
+	public int getDirection(Point from, Point to)
+	{
+		if(from.equals(to))return Move.STAY;
+		int x = to.x - from.x;
+		int y = to.y - from.y;
+		if(y > 0)
+		{
+			if(x > 0)return Move.UPRIGHT;
+			else if(x == 0)return Move.UP;
+			else/* if(x < 0)*/return Move.UPLEFT;
+		}
+		else if(y == 0)
+		{
+			if(x > 0)return Move.RIGHT;
+			else/* if(x < 0)*/return Move.LEFT;
+		}
+		else/* if(y < 0)*/
+		{
+			if(x > 0)return Move.DOWNRIGHT;
+			else if(x == 0)return Move.DOWN;
+			else/* if(x < 0)*/return Move.DOWNLEFT;
 		}
 	}
 	

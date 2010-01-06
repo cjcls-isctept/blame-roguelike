@@ -5,11 +5,11 @@ import su.msk.dunno.blame.prototypes.ADecision;
 import su.msk.dunno.blame.prototypes.ALiving;
 import su.msk.dunno.blame.prototypes.AObject;
 
-public class Attack extends ADecision
+public class MeleeAttack extends ADecision
 {
 	int dir;
 	
-	public Attack(ALiving al, int dir) 
+	public MeleeAttack(ALiving al, int dir) 
 	{
 		super(al);
 		this.dir = dir;
@@ -20,7 +20,7 @@ public class Attack extends ADecision
 	{
 		for(AObject ao: al.getObjectsAtDir(dir))
 		{
-			if(ao.isEnemy())
+			if(al.isEnemy(ao))
 			{
 				ao.changeState(args);
 				if(al.isNearPlayer())

@@ -48,7 +48,7 @@ public abstract class AObject
 		return new HashMap<String, Integer>();
 	}
 	
-	public boolean isEnemy() 
+	public boolean isEnemy(AObject ao)
 	{
 		return false;
 	}

@@ -20,8 +20,8 @@ public abstract class ALiving extends AObject
 	
 	protected Field field;
 	
-	public int lastAction_time;
-	public int actionPeriod;
+	private int lastAction_time;
+	protected int actionPeriod;
 	
 	private ADecision decision;
 
@@ -50,8 +50,7 @@ public abstract class ALiving extends AObject
 	
 	public void nextStep(int time)
 	{
-		if(health < 0)isDead = true;
-		if(time - lastAction_time >= actionPeriod)
+		if(time - getLastActionTime() >= getActionPeriod())
 		{
 			if(decision == null)
 			{
@@ -67,7 +66,7 @@ public abstract class ALiving extends AObject
 	{
 		for(AObject ao: getObjectsAtDir(dir))
 		{
-			if(ao.isEnemy())return true;
+			if(isEnemy(ao))return true;
 		}
 		return false;
 	}
@@ -103,6 +102,15 @@ public abstract class ALiving extends AObject
 		return null;
 	}
 	
+	public boolean getPassabilityAtDir(int dir)
+	{
+		for(AObject ao: this.getObjectsAtDir(dir))
+		{
+			if(!ao.getPassability())return false;
+		}
+		return true;
+	}
+	
 	public LinkedList<AObject> getMyNearestNeighbours() // dov = depth of vision
 	{
 		return field.getNeighbours(this, 1);
@@ -115,6 +123,7 @@ public abstract class ALiving extends AObject
 
 	public void checkStatus(ListIterator<ALiving> li) 
 	{
+		if(health < 0)isDead = true;
 		if(isDead)
 		{
 			li.remove();
@@ -123,7 +132,7 @@ public abstract class ALiving extends AObject
 		}
 	}
 	
-	@Override public abstract boolean isEnemy();
+	@Override public abstract boolean isEnemy(AObject ao);
 	
 	
 	@Override public boolean getPassability() // all livings are impossible to pass through
@@ -162,4 +171,12 @@ public abstract class ALiving extends AObject
 	}
 	
 	@Override public abstract  Color getColor();
+
+	public int getLastActionTime() {
+		return lastAction_time;
+	}
+
+	public int getActionPeriod() {
+		return actionPeriod;
+	}
 }

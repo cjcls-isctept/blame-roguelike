@@ -10,11 +10,6 @@ public class MinorSelector extends AObject
 		super(p);
 	}
 
-	@Override public boolean isEnemy() 
-	{
-		return false;
-	}
-
 	@Override public String getName() 
 	{
 		return "MinorSelecter";

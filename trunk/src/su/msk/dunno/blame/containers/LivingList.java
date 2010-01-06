@@ -15,7 +15,7 @@ public class LivingList
 	private static final long serialVersionUID = 7325672295995481834L;
 	private Field field;
 	
-	public int time;
+	public int time;	// must be private in the release!
 	
 	private LinkedList<ALiving> livings;
 	private Killy killy;
@@ -51,23 +51,31 @@ public class LivingList
 	public void nextStep()
 	{
 		// update state of the current player
-		(Blame.playCibo?cibo:killy).updateOldPos();
-		(Blame.playCibo?cibo:killy).nextStep(time);
-		if((Blame.playCibo?cibo:killy).getState().containsKey("CancelMove")) return;
+		if(!(Blame.playCibo?cibo:killy).isDead)
+		{
+			(Blame.playCibo?cibo:killy).checkPlayerStatus();
+			(Blame.playCibo?cibo:killy).updateOldPos();
+			(Blame.playCibo?cibo:killy).nextStep(time);
+			if((Blame.playCibo?cibo:killy).getState().containsKey("CancelMove")) return;
+		}
 		
 		// update state of the second player (if not CancelMove)
-		(Blame.playCibo?killy:cibo).updateOldPos();
-		(Blame.playCibo?killy:cibo).nextStep(time);		
+		if(!(Blame.playCibo?killy:cibo).isDead)
+		{
+			(Blame.playCibo?killy:cibo).checkPlayerStatus();
+			(Blame.playCibo?killy:cibo).updateOldPos();
+			(Blame.playCibo?killy:cibo).nextStep(time);
+		}
 		
 		// update monsters
-		while(time - (Blame.playCibo?cibo:killy).lastAction_time < (Blame.playCibo?cibo:killy).actionPeriod)
+		while(time - (Blame.playCibo?cibo:killy).getLastActionTime() < (Blame.playCibo?cibo:killy).getActionPeriod())
 		{
 			for(ListIterator<ALiving> li = livings.listIterator(); li.hasNext();)
 			{
 				ALiving al = li.next();
+				al.checkStatus(li);
 				al.updateOldPos();
 				al.nextStep(time);
-				al.checkStatus(li);
 			}
 			time++;
 		}

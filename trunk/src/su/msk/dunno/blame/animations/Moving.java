@@ -1,7 +1,5 @@
 package su.msk.dunno.blame.animations;
 
-import org.lwjgl.opengl.GL11;
-
 import su.msk.dunno.blame.containers.Field;
 import su.msk.dunno.blame.main.Blame;
 import su.msk.dunno.blame.main.support.MyFont;
@@ -26,15 +24,12 @@ public class Moving extends AAnimation
 
 		dir = pTo.minus(pFrom);
 				
-		duration = Blame.fps/5;
+		duration = Blame.fps/3;
 		frames = duration;
 	}
 
 	@Override public void nextFrame()
 	{
-		/*GL11.glTranslatef(220-player_point.x*Blame.scale, 
-		  		  		  240-player_point.y*Blame.scale, 
-		  		  		  0.0f);*/
 		MyFont.instance().drawChar(al.getSymbol(), pFrom.x*Blame.scale+dir.x*cur_frame*Blame.scale/frames, pFrom.y*Blame.scale+dir.y*cur_frame*Blame.scale/frames, Blame.scale*0.01f, al.getColor());
 	}
 	

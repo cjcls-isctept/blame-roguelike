@@ -3,26 +3,74 @@ package su.msk.dunno.blame.livings;
 import java.util.HashMap;
 
 import su.msk.dunno.blame.containers.Field;
+import su.msk.dunno.blame.decisions.MeleeAttack;
 import su.msk.dunno.blame.decisions.Move;
+import su.msk.dunno.blame.decisions.Open;
 import su.msk.dunno.blame.main.support.Color;
 import su.msk.dunno.blame.main.support.Point;
+import su.msk.dunno.blame.path.PathFinder;
+import su.msk.dunno.blame.path.astar.AStarPathFinder;
 import su.msk.dunno.blame.prototypes.ADecision;
 import su.msk.dunno.blame.prototypes.ALiving;
+import su.msk.dunno.blame.prototypes.AObject;
 
 
 public class SiliconCreature extends ALiving 
 {
+	PathFinder find;
+	int steps;
+	
 	public SiliconCreature(Point p, Field field) 
 	{
 		super(p, field);
 		health = 20;
 		dov = 5;
-		actionPeriod = 3;
+		actionPeriod = 2;
+		
+		find = new AStarPathFinder(field);
 	}
 
 	@Override public ADecision livingAI() 
 	{
-		return new Move(this, (int)(Math.random()*9), field);
+		for(AObject ao: this.getMyNeighbours())
+		{
+			if(this.isEnemy(ao))
+			{
+				int dir = field.getDirection(cur_pos, ao.cur_pos);
+				if(this.isEnemyAtDir(dir))return new MeleeAttack(this, dir);
+				else  
+				{
+					if(!this.getPassabilityAtDir(dir))
+					{
+						return new Move(this, (int)(Math.random()*9), field);
+					}
+					else return new Move(this, dir, field);
+				}
+			}
+		}
+		steps--;
+		if(!find.path.isEmpty() && cur_pos.equals(find.path.getFirst()))find.path.removeFirst();	// remove the point we reach on the prevoius step
+		if(find.path.isEmpty() || steps == 0)	// create a new path to some random point
+		{
+			Point goTo = field.getRandomPos();
+			find.findPath(cur_pos, goTo);
+			if(find.path.isEmpty())	// couldn't create a path - go to random direction
+			{
+				return new Move(this, (int)(Math.random()*9), field);
+			}
+			steps = find.path.size()*2;
+		}
+		AObject nextTile = field.getObjectsAtPoint(find.path.getFirst()).getFirst();
+		if("Close door".equals(nextTile.getName()))	//found a door near us
+		{
+			return new Open(this);	// open it
+		}
+		if(!field.getPassability(find.path.getFirst()))	// there is an obstacle on our way
+		{
+			return new Move(this, (int)(Math.random()*9), field);	// go to random dir
+		}
+		Move move = new Move(this, field.getDirection(cur_pos, find.path.getFirst()), field);	// if everything ok - go to the next point in our path
+		return move;
 	}
 
 	@Override public String getName() 
@@ -48,8 +96,8 @@ public class SiliconCreature extends ALiving
 		}
 	}
 
-	@Override public boolean isEnemy() 
+	@Override public boolean isEnemy(AObject ao) 
 	{
-		return true;
+		return "Killy".equals(ao.getName()) || "Cibo".equals(ao.getName());
 	}
 }

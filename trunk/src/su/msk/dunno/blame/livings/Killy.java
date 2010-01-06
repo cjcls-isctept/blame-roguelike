@@ -4,12 +4,13 @@ import java.util.HashMap;
 import java.util.LinkedList;
 
 import su.msk.dunno.blame.containers.Field;
-import su.msk.dunno.blame.decisions.Attack;
+import su.msk.dunno.blame.decisions.MeleeAttack;
 import su.msk.dunno.blame.decisions.Close;
 import su.msk.dunno.blame.decisions.Move;
 import su.msk.dunno.blame.decisions.Open;
 import su.msk.dunno.blame.decisions.Shoot;
 import su.msk.dunno.blame.decisions.Take;
+import su.msk.dunno.blame.items.PlayerCorpse;
 import su.msk.dunno.blame.main.support.Color;
 import su.msk.dunno.blame.main.support.Point;
 import su.msk.dunno.blame.prototypes.ADecision;
@@ -44,7 +45,7 @@ public class Killy extends ALiving
 	{
 		super(i, j, field);
 		health = 100;
-		actionPeriod = 4;
+		actionPeriod = 3;
 		dov = 5;
 		
 		selectLine = new LinkedList<MinorSelector>();
@@ -63,7 +64,7 @@ public class Killy extends ALiving
 			}
 			else
 			{
-				if(isEnemyAtDir(Move.UP))return new Attack(this, Move.UP);
+				if(isEnemyAtDir(Move.UP))return new MeleeAttack(this, Move.UP);
 				else return new Move(this, Move.UP, field);
 			}
 		}
@@ -77,7 +78,7 @@ public class Killy extends ALiving
 			}
 			else
 			{
-				if(isEnemyAtDir(Move.LEFT))return new Attack(this, Move.LEFT);
+				if(isEnemyAtDir(Move.LEFT))return new MeleeAttack(this, Move.LEFT);
 				else return new Move(this, Move.LEFT, field);
 			}
 		}
@@ -91,7 +92,7 @@ public class Killy extends ALiving
 			}
 			else
 			{
-				if(isEnemyAtDir(Move.DOWN))return new Attack(this, Move.DOWN);
+				if(isEnemyAtDir(Move.DOWN))return new MeleeAttack(this, Move.DOWN);
 				else return new Move(this, Move.DOWN, field);
 			}
 		}
@@ -105,7 +106,7 @@ public class Killy extends ALiving
 			}
 			else
 			{
-				if(isEnemyAtDir(Move.RIGHT))return new Attack(this, Move.RIGHT);
+				if(isEnemyAtDir(Move.RIGHT))return new MeleeAttack(this, Move.RIGHT);
 				else return new Move(this, Move.RIGHT, field);
 			}
 		}
@@ -119,7 +120,7 @@ public class Killy extends ALiving
 			}
 			else
 			{
-				if(isEnemyAtDir(Move.UPRIGHT))return new Attack(this, Move.UPRIGHT);
+				if(isEnemyAtDir(Move.UPRIGHT))return new MeleeAttack(this, Move.UPRIGHT);
 				else return new Move(this, Move.UPRIGHT, field);
 			}
 		}
@@ -133,7 +134,7 @@ public class Killy extends ALiving
 			}
 			else
 			{
-				if(isEnemyAtDir(Move.UPLEFT))return new Attack(this, Move.UPLEFT);
+				if(isEnemyAtDir(Move.UPLEFT))return new MeleeAttack(this, Move.UPLEFT);
 				else return new Move(this, Move.UPLEFT, field);
 			}
 		}
@@ -147,7 +148,7 @@ public class Killy extends ALiving
 			}
 			else
 			{
-				if(isEnemyAtDir(Move.DOWNLEFT))return new Attack(this, Move.DOWNLEFT);
+				if(isEnemyAtDir(Move.DOWNLEFT))return new MeleeAttack(this, Move.DOWNLEFT);
 				else return new Move(this, Move.DOWNLEFT, field);
 			}
 		}
@@ -161,7 +162,7 @@ public class Killy extends ALiving
 			}
 			else
 			{
-				if(isEnemyAtDir(Move.DOWNRIGHT))return new Attack(this, Move.DOWNRIGHT);
+				if(isEnemyAtDir(Move.DOWNRIGHT))return new MeleeAttack(this, Move.DOWNRIGHT);
 				else return new Move(this, Move.DOWNRIGHT, field);
 			}
 		}
@@ -184,7 +185,7 @@ public class Killy extends ALiving
 				LinkedList<AObject> neighbours = getMyNeighbours();
 				for(AObject ao: neighbours)
 				{
-					if(ao.isEnemy())
+					if(isEnemy(ao))
 					{
 						selectPoint = ao.cur_pos;
 						break;
@@ -209,7 +210,8 @@ public class Killy extends ALiving
 	
 	@Override public Color getColor()
 	{
-		return Color.RED;
+		/*if(isDead) return Color.WHITE;
+		else */return Color.RED;
 	}
 	
 	public void reset_keys()
@@ -220,11 +222,6 @@ public class Killy extends ALiving
 		wantTake = false;
 		wantShoot = false;
 		isSelectTarget = false;
-	}
-
-	@Override public boolean isEnemy() 
-	{
-		return false;
 	}
 	
 	@Override public void changeState(HashMap<String, Integer> args)
@@ -290,5 +287,20 @@ public class Killy extends ALiving
 	@Override public boolean isLightSource()
 	{
 		return true;
+	}
+
+	@Override public boolean isEnemy(AObject ao) 
+	{
+		return "Silicon Creature".equals(ao.getName());
+	}
+	
+	public void checkPlayerStatus()
+	{
+		if(health < 0)isDead = true;
+		if(isDead)
+		{
+			field.removeObject(this);
+			field.addObject(new PlayerCorpse(cur_pos));
+		}
 	}
 }
