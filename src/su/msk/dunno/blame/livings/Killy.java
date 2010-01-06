@@ -44,7 +44,7 @@ public class Killy extends ALiving
 	{
 		super(i, j, field);
 		health = 100;
-		action_period = 0;
+		actionPeriod = 4;
 		dov = 5;
 		
 		selectLine = new LinkedList<MinorSelector>();

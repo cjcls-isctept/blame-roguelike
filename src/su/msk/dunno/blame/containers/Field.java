@@ -80,8 +80,11 @@ public class Field
 
 			public void visit(int x, int y) 
 			{
-				MyFont.instance().drawChar(objects[x][y].getLast().getSymbol(), x*Blame.scale, y*Blame.scale, Blame.scale*0.01f, objects[x][y].getLast().getColor());
-				objects[x][y].getFirst().wasDrawed = true;				
+				if(!objects[x][y].getLast().preventDraw)
+				{
+					MyFont.instance().drawChar(objects[x][y].getLast().getSymbol(), x*Blame.scale, y*Blame.scale, Blame.scale*0.01f, objects[x][y].getLast().getColor());
+					objects[x][y].getFirst().wasDrawed = true;
+				}
 			}			
 		};
 		lineView = new RL4JMapView()
@@ -125,7 +128,7 @@ public class Field
 	public Vector2D getCoordForPoint(Point player_point, Point p)
 	{
 		return new Vector2D(220-player_point.x*Blame.scale, 240-player_point.y*Blame.scale).plus
-		      (new Vector2D(p.x*20, p.y*20));
+		      (new Vector2D(p.x*Blame.scale, p.y*Blame.scale));
 	}
 	
 	public void draw()
@@ -150,9 +153,9 @@ public class Field
 		GL11.glTranslatef(220-player_point.x*Blame.scale, 
 				  		  240-player_point.y*Blame.scale, 
 				  		  0.0f);
-		for(int i = 0; i < N_x; i++)
+		for(int i = Math.max(0, player_point.x-20*7/Blame.scale); i < Math.min(player_point.x+20*7/Blame.scale, N_x); i++)
 		{
-			for(int j = 0; j < N_y; j++)
+			for(int j = Math.max(0, player_point.y-20*7/Blame.scale); j < Math.min(player_point.y+20*7/Blame.scale, N_y); j++)
 			{
 				if(objects[i][j].getLast().isAlwaysDraw())
 				{
@@ -176,6 +179,7 @@ public class Field
 			GL11.glLoadIdentity();
 			draw((Blame.playCibo?Blame.cibo.cur_pos:Blame.killy.cur_pos));
 			a.play();
+			MyFont.instance().drawString("FPS: "+Blame.fps, 450, 415, 0.2f, Color.WHITE);
 			Display.sync(Blame.framerate);
 			Display.update();
 		}		

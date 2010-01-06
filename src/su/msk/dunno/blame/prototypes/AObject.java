@@ -9,7 +9,10 @@ import su.msk.dunno.blame.main.support.Point;
 public abstract class AObject 
 {
 	public Point cur_pos;	// current position
+	
 	public boolean wasDrawed;
+	public boolean preventDraw;
+	
 	protected int dov;	// dov = depth of vision
 	
 	public AObject(int i, int j)

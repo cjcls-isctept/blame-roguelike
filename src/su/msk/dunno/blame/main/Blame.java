@@ -59,9 +59,9 @@ public class Blame
 		field = new Field(N_x, N_y, "random");
 		killy = new Killy(field.getRandomPos(), field);
 		cibo = new Cibo(field.getRandomPos(), field);
-		objects = new LivingList(field);
-		objects.addObject(killy);	// killy must be first in the list
-		objects.addObject(cibo);	// and cibo too
+		objects = new LivingList(field, killy, cibo);
+		//objects.addObject(killy);	// killy must be first in the list
+		//objects.addObject(cibo);	// and cibo too
 		objects.addCreatures(40);
 		
 		isRunning = true;
@@ -105,6 +105,8 @@ public class Blame
 		Messages.instance().showMessages();
 		MyFont.instance().drawString((playCibo?"Cibo":"Killy"), 450, 460, 0.2f, Color.WHITE);
 		MyFont.instance().drawString("HP: "+(playCibo?cibo:killy).getHealth(), 450, 445, 0.2f, Color.WHITE);
+		MyFont.instance().drawString("Time: "+objects.time, 450, 430, 0.2f, Color.WHITE);
+		MyFont.instance().drawString("FPS: "+fps, 450, 415, 0.2f, Color.WHITE);
         
 		Display.sync(framerate);
 		Display.update();

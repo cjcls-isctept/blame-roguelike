@@ -20,9 +20,9 @@ public abstract class ALiving extends AObject
 	
 	protected Field field;
 	
-	protected int action_period;
+	public int lastAction_time;
+	public int actionPeriod;
 	
-	private int time_remain;
 	private ADecision decision;
 
 	public ALiving(int i, int j, Field field) 
@@ -48,33 +48,19 @@ public abstract class ALiving extends AObject
 		old_pos = cur_pos;
 	}
 	
-	public void nextStep()
+	public void nextStep(int time)
 	{
-		if(health <= 0)isDead = true;
-		if(decision == null)
+		if(health < 0)isDead = true;
+		if(time - lastAction_time >= actionPeriod)
 		{
-			decision = livingAI();
-			if(decision != null)time_remain = action_period;
-		}
-		if(decision != null)
-		{
-			if(time_remain == 0)
+			if(decision == null)
 			{
-				decision.doAction();
-				if(decision.wasExecuted())decision = null;
+				decision = livingAI();
 			}
-			else time_remain--;
+			if(decision != null)decision.doAction();
+			decision = null;
+			if(!this.getState().containsKey("CancelMove"))lastAction_time = time;
 		}
-		/*else 
-		{
-			decision = livingAI();
-			if(decision != null)time_remain = action_period;
-		}
-		if(time_remain == 0 && decision != null)
-		{
-			decision.doAction();
-			if(decision.wasExecuted())decision = null;
-		}*/
 	}
 	
 	public boolean isEnemyAtDir(int dir)
