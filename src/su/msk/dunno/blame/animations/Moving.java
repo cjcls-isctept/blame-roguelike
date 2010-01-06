@@ -11,7 +11,6 @@ import su.msk.dunno.blame.prototypes.ALiving;
 
 public class Moving extends AAnimation 
 {
-	Point player_point;
 	Point pFrom, pTo;
 	Point dir;
 	ALiving al;
@@ -22,8 +21,6 @@ public class Moving extends AAnimation
 		
 		this.al = al;
 		al.preventDraw = true;
-		//field.removeObject(al);
-		player_point = Blame.playCibo?Blame.cibo.cur_pos:Blame.killy.cur_pos;
 		pFrom = p_from;
 		pTo = p_to;
 
@@ -35,9 +32,9 @@ public class Moving extends AAnimation
 
 	@Override public void nextFrame()
 	{
-		GL11.glTranslatef(220-player_point.x*Blame.scale, 
+		/*GL11.glTranslatef(220-player_point.x*Blame.scale, 
 		  		  		  240-player_point.y*Blame.scale, 
-		  		  		  0.0f);
+		  		  		  0.0f);*/
 		MyFont.instance().drawChar(al.getSymbol(), pFrom.x*Blame.scale+dir.x*cur_frame*Blame.scale/frames, pFrom.y*Blame.scale+dir.y*cur_frame*Blame.scale/frames, Blame.scale*0.01f, al.getColor());
 	}
 	

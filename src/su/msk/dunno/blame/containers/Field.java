@@ -168,6 +168,7 @@ public class Field
 		{
 			new PrecisePermissive().visitFieldOfView(drawView, source.cur_pos.x, source.cur_pos.y, source.getDov());
 		}
+		playAnimations();
 		GL11.glPopMatrix();
 	}
 	
