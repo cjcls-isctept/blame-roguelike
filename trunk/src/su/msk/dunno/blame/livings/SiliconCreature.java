@@ -34,21 +34,21 @@ public class SiliconCreature extends ALiving
 	{
 		for(AObject ao: this.getMyNeighbours())
 		{
-			if(this.isEnemy(ao))
+			if(this.isEnemy(ao))	// attack sequence
 			{
 				int dir = field.getDirection(cur_pos, ao.cur_pos);
 				if(this.isEnemyAtDir(dir))return new MeleeAttack(this, dir);
 				else  
 				{
-					if(!this.getPassabilityAtDir(dir))
+					if(getPassabilityAtDir(dir))
 					{
-						return new Move(this, (int)(Math.random()*9), field);
+						return new Move(this, dir, field);						
 					}
-					else return new Move(this, dir, field);
+					else return new Move(this, (int)(Math.random()*9), field); 
 				}
 			}
 		}
-		steps--;
+		steps--;	// explore sequence
 		if(!find.path.isEmpty() && cur_pos.equals(find.path.getFirst()))find.path.removeFirst();	// remove the point we reach on the prevoius step
 		if(find.path.isEmpty() || steps == 0)	// create a new path to some random point
 		{
@@ -69,8 +69,8 @@ public class SiliconCreature extends ALiving
 		{
 			return new Move(this, (int)(Math.random()*9), field);	// go to random dir
 		}
-		Move move = new Move(this, field.getDirection(cur_pos, find.path.getFirst()), field);	// if everything ok - go to the next point in our path
-		return move;
+		// if everything ok - go to the next point in our path
+		return new Move(this, field.getDirection(cur_pos, find.path.getFirst()), field);
 	}
 
 	@Override public String getName() 

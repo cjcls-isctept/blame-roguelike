@@ -15,8 +15,6 @@ public abstract class AObject
 	
 	protected int dov;	// dov = depth of vision
 	
-	public boolean isMoving;
-	
 	public AObject(int i, int j)
 	{
 		this(new Point(i, j));

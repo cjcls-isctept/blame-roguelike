@@ -1,12 +1,13 @@
 package su.msk.dunno.blame.animations;
 
+import java.util.HashMap;
+
 import su.msk.dunno.blame.containers.Field;
 import su.msk.dunno.blame.main.Blame;
 import su.msk.dunno.blame.main.support.MyFont;
 import su.msk.dunno.blame.main.support.Point;
 import su.msk.dunno.blame.main.support.Vector2D;
 import su.msk.dunno.blame.prototypes.AAnimation;
-import su.msk.dunno.blame.prototypes.ALiving;
 import su.msk.dunno.blame.prototypes.AObject;
 
 public class Moving extends AAnimation 
@@ -21,13 +22,15 @@ public class Moving extends AAnimation
 		
 		this.ao = ao;
 		ao.preventDraw = true;
-		ao.isMoving = true;
+		HashMap<String, Integer> args = new HashMap<String, Integer>();
+		args.put("MovingStarted", 1);
+		ao.changeState(args);
 		pFrom = p_from;
 		pTo = p_to;
 
 		dir = pTo.minus(pFrom);
 				
-		duration = Blame.fps/3;
+		duration = Blame.fps/4;
 		frames = duration;
 		
 		if((Blame.playCibo?"Cibo":"Killy").equals(ao.getName()))
@@ -54,7 +57,9 @@ public class Moving extends AAnimation
 	@Override public void stop()
 	{
 		ao.preventDraw = false;
-		ao.isMoving = false;
+		HashMap<String, Integer> args = new HashMap<String, Integer>();
+		args.put("MovingEnded", 1);
+		ao.changeState(args);
 		if((Blame.playCibo?"Cibo":"Killy").equals(ao.getName()))field.isPlayerMoving = false;
 	}
 }
