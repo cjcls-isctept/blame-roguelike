@@ -29,12 +29,15 @@ import su.msk.dunno.blame.tiles.Wall;
 public class Field 
 {
 	public LinkObject[][] objects;	// must be private in the release!!!
-	private LinkedList<AAnimation> animations;
+	public LinkedList<AAnimation> animations;	// must be private!!!
 	private LinkedList<AObject> lightSources;
 	private int N_x, N_y;
 	
 	private RL4JMapView drawView;
 	private RL4JMapView lineView;
+	
+	public boolean isPlayerMoving;
+	public Vector2D playerMovingCoord;
 	
 	public Field(int N_x, int N_y, String mapname)	// constructor for map generation or map loading
 	{
@@ -142,7 +145,10 @@ public class Field
 		{
 			for(int j = 0; j < N_y; j++)
 			{
-				MyFont.instance().drawChar(objects[i][j].getLast().getSymbol(), i*20, j*20, 0.2f, objects[i][j].getLast().getColor());
+				if(!objects[i][j].getLast().preventDraw)
+				{
+					MyFont.instance().drawChar(objects[i][j].getLast().getSymbol(), i*20, j*20, 0.2f, objects[i][j].getLast().getColor());
+				}
 			}
 		}
 		playAnimations();
@@ -152,9 +158,18 @@ public class Field
 	public void draw(Point player_point)
 	{
 		GL11.glPushMatrix();
-		GL11.glTranslatef(220-player_point.x*Blame.scale, 
-				  		  240-player_point.y*Blame.scale, 
-				  		  0.0f);
+		if(!isPlayerMoving)
+		{
+			GL11.glTranslatef(220-player_point.x*Blame.scale, 
+					  		  240-player_point.y*Blame.scale, 
+					  		  0.0f);
+		}
+		else
+		{
+			GL11.glTranslatef(220-playerMovingCoord.x, 
+			  		  		  240-playerMovingCoord.y, 
+			  		  		  0.0f);
+		}
 		for(int i = /*Math.max(0, player_point.x-20*7/Blame.scale)*/0; i < Math.min(player_point.x+20*10/Blame.scale, N_x); i++)
 		{
 			for(int j = Math.max(0, player_point.y-20*7/Blame.scale); j < /*Math.min(player_point.y+20*7/Blame.scale, N_y)*/N_y; j++)
@@ -174,11 +189,11 @@ public class Field
 		GL11.glPopMatrix();
 	}
 	
-	public void playAnimation(AAnimation a)
+	/*public void playAnimation(AAnimation a)
 	{
 		while(!a.isEnded)
 		{
-			GL11.glClear(GL11.GL_COLOR_BUFFER_BIT/* | GL11.GL_DEPTH_BUFFER_BIT*/);		
+			GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);		
 			GL11.glLoadIdentity();
 			draw((Blame.playCibo?Blame.cibo.cur_pos:Blame.killy.cur_pos));
 			a.play();
@@ -186,7 +201,7 @@ public class Field
 			Display.sync(Blame.framerate);
 			Display.update();
 		}		
-	}
+	}*/
 	
 	public void playAnimations()
 	{
@@ -394,6 +409,11 @@ public class Field
 			j = starty + (int)(Math.random()*(endy+1 - starty));
 		}
 		return new Point(i, j);
+	}
+	
+	public Point getRandomPos(Point leftup, Point rightdown)
+	{
+		return this.getRandomPos(leftup.x, leftup.y, rightdown.x, rightdown.y);
 	}
 
 	public int getN_x() {

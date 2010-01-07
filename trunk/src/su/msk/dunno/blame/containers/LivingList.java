@@ -21,14 +21,22 @@ public class LivingList
 	private Killy killy;
 	private Cibo cibo;
 	
-	public LivingList(Field field, Killy killy, Cibo cibo)
+	public LivingList(Field field)
 	{
-		this.field = field;
+		this.field = field;		
+		livings = new LinkedList<ALiving>();
+	}
+	
+	public void addKilly(Killy killy)
+	{
 		this.killy = killy;
-		field.addObject(killy);
+		field.addObject(killy);	
+	}
+	
+	public void addCibo(Cibo cibo)
+	{
 		this.cibo = cibo;
 		field.addObject(cibo);
-		livings = new LinkedList<ALiving>();
 	}
 	
 	public void addCreatures(int num)

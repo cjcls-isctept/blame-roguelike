@@ -4,6 +4,7 @@ import java.util.HashMap;
 
 import su.msk.dunno.blame.animations.Moving;
 import su.msk.dunno.blame.containers.Field;
+import su.msk.dunno.blame.main.Blame;
 import su.msk.dunno.blame.main.support.Point;
 import su.msk.dunno.blame.prototypes.ADecision;
 import su.msk.dunno.blame.prototypes.ALiving;
@@ -34,44 +35,47 @@ public class Move extends ADecision
 
 	@Override public void doAction() 
 	{
-		Point old = al.cur_pos;
-		switch(dir)
+		if(!(Blame.playCibo?"Cibo":"Killy").equals(al.getName()) || !al.isMoving)
 		{
-		case 0: 
-			al.cur_pos = new Point(al.cur_pos.x, al.cur_pos.y+1); 
-			break;	// up
-		case 1: 
-			al.cur_pos = new Point(al.cur_pos.x-1, al.cur_pos.y); 
-			break;	// left
-		case 2: 
-			al.cur_pos = new Point(al.cur_pos.x, al.cur_pos.y-1); 
-			break;	// down
-		case 3: 
-			al.cur_pos = new Point(al.cur_pos.x+1, al.cur_pos.y); 
-			break;	// right
-		case 4:
-			al.cur_pos = new Point(al.cur_pos.x+1, al.cur_pos.y+1); 
-			break;	// up/right
-		case 5:
-			al.cur_pos = new Point(al.cur_pos.x-1, al.cur_pos.y+1); 
-			break;	// up/left
-		case 6:
-			al.cur_pos = new Point(al.cur_pos.x-1, al.cur_pos.y-1); 
-			break;	// down/left
-		case 7:
-			al.cur_pos = new Point(al.cur_pos.x+1, al.cur_pos.y-1); 
-			break;	// down/right
-		case 8:
-			//al.cur_pos = new Point(al.cur_pos.x, al.cur_pos.y); 
-			break;	// down/right
-		}
-		if(!field.changeLocation(al))
-		{
-			HashMap<String, Integer> args = new HashMap<String, Integer>();
-			args.put("MoveFail", 1);
-			al.changeState(args);
-		}
-		else if(al.isNearPlayer() && dir != Move.STAY)field.addAnimation(new Moving(field, al, old, al.cur_pos));
-		wasExecuted = true;
+			Point old = al.cur_pos;
+			switch(dir)
+			{
+			case 0: 
+				al.cur_pos = new Point(al.cur_pos.x, al.cur_pos.y+1); 
+				break;	// up
+			case 1: 
+				al.cur_pos = new Point(al.cur_pos.x-1, al.cur_pos.y); 
+				break;	// left
+			case 2: 
+				al.cur_pos = new Point(al.cur_pos.x, al.cur_pos.y-1); 
+				break;	// down
+			case 3: 
+				al.cur_pos = new Point(al.cur_pos.x+1, al.cur_pos.y); 
+				break;	// right
+			case 4:
+				al.cur_pos = new Point(al.cur_pos.x+1, al.cur_pos.y+1); 
+				break;	// up/right
+			case 5:
+				al.cur_pos = new Point(al.cur_pos.x-1, al.cur_pos.y+1); 
+				break;	// up/left
+			case 6:
+				al.cur_pos = new Point(al.cur_pos.x-1, al.cur_pos.y-1); 
+				break;	// down/left
+			case 7:
+				al.cur_pos = new Point(al.cur_pos.x+1, al.cur_pos.y-1); 
+				break;	// down/right
+			case 8:
+				//al.cur_pos = new Point(al.cur_pos.x, al.cur_pos.y); 
+				break;	// down/right
+			}
+			if(!field.changeLocation(al))
+			{
+				HashMap<String, Integer> args = new HashMap<String, Integer>();
+				args.put("MoveFail", 1);
+				al.changeState(args);
+			}
+			else if(al.isNearPlayer() && dir != Move.STAY)field.addAnimation(new Moving(field, al, old, al.cur_pos));
+			wasExecuted = true;
+		}		
 	}
 }

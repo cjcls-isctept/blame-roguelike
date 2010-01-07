@@ -16,6 +16,7 @@ import su.msk.dunno.blame.livings.Killy;
 import su.msk.dunno.blame.main.support.Color;
 import su.msk.dunno.blame.main.support.Messages;
 import su.msk.dunno.blame.main.support.MyFont;
+import su.msk.dunno.blame.main.support.Point;
 import su.msk.dunno.blame.main.support.listeners.EventManager;
 import su.msk.dunno.blame.main.support.listeners.KeyListener;
 
@@ -44,7 +45,7 @@ public class Blame
 	private boolean isNextStep = true;
 	private boolean isStepDone = false;
 
-	// variables below are for infinite (with pushed key) moving purposes
+	// variables below are for infinite (with pressed key) moving purposes
 	private int frames;
 	private long msek = Calendar.getInstance().getTimeInMillis();
 	public static int fps;	
@@ -57,11 +58,12 @@ public class Blame
 		initEvents();
 
 		field = new Field(N_x, N_y, "random");
+		
+		objects = new LivingList(field);
 		killy = new Killy(field.getRandomPos(), field);
-		cibo = new Cibo(field.getRandomPos(), field);
-		objects = new LivingList(field, killy, cibo);
-		//objects.addObject(killy);	// killy must be first in the list
-		//objects.addObject(cibo);	// and cibo too
+		objects.addKilly(killy);
+		cibo = new Cibo(field.getRandomPos(killy.cur_pos.plus(new Point(-2,2)), killy.cur_pos.plus(new Point(2,-2))), field);	// generate cibo near killy
+		objects.addCibo(cibo);
 		objects.addCreatures(20);
 		
 		isRunning = true;
@@ -94,21 +96,47 @@ public class Blame
 	
 	public void render()
 	{
-		GL11.glClear(GL11.GL_COLOR_BUFFER_BIT/* | GL11.GL_DEPTH_BUFFER_BIT*/);		
-		GL11.glLoadIdentity();
-		
-		/*char ch = '@';
-		MyFont.instance().drawChar(ch, new Vector2D(320,240), 0.2f, Color.WHITE);*/
-		
-		field.draw((playCibo?cibo.cur_pos:killy.cur_pos));
-		Messages.instance().showMessages();
-		MyFont.instance().drawString((playCibo?"Cibo":"Killy"), 450, 460, 0.2f, Color.WHITE);
-		MyFont.instance().drawString("HP: "+(playCibo?cibo:killy).getHealth(), 450, 445, 0.2f, Color.WHITE);
-		MyFont.instance().drawString("Time: "+objects.time, 450, 430, 0.2f, Color.WHITE);
-		MyFont.instance().drawString("FPS: "+fps, 450, 415, 0.2f, Color.WHITE);
-        
-		Display.sync(framerate);
-		Display.update();
+		/*if(field.animations.size() > 0)
+		{
+			while(field.animations.size() > 0)
+			{
+				GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);		
+				GL11.glLoadIdentity();
+				
+				char ch = '@';
+				MyFont.instance().drawChar(ch, new Vector2D(320,240), 0.2f, Color.WHITE);
+				
+				field.draw((playCibo?cibo.cur_pos:killy.cur_pos));
+				Messages.instance().showMessages();
+				MyFont.instance().drawString((playCibo?"Cibo":"Killy"), 450, 460, 0.2f, Color.WHITE);
+				MyFont.instance().drawString("HP: "+(playCibo?cibo:killy).getHealth(), 450, 445, 0.2f, Color.WHITE);
+				MyFont.instance().drawString("Time: "+objects.time, 450, 430, 0.2f, Color.WHITE);
+				MyFont.instance().drawString("FPS: "+fps, 450, 415, 0.2f, Color.WHITE);
+				MyFont.instance().drawString("Anima: "+field.animations.size(), 450, 400, 0.2f, Color.WHITE);
+		        
+				Display.sync(framerate);
+				Display.update();
+			}
+		}
+		else
+		{*/
+			GL11.glClear(GL11.GL_COLOR_BUFFER_BIT/* | GL11.GL_DEPTH_BUFFER_BIT*/);		
+			GL11.glLoadIdentity();
+			
+			/*char ch = '@';
+			MyFont.instance().drawChar(ch, new Vector2D(320,240), 0.2f, Color.WHITE);*/
+			
+			field.draw((playCibo?cibo.cur_pos:killy.cur_pos));
+			Messages.instance().showMessages();
+			MyFont.instance().drawString((playCibo?"Cibo":"Killy"), 450, 460, 0.2f, Color.WHITE);
+			MyFont.instance().drawString("HP: "+(playCibo?cibo:killy).getHealth(), 450, 445, 0.2f, Color.WHITE);
+			MyFont.instance().drawString("Time: "+objects.time, 450, 430, 0.2f, Color.WHITE);
+			MyFont.instance().drawString("FPS: "+fps, 450, 415, 0.2f, Color.WHITE);
+			MyFont.instance().drawString("Anima: "+field.animations.size(), 450, 400, 0.2f, Color.WHITE);
+	        
+			Display.sync(framerate);
+			Display.update();
+		/*}*/
 	}
 	
 	public void checkRequests()
@@ -163,7 +191,7 @@ public class Blame
         		{
         			isStepDone = false;
         			count = 0;
-        			period = fps/10;
+        			period = fps/3;
         		}
          	}
         	
@@ -171,7 +199,7 @@ public class Blame
         	{
         		isStepDone = false;
         		count = 0;
-        		period = fps/2;
+        		period = fps/3;
         	}
         });
 		EventManager.instance().addListener(Keyboard.KEY_NUMPAD8, new KeyListener()
@@ -185,7 +213,7 @@ public class Blame
         		{
         			isStepDone = false;
         			count = 0;
-        			period = fps/10;
+        			period = fps/3;
         		}
          	}
         	
@@ -193,7 +221,7 @@ public class Blame
         	{
         		isStepDone = false;
         		count = 0;
-        		period = fps/2;
+        		period = fps/3;
         	}
         });
 		EventManager.instance().addListener(Keyboard.KEY_LEFT, new KeyListener()
@@ -207,7 +235,7 @@ public class Blame
         		{
         			isStepDone = false;
         			count = 0;
-        			period = fps/10;
+        			period = fps/3;
         		}
         	}
         	
@@ -215,7 +243,7 @@ public class Blame
         	{
         		isStepDone = false;
         		count = 0;
-        		period = fps/2;
+        		period = fps/3;
         	}
         });
 		EventManager.instance().addListener(Keyboard.KEY_NUMPAD4, new KeyListener()
@@ -229,7 +257,7 @@ public class Blame
         		{
         			isStepDone = false;
         			count = 0;
-        			period = fps/10;
+        			period = fps/3;
         		}
         	}
         	
@@ -237,7 +265,7 @@ public class Blame
         	{
         		isStepDone = false;
         		count = 0;
-        		period = fps/2;
+        		period = fps/3;
         	}
         });
 		EventManager.instance().addListener(Keyboard.KEY_DOWN, new KeyListener()
@@ -251,7 +279,7 @@ public class Blame
         		{
         			isStepDone = false;
         			count = 0;
-        			period = fps/10;
+        			period = fps/3;
         		}
         	}
         	
@@ -259,7 +287,7 @@ public class Blame
         	{
         		isStepDone = false;
         		count = 0;
-        		period = fps/2;
+        		period = fps/3;
         	}
         });
 		EventManager.instance().addListener(Keyboard.KEY_NUMPAD2, new KeyListener()
@@ -273,7 +301,7 @@ public class Blame
         		{
         			isStepDone = false;
         			count = 0;
-        			period = fps/10;
+        			period = fps/3;
         		}
         	}
         	
@@ -281,7 +309,7 @@ public class Blame
         	{
         		isStepDone = false;
         		count = 0;
-        		period = fps/2;
+        		period = fps/3;
         	}
         });
 		EventManager.instance().addListener(Keyboard.KEY_RIGHT, new KeyListener()
@@ -295,7 +323,7 @@ public class Blame
         		{
         			isStepDone = false;
         			count = 0;
-        			period = fps/10;
+        			period = fps/3;
         		}
         	}
         	
@@ -303,7 +331,7 @@ public class Blame
         	{
         		isStepDone = false;
         		count = 0;
-        		period = fps/2;
+        		period = fps/3;
         	}
         });
 		EventManager.instance().addListener(Keyboard.KEY_NUMPAD6, new KeyListener()
@@ -317,7 +345,7 @@ public class Blame
         		{
         			isStepDone = false;
         			count = 0;
-        			period = fps/10;
+        			period = fps/3;
         		}
         	}
         	
@@ -325,7 +353,7 @@ public class Blame
         	{
         		isStepDone = false;
         		count = 0;
-        		period = fps/2;
+        		period = fps/3;
         	}
         });
 		EventManager.instance().addListener(Keyboard.KEY_NUMPAD9, new KeyListener()
@@ -339,7 +367,7 @@ public class Blame
         		{
         			isStepDone = false;
         			count = 0;
-        			period = fps/10;
+        			period = fps/3;
         		}
         	}
         	
@@ -347,7 +375,7 @@ public class Blame
         	{
         		isStepDone = false;
         		count = 0;
-        		period = fps/2;
+        		period = fps/3;
         	}
         });
 		EventManager.instance().addListener(Keyboard.KEY_NUMPAD7, new KeyListener()
@@ -361,7 +389,7 @@ public class Blame
         		{
         			isStepDone = false;
         			count = 0;
-        			period = fps/10;
+        			period = fps/3;
         		}
         	}
         	
@@ -369,7 +397,7 @@ public class Blame
         	{
         		isStepDone = false;
         		count = 0;
-        		period = fps/2;
+        		period = fps/3;
         	}
         });
 		EventManager.instance().addListener(Keyboard.KEY_NUMPAD1, new KeyListener()
@@ -383,7 +411,7 @@ public class Blame
         		{
         			isStepDone = false;
         			count = 0;
-        			period = fps/10;
+        			period = fps/3;
         		}
         	}
         	
@@ -391,7 +419,7 @@ public class Blame
         	{
         		isStepDone = false;
         		count = 0;
-        		period = fps/2;
+        		period = fps/3;
         	}
         });
 		EventManager.instance().addListener(Keyboard.KEY_NUMPAD3, new KeyListener()
@@ -405,7 +433,7 @@ public class Blame
         		{
         			isStepDone = false;
         			count = 0;
-        			period = fps/10;
+        			period = fps/3;
         		}
         	}
         	
@@ -413,7 +441,7 @@ public class Blame
         	{
         		isStepDone = false;
         		count = 0;
-        		period = fps/2;
+        		period = fps/3;
         	}
         });
 		EventManager.instance().addListener(Keyboard.KEY_NUMPAD5, new KeyListener()
@@ -427,7 +455,7 @@ public class Blame
         		{
         			isStepDone = false;
         			count = 0;
-        			period = fps/10;
+        			period = fps/3;
         		}
         	}
         	
@@ -435,7 +463,7 @@ public class Blame
         	{
         		isStepDone = false;
         		count = 0;
-        		period = fps/2;
+        		period = fps/3;
         	}
         });
 		EventManager.instance().addListener(Keyboard.KEY_O, new KeyListener()
