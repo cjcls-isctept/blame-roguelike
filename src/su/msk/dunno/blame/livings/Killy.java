@@ -4,8 +4,8 @@ import java.util.HashMap;
 import java.util.LinkedList;
 
 import su.msk.dunno.blame.containers.Field;
-import su.msk.dunno.blame.decisions.MeleeAttack;
 import su.msk.dunno.blame.decisions.Close;
+import su.msk.dunno.blame.decisions.MeleeAttack;
 import su.msk.dunno.blame.decisions.Move;
 import su.msk.dunno.blame.decisions.Open;
 import su.msk.dunno.blame.decisions.Shoot;
@@ -35,6 +35,7 @@ public class Killy extends ALiving
 	protected LinkedList<MinorSelector> selectLine;
 	
 	boolean isCancelMove;
+	boolean isMoving;
 	
 	public Killy(Point p, Field field) 
 	{
@@ -65,7 +66,10 @@ public class Killy extends ALiving
 			else
 			{
 				if(isEnemyAtDir(Move.UP))return new MeleeAttack(this, Move.UP);
-				else return new Move(this, Move.UP, field);
+				else if(!isMoving)
+				{
+					return new Move(this, Move.UP, field);
+				}
 			}
 		}
 		else if(keys[1])
@@ -79,7 +83,10 @@ public class Killy extends ALiving
 			else
 			{
 				if(isEnemyAtDir(Move.LEFT))return new MeleeAttack(this, Move.LEFT);
-				else return new Move(this, Move.LEFT, field);
+				else if(!isMoving)
+				{
+					return new Move(this, Move.LEFT, field);
+				}
 			}
 		}
 		else if(keys[2])
@@ -93,7 +100,10 @@ public class Killy extends ALiving
 			else
 			{
 				if(isEnemyAtDir(Move.DOWN))return new MeleeAttack(this, Move.DOWN);
-				else return new Move(this, Move.DOWN, field);
+				else if(!isMoving)
+				{
+					return new Move(this, Move.DOWN, field);
+				}
 			}
 		}
 		else if(keys[3])
@@ -107,7 +117,10 @@ public class Killy extends ALiving
 			else
 			{
 				if(isEnemyAtDir(Move.RIGHT))return new MeleeAttack(this, Move.RIGHT);
-				else return new Move(this, Move.RIGHT, field);
+				else if(!isMoving)
+				{
+					return new Move(this, Move.RIGHT, field);
+				}
 			}
 		}
 		else if(keys[4])
@@ -121,7 +134,10 @@ public class Killy extends ALiving
 			else
 			{
 				if(isEnemyAtDir(Move.UPRIGHT))return new MeleeAttack(this, Move.UPRIGHT);
-				else return new Move(this, Move.UPRIGHT, field);
+				else if(!isMoving)
+				{
+					return new Move(this, Move.UPRIGHT, field);
+				}
 			}
 		}
 		else if(keys[5])
@@ -135,7 +151,10 @@ public class Killy extends ALiving
 			else
 			{
 				if(isEnemyAtDir(Move.UPLEFT))return new MeleeAttack(this, Move.UPLEFT);
-				else return new Move(this, Move.UPLEFT, field);
+				else if(!isMoving)
+				{
+					return new Move(this, Move.UPLEFT, field);
+				}
 			}
 		}
 		else if(keys[6])
@@ -149,7 +168,10 @@ public class Killy extends ALiving
 			else
 			{
 				if(isEnemyAtDir(Move.DOWNLEFT))return new MeleeAttack(this, Move.DOWNLEFT);
-				else return new Move(this, Move.DOWNLEFT, field);
+				else if(!isMoving)
+				{
+					return new Move(this, Move.DOWNLEFT, field);
+				}
 			}
 		}
 		else if(keys[7])
@@ -163,7 +185,10 @@ public class Killy extends ALiving
 			else
 			{
 				if(isEnemyAtDir(Move.DOWNRIGHT))return new MeleeAttack(this, Move.DOWNRIGHT);
-				else return new Move(this, Move.DOWNRIGHT, field);
+				else if(!isMoving)
+				{
+					return new Move(this, Move.DOWNRIGHT, field);
+				}
 			}
 		}
 		else if(keys[8])return new Move(this, Move.STAY, field);
@@ -237,6 +262,14 @@ public class Killy extends ALiving
 		if(args.containsKey("MoveFail"))
 		{
 			isCancelMove = true;
+		}
+		if(args.containsKey("MovingStarted"))
+		{
+			isMoving = true;
+		}
+		if(args.containsKey("MovingEnded"))
+		{
+			isMoving = false;
 		}
 	}
 	

@@ -191,7 +191,7 @@ public class Blame
         		{
         			isStepDone = false;
         			count = 0;
-        			period = fps/3;
+        			period = fps/4;
         		}
          	}
         	
@@ -199,7 +199,7 @@ public class Blame
         	{
         		isStepDone = false;
         		count = 0;
-        		period = fps/3;
+        		period = fps/4;
         	}
         });
 		EventManager.instance().addListener(Keyboard.KEY_NUMPAD8, new KeyListener()
@@ -213,7 +213,7 @@ public class Blame
         		{
         			isStepDone = false;
         			count = 0;
-        			period = fps/3;
+        			period = fps/4;
         		}
          	}
         	
@@ -221,7 +221,7 @@ public class Blame
         	{
         		isStepDone = false;
         		count = 0;
-        		period = fps/3;
+        		period = fps/4;
         	}
         });
 		EventManager.instance().addListener(Keyboard.KEY_LEFT, new KeyListener()
@@ -235,7 +235,7 @@ public class Blame
         		{
         			isStepDone = false;
         			count = 0;
-        			period = fps/3;
+        			period = fps/4;
         		}
         	}
         	
@@ -243,7 +243,7 @@ public class Blame
         	{
         		isStepDone = false;
         		count = 0;
-        		period = fps/3;
+        		period = fps/4;
         	}
         });
 		EventManager.instance().addListener(Keyboard.KEY_NUMPAD4, new KeyListener()
@@ -257,7 +257,7 @@ public class Blame
         		{
         			isStepDone = false;
         			count = 0;
-        			period = fps/3;
+        			period = fps/4;
         		}
         	}
         	
@@ -265,7 +265,7 @@ public class Blame
         	{
         		isStepDone = false;
         		count = 0;
-        		period = fps/3;
+        		period = fps/4;
         	}
         });
 		EventManager.instance().addListener(Keyboard.KEY_DOWN, new KeyListener()
@@ -279,7 +279,7 @@ public class Blame
         		{
         			isStepDone = false;
         			count = 0;
-        			period = fps/3;
+        			period = fps/4;
         		}
         	}
         	
@@ -287,7 +287,7 @@ public class Blame
         	{
         		isStepDone = false;
         		count = 0;
-        		period = fps/3;
+        		period = fps/4;
         	}
         });
 		EventManager.instance().addListener(Keyboard.KEY_NUMPAD2, new KeyListener()
@@ -301,7 +301,7 @@ public class Blame
         		{
         			isStepDone = false;
         			count = 0;
-        			period = fps/3;
+        			period = fps/4;
         		}
         	}
         	
@@ -309,7 +309,7 @@ public class Blame
         	{
         		isStepDone = false;
         		count = 0;
-        		period = fps/3;
+        		period = fps/4;
         	}
         });
 		EventManager.instance().addListener(Keyboard.KEY_RIGHT, new KeyListener()
@@ -323,7 +323,7 @@ public class Blame
         		{
         			isStepDone = false;
         			count = 0;
-        			period = fps/3;
+        			period = fps/4;
         		}
         	}
         	
@@ -331,7 +331,7 @@ public class Blame
         	{
         		isStepDone = false;
         		count = 0;
-        		period = fps/3;
+        		period = fps/4;
         	}
         });
 		EventManager.instance().addListener(Keyboard.KEY_NUMPAD6, new KeyListener()
@@ -345,7 +345,7 @@ public class Blame
         		{
         			isStepDone = false;
         			count = 0;
-        			period = fps/3;
+        			period = fps/4;
         		}
         	}
         	
@@ -353,7 +353,7 @@ public class Blame
         	{
         		isStepDone = false;
         		count = 0;
-        		period = fps/3;
+        		period = fps/4;
         	}
         });
 		EventManager.instance().addListener(Keyboard.KEY_NUMPAD9, new KeyListener()
@@ -367,7 +367,7 @@ public class Blame
         		{
         			isStepDone = false;
         			count = 0;
-        			period = fps/3;
+        			period = fps/4;
         		}
         	}
         	
@@ -375,7 +375,7 @@ public class Blame
         	{
         		isStepDone = false;
         		count = 0;
-        		period = fps/3;
+        		period = fps/4;
         	}
         });
 		EventManager.instance().addListener(Keyboard.KEY_NUMPAD7, new KeyListener()
@@ -389,7 +389,7 @@ public class Blame
         		{
         			isStepDone = false;
         			count = 0;
-        			period = fps/3;
+        			period = fps/4;
         		}
         	}
         	
@@ -397,7 +397,7 @@ public class Blame
         	{
         		isStepDone = false;
         		count = 0;
-        		period = fps/3;
+        		period = fps/4;
         	}
         });
 		EventManager.instance().addListener(Keyboard.KEY_NUMPAD1, new KeyListener()
@@ -411,7 +411,7 @@ public class Blame
         		{
         			isStepDone = false;
         			count = 0;
-        			period = fps/3;
+        			period = fps/4;
         		}
         	}
         	
@@ -419,7 +419,7 @@ public class Blame
         	{
         		isStepDone = false;
         		count = 0;
-        		period = fps/3;
+        		period = fps/4;
         	}
         });
 		EventManager.instance().addListener(Keyboard.KEY_NUMPAD3, new KeyListener()
@@ -433,7 +433,7 @@ public class Blame
         		{
         			isStepDone = false;
         			count = 0;
-        			period = fps/3;
+        			period = fps/4;
         		}
         	}
         	
@@ -441,7 +441,7 @@ public class Blame
         	{
         		isStepDone = false;
         		count = 0;
-        		period = fps/3;
+        		period = fps/4;
         	}
         });
 		EventManager.instance().addListener(Keyboard.KEY_NUMPAD5, new KeyListener()
@@ -455,7 +455,7 @@ public class Blame
         		{
         			isStepDone = false;
         			count = 0;
-        			period = fps/3;
+        			period = fps/4;
         		}
         	}
         	
@@ -463,7 +463,7 @@ public class Blame
         	{
         		isStepDone = false;
         		count = 0;
-        		period = fps/3;
+        		period = fps/4;
         	}
         });
 		EventManager.instance().addListener(Keyboard.KEY_O, new KeyListener()

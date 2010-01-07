@@ -3,7 +3,6 @@ package su.msk.dunno.blame.containers;
 import java.util.LinkedList;
 import java.util.ListIterator;
 
-import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
 
 import rlforj.los.BresLos;
