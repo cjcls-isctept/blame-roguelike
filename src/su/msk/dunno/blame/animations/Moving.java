@@ -4,21 +4,24 @@ import su.msk.dunno.blame.containers.Field;
 import su.msk.dunno.blame.main.Blame;
 import su.msk.dunno.blame.main.support.MyFont;
 import su.msk.dunno.blame.main.support.Point;
+import su.msk.dunno.blame.main.support.Vector2D;
 import su.msk.dunno.blame.prototypes.AAnimation;
 import su.msk.dunno.blame.prototypes.ALiving;
+import su.msk.dunno.blame.prototypes.AObject;
 
 public class Moving extends AAnimation 
 {
 	Point pFrom, pTo;
 	Point dir;
-	ALiving al;
+	AObject ao;
 	
-	public Moving(Field field, ALiving al, Point p_from, Point p_to) 
+	public Moving(Field field, AObject ao, Point p_from, Point p_to) 
 	{
 		super(field, false);
 		
-		this.al = al;
-		al.preventDraw = true;
+		this.ao = ao;
+		ao.preventDraw = true;
+		ao.isMoving = true;
 		pFrom = p_from;
 		pTo = p_to;
 
@@ -26,15 +29,32 @@ public class Moving extends AAnimation
 				
 		duration = Blame.fps/3;
 		frames = duration;
+		
+		if((Blame.playCibo?"Cibo":"Killy").equals(ao.getName()))
+		{
+			field.isPlayerMoving = true;
+			field.playerMovingCoord = new Vector2D(pFrom.x*Blame.scale, pFrom.y*Blame.scale);
+		}
 	}
 
 	@Override public void nextFrame()
 	{
-		MyFont.instance().drawChar(al.getSymbol(), pFrom.x*Blame.scale+dir.x*cur_frame*Blame.scale/frames, pFrom.y*Blame.scale+dir.y*cur_frame*Blame.scale/frames, Blame.scale*0.01f, al.getColor());
+		MyFont.instance().drawChar(ao.getSymbol(), 
+								   pFrom.x*Blame.scale+dir.x*cur_frame*Blame.scale/frames, 
+								   pFrom.y*Blame.scale+dir.y*cur_frame*Blame.scale/frames, 
+								   Blame.scale*0.01f, ao.getColor());
+		if((Blame.playCibo?"Cibo":"Killy").equals(ao.getName()))
+		{
+			field.playerMovingCoord = new Vector2D(pFrom.x*Blame.scale+dir.x*cur_frame*Blame.scale/frames, 
+					   							   pFrom.y*Blame.scale+dir.y*cur_frame*Blame.scale/frames);
+		}
+		
 	}
 	
 	@Override public void stop()
 	{
-		al.preventDraw = false;
+		ao.preventDraw = false;
+		ao.isMoving = false;
+		if((Blame.playCibo?"Cibo":"Killy").equals(ao.getName()))field.isPlayerMoving = false;
 	}
 }
