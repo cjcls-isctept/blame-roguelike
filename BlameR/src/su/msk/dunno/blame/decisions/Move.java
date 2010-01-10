@@ -2,7 +2,6 @@ package su.msk.dunno.blame.decisions;
 
 import java.util.HashMap;
 
-import su.msk.dunno.blame.animations.Moving;
 import su.msk.dunno.blame.containers.Field;
 import su.msk.dunno.blame.main.support.Point;
 import su.msk.dunno.blame.prototypes.ADecision;
@@ -71,7 +70,7 @@ public class Move extends ADecision
 			args.put("MoveFail", 1);
 			al.changeState(args);
 		}
-		else if(al.isNearPlayer() && dir != Move.STAY)field.addAnimation(new Moving(actionMoment, field, al, old, al.cur_pos));
+		//else if(al.isNearPlayer() && dir != Move.STAY)field.addAnimation(new Moving(actionMoment, field, al, old, al.cur_pos));
 		wasExecuted = true;				
 	}
 }

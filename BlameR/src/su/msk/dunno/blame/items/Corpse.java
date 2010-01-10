@@ -14,7 +14,7 @@ public class Corpse extends AItem
 
 	@Override public String getName() 
 	{
-		return "Corpse";
+		return "CorpseLand";
 	}
 
 	@Override public boolean getPassability() 

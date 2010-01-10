@@ -6,7 +6,7 @@ public abstract class AAnimation
 {
 	protected Field field;
 
-	protected int time;
+	protected int count;
 	protected int duration;
 	
 	protected int frames;
@@ -28,8 +28,8 @@ public abstract class AAnimation
 	
 	public void play()
 	{
-		time++;
-		if(time > duration)
+		count++;
+		if(count > duration)
 		{
 			if(isRepeatable)restart();
 			else 
@@ -40,7 +40,7 @@ public abstract class AAnimation
 		}
 		else
 		{
-			int i = time*frames/duration;
+			int i = count*frames/duration;
 			if(i > cur_frame)
 			{
 				nextFrame();
