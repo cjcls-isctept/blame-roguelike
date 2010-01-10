@@ -4,6 +4,7 @@ import java.util.LinkedList;
 import java.util.ListIterator;
 
 import su.msk.dunno.blame.containers.Field;
+import su.msk.dunno.blame.containers.Inventory;
 import su.msk.dunno.blame.decisions.Move;
 import su.msk.dunno.blame.items.Corpse;
 import su.msk.dunno.blame.main.Blame;
@@ -15,6 +16,7 @@ public abstract class ALiving extends AObject
 {
 	protected int health;
 	public boolean isDead;
+	public Inventory inventory;
 	
 	private Point old_pos;	// previous position: set private to prevent some possibilities "to hack" system :)
 	
@@ -28,6 +30,7 @@ public abstract class ALiving extends AObject
 	public ALiving(int i, int j, Field field) 
 	{
 		super(i, j);
+		inventory = new Inventory(this, field);
 		old_pos = cur_pos;
 		this.field = field;
 		field.addObject(this);
@@ -121,6 +124,16 @@ public abstract class ALiving extends AObject
 	{
 		return field.getNeighbours(this, getDov()+1);	// +1 because of the rlforj fov algorithm
 	}
+	
+	public LinkedList<AObject> getMyEnemies()
+	{
+		LinkedList<AObject> enemies = new LinkedList<AObject>();
+		for(AObject o: getMyNeighbours())
+		{
+			if(isEnemy(o))enemies.add(o);
+		}
+		return enemies;
+	}
 
 	public void checkStatus(ListIterator<ALiving> li) 
 	{
@@ -149,11 +162,6 @@ public abstract class ALiving extends AObject
 	public Point getOld_pos() 
 	{
 		return old_pos;
-	}
-	
-	public void removeObject(AObject ao)
-	{
-		if(cur_pos.equals(ao.cur_pos))field.removeObject(ao);
 	}
 
 	public int getHealth() 

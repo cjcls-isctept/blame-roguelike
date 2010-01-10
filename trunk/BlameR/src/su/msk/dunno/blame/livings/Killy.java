@@ -41,15 +41,17 @@ public class Killy extends ALiving
 	protected int count = period;
 	
 	//0 - up/2; 1 - left/4; 2 - down/2; 3 - right/6; 4 - 9; 5 - 7; 6 - 1; 7 - 3; 8 - 5
-	public boolean[] keys = new boolean[9];
+	protected boolean[] keys = new boolean[9];
 
-	public boolean wantOpen;
-	public boolean wantClose;
-	public boolean wantTake;
-	public boolean wantShoot;
+	protected boolean wantOpen;
+	protected boolean wantClose;
+	protected boolean wantTake;
+	protected boolean wantShoot;
 	
-	public boolean isSelectTarget;
-	public Point selectPoint;
+	protected boolean showInventory;
+	
+	protected boolean isSelectTarget;
+	protected Point selectPoint;
 	protected LinkedList<MinorSelector> selectLine;
 	
 	boolean isCancelMove;
@@ -282,12 +284,16 @@ public class Killy extends ALiving
 		{
 			isCancelMove = true;
 		}
+		if(args.containsKey("InventoryClose"))
+		{
+			showInventory = false;
+		}
 	}
 	
 	@Override public HashMap<String, Integer> getState() 
 	{
 		HashMap<String, Integer> state = new HashMap<String, Integer>();
-		if(isSelectTarget || isCancelMove)
+		if(isSelectTarget || isCancelMove || showInventory)
 		{
 			state.put("CancelMove", 1);
 			isCancelMove = false;
@@ -703,31 +709,48 @@ public class Killy extends ALiving
         		isStepDone = false;
         	}
         });
+		playerEvents.addListener(Keyboard.KEY_I, new KeyListener()
+        {
+        	public void onKeyDown()
+        	{
+        		showInventory = true;
+        		isNextStep = true;
+        	}
+        	
+        	public void onKeyUp()
+        	{
+        		isStepDone = false;
+        	}
+        });
 	}
 	
 	public void process()
 	{
-		playerEvents.checkEvents();
-		if(isNextStep && !isStepDone)
+		if(showInventory)inventory.process();
+		else
 		{
-			livings.nextStep();
-			isNextStep = false;
-			isStepDone = true;
-			reset_keys();	
+			playerEvents.checkEvents();
+			if(isNextStep && !isStepDone)
+			{
+				livings.nextStep();
+				isNextStep = false;
+				isStepDone = true;
+				reset_keys();	
+			}
+			GL11.glClear(GL11.GL_COLOR_BUFFER_BIT/* | GL11.GL_DEPTH_BUFFER_BIT*/);		
+			GL11.glLoadIdentity();
+			
+			field.draw(cur_pos);		
+			Messages.instance().showMessages();
+			MyFont.instance().drawString(getName(), 450, 460, 0.2f, Color.WHITE);
+			MyFont.instance().drawString("HP: "+health, 450, 445, 0.2f, Color.WHITE);
+			MyFont.instance().drawString("Time: "+livings.time, 450, 430, 0.2f, Color.WHITE);
+			MyFont.instance().drawString("FPS: "+Blame.fps, 450, 415, 0.2f, Color.WHITE);
+			MyFont.instance().drawString("Anima: "+field.animations.size(), 450, 400, 0.2f, Color.WHITE);
+			MyFont.instance().drawString("PlayerMoves: "+field.playerMoves, 450, 385, 0.2f, Color.WHITE);
+			
+			Display.sync(Blame.framerate);
+			Display.update();
 		}
-		GL11.glClear(GL11.GL_COLOR_BUFFER_BIT/* | GL11.GL_DEPTH_BUFFER_BIT*/);		
-		GL11.glLoadIdentity();
-		field.draw(cur_pos);
-		
-		Messages.instance().showMessages();
-		MyFont.instance().drawString(getName(), 450, 460, 0.2f, Color.WHITE);
-		MyFont.instance().drawString("HP: "+health, 450, 445, 0.2f, Color.WHITE);
-		MyFont.instance().drawString("Time: "+livings.time, 450, 430, 0.2f, Color.WHITE);
-		MyFont.instance().drawString("FPS: "+Blame.fps, 450, 415, 0.2f, Color.WHITE);
-		MyFont.instance().drawString("Anima: "+field.animations.size(), 450, 400, 0.2f, Color.WHITE);
-		MyFont.instance().drawString("PlayerMoves: "+field.playerMoves, 450, 385, 0.2f, Color.WHITE);
-		
-		Display.sync(Blame.framerate);
-		Display.update();
 	}
 }

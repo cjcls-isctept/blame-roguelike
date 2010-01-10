@@ -1,7 +1,5 @@
 package su.msk.dunno.blame.decisions;
 
-import java.util.HashMap;
-
 import su.msk.dunno.blame.main.support.Messages;
 import su.msk.dunno.blame.prototypes.ADecision;
 import su.msk.dunno.blame.prototypes.ALiving;
@@ -17,11 +15,13 @@ public class Take extends ADecision
 	@Override public void doAction(int actionMoment) 
 	{
 		AObject item = al.getObjectsAtDir(Move.STAY).getLast();
-		HashMap<String, Integer> state = item.getState();
-		if(state.containsKey("Item"))
+		if(item.getState().containsKey("Item"))
 		{
-			al.changeState(item.getState());
-			al.removeObject(item);
+			if(!al.inventory.isFull())
+			{
+				al.inventory.addItem(item);
+			}
+			else if(al.isNearPlayer())Messages.instance().addMessage(al.getName()+"'s inventory is full");
 			if(al.isNearPlayer())Messages.instance().addMessage(al.getName()+" picks up "+item.getName()+" from the floor");
 		}
 		wasExecuted = true;

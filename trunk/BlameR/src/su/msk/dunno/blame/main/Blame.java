@@ -13,8 +13,6 @@ import su.msk.dunno.blame.containers.Field;
 import su.msk.dunno.blame.containers.LivingList;
 import su.msk.dunno.blame.livings.Cibo;
 import su.msk.dunno.blame.livings.Killy;
-import su.msk.dunno.blame.main.support.Color;
-import su.msk.dunno.blame.main.support.Messages;
 import su.msk.dunno.blame.main.support.MyFont;
 import su.msk.dunno.blame.main.support.Point;
 import su.msk.dunno.blame.main.support.listeners.EventManager;
@@ -76,52 +74,6 @@ public class Blame
 		}
 		MyFont.instance().destroy();
 		Display.destroy();
-	}
-	
-	public void render()
-	{
-		/*if(field.animations.size() > 0)
-		{
-			while(field.animations.size() > 0)
-			{
-				GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);		
-				GL11.glLoadIdentity();
-				
-				char ch = '@';
-				MyFont.instance().drawChar(ch, new Vector2D(320,240), 0.2f, Color.WHITE);
-				
-				field.draw((playCibo?cibo.cur_pos:killy.cur_pos));
-				Messages.instance().showMessages();
-				MyFont.instance().drawString((playCibo?"Cibo":"Killy"), 450, 460, 0.2f, Color.WHITE);
-				MyFont.instance().drawString("HP: "+(playCibo?cibo:killy).getHealth(), 450, 445, 0.2f, Color.WHITE);
-				MyFont.instance().drawString("Time: "+objects.time, 450, 430, 0.2f, Color.WHITE);
-				MyFont.instance().drawString("FPS: "+fps, 450, 415, 0.2f, Color.WHITE);
-				MyFont.instance().drawString("Anima: "+field.animations.size(), 450, 400, 0.2f, Color.WHITE);
-		        
-				Display.sync(framerate);
-				Display.update();
-			}
-		}
-		else
-		{*/
-			GL11.glClear(GL11.GL_COLOR_BUFFER_BIT/* | GL11.GL_DEPTH_BUFFER_BIT*/);		
-			GL11.glLoadIdentity();
-			
-			/*char ch = '@';
-			MyFont.instance().drawChar(ch, new Vector2D(320,240), 0.2f, Color.WHITE);*/
-			
-			//field.draw((playCibo?cibo.cur_pos:killy.cur_pos));
-			Messages.instance().showMessages();
-			MyFont.instance().drawString((playCibo?"Cibo":"Killy"), 450, 460, 0.2f, Color.WHITE);
-			MyFont.instance().drawString("HP: "+(playCibo?cibo:killy).getHealth(), 450, 445, 0.2f, Color.WHITE);
-			MyFont.instance().drawString("Time: "+livings.time, 450, 430, 0.2f, Color.WHITE);
-			MyFont.instance().drawString("FPS: "+fps, 450, 415, 0.2f, Color.WHITE);
-			MyFont.instance().drawString("Anima: "+field.animations.size(), 450, 400, 0.2f, Color.WHITE);
-			MyFont.instance().drawString("PlayerMoves: "+field.playerMoves, 450, 385, 0.2f, Color.WHITE);
-	        
-			Display.sync(framerate);
-			Display.update();
-		/*}*/
 	}
 	
 	public void checkRequests()

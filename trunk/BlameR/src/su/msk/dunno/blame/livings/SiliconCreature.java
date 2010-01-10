@@ -3,7 +3,6 @@ package su.msk.dunno.blame.livings;
 import java.util.HashMap;
 
 import su.msk.dunno.blame.containers.Field;
-import su.msk.dunno.blame.decisions.MeleeAttack;
 import su.msk.dunno.blame.decisions.Move;
 import su.msk.dunno.blame.decisions.Open;
 import su.msk.dunno.blame.main.support.Color;
