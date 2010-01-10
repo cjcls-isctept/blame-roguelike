@@ -18,7 +18,7 @@ public class RecursiveDivisionMethod
 		int[][] map = new int[field.getN_x()][field.getN_y()];
 		
 		create4Rooms(map, field, 0, 0, field.getN_x()-1, field.getN_y()-1);
-		createSolidEdges(map);
+		//createSolidEdges(map);
 		return map;
 	}
 	
