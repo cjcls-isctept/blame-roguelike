@@ -40,17 +40,12 @@ public class Blame
 	public static boolean playCibo;
 	
 	Field field;
-	LivingList objects;
-	
-	private boolean isNextStep = true;
-	private boolean isStepDone = false;
+	LivingList livings;
 
 	// variables below are for infinite (with pressed key) moving purposes
 	private int frames;
 	private long msek = Calendar.getInstance().getTimeInMillis();
-	public static int fps;	
-	private int period = framerate/2;
-	private int count = period;
+	public static int fps;
 	
 	public Blame()
 	{
@@ -59,12 +54,13 @@ public class Blame
 
 		field = new Field(N_x, N_y, "random");
 		
-		objects = new LivingList(field);
-		killy = new Killy(field.getRandomPos(), field);
-		objects.addKilly(killy);
-		cibo = new Cibo(field.getRandomPos(killy.cur_pos.plus(new Point(-2,2)), killy.cur_pos.plus(new Point(2,-2))), field);	// generate cibo near killy
-		objects.addCibo(cibo);
-		//objects.addCreatures(5);
+		livings = new LivingList(field);
+		killy = new Killy(field.getRandomPos(), field, livings);
+		livings.addKilly(killy);
+		cibo = new Cibo(field.getRandomPos(killy.cur_pos.plus(new Point(-2,2)), killy.cur_pos.plus(new Point(2,-2))), 
+				        field, livings);	// generate cibo near killy
+		livings.addCibo(cibo);
+		livings.addCreatures(10);
 		
 		isRunning = true;
 		run();
@@ -75,23 +71,11 @@ public class Blame
 		while(isRunning)
 		{
 			checkRequests();
-			nextStep();
-			render();
+			(playCibo?cibo:killy).process();
 			getFPS();
 		}
 		MyFont.instance().destroy();
 		Display.destroy();
-	}
-	
-	public void nextStep()
-	{
-		if(isNextStep && !isStepDone)
-		{
-			objects.nextStep();
-			isNextStep = false;
-			isStepDone = true;
-			(playCibo?cibo:killy).reset_keys();	
-		}
 	}
 	
 	public void render()
@@ -126,11 +110,11 @@ public class Blame
 			/*char ch = '@';
 			MyFont.instance().drawChar(ch, new Vector2D(320,240), 0.2f, Color.WHITE);*/
 			
-			field.draw((playCibo?cibo.cur_pos:killy.cur_pos));
+			//field.draw((playCibo?cibo.cur_pos:killy.cur_pos));
 			Messages.instance().showMessages();
 			MyFont.instance().drawString((playCibo?"Cibo":"Killy"), 450, 460, 0.2f, Color.WHITE);
 			MyFont.instance().drawString("HP: "+(playCibo?cibo:killy).getHealth(), 450, 445, 0.2f, Color.WHITE);
-			MyFont.instance().drawString("Time: "+objects.time, 450, 430, 0.2f, Color.WHITE);
+			MyFont.instance().drawString("Time: "+livings.time, 450, 430, 0.2f, Color.WHITE);
 			MyFont.instance().drawString("FPS: "+fps, 450, 415, 0.2f, Color.WHITE);
 			MyFont.instance().drawString("Anima: "+field.animations.size(), 450, 400, 0.2f, Color.WHITE);
 			MyFont.instance().drawString("PlayerMoves: "+field.playerMoves, 450, 385, 0.2f, Color.WHITE);
@@ -181,359 +165,7 @@ public class Blame
     }
 	
 	public void initEvents()
-	{
-		EventManager.instance().addListener(Keyboard.KEY_UP, new KeyListener()
-        {
-        	public void onKeyDown()
-        	{
-        		(playCibo?cibo:killy).keys[0] = true;
-        		isNextStep = true;
-        		count++;
-        		if(count > period)
-        		{
-        			isStepDone = false;
-        			count = 0;
-        			period = fps/4;
-        		}
-         	}
-        	
-        	public void onKeyUp()
-        	{
-        		isStepDone = false;
-        		count = 0;
-        		period = fps/4;
-        	}
-        });
-		EventManager.instance().addListener(Keyboard.KEY_NUMPAD8, new KeyListener()
-        {
-        	public void onKeyDown()
-        	{
-        		(playCibo?cibo:killy).keys[0] = true;
-        		isNextStep = true;
-        		count++;
-        		if(count > period)
-        		{
-        			isStepDone = false;
-        			count = 0;
-        			period = fps/4;
-        		}
-         	}
-        	
-        	public void onKeyUp()
-        	{
-        		isStepDone = false;
-        		count = 0;
-        		period = fps/4;
-        	}
-        });
-		EventManager.instance().addListener(Keyboard.KEY_LEFT, new KeyListener()
-        {
-        	public void onKeyDown()
-        	{
-        		(playCibo?cibo:killy).keys[1] = true;
-        		isNextStep = true;
-        		count++;
-        		if(count > period)
-        		{
-        			isStepDone = false;
-        			count = 0;
-        			period = fps/4;
-        		}
-        	}
-        	
-        	public void onKeyUp()
-        	{
-        		isStepDone = false;
-        		count = 0;
-        		period = fps/4;
-        	}
-        });
-		EventManager.instance().addListener(Keyboard.KEY_NUMPAD4, new KeyListener()
-        {
-        	public void onKeyDown()
-        	{
-        		(playCibo?cibo:killy).keys[1] = true;
-        		isNextStep = true;
-        		count++;
-        		if(count > period)
-        		{
-        			isStepDone = false;
-        			count = 0;
-        			period = fps/4;
-        		}
-        	}
-        	
-        	public void onKeyUp()
-        	{
-        		isStepDone = false;
-        		count = 0;
-        		period = fps/4;
-        	}
-        });
-		EventManager.instance().addListener(Keyboard.KEY_DOWN, new KeyListener()
-        {
-        	public void onKeyDown()
-        	{
-        		(playCibo?cibo:killy).keys[2] = true;
-        		isNextStep = true;
-        		count++;
-        		if(count > period)
-        		{
-        			isStepDone = false;
-        			count = 0;
-        			period = fps/4;
-        		}
-        	}
-        	
-        	public void onKeyUp()
-        	{
-        		isStepDone = false;
-        		count = 0;
-        		period = fps/4;
-        	}
-        });
-		EventManager.instance().addListener(Keyboard.KEY_NUMPAD2, new KeyListener()
-        {
-        	public void onKeyDown()
-        	{
-        		(playCibo?cibo:killy).keys[2] = true;
-        		isNextStep = true;
-        		count++;
-        		if(count > period)
-        		{
-        			isStepDone = false;
-        			count = 0;
-        			period = fps/4;
-        		}
-        	}
-        	
-        	public void onKeyUp()
-        	{
-        		isStepDone = false;
-        		count = 0;
-        		period = fps/4;
-        	}
-        });
-		EventManager.instance().addListener(Keyboard.KEY_RIGHT, new KeyListener()
-        {
-        	public void onKeyDown()
-        	{
-        		(playCibo?cibo:killy).keys[3] = true;
-        		isNextStep = true;
-        		count++;
-        		if(count > period)
-        		{
-        			isStepDone = false;
-        			count = 0;
-        			period = fps/4;
-        		}
-        	}
-        	
-        	public void onKeyUp()
-        	{
-        		isStepDone = false;
-        		count = 0;
-        		period = fps/4;
-        	}
-        });
-		EventManager.instance().addListener(Keyboard.KEY_NUMPAD6, new KeyListener()
-        {
-        	public void onKeyDown()
-        	{
-        		(playCibo?cibo:killy).keys[3] = true;
-        		isNextStep = true;
-        		count++;
-        		if(count > period)
-        		{
-        			isStepDone = false;
-        			count = 0;
-        			period = fps/4;
-        		}
-        	}
-        	
-        	public void onKeyUp()
-        	{
-        		isStepDone = false;
-        		count = 0;
-        		period = fps/4;
-        	}
-        });
-		EventManager.instance().addListener(Keyboard.KEY_NUMPAD9, new KeyListener()
-        {
-        	public void onKeyDown()
-        	{
-        		(playCibo?cibo:killy).keys[4] = true;
-        		isNextStep = true;
-        		count++;
-        		if(count > period)
-        		{
-        			isStepDone = false;
-        			count = 0;
-        			period = fps/4;
-        		}
-        	}
-        	
-        	public void onKeyUp()
-        	{
-        		isStepDone = false;
-        		count = 0;
-        		period = fps/4;
-        	}
-        });
-		EventManager.instance().addListener(Keyboard.KEY_NUMPAD7, new KeyListener()
-        {
-        	public void onKeyDown()
-        	{
-        		(playCibo?cibo:killy).keys[5] = true;
-        		isNextStep = true;
-        		count++;
-        		if(count > period)
-        		{
-        			isStepDone = false;
-        			count = 0;
-        			period = fps/4;
-        		}
-        	}
-        	
-        	public void onKeyUp()
-        	{
-        		isStepDone = false;
-        		count = 0;
-        		period = fps/4;
-        	}
-        });
-		EventManager.instance().addListener(Keyboard.KEY_NUMPAD1, new KeyListener()
-        {
-        	public void onKeyDown()
-        	{
-        		(playCibo?cibo:killy).keys[6] = true;
-        		isNextStep = true;
-        		count++;
-        		if(count > period)
-        		{
-        			isStepDone = false;
-        			count = 0;
-        			period = fps/4;
-        		}
-        	}
-        	
-        	public void onKeyUp()
-        	{
-        		isStepDone = false;
-        		count = 0;
-        		period = fps/4;
-        	}
-        });
-		EventManager.instance().addListener(Keyboard.KEY_NUMPAD3, new KeyListener()
-        {
-        	public void onKeyDown()
-        	{
-        		(playCibo?cibo:killy).keys[7] = true;
-        		isNextStep = true;
-        		count++;
-        		if(count > period)
-        		{
-        			isStepDone = false;
-        			count = 0;
-        			period = fps/4;
-        		}
-        	}
-        	
-        	public void onKeyUp()
-        	{
-        		isStepDone = false;
-        		count = 0;
-        		period = fps/4;
-        	}
-        });
-		EventManager.instance().addListener(Keyboard.KEY_NUMPAD5, new KeyListener()
-        {
-        	public void onKeyDown()
-        	{
-        		(playCibo?cibo:killy).keys[8] = true;
-        		isNextStep = true;
-        		count++;
-        		if(count > period)
-        		{
-        			isStepDone = false;
-        			count = 0;
-        			period = fps/4;
-        		}
-        	}
-        	
-        	public void onKeyUp()
-        	{
-        		isStepDone = false;
-        		count = 0;
-        		period = fps/4;
-        	}
-        });
-		EventManager.instance().addListener(Keyboard.KEY_O, new KeyListener()
-        {
-        	public void onKeyDown()
-        	{
-        		(playCibo?cibo:killy).wantOpen = true;
-        		isNextStep = true;
-        	}
-        	
-        	public void onKeyUp()
-        	{
-        		isStepDone = false;
-        	}
-        });
-		EventManager.instance().addListener(Keyboard.KEY_C, new KeyListener()
-        {
-        	public void onKeyDown()
-        	{
-        		(playCibo?cibo:killy).wantClose = true;
-        		isNextStep = true;
-        	}
-        	
-        	public void onKeyUp()
-        	{
-        		isStepDone = false;
-        	}
-        });
-		EventManager.instance().addListener(Keyboard.KEY_F, new KeyListener()
-        {
-        	public void onKeyDown()
-        	{
-        		(playCibo?cibo:killy).wantShoot = true;
-        		isNextStep = true;
-        	}
-        	
-        	public void onKeyUp()
-        	{
-        		isStepDone = false;
-        	}
-        });
-		EventManager.instance().addListener(Keyboard.KEY_ESCAPE, new KeyListener()
-        {
-        	public void onKeyDown()
-        	{
-        		(playCibo?cibo:killy).clearLine();
-        		(playCibo?cibo:killy).selectPoint = null;
-        		isNextStep = true;
-        	}
-        	
-        	public void onKeyUp()
-        	{
-        		isStepDone = false;
-        	}
-        });
-		EventManager.instance().addListener(Keyboard.KEY_COMMA, new KeyListener()
-        {
-        	public void onKeyDown()
-        	{
-        		(playCibo?cibo:killy).wantTake = true;
-        		isNextStep = true;
-        	}
-        	
-        	public void onKeyUp()
-        	{
-        		isStepDone = false;
-        	}
-        });
+	{		
 		EventManager.instance().addListener(Keyboard.KEY_ADD, new KeyListener()
         {
         	public void onKeyDown()
