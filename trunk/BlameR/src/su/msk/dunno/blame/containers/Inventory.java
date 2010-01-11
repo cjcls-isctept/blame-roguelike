@@ -57,7 +57,7 @@ public class Inventory
 		if(selectedItem != null)
 		{
 			int pos = 430-15*items.indexOf(selectedItem);
-			MyFont.instance().drawString("(d)rop/(e)quip?", selectedItem.getName().length()*20+20, pos, 0.2f, Color.WHITE);
+			MyFont.instance().drawString("(d)rop/(e)quip?", (selectedItem.getName().length()+3)*12+36, pos, 0.2f, Color.WHITE);
 		}
 	}
 	
