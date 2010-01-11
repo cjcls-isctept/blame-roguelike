@@ -33,9 +33,10 @@ public class Blame
 	public static int scale = 20;
 	public static int framerate = 70;
 	
-	public static Killy killy;
-	public static Cibo cibo;
+	private static Killy killy;
+	private static Cibo cibo;
 	public static boolean playCibo;
+	private boolean alreadyPressed;
 	
 	Field field;
 	LivingList livings;
@@ -132,20 +133,22 @@ public class Blame
         		if(scale > 5)scale--;
         	}
         });
-		EventManager.instance().addListener(Keyboard.KEY_1, new KeyListener()
+		EventManager.instance().addListener(Keyboard.KEY_TAB, new KeyListener()
         {
         	public void onKeyDown()
         	{
-        		playCibo = false;
+        		if(!alreadyPressed)
+        		{
+        			playCibo = !playCibo;
+        			alreadyPressed = true;
+        		}
+        	}
+        	
+        	public void onKeyUp()
+        	{
+        		alreadyPressed = false;
         	}
         });
-		EventManager.instance().addListener(Keyboard.KEY_2, new KeyListener()
-        {
-        	public void onKeyDown()
-        	{
-        		playCibo = true;
-        	}
-        });	
 	}
 	
 	private void getFPS()

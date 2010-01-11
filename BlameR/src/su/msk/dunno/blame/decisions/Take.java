@@ -20,9 +20,9 @@ public class Take extends ADecision
 			if(!al.inventory.isFull())
 			{
 				al.inventory.addItem(item);
+				if(al.isNearPlayer())Messages.instance().addMessage(al.getName()+" picks up "+item.getName()+" from the floor");
 			}
 			else if(al.isNearPlayer())Messages.instance().addMessage(al.getName()+"'s inventory is full");
-			if(al.isNearPlayer())Messages.instance().addMessage(al.getName()+" picks up "+item.getName()+" from the floor");
 		}
 		wasExecuted = true;
 	}
