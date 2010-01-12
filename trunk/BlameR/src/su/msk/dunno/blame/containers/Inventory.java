@@ -7,6 +7,7 @@ import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
 
+import su.msk.dunno.blame.decisions.Drop;
 import su.msk.dunno.blame.main.Blame;
 import su.msk.dunno.blame.main.support.Color;
 import su.msk.dunno.blame.main.support.MyFont;
@@ -17,11 +18,17 @@ import su.msk.dunno.blame.prototypes.AObject;
 
 public class Inventory 
 {
+	public static final int TO_DROP = 0;
+	public static final int TO_CHECK = 1;
+	
 	private ALiving owner;
 	private Field field;
 	private LinkedList<AObject> items;
 	private EventManager inventoryEvents;
 	private int inventoryCapacity = 5;
+	
+	private boolean showInventory;
+	private int mode;
 	
 	public AObject selectedItem;
 	
@@ -72,17 +79,33 @@ public class Inventory
 		return false;
 	}
 	
+	public void removeItem(AObject o)
+	{
+		items.remove(o);
+		field.addObject(owner.cur_pos, o);
+	}
+	
 	public boolean isFull()
 	{
 		return items.size() == inventoryCapacity;
 	}
 	
+	public boolean isOpen()
+	{
+		return showInventory;
+	}
+	
 	private void closeInventory()
 	{
 		selectedItem = null;
-		HashMap<String, Integer> args = new HashMap<String, Integer>();
-		args.put("InventoryClose", 1);
-		owner.changeState(args);
+		showInventory = false;
+	}
+	
+	public void openInventory(int mode)
+	{
+		this.mode = mode;
+		showInventory = true;
+		
 	}
 	
 	public void initEvents()
@@ -92,42 +115,86 @@ public class Inventory
         {
         	public void onKeyDown()
         	{
-        		if(items.size() > 0)selectedItem = items.get(0);
+        		if(items.size() > 0)
+        		{
+        			selectedItem = items.get(0);
+        			if(mode == TO_DROP)
+        			{
+        				owner.setDecision(new Drop(owner, selectedItem));
+                		closeInventory();
+        			}
+        		}
         	}
         });
 		inventoryEvents.addListener(Keyboard.KEY_2, new KeyListener()
         {
         	public void onKeyDown()
         	{
-        		if(items.size() > 1)selectedItem = items.get(1);
+        		if(items.size() > 1)
+        		{
+        			selectedItem = items.get(1);
+        			if(mode == TO_DROP)
+        			{
+        				owner.setDecision(new Drop(owner, selectedItem));
+                		closeInventory();
+        			}
+        		}
         	}
         });
 		inventoryEvents.addListener(Keyboard.KEY_3, new KeyListener()
         {
         	public void onKeyDown()
         	{
-        		if(items.size() > 2)selectedItem = items.get(2);
+        		if(items.size() > 2)
+        		{
+        			selectedItem = items.get(2);
+        			if(mode == TO_DROP)
+        			{
+        				owner.setDecision(new Drop(owner, selectedItem));
+                		closeInventory();
+        			}
+        		}
         	}
         });
 		inventoryEvents.addListener(Keyboard.KEY_4, new KeyListener()
         {
         	public void onKeyDown()
         	{
-        		if(items.size() > 3)selectedItem = items.get(3);
+        		if(items.size() > 3)
+        		{
+        			selectedItem = items.get(3);
+        			if(mode == TO_DROP)
+        			{
+        				owner.setDecision(new Drop(owner, selectedItem));
+                		closeInventory();
+        			}
+        		}
         	}
         });
 		inventoryEvents.addListener(Keyboard.KEY_5, new KeyListener()
         {
         	public void onKeyDown()
         	{
-        		if(items.size() > 4)selectedItem = items.get(4);
+        		if(items.size() > 4)
+        		{
+        			selectedItem = items.get(4);
+        			if(mode == TO_DROP)
+        			{
+        				owner.setDecision(new Drop(owner, selectedItem));
+                		closeInventory();
+        			}
+        		}
         	}
         });
 		inventoryEvents.addListener(Keyboard.KEY_D, new KeyListener()
         {
         	public void onKeyDown()
         	{
-        		
+        		if(selectedItem != null)
+        		{
+        			owner.setDecision(new Drop(owner, selectedItem));
+        			closeInventory();
+        		}
         	}
         });
 		inventoryEvents.addListener(Keyboard.KEY_ESCAPE, new KeyListener()

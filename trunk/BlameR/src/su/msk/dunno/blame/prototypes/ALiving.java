@@ -188,4 +188,9 @@ public abstract class ALiving extends AObject
 	public int getActionPeriod() {
 		return actionPeriod;
 	}
+	
+	public void setDecision(ADecision d)
+	{
+		decision = d;
+	}
 }

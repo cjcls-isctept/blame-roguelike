@@ -8,6 +8,7 @@ import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
 
 import su.msk.dunno.blame.containers.Field;
+import su.msk.dunno.blame.containers.Inventory;
 import su.msk.dunno.blame.containers.LivingList;
 import su.msk.dunno.blame.decisions.Close;
 import su.msk.dunno.blame.decisions.MeleeAttack;
@@ -47,8 +48,6 @@ public class Killy extends ALiving
 	protected boolean wantClose;
 	protected boolean wantTake;
 	protected boolean wantShoot;
-	
-	protected boolean showInventory;
 	
 	protected boolean isSelectTarget;
 	protected Point selectPoint;
@@ -284,16 +283,12 @@ public class Killy extends ALiving
 		{
 			isCancelMove = true;
 		}
-		if(args.containsKey("InventoryClose"))
-		{
-			showInventory = false;
-		}
 	}
 	
 	@Override public HashMap<String, Integer> getState() 
 	{
 		HashMap<String, Integer> state = new HashMap<String, Integer>();
-		if(isSelectTarget || isCancelMove || showInventory)
+		if(isSelectTarget || isCancelMove || inventory.isOpen())
 		{
 			state.put("CancelMove", 1);
 			isCancelMove = false;
@@ -713,7 +708,7 @@ public class Killy extends ALiving
         {
         	public void onKeyDown()
         	{
-        		showInventory = true;
+        		inventory.openInventory(Inventory.TO_CHECK);
         		isNextStep = true;
         	}
         	
@@ -726,7 +721,7 @@ public class Killy extends ALiving
 	
 	public void process()
 	{
-		if(showInventory)inventory.process();
+		if(inventory.isOpen())inventory.process();
 		else
 		{
 			playerEvents.checkEvents();
