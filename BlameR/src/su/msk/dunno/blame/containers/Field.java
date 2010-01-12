@@ -107,6 +107,13 @@ public class Field
 		if(ao.isLightSource())lightSources.add(ao);
 	}
 	
+	public void addObject(Point p, AObject ao)
+	{
+		ao.cur_pos = p;
+		objects[p.x][p.y].add(objects[p.x][p.y].size()-1, ao);
+		if(ao.isLightSource())lightSources.add(ao);
+	}
+	
 	public boolean removeObject(AObject ao)
 	{
 		if(ao.isLightSource())lightSources.remove(ao);
