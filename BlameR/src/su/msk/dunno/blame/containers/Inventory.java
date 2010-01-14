@@ -185,18 +185,7 @@ public class Inventory
         			}
         		}
         	}
-        });
-		inventoryEvents.addListener(Keyboard.KEY_D, new KeyListener()
-        {
-        	public void onKeyDown()
-        	{
-        		if(selectedItem != null)
-        		{
-        			owner.setDecision(new Drop(owner, selectedItem));
-        			closeInventory();
-        		}
-        	}
-        });
+        });		
 		inventoryEvents.addListener(Keyboard.KEY_ESCAPE, new KeyListener()
         {
         	public void onKeyDown()
