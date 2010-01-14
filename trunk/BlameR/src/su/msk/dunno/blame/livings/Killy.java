@@ -717,6 +717,19 @@ public class Killy extends ALiving
         		isStepDone = false;
         	}
         });
+		playerEvents.addListener(Keyboard.KEY_D, new KeyListener()
+        {
+        	public void onKeyDown()
+        	{
+        		inventory.openInventory(Inventory.TO_DROP);
+        		isNextStep = true;
+        	}
+        	
+        	public void onKeyUp()
+        	{
+        		isStepDone = false;
+        	}
+        });
 	}
 	
 	public void process()
