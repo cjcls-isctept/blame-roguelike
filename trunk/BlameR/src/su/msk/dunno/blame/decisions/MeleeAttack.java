@@ -13,7 +13,7 @@ public class MeleeAttack extends ADecision
 	{
 		super(al);
 		this.dir = dir;
-		args.put("Damage", (int)(Math.random()*20));
+		args.put("Damage", (int)(Math.random()*20)+"");
 	}
 
 	@Override public void doAction(int actionMoment) 

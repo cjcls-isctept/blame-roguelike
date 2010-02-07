@@ -5,8 +5,9 @@ import java.util.ListIterator;
 
 import su.msk.dunno.blame.containers.Field;
 import su.msk.dunno.blame.containers.Inventory;
+import su.msk.dunno.blame.containers.Weapon;
 import su.msk.dunno.blame.decisions.Move;
-import su.msk.dunno.blame.items.Corpse;
+import su.msk.dunno.blame.items.SocketExtender;
 import su.msk.dunno.blame.main.Blame;
 import su.msk.dunno.blame.main.support.Color;
 import su.msk.dunno.blame.main.support.Point;
@@ -14,24 +15,28 @@ import su.msk.dunno.blame.main.support.Point;
 
 public abstract class ALiving extends AObject 
 {
+	// stats
 	protected int health;
+	protected int speed;	
+	
+	// effects
 	public boolean isDead;
+	
 	public Inventory inventory;
+	public Weapon weapon;
 	
-	private Point old_pos;	// previous position: set private to prevent some possibilities "to hack" system :)
-	
-	protected Field field;
-	
-	private int lastAction_time;
-	protected int actionPeriod;
-	
+	private Point old_pos = cur_pos;	// previous position: set private to prevent some possibilities "to hack" the system :)
+	private int lastActionTime;
+	private int actionPeriod;
 	private ADecision decision;
+	
+	protected Field field;	
 
 	public ALiving(int i, int j, Field field) 
 	{
 		super(i, j);
 		inventory = new Inventory(this, field);
-		old_pos = cur_pos;
+		weapon = new Weapon(this, inventory);
 		this.field = field;
 		field.addObject(this);
 	}
@@ -54,15 +59,19 @@ public abstract class ALiving extends AObject
 	
 	public void nextStep(int cur_time)
 	{
-		if(cur_time - getLastActionTime() >= getActionPeriod())
+		if(cur_time - lastActionTime >= actionPeriod)
 		{
 			if(decision == null)
 			{
 				decision = livingAI();
 			}
-			if(decision != null)decision.doAction(cur_time);
+			if(decision != null)
+			{
+				decision.doAction(cur_time);
+				actionPeriod = decision.getActionPeriod();
+			}
 			decision = null;
-			if(!this.getState().containsKey("CancelMove"))lastAction_time = cur_time;
+			if(!this.getState().containsKey("CancelMove"))lastActionTime = cur_time;
 		}
 	}
 	
@@ -142,12 +151,13 @@ public abstract class ALiving extends AObject
 		{
 			li.remove();
 			field.removeObject(this);
-			field.addObject(new Corpse(cur_pos));
+			field.addObject(new SocketExtender(cur_pos));
 		}
 	}
 	
 	@Override public abstract boolean isEnemy(AObject ao);
 	
+	public abstract boolean isPlayer();	
 	
 	@Override public boolean getPassability() // all livings are impossible to pass through
 	{
@@ -182,7 +192,7 @@ public abstract class ALiving extends AObject
 	@Override public abstract  Color getColor();
 
 	public int getLastActionTime() {
-		return lastAction_time;
+		return lastActionTime;
 	}
 
 	public int getActionPeriod() {
@@ -192,5 +202,12 @@ public abstract class ALiving extends AObject
 	public void setDecision(ADecision d)
 	{
 		decision = d;
+	}
+	
+	public int getStat(String s)
+	{
+		if("Health".equals(s))return health;
+		if("Speed".equals(s))return speed;
+		return 0;
 	}
 }

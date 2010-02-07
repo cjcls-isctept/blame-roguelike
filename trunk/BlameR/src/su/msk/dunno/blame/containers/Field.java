@@ -189,20 +189,16 @@ public class Field
 	
 	public void playAnimations()
 	{
-		int cur_time = 0;
-		for(ListIterator<AAnimation> li = animations.listIterator(); li.hasNext();)
+		if(animations.size() > 0)
 		{
-			AAnimation a = li.next();
-			if(a.equals(animations.getFirst()))cur_time = a.cur_time;
-			if(a.cur_time == cur_time)a.play();
-			if(a.isEnded)li.remove();
-		}
-			/*if(animations.size() > 0)
+			int cur_time = animations.getFirst().cur_time;
+			for(ListIterator<AAnimation> li = animations.listIterator(); li.hasNext();)
 			{
-				AAnimation a = animations.getFirst();
-				a.play();
-				if(a.isEnded)animations.remove(a);
-			}*/
+				AAnimation a = li.next();
+				if(a.cur_time == cur_time)a.play();
+				if(a.isEnded)li.remove();
+			}
+		}
 	}
 	
 	public boolean changeLocation(ALiving al)	// add checks for edges and passability!

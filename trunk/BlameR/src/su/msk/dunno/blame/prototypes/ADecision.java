@@ -5,13 +5,13 @@ import java.util.HashMap;
 public abstract class ADecision 
 {
 	protected ALiving al;
-	protected HashMap<String, Integer> args;
+	protected HashMap<String, String> args = new HashMap<String, String>();
 	protected boolean wasExecuted;
+	private int actionPeriod;
 	
 	public ADecision(ALiving al)
 	{
 		this.al = al;
-		args = new HashMap<String, Integer>();
 	}
 	
 	public abstract void doAction(int actionMoment);
@@ -19,5 +19,10 @@ public abstract class ADecision
 	public boolean wasExecuted()
 	{
 		return wasExecuted;
+	}
+
+	public int getActionPeriod()
+	{
+		return al.getStat("Speed");
 	}
 }

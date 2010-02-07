@@ -32,10 +32,20 @@ public class Point
 		return new Point(x + p.x, y + p.y);
 	}
 	
+	public Point plus(int i, int j)
+	{
+		return new Point(x + i, y + j);
+	}
+	
 	public Point minus(Point p)
 	{
 		return new Point(x - p.x, y - p.y);
 	}
+	
+	public Point minus(int i, int j)
+	{
+		return new Point(x - i, y - j);
+	}	
 	
 	public Point mul(int k)
 	{

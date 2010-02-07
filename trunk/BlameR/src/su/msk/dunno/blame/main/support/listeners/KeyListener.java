@@ -4,19 +4,32 @@ import org.lwjgl.input.Keyboard;
 
 public class KeyListener extends Listener 
 {	
-	public void check()
+	public KeyListener(long repeatTime) 
+	{
+		super(repeatTime);
+	}	
+
+	@Override public void check()
 	{
 		if(Keyboard.isKeyDown(monitored)) 
         {
-    		wasPressed = true;
-    		onKeyDown();        	
+			if(!wasPressed)
+			{
+				onKeyDown();
+				wasPressed = true;
+				lastPressed = System.currentTimeMillis();
+			}
+			else if(isRepeatable && System.currentTimeMillis()-lastPressed > repeatTime) 
+			{
+				onKeyDown();
+				lastPressed = System.currentTimeMillis();
+			}
         }
-        else
-        	if (wasPressed)
-        	{
-        		onKeyUp();
-        		wasPressed = false;
-        	}
+        else if(wasPressed)
+        {
+        	onKeyUp();
+        	wasPressed = false;
+        }
 	}
 	
 	public void onKeyDown(){};

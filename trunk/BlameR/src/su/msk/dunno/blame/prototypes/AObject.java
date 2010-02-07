@@ -38,14 +38,14 @@ public abstract class AObject
 		return Color.WHITE;
 	}
 	
-	public void changeState(HashMap<String, Integer> args)
+	public void changeState(HashMap<String, String> args)
 	{
 		
 	}
 	
-	public HashMap<String, Integer> getState()
+	public HashMap<String, String> getState()
 	{
-		return new HashMap<String, Integer>();
+		return new HashMap<String, String>();
 	}
 	
 	public boolean isEnemy(AObject ao)

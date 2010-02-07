@@ -7,16 +7,15 @@ import su.msk.dunno.blame.main.support.Point;
 
 public abstract class AItem extends AObject
 {
-	protected HashMap<String, Integer> state;
+	protected HashMap<String, String> state = new HashMap<String, String>();
 	
 	public AItem(Point p) 
 	{
 		super(p);
-		state = new HashMap<String, Integer>();
-		state.put("Item", 1);
+		state.put("Item", "");
 	}
 	
-	public HashMap<String, Integer> getState()
+	@Override public HashMap<String, String> getState()
 	{
 		return state;
 	}

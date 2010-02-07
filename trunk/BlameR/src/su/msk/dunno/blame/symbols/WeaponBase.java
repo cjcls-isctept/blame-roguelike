@@ -1,20 +1,24 @@
-package su.msk.dunno.blame.items;
+package su.msk.dunno.blame.symbols;
 
 import su.msk.dunno.blame.main.support.Point;
-import su.msk.dunno.blame.prototypes.AItem;
+import su.msk.dunno.blame.prototypes.AObject;
 
-
-public class Corpse extends AItem 
+public class WeaponBase extends AObject 
 {
-	public Corpse(Point p) 
+
+	public WeaponBase(Point p) 
 	{
 		super(p);
-		state.put("Info", "Piece of silicon shit");
+	}
+
+	public WeaponBase(int i, int j) 
+	{
+		super(i, j);
 	}
 
 	@Override public String getName() 
 	{
-		return "Corpse";
+		return "Weapon Sceleton";
 	}
 
 	@Override public boolean getPassability() 
@@ -24,11 +28,12 @@ public class Corpse extends AItem
 
 	@Override public char getSymbol() 
 	{
-		return '%';
+		return 'w';
 	}
 
 	@Override public boolean getTransparency() 
 	{
 		return true;
 	}
+
 }

@@ -1,20 +1,21 @@
 package su.msk.dunno.blame.items;
 
+import su.msk.dunno.blame.main.support.Color;
 import su.msk.dunno.blame.main.support.Point;
 import su.msk.dunno.blame.prototypes.AItem;
 
-
-public class Corpse extends AItem 
+public class SocketExtender extends AItem 
 {
-	public Corpse(Point p) 
+
+	public SocketExtender(Point p) 
 	{
 		super(p);
-		state.put("Info", "Piece of silicon shit");
+		state.put("Extender", "");
 	}
 
 	@Override public String getName() 
 	{
-		return "Corpse";
+		return "Socket Extender";
 	}
 
 	@Override public boolean getPassability() 
@@ -24,11 +25,16 @@ public class Corpse extends AItem
 
 	@Override public char getSymbol() 
 	{
-		return '%';
+		return 'w';
 	}
 
 	@Override public boolean getTransparency() 
 	{
 		return true;
+	}
+	
+	@Override public Color getColor()
+	{
+		return Color.CYAN;
 	}
 }

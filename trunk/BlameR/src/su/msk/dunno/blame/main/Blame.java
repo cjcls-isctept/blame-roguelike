@@ -14,7 +14,6 @@ import su.msk.dunno.blame.containers.LivingList;
 import su.msk.dunno.blame.livings.Cibo;
 import su.msk.dunno.blame.livings.Killy;
 import su.msk.dunno.blame.main.support.MyFont;
-import su.msk.dunno.blame.main.support.Point;
 import su.msk.dunno.blame.main.support.listeners.EventManager;
 import su.msk.dunno.blame.main.support.listeners.KeyListener;
 
@@ -36,7 +35,6 @@ public class Blame
 	private static Killy killy;
 	private static Cibo cibo;
 	public static boolean playCibo;
-	private boolean alreadyPressed;
 	
 	Field field;
 	LivingList livings;
@@ -54,12 +52,13 @@ public class Blame
 		field = new Field(N_x, N_y, "random");
 		
 		livings = new LivingList(field);
-		killy = new Killy(field.getRandomPos(), field, livings);
-		livings.addKilly(killy);
-		cibo = new Cibo(field.getRandomPos(killy.cur_pos.plus(new Point(-2,2)), killy.cur_pos.plus(new Point(2,-2))), 
+		killy = new Killy(field.getRandomPos(), 
+						  field, livings);
+		cibo = new Cibo(field.getRandomPos(killy.cur_pos.plus(-2,2), killy.cur_pos.plus(-2,2)), 
 				        field, livings);	// generate cibo near killy
+		livings.addKilly(killy);
 		livings.addCibo(cibo);
-		livings.addCreatures(10);
+		livings.addCreatures(2);
 		
 		isRunning = true;
 		run();
@@ -119,34 +118,25 @@ public class Blame
 	
 	public void initEvents()
 	{		
-		EventManager.instance().addListener(Keyboard.KEY_ADD, new KeyListener()
+		EventManager.instance().addListener(Keyboard.KEY_ADD, new KeyListener(1)
         {
         	public void onKeyDown()
         	{
         		if(scale < 80)scale++;
         	}
         });
-		EventManager.instance().addListener(Keyboard.KEY_SUBTRACT, new KeyListener()
+		EventManager.instance().addListener(Keyboard.KEY_SUBTRACT, new KeyListener(1)
         {
         	public void onKeyDown()
         	{
         		if(scale > 5)scale--;
         	}
         });
-		EventManager.instance().addListener(Keyboard.KEY_TAB, new KeyListener()
+		EventManager.instance().addListener(Keyboard.KEY_TAB, new KeyListener(0)
         {
         	public void onKeyDown()
         	{
-        		if(!alreadyPressed)
-        		{
-        			playCibo = !playCibo;
-        			alreadyPressed = true;
-        		}
-        	}
-        	
-        	public void onKeyUp()
-        	{
-        		alreadyPressed = false;
+        		playCibo = !playCibo;
         	}
         });
 	}

@@ -13,7 +13,7 @@ public class Open extends ADecision
 	public Open(ALiving al) 
 	{
 		super(al);
-		args.put("Open", 1);
+		args.put("Open", "");
 	}
 
 	@Override public void doAction(int actionMoment) 
