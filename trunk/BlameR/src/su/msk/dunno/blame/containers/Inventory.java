@@ -9,6 +9,7 @@ import org.lwjgl.opengl.GL11;
 import su.msk.dunno.blame.decisions.Drop;
 import su.msk.dunno.blame.main.Blame;
 import su.msk.dunno.blame.main.support.Color;
+import su.msk.dunno.blame.main.support.Messages;
 import su.msk.dunno.blame.main.support.MyFont;
 import su.msk.dunno.blame.main.support.listeners.EventManager;
 import su.msk.dunno.blame.main.support.listeners.KeyListener;
@@ -105,6 +106,7 @@ public class Inventory
 	
 	public void openInventory(int mode)
 	{
+		Messages.instance().clear();
 		this.mode = mode;
 		showInventory = true;
 		
@@ -125,7 +127,7 @@ public class Inventory
         			}
         			else if(mode == TO_SELECT_SOCKET)
         			{
-        				owner.weapon.addSocket(items.get(0));
+        				owner.weapon.addPart(items.get(0));
         				items.remove(0);
         				closeInventory();
         			}
@@ -147,6 +149,12 @@ public class Inventory
         				owner.setDecision(new Drop(owner, items.get(1)));
                 		closeInventory();
         			}
+          			else if(mode == TO_SELECT_SOCKET)
+        			{
+        				owner.weapon.addPart(items.get(1));
+        				items.remove(1);
+        				closeInventory();
+        			}
         			else
         			{
         				selectedItem = items.get(1);
@@ -164,6 +172,12 @@ public class Inventory
         			{
         				owner.setDecision(new Drop(owner, items.get(2)));
                 		closeInventory();
+        			}
+          			else if(mode == TO_SELECT_SOCKET)
+        			{
+        				owner.weapon.addPart(items.get(2));
+        				items.remove(2);
+        				closeInventory();
         			}
         			else
         			{
@@ -183,6 +197,12 @@ public class Inventory
         				owner.setDecision(new Drop(owner, items.get(3)));
                 		closeInventory();
         			}
+          			else if(mode == TO_SELECT_SOCKET)
+        			{
+        				owner.weapon.addPart(items.get(3));
+        				items.remove(3);
+        				closeInventory();
+        			}
         			else
         			{
         				selectedItem = items.get(3);
@@ -200,6 +220,12 @@ public class Inventory
         			{
         				owner.setDecision(new Drop(owner, items.get(4)));
                 		closeInventory();
+        			}
+          			else if(mode == TO_SELECT_SOCKET)
+        			{
+        				owner.weapon.addPart(items.get(4));
+        				items.remove(4);
+        				closeInventory();
         			}
         			else
         			{

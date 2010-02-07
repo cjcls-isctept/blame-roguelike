@@ -10,6 +10,8 @@ public class SocketExtender extends AItem
 	public SocketExtender(Point p) 
 	{
 		super(p);
+		state.put("Part", "");
+		state.put("Info", "Adds new socket places to weapon");
 		state.put("Extender", "");
 	}
 

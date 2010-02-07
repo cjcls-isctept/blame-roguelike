@@ -1,5 +1,6 @@
 package su.msk.dunno.blame.symbols;
 
+import su.msk.dunno.blame.main.support.Point;
 import su.msk.dunno.blame.prototypes.AObject;
 
 public class SocketSymbol extends AObject
@@ -8,6 +9,11 @@ public class SocketSymbol extends AObject
 	public SocketSymbol(int i, int j) 
 	{
 		super(i, j);
+	}
+
+	public SocketSymbol(Point cur_pos) 
+	{
+		super(cur_pos);
 	}
 
 	@Override public String getName() 

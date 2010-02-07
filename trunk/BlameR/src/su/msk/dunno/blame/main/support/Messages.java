@@ -37,4 +37,9 @@ public class Messages
 			MyFont.instance().drawString(mes, 20, h, 0.2f, Color.WHITE); h -=15;
 		}
 	}
+
+	public void clear() 
+	{
+		messages.clear();
+	}
 }

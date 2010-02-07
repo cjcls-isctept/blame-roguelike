@@ -7,8 +7,10 @@ import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
 
+import su.msk.dunno.blame.decisions.Drop;
 import su.msk.dunno.blame.main.Blame;
 import su.msk.dunno.blame.main.support.Color;
+import su.msk.dunno.blame.main.support.Messages;
 import su.msk.dunno.blame.main.support.MyFont;
 import su.msk.dunno.blame.main.support.Point;
 import su.msk.dunno.blame.main.support.listeners.EventManager;
@@ -61,10 +63,13 @@ public class Weapon
 		{
 			for(int j = 0; j < Blame.N_y; j++)
 			{
-				MyFont.instance().drawChar(weaponView[i][j].getSymbol(), i*20, j*20, 0.2f, weaponView[i][j].getColor());
+				if(!"SocketPlace".equals(weaponView[i][j].getName()) || isSelectSocket)
+					MyFont.instance().drawChar(weaponView[i][j].getSymbol(), i*20, j*20, 0.2f, 
+											   weaponView[i][j].getColor());
 			}
 		}
 		if(isSelectSocket)MyFont.instance().drawChar(selector.getSymbol(), selector.cur_pos.x*20, selector.cur_pos.y*20, 0.2f, selector.getColor());
+		Messages.instance().showMessages();
 		Display.sync(Blame.framerate);
 		Display.update();
 	}
@@ -74,12 +79,101 @@ public class Weapon
 		return null;
 	}
 	
-	public void addSocket(AObject ao)
+	public void addPart(AObject ao)
 	{
+		ao.cur_pos = selector.cur_pos;
 		sockets.add(ao);
 		weaponView[selector.cur_pos.x][selector.cur_pos.y] = ao;
+		if("Socket Extender".equals(ao.getName()))
+		{
+			addNewSockets(ao);
+		}
 	}
 	
+	private void addNewSockets(AObject ao) 
+	{
+		for(int i = Math.max(0, ao.cur_pos.x-1); i <= Math.min(weaponView.length-1, ao.cur_pos.x+1); i++)
+		{
+			for(int j = Math.max(0, ao.cur_pos.y-1); j <= Math.min(weaponView[0].length-1, ao.cur_pos.y+1); j++)
+			{
+				if("Empty".equals(weaponView[i][j].getName()) && !isRestrictedPlace(i, j) && !isDiagonal(ao.cur_pos, new Point(i,j)))
+				{
+					weaponView[i][j] = new SocketSymbol(i,j);
+				}
+			}
+		}
+	}
+	
+	private boolean isRestrictedPlace(int i, int j)
+	{
+		if((i == weaponView.length/2-4 && (j == weaponView[0].length/2-1 || j == weaponView[0].length/2-2)) ||
+		   (i == weaponView.length/2-2 && (j == weaponView[0].length/2-1 || j == weaponView[0].length/2-2)))
+		   return true;
+		else return false;
+	}
+	
+	private boolean isDiagonal(Point pos, Point new_pos)
+	{
+		Point dif = new_pos.minus(pos);
+		if(dif.x != 0 && dif.y != 0) return true;
+		else return false;
+	}
+	
+	public boolean removePart(AObject ao)
+	{
+		sockets.remove(ao);
+		weaponView[ao.cur_pos.x][ao.cur_pos.y] = new SocketSymbol(ao.cur_pos);
+		if("Socket Extender".equals(ao.getName()))
+		{
+			removeSockets(ao);
+		}
+		if(!inventory.isFull())
+		{			
+			inventory.addItem(ao);			
+			return true;
+		}
+		else 
+		{
+			owner.setDecision(new Drop(owner, ao));
+			return false;
+		}		
+	}
+
+	private void removeSockets(AObject ao) 
+	{
+		for(int i = Math.max(0, ao.cur_pos.x-1); i <= Math.min(weaponView.length-1, ao.cur_pos.x+1); i++)
+		{
+			for(int j = Math.max(0, ao.cur_pos.y-1); j <= Math.min(weaponView[0].length-1, ao.cur_pos.y+1); j++)
+			{
+				if("SocketPlace".equals(weaponView[i][j].getName()))
+				{
+					if(noPartsNear(weaponView[i][j]))weaponView[i][j] = new EmptySpace(i,j);
+				}
+				else if("Socket Extender".equals(weaponView[i][j].getName()))
+				{
+					if(noPartsNear(weaponView[i][j]))removePart(weaponView[i][j]);
+				}
+			}
+		}
+	}
+
+	private boolean noPartsNear(AObject ao) 
+	{
+		for(int i = Math.max(0, ao.cur_pos.x-1); i <= Math.min(weaponView.length-1, ao.cur_pos.x+1); i++)
+		{
+			for(int j = Math.max(0, ao.cur_pos.y-1); j <= Math.min(weaponView[0].length-1, ao.cur_pos.y+1); j++)
+			{
+				if(!ao.equals(weaponView[i][j]))
+				{
+					String name = weaponView[i][j].getName();
+					if(("Weapon Sceleton".equals(name) || "Socket Extender".equals(name)) && 
+						!isDiagonal(ao.cur_pos, new Point(i,j)))return false;
+				}
+			}
+		}
+		return true;
+	}
+
 	public void initWeaponView()
 	{
 		for(int i = 0; i < weaponView.length; i++)
@@ -130,49 +224,74 @@ public class Weapon
 	
 	public void openWeaponView()
 	{
+		Messages.instance().clear();
 		isWeaponView = true;
 		
 	}
 		
 	public void initEvents()
 	{
-		weaponEvents.addListener(Keyboard.KEY_UP, new KeyListener(0)
+		weaponEvents.addListener(Keyboard.KEY_UP, new KeyListener(100)
         {
         	public void onKeyDown()
         	{
-        		selector.cur_pos = selector.cur_pos.plus(new Point(0, 1));
-        		isSelectSocket = true;
+        		if(selector.cur_pos.y < weaponView[0].length-1)
+        		{
+        			selector.cur_pos = selector.cur_pos.plus(0,1);
+        			isSelectSocket = true;
+        		}
         	}
         });
-		weaponEvents.addListener(Keyboard.KEY_DOWN, new KeyListener(0)
+		weaponEvents.addListener(Keyboard.KEY_DOWN, new KeyListener(100)
         {
         	public void onKeyDown()
         	{
-        		selector.cur_pos = selector.cur_pos.plus(new Point(0, -1));
-        		isSelectSocket = true;
+        		if(selector.cur_pos.y > 0)
+        		{
+        			selector.cur_pos = selector.cur_pos.plus(0,-1);
+        			isSelectSocket = true;
+        		}
         	}
         });
-		weaponEvents.addListener(Keyboard.KEY_RIGHT, new KeyListener(0)
+		weaponEvents.addListener(Keyboard.KEY_RIGHT, new KeyListener(100)
         {
         	public void onKeyDown()
         	{
-        		selector.cur_pos = selector.cur_pos.plus(new Point(1, 0));
-        		isSelectSocket = true;
+        		if(selector.cur_pos.x < weaponView.length-1)
+        		{
+        			selector.cur_pos = selector.cur_pos.plus(1,0);
+        			isSelectSocket = true;
+        		}
         	}
         });
-		weaponEvents.addListener(Keyboard.KEY_LEFT, new KeyListener(0)
+		weaponEvents.addListener(Keyboard.KEY_LEFT, new KeyListener(100)
         {
         	public void onKeyDown()
         	{
-        		selector.cur_pos = selector.cur_pos.plus(new Point(-1, 0));
-        		isSelectSocket = true;
+        		if(selector.cur_pos.x > 0)
+        		{
+        			selector.cur_pos = selector.cur_pos.plus(-1,0);
+        			isSelectSocket = true;
+        		}
         	}
         });
 		weaponEvents.addListener(Keyboard.KEY_RETURN, new KeyListener(0)
         {
         	public void onKeyDown()
         	{
-        		inventory.openInventory(Inventory.TO_SELECT_SOCKET);
+        		if("SocketPlace".equals(weaponView[selector.cur_pos.x][selector.cur_pos.y].getName()))
+        				inventory.openInventory(Inventory.TO_SELECT_SOCKET);
+        		else if("Weapon Sceleton".equals(weaponView[selector.cur_pos.x][selector.cur_pos.y].getName()))
+        		{
+        			Messages.instance().addMessage("Can't remove this part");
+        		}
+        		else if(weaponView[selector.cur_pos.x][selector.cur_pos.y].getState().containsKey("Part"))
+        		{
+        			if(!removePart(weaponView[selector.cur_pos.x][selector.cur_pos.y]))
+        				Messages.instance().addMessage("Inventory is full. Drop the part to the ground");
+        		}
+        		else
+        			Messages.instance().addMessage("There is no socket or weapon part here");
         	}
         });
 		weaponEvents.addListener(Keyboard.KEY_ESCAPE, new KeyListener(0)
