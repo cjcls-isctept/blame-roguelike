@@ -2,6 +2,7 @@ package su.msk.dunno.blame.decisions;
 
 import java.util.HashMap;
 
+import su.msk.dunno.blame.animations.Moving;
 import su.msk.dunno.blame.containers.Field;
 import su.msk.dunno.blame.main.support.Point;
 import su.msk.dunno.blame.prototypes.ADecision;
@@ -36,7 +37,7 @@ public class Move extends ADecision
 		Point old = al.cur_pos;
 		switch(dir)
 		{
-		case 0: 
+		case 0: // rewrite this with plus(int i, int j) from Point class
 			al.cur_pos = new Point(al.cur_pos.x, al.cur_pos.y+1); 
 			break;	// up
 		case 1: 
@@ -66,11 +67,11 @@ public class Move extends ADecision
 		}
 		if(!field.changeLocation(al))
 		{
-			HashMap<String, Integer> args = new HashMap<String, Integer>();
-			args.put("MoveFail", 1);
+			HashMap<String, String> args = new HashMap<String, String>();
+			args.put("MoveFail", "");
 			al.changeState(args);
 		}
-		//else if(al.isNearPlayer() && dir != Move.STAY)field.addAnimation(new Moving(actionMoment, field, al, old, al.cur_pos));
+		else if(!al.isPlayer() && al.isNearPlayer() && dir != Move.STAY)field.addAnimation(new Moving(actionMoment, field, al, old, al.cur_pos));
 		wasExecuted = true;				
 	}
 }

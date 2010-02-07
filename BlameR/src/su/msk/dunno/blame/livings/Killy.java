@@ -36,10 +36,7 @@ public class Killy extends ALiving
 	protected LivingList livings;
 	
 	protected EventManager playerEvents;
-	protected boolean isNextStep = true;
-	protected boolean isStepDone = false;
-	protected int period = Blame.framerate/4;
-	protected int count = period;
+	protected boolean isNextStep;
 	
 	//0 - up/2; 1 - left/4; 2 - down/2; 3 - right/6; 4 - 9; 5 - 7; 6 - 1; 7 - 3; 8 - 5
 	protected boolean[] keys = new boolean[9];
@@ -51,7 +48,7 @@ public class Killy extends ALiving
 	
 	protected boolean isSelectTarget;
 	protected Point selectPoint;
-	protected LinkedList<MinorSelector> selectLine;
+	protected LinkedList<MinorSelector> selectLine = new LinkedList<MinorSelector>();
 	
 	boolean isCancelMove;
 	
@@ -65,11 +62,9 @@ public class Killy extends ALiving
 		super(i, j, field);
 		this.livings = livings;
 		initEvents();
-		health = 100;
-		actionPeriod = 4;
 		dov = 5;
-		
-		selectLine = new LinkedList<MinorSelector>();
+		health = 100;
+		speed = 4;		
 	}
 
 	@Override public ADecision livingAI() 
@@ -269,15 +264,15 @@ public class Killy extends ALiving
 		isSelectTarget = false;
 	}
 	
-	@Override public void changeState(HashMap<String, Integer> args)
+	@Override public void changeState(HashMap<String, String> args)
 	{
 		if(args.containsKey("Damage"))
 		{
-			health -= args.get("Damage");
+			health -= Integer.valueOf(args.get("Damage"));
 		}
 		if(args.containsKey("HealthPlus"))
 		{
-			health += args.get("HealthPlus");
+			health += Integer.valueOf(args.get("HealthPlus"));
 		}
 		if(args.containsKey("MoveFail"))
 		{
@@ -285,12 +280,12 @@ public class Killy extends ALiving
 		}
 	}
 	
-	@Override public HashMap<String, Integer> getState() 
+	@Override public HashMap<String, String> getState() 
 	{
-		HashMap<String, Integer> state = new HashMap<String, Integer>();
+		HashMap<String, String> state = new HashMap<String, String>();
 		if(isSelectTarget || isCancelMove || inventory.isOpen())
 		{
-			state.put("CancelMove", 1);
+			state.put("CancelMove", "");
 			isCancelMove = false;
 		}
 		return state;
@@ -352,332 +347,135 @@ public class Killy extends ALiving
 	public void initEvents()
 	{
 		playerEvents = new EventManager();
-		playerEvents.addListener(Keyboard.KEY_UP, new KeyListener()
+		playerEvents.addListener(Keyboard.KEY_UP, new KeyListener(100)
         {
         	public void onKeyDown()
         	{
         		keys[0] = true;
         		isNextStep = true;
-        		count++;
-        		if(count > period)
-        		{
-        			isStepDone = false;
-        			count = 0;
-        			period = Blame.fps/4;
-        		}
          	}
-        	
-        	public void onKeyUp()
-        	{
-        		isStepDone = false;
-        		count = 0;
-        		period = Blame.fps/4;
-        	}
         });
-		playerEvents.addListener(Keyboard.KEY_NUMPAD8, new KeyListener()
+		playerEvents.addListener(Keyboard.KEY_NUMPAD8, new KeyListener(100)
         {
         	public void onKeyDown()
         	{
         		keys[0] = true;
         		isNextStep = true;
-        		count++;
-        		if(count > period)
-        		{
-        			isStepDone = false;
-        			count = 0;
-        			period = Blame.fps/4;
-        		}
          	}
-        	
-        	public void onKeyUp()
-        	{
-        		isStepDone = false;
-        		count = 0;
-        		period = Blame.fps/4;
-        	}
         });
-		playerEvents.addListener(Keyboard.KEY_LEFT, new KeyListener()
+		playerEvents.addListener(Keyboard.KEY_LEFT, new KeyListener(100)
         {
         	public void onKeyDown()
         	{
         		keys[1] = true;
         		isNextStep = true;
-        		count++;
-        		if(count > period)
-        		{
-        			isStepDone = false;
-        			count = 0;
-        			period = Blame.fps/4;
-        		}
-        	}
-        	
-        	public void onKeyUp()
-        	{
-        		isStepDone = false;
-        		count = 0;
-        		period = Blame.fps/4;
         	}
         });
-		playerEvents.addListener(Keyboard.KEY_NUMPAD4, new KeyListener()
+		playerEvents.addListener(Keyboard.KEY_NUMPAD4, new KeyListener(100)
         {
         	public void onKeyDown()
         	{
         		keys[1] = true;
         		isNextStep = true;
-        		count++;
-        		if(count > period)
-        		{
-        			isStepDone = false;
-        			count = 0;
-        			period = Blame.fps/4;
-        		}
-        	}
-        	
-        	public void onKeyUp()
-        	{
-        		isStepDone = false;
-        		count = 0;
-        		period = Blame.fps/4;
         	}
         });
-		playerEvents.addListener(Keyboard.KEY_DOWN, new KeyListener()
+		playerEvents.addListener(Keyboard.KEY_DOWN, new KeyListener(100)
         {
         	public void onKeyDown()
         	{
         		keys[2] = true;
         		isNextStep = true;
-        		count++;
-        		if(count > period)
-        		{
-        			isStepDone = false;
-        			count = 0;
-        			period = Blame.fps/4;
-        		}
-        	}
-        	
-        	public void onKeyUp()
-        	{
-        		isStepDone = false;
-        		count = 0;
-        		period = Blame.fps/4;
         	}
         });
-		playerEvents.addListener(Keyboard.KEY_NUMPAD2, new KeyListener()
+		playerEvents.addListener(Keyboard.KEY_NUMPAD2, new KeyListener(100)
         {
         	public void onKeyDown()
         	{
         		keys[2] = true;
         		isNextStep = true;
-        		count++;
-        		if(count > period)
-        		{
-        			isStepDone = false;
-        			count = 0;
-        			period = Blame.fps/4;
-        		}
-        	}
-        	
-        	public void onKeyUp()
-        	{
-        		isStepDone = false;
-        		count = 0;
-        		period = Blame.fps/4;
         	}
         });
-		playerEvents.addListener(Keyboard.KEY_RIGHT, new KeyListener()
+		playerEvents.addListener(Keyboard.KEY_RIGHT, new KeyListener(100)
         {
         	public void onKeyDown()
         	{
         		keys[3] = true;
         		isNextStep = true;
-        		count++;
-        		if(count > period)
-        		{
-        			isStepDone = false;
-        			count = 0;
-        			period = Blame.fps/4;
-        		}
-        	}
-        	
-        	public void onKeyUp()
-        	{
-        		isStepDone = false;
-        		count = 0;
-        		period = Blame.fps/4;
         	}
         });
-		playerEvents.addListener(Keyboard.KEY_NUMPAD6, new KeyListener()
+		playerEvents.addListener(Keyboard.KEY_NUMPAD6, new KeyListener(100)
         {
         	public void onKeyDown()
         	{
         		keys[3] = true;
         		isNextStep = true;
-        		count++;
-        		if(count > period)
-        		{
-        			isStepDone = false;
-        			count = 0;
-        			period = Blame.fps/4;
-        		}
-        	}
-        	
-        	public void onKeyUp()
-        	{
-        		isStepDone = false;
-        		count = 0;
-        		period = Blame.fps/4;
         	}
         });
-		playerEvents.addListener(Keyboard.KEY_NUMPAD9, new KeyListener()
+		playerEvents.addListener(Keyboard.KEY_NUMPAD9, new KeyListener(100)
         {
         	public void onKeyDown()
         	{
         		keys[4] = true;
         		isNextStep = true;
-        		count++;
-        		if(count > period)
-        		{
-        			isStepDone = false;
-        			count = 0;
-        			period = Blame.fps/4;
-        		}
-        	}
-        	
-        	public void onKeyUp()
-        	{
-        		isStepDone = false;
-        		count = 0;
-        		period = Blame.fps/4;
         	}
         });
-		playerEvents.addListener(Keyboard.KEY_NUMPAD7, new KeyListener()
+		playerEvents.addListener(Keyboard.KEY_NUMPAD7, new KeyListener(100)
         {
         	public void onKeyDown()
         	{
         		keys[5] = true;
         		isNextStep = true;
-        		count++;
-        		if(count > period)
-        		{
-        			isStepDone = false;
-        			count = 0;
-        			period = Blame.fps/4;
-        		}
-        	}
-        	
-        	public void onKeyUp()
-        	{
-        		isStepDone = false;
-        		count = 0;
-        		period = Blame.fps/4;
         	}
         });
-		playerEvents.addListener(Keyboard.KEY_NUMPAD1, new KeyListener()
+		playerEvents.addListener(Keyboard.KEY_NUMPAD1, new KeyListener(100)
         {
         	public void onKeyDown()
         	{
         		keys[6] = true;
         		isNextStep = true;
-        		count++;
-        		if(count > period)
-        		{
-        			isStepDone = false;
-        			count = 0;
-        			period = Blame.fps/4;
-        		}
-        	}
-        	
-        	public void onKeyUp()
-        	{
-        		isStepDone = false;
-        		count = 0;
-        		period = Blame.fps/4;
         	}
         });
-		playerEvents.addListener(Keyboard.KEY_NUMPAD3, new KeyListener()
+		playerEvents.addListener(Keyboard.KEY_NUMPAD3, new KeyListener(100)
         {
         	public void onKeyDown()
         	{
         		keys[7] = true;
         		isNextStep = true;
-        		count++;
-        		if(count > period)
-        		{
-        			isStepDone = false;
-        			count = 0;
-        			period = Blame.fps/4;
-        		}
-        	}
-        	
-        	public void onKeyUp()
-        	{
-        		isStepDone = false;
-        		count = 0;
-        		period = Blame.fps/4;
         	}
         });
-		playerEvents.addListener(Keyboard.KEY_NUMPAD5, new KeyListener()
+		playerEvents.addListener(Keyboard.KEY_NUMPAD5, new KeyListener(100)
         {
         	public void onKeyDown()
         	{
         		keys[8] = true;
         		isNextStep = true;
-        		count++;
-        		if(count > period)
-        		{
-        			isStepDone = false;
-        			count = 0;
-        			period = Blame.fps/4;
-        		}
-        	}
-        	
-        	public void onKeyUp()
-        	{
-        		isStepDone = false;
-        		count = 0;
-        		period = Blame.fps/4;
         	}
         });
-		playerEvents.addListener(Keyboard.KEY_O, new KeyListener()
+		playerEvents.addListener(Keyboard.KEY_O, new KeyListener(0)
         {
         	public void onKeyDown()
         	{
         		wantOpen = true;
         		isNextStep = true;
         	}
-        	
-        	public void onKeyUp()
-        	{
-        		isStepDone = false;
-        	}
         });
-		playerEvents.addListener(Keyboard.KEY_C, new KeyListener()
+		playerEvents.addListener(Keyboard.KEY_C, new KeyListener(0)
         {
         	public void onKeyDown()
         	{
         		wantClose = true;
         		isNextStep = true;
         	}
-        	
-        	public void onKeyUp()
-        	{
-        		isStepDone = false;
-        	}
         });
-		playerEvents.addListener(Keyboard.KEY_F, new KeyListener()
+		playerEvents.addListener(Keyboard.KEY_F, new KeyListener(0)
         {
         	public void onKeyDown()
         	{
         		wantShoot = true;
         		isNextStep = true;
         	}
-        	
-        	public void onKeyUp()
-        	{
-        		isStepDone = false;
-        	}
         });
-		playerEvents.addListener(Keyboard.KEY_ESCAPE, new KeyListener()
+		playerEvents.addListener(Keyboard.KEY_ESCAPE, new KeyListener(0)
         {
         	public void onKeyDown()
         	{
@@ -685,49 +483,37 @@ public class Killy extends ALiving
         		selectPoint = null;
         		isNextStep = true;
         	}
-        	
-        	public void onKeyUp()
-        	{
-        		isStepDone = false;
-        	}
         });
-		playerEvents.addListener(Keyboard.KEY_COMMA, new KeyListener()
+		playerEvents.addListener(Keyboard.KEY_COMMA, new KeyListener(0)
         {
         	public void onKeyDown()
         	{
         		wantTake = true;
         		isNextStep = true;
         	}
-        	
-        	public void onKeyUp()
-        	{
-        		isStepDone = false;
-        	}
         });
-		playerEvents.addListener(Keyboard.KEY_I, new KeyListener()
+		playerEvents.addListener(Keyboard.KEY_I, new KeyListener(0)
         {
         	public void onKeyDown()
         	{
         		inventory.openInventory(Inventory.TO_CHECK);
         		isNextStep = true;
         	}
-        	
-        	public void onKeyUp()
-        	{
-        		isStepDone = false;
-        	}
         });
-		playerEvents.addListener(Keyboard.KEY_D, new KeyListener()
+		playerEvents.addListener(Keyboard.KEY_D, new KeyListener(0)
         {
         	public void onKeyDown()
         	{
         		inventory.openInventory(Inventory.TO_DROP);
         		isNextStep = true;
         	}
-        	
-        	public void onKeyUp()
+        });
+		playerEvents.addListener(Keyboard.KEY_W, new KeyListener(0)
+        {
+        	public void onKeyDown()
         	{
-        		isStepDone = false;
+        		weapon.openWeaponView();
+        		isNextStep = true;
         	}
         });
 	}
@@ -735,14 +521,14 @@ public class Killy extends ALiving
 	public void process()
 	{
 		if(inventory.isOpen())inventory.process();
+		else if(weapon.isOpen())weapon.process();
 		else
 		{
 			playerEvents.checkEvents();
-			if(isNextStep && !isStepDone)
+			if(isNextStep)
 			{
 				livings.nextStep();
 				isNextStep = false;
-				isStepDone = true;
 				reset_keys();	
 			}
 			GL11.glClear(GL11.GL_COLOR_BUFFER_BIT/* | GL11.GL_DEPTH_BUFFER_BIT*/);		
@@ -760,5 +546,10 @@ public class Killy extends ALiving
 			Display.sync(Blame.framerate);
 			Display.update();
 		}
+	}
+
+	@Override public boolean isPlayer() 
+	{
+		return true;
 	}
 }

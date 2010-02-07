@@ -10,6 +10,11 @@ public class MinorSelector extends AObject
 		super(p);
 	}
 
+	public MinorSelector(int i, int j) 
+	{
+		super(i, j);
+	}
+
 	@Override public String getName() 
 	{
 		return "MinorSelecter";

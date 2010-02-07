@@ -24,8 +24,7 @@ public class SiliconCreature extends ALiving
 		super(p, field);
 		health = 20;
 		dov = 5;
-		actionPeriod = 2;
-		
+		speed = 8;
 		find = new AStarPathFinder(field);
 	}
 
@@ -89,16 +88,21 @@ public class SiliconCreature extends ALiving
 		return Color.CYAN;
 	}
 	
-	@Override public void changeState(HashMap<String, Integer> args)
+	@Override public void changeState(HashMap<String, String> args)
 	{
 		if(args.containsKey("Damage"))
 		{
-			health -= args.get("Damage");
+			health -= Integer.valueOf(args.get("Damage"));
 		}
 	}
 
 	@Override public boolean isEnemy(AObject ao) 
 	{
 		return "Killy".equals(ao.getName()) || "Cibo".equals(ao.getName());
+	}
+
+	@Override public boolean isPlayer() 
+	{
+		return false;
 	}
 }

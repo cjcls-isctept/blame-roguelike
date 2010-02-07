@@ -36,7 +36,7 @@ public class Door extends AObject
 		return isOpen;
 	}
 	
-	@Override public void changeState(HashMap<String, Integer> args)
+	@Override public void changeState(HashMap<String, String> args)
 	{// maybe need to check for monster staying in door, but its seems not to throw any error now...
 		if(args.containsKey("Open"))isOpen = true;
 		if(args.containsKey("Close"))isOpen = false;

@@ -13,7 +13,7 @@ public class Close extends ADecision
 	public Close(ALiving al) 
 	{
 		super(al);
-		args.put("Close", 1);
+		args.put("Close", "");
 	}
 
 	@Override public void doAction(int actionMoment) 
