@@ -82,4 +82,9 @@ public abstract class AObject
 	{
 		return preventDrawRequests > 0;
 	}
+	
+/*	public boolean equals(AObject ao)
+	{
+		return cur_pos.equals(ao.cur_pos);
+	}*/
 }

@@ -19,5 +19,6 @@ public class Drop extends ADecision
 	{
 		al.inventory.removeItem(toDrop);
 		if(al.isNearPlayer())Messages.instance().addMessage(al.getName()+" drops "+toDrop.getName()+" to the floor");
+		wasExecuted = true;
 	}
 }

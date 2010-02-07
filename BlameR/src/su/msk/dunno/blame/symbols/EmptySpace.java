@@ -12,7 +12,7 @@ public class EmptySpace extends AObject
 
 	@Override public String getName() 
 	{
-		return "Weapon's Empty";
+		return "Empty";
 	}
 
 	@Override public boolean getPassability() 
