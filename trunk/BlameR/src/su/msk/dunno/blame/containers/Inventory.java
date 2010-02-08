@@ -26,7 +26,7 @@ public class Inventory
 	private Field field;
 	private LinkedList<AObject> items;
 	private EventManager inventoryEvents = new EventManager();
-	private int inventoryCapacity = 5;
+	private int inventoryCapacity = 10;
 	
 	private boolean showInventory;
 	private int mode;
@@ -233,7 +233,127 @@ public class Inventory
         			}
         		}
         	}
-        });		
+        });
+		inventoryEvents.addListener(Keyboard.KEY_6, new KeyListener(0)
+        {
+        	public void onKeyDown()
+        	{
+        		if(items.size() > 5)
+        		{
+          			if(mode == TO_DROP)
+        			{
+        				owner.setDecision(new Drop(owner, items.get(5)));
+                		closeInventory();
+        			}
+          			else if(mode == TO_SELECT_SOCKET)
+        			{
+        				owner.weapon.addPart(items.get(5));
+        				items.remove(5);
+        				closeInventory();
+        			}
+        			else
+        			{
+        				selectedItem = items.get(5);
+        			}
+        		}
+        	}
+        });
+		inventoryEvents.addListener(Keyboard.KEY_7, new KeyListener(0)
+        {
+        	public void onKeyDown()
+        	{
+        		if(items.size() > 6)
+        		{
+          			if(mode == TO_DROP)
+        			{
+        				owner.setDecision(new Drop(owner, items.get(6)));
+                		closeInventory();
+        			}
+          			else if(mode == TO_SELECT_SOCKET)
+        			{
+        				owner.weapon.addPart(items.get(6));
+        				items.remove(6);
+        				closeInventory();
+        			}
+        			else
+        			{
+        				selectedItem = items.get(6);
+        			}
+        		}
+        	}
+        });
+		inventoryEvents.addListener(Keyboard.KEY_8, new KeyListener(0)
+        {
+        	public void onKeyDown()
+        	{
+        		if(items.size() > 7)
+        		{
+          			if(mode == TO_DROP)
+        			{
+        				owner.setDecision(new Drop(owner, items.get(7)));
+                		closeInventory();
+        			}
+          			else if(mode == TO_SELECT_SOCKET)
+        			{
+        				owner.weapon.addPart(items.get(7));
+        				items.remove(7);
+        				closeInventory();
+        			}
+        			else
+        			{
+        				selectedItem = items.get(7);
+        			}
+        		}
+        	}
+        });
+		inventoryEvents.addListener(Keyboard.KEY_9, new KeyListener(0)
+        {
+        	public void onKeyDown()
+        	{
+        		if(items.size() > 8)
+        		{
+          			if(mode == TO_DROP)
+        			{
+        				owner.setDecision(new Drop(owner, items.get(8)));
+                		closeInventory();
+        			}
+          			else if(mode == TO_SELECT_SOCKET)
+        			{
+        				owner.weapon.addPart(items.get(8));
+        				items.remove(8);
+        				closeInventory();
+        			}
+        			else
+        			{
+        				selectedItem = items.get(8);
+        			}
+        		}
+        	}
+        });
+		inventoryEvents.addListener(Keyboard.KEY_0, new KeyListener(0)
+        {
+        	public void onKeyDown()
+        	{
+        		if(items.size() > 9)
+        		{
+          			if(mode == TO_DROP)
+        			{
+        				owner.setDecision(new Drop(owner, items.get(9)));
+                		closeInventory();
+        			}
+          			else if(mode == TO_SELECT_SOCKET)
+        			{
+        				owner.weapon.addPart(items.get(9));
+        				items.remove(9);
+        				closeInventory();
+        			}
+        			else
+        			{
+        				selectedItem = items.get(9);
+        			}
+        		}
+        	}
+        });
 		inventoryEvents.addListener(Keyboard.KEY_ESCAPE, new KeyListener(0)
         {
         	public void onKeyDown()

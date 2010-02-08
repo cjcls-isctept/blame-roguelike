@@ -7,6 +7,10 @@ import su.msk.dunno.blame.containers.Field;
 import su.msk.dunno.blame.containers.Inventory;
 import su.msk.dunno.blame.containers.Weapon;
 import su.msk.dunno.blame.decisions.Move;
+import su.msk.dunno.blame.items.ColdPart;
+import su.msk.dunno.blame.items.FirePart;
+import su.msk.dunno.blame.items.LightningPart;
+import su.msk.dunno.blame.items.PoisonPart;
 import su.msk.dunno.blame.items.SocketExtender;
 import su.msk.dunno.blame.main.Blame;
 import su.msk.dunno.blame.main.support.Color;
@@ -151,7 +155,15 @@ public abstract class ALiving extends AObject
 		{
 			li.remove();
 			field.removeObject(this);
-			field.addObject(new SocketExtender(cur_pos));
+			int rand = (int)(Math.random()*5);
+			switch(rand)
+			{
+			case 0: field.addObject(new ColdPart(cur_pos)); return;
+			case 1: field.addObject(new FirePart(cur_pos)); return;
+			case 2: field.addObject(new LightningPart(cur_pos)); return;
+			case 3: field.addObject(new PoisonPart(cur_pos)); return;
+			case 4: field.addObject(new SocketExtender(cur_pos)); return;			
+			}
 		}
 	}
 	
@@ -174,11 +186,6 @@ public abstract class ALiving extends AObject
 		return old_pos;
 	}
 
-	public int getHealth() 
-	{
-		return health;
-	}	
-	
 	public boolean isNearPlayer()
 	{
 		if((Blame.playCibo?"Cibo":"Killy").equals(getName()))return true;
@@ -203,6 +210,11 @@ public abstract class ALiving extends AObject
 	{
 		decision = d;
 	}
+	
+	public int getHealth() 
+	{
+		return health;
+	}	
 	
 	public int getStat(String s)
 	{

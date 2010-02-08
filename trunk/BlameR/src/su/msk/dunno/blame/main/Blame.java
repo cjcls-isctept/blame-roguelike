@@ -58,7 +58,7 @@ public class Blame
 				        field, livings);	// generate cibo near killy
 		livings.addKilly(killy);
 		livings.addCibo(cibo);
-		livings.addCreatures(2);
+		livings.addCreatures(40);
 		
 		isRunning = true;
 		run();
