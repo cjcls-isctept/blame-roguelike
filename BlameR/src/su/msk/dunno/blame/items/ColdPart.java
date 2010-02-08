@@ -4,20 +4,19 @@ import su.msk.dunno.blame.main.support.Color;
 import su.msk.dunno.blame.main.support.Point;
 import su.msk.dunno.blame.prototypes.AItem;
 
-public class SocketExtender extends AItem 
+public class ColdPart extends AItem 
 {
-
-	public SocketExtender(Point p) 
+	public ColdPart(Point p) 
 	{
 		super(p);
 		state.put("Part", "");
-		state.put("Info", "Adds new socket places to weapon");
-		state.put("Extender", "");
+		state.put("Info", "Adds cold damage to weapon");
+		state.put("Cold", "");
 	}
 
 	@Override public String getName() 
 	{
-		return "Socket Extender";
+		return "Cold";
 	}
 
 	@Override public boolean getPassability() 
@@ -33,5 +32,10 @@ public class SocketExtender extends AItem
 	@Override public boolean getTransparency() 
 	{
 		return true;
+	}
+	
+	@Override public Color getColor()
+	{
+		return Color.CYAN;
 	}
 }
