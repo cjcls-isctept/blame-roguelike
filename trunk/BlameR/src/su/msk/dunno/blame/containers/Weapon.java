@@ -125,6 +125,7 @@ public class Weapon
 		weaponView[ao.cur_pos.x][ao.cur_pos.y] = new SocketSymbol(ao.cur_pos);
 		if("Socket Extender".equals(ao.getName()))
 		{
+			
 			removeSockets(ao);
 		}
 		if(!inventory.isFull())
@@ -147,17 +148,21 @@ public class Weapon
 			{
 				if("SocketPlace".equals(weaponView[i][j].getName()))
 				{
-					if(noPartsNear(weaponView[i][j]))weaponView[i][j] = new EmptySpace(i,j);
+					if(noBasePartsNear(weaponView[i][j]))weaponView[i][j] = new EmptySpace(i,j);
 				}
-				else if("Socket Extender".equals(weaponView[i][j].getName()))
+				else if(weaponView[i][j].getState().containsKey("Part"))
 				{
-					if(noPartsNear(weaponView[i][j]))removePart(weaponView[i][j]);
+					if(noBasePartsNear(weaponView[i][j]))
+					{
+						removePart(weaponView[i][j]);
+						weaponView[i][j] = new EmptySpace(i,j);
+					}
 				}
 			}
 		}
 	}
 
-	private boolean noPartsNear(AObject ao) 
+	private boolean noBasePartsNear(AObject ao) 
 	{
 		for(int i = Math.max(0, ao.cur_pos.x-1); i <= Math.min(weaponView.length-1, ao.cur_pos.x+1); i++)
 		{
