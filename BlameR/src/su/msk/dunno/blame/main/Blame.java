@@ -49,12 +49,12 @@ public class Blame
 		initGL();				
 		initEvents();
 
-		field = new Field(N_x, N_y, "random");
+		for(int i=0; i < 50; i++)field = new Field(N_x, N_y, "random");
 		
 		livings = new LivingList(field);
 		killy = new Killy(field.getRandomPos(), 
 						  field, livings);
-		cibo = new Cibo(field.getRandomPos(killy.cur_pos.plus(-2,2), killy.cur_pos.plus(-2,2)), 
+		cibo = new Cibo(field.getRandomPos(killy.cur_pos.plus(-2,2), killy.cur_pos.plus(2,-2)), 
 				        field, livings);	// generate cibo near killy
 		livings.addKilly(killy);
 		livings.addCibo(cibo);
@@ -101,7 +101,7 @@ public class Blame
 		height = Display.getDisplayMode().getHeight();
 		
 		GL11.glEnable(GL11.GL_TEXTURE_2D);
-		//GL11.glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+		GL11.glClearColor(0,0,0,0);
 		GL11.glDisable(GL11.GL_DEPTH_TEST);
 		//GL11.glEnable(GL11.GL_DEPTH_TEST);
 		//GL11.glClearDepth(1.0);
