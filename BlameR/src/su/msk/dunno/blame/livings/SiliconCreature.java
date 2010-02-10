@@ -48,7 +48,8 @@ public class SiliconCreature extends ALiving
 				}
 			}
 		}
-		steps--;	// explore sequence
+		return new Move(this, (int)(Math.random()*9), field);
+		/*steps--;	// explore sequence
 		if(!find.path.isEmpty() && cur_pos.equals(find.path.getFirst()))find.path.removeFirst();	// remove the point we reach on the prevoius step
 		if(find.path.isEmpty() || steps == 0)	// create a new path to some random point
 		{
@@ -70,7 +71,7 @@ public class SiliconCreature extends ALiving
 			return new Move(this, (int)(Math.random()*9), field);	// go to random dir
 		}
 		// if everything ok - go to the next point in our path
-		return new Move(this, field.getDirection(cur_pos, find.path.getFirst()), field);
+		return new Move(this, field.getDirection(cur_pos, find.path.getFirst()), field);*/
 	}
 
 	@Override public String getName() 
@@ -93,6 +94,10 @@ public class SiliconCreature extends ALiving
 		if(args.containsKey("Damage"))
 		{
 			health -= Integer.valueOf(args.get("Damage"));
+		}
+		if(args.containsKey("Kick"))
+		{
+			setDecision(new Move(this, 1, field));
 		}
 	}
 

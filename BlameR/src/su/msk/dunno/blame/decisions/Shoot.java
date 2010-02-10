@@ -21,7 +21,8 @@ public class Shoot extends ADecision
 		super(al);
 		this.field = field;
 		shootTo = selectPoint;
-		args.put("Damage", (int)(Math.random()*20)+"");
+		//args.put("Damage", (int)(Math.random()*20)+"");
+		args.put("Kick", "");
 	}
 
 	@Override public void doAction(int actionMoment) 
