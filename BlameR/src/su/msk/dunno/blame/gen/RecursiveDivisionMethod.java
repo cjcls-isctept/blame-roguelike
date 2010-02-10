@@ -17,7 +17,7 @@ public class RecursiveDivisionMethod
 	{
 		int[][] map = new int[field.getN_x()][field.getN_y()];
 		
-		create4Rooms(map, field, 0, 0, field.getN_x()-1, field.getN_y()-1);
+		create4Rooms(map, field, 1, 1, field.getN_x()-2, field.getN_y()-2);
 		createSolidEdges(map);
 		return map;
 	}
@@ -41,10 +41,10 @@ public class RecursiveDivisionMethod
 			y++;
 			//drawField(map, field);
 		}		
-		if((p.x-1 - startx > Math.random()*20 && p.y-1 - starty > Math.random()*20) && p.x-1 >= 0 && p.y-1 >= 0)create4Rooms(map, field, startx, starty, p.x-1, p.y-1);
-		if((endx - (p.x+1) > Math.random()*20 && p.y-1 - starty > Math.random()*20) && p.x+1 < field.getN_x() && p.y-1 >= 0)create4Rooms(map, field, p.x+1, starty, endx, p.y-1);
-		if((p.x-1 - startx > Math.random()*20 && endy - (p.y+1) > Math.random()*20) && p.y+1 < field.getN_y() && p.x-1 >= 0)create4Rooms(map, field, startx, p.y+1, p.x-1, endy);
-		if((endx - (p.x+1) > Math.random()*20 && endy - (p.y+1) > Math.random()*20) && p.x+1 < field.getN_x() && p.y+1 < field.getN_y())create4Rooms(map, field, p.x+1, p.y+1, endx, endy);
+		if((p.x-1 - startx > 1+Math.random()*5 && p.y-1 - starty > 1+Math.random()*5) && p.x-1 >= 0 && p.y-1 >= 0)create4Rooms(map, field, startx, starty, p.x-1, p.y-1);
+		if((endx - (p.x+1) > 1+Math.random()*5 && p.y-1 - starty > 1+Math.random()*5) && p.x+1 < field.getN_x() && p.y-1 >= 0)create4Rooms(map, field, p.x+1, starty, endx, p.y-1);
+		if((p.x-1 - startx > 1+Math.random()*5 && endy - (p.y+1) > 1+Math.random()*5) && p.y+1 < field.getN_y() && p.x-1 >= 0)create4Rooms(map, field, startx, p.y+1, p.x-1, endy);
+		if((endx - (p.x+1) > 1+Math.random()*5 && endy - (p.y+1) > 1+Math.random()*5) && p.x+1 < field.getN_x() && p.y+1 < field.getN_y())create4Rooms(map, field, p.x+1, p.y+1, endx, endy);
 
 		create3Doors(map, p, startx, starty, endx, endy);
 	}

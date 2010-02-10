@@ -24,8 +24,8 @@ public class Blame
 	public static int width = 640;
 	public static int height = 480;
 	
-	public static int N_x = 20;
-	public static int N_y = 20;
+	public static int N_x = 100;
+	public static int N_y = 100;
 	
 	private boolean isRunning;
 	
@@ -49,7 +49,7 @@ public class Blame
 		initGL();				
 		initEvents();
 
-		for(int i=0; i < 50; i++)field = new Field(N_x, N_y, "random");
+		/*for(int i=0; i < 50; i++)*/field = new Field(N_x, N_y, "random");
 		
 		livings = new LivingList(field);
 		killy = new Killy(field.getRandomPos(), 
