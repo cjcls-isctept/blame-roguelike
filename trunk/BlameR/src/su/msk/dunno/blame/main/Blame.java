@@ -49,7 +49,7 @@ public class Blame
 		initGL();				
 		initEvents();
 
-		/*for(int i=0; i < 50; i++)*/field = new Field(N_x, N_y, "random");
+		/*for(int i=0; i < 5000; i++)*/field = new Field(N_x, N_y, "random");
 		
 		livings = new LivingList(field);
 		killy = new Killy(field.getRandomPos(), 

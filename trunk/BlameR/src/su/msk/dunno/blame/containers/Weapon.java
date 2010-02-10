@@ -8,6 +8,11 @@ import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
 
 import su.msk.dunno.blame.decisions.Drop;
+import su.msk.dunno.blame.items.ColdPart;
+import su.msk.dunno.blame.items.FirePart;
+import su.msk.dunno.blame.items.LightningPart;
+import su.msk.dunno.blame.items.PoisonPart;
+import su.msk.dunno.blame.items.SocketExtender;
 import su.msk.dunno.blame.main.Blame;
 import su.msk.dunno.blame.main.support.Color;
 import su.msk.dunno.blame.main.support.Messages;
@@ -41,6 +46,7 @@ public class Weapon
 		inventory = inv;
 		initEvents();
 		initWeaponView();
+		fillWeapon(11);
 	}
 	
 	public void process()
@@ -231,7 +237,60 @@ public class Weapon
 	{
 		Messages.instance().clear();
 		isWeaponView = true;
-		
+	}
+	
+	private void fillWeapon(int num)
+	{
+		int amount = Math.min(getFreeSocketsNum(), num);
+		Point p;
+		int rand;
+		AObject ao;
+		for(int i = 0; i < amount; i++)
+		{
+			p = getFreeRandomSocket();
+			if(p != null)
+			{
+				rand = (int)(Math.random()*5);
+				selector.cur_pos = p;
+				switch(rand)
+				{
+				case 0: ao = new ColdPart(p); addPart(ao); continue;
+				case 1: ao = new FirePart(p); addPart(ao); continue;
+				case 2: ao = new LightningPart(p); addPart(ao); continue;
+				case 3: ao = new PoisonPart(p); addPart(ao); continue;
+				case 4: ao = new SocketExtender(p); addPart(ao); continue;			
+				}
+			}
+		}
+	}
+	
+	private int getFreeSocketsNum()
+	{
+		int sum = 0;
+		for(int i = 0; i < 20; i++)
+		{
+			for(int j = 0; j < 20; j++)
+			{
+				if("SocketPlace".equals(weaponView[i][j].getName()))sum++;
+			}
+		}
+		return sum;
+	}
+	
+	private Point getFreeRandomSocket()
+	{
+		if(getFreeSocketsNum() > 0)
+		{
+			int x = (int)(Math.random()*20);
+			int y = (int)(Math.random()*20);
+			while(!"SocketPlace".equals(weaponView[x][y].getName()))
+			{
+				x = (int)(Math.random()*20);
+				y = (int)(Math.random()*20);
+			}
+			return new Point(x,y);
+		}
+		return null;
 	}
 		
 	public void initEvents()

@@ -34,6 +34,7 @@ public class Field
 	
 	private RL4JMapView drawView;
 	private RL4JMapView lineView;
+	private PrecisePermissive pp = new PrecisePermissive();;
 	
 	public Vector2D playerMovingCoord;
 	public int playerMoves;
@@ -181,7 +182,7 @@ public class Field
 		}
 		for(AObject source: lightSources)
 		{
-			new PrecisePermissive().visitFieldOfView(drawView, source.cur_pos.x, source.cur_pos.y, source.getDov());
+			pp.visitFieldOfView(drawView, source.cur_pos.x, source.cur_pos.y, source.getDov());
 		}
 		playAnimations();
 		GL11.glPopMatrix();
