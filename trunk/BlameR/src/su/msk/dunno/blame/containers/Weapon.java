@@ -27,7 +27,7 @@ public class Weapon
 	private ALiving owner;
 	private Inventory inventory;
 	private EventManager weaponEvents = new EventManager();
-	private AObject[][] weaponView = new AObject[Blame.N_x][Blame.N_y];
+	private AObject[][] weaponView = new AObject[20][20];
 	private LinkedList<AObject> sockets = new LinkedList<AObject>();
 	
 	private MinorSelector selector = new MinorSelector(0, 0);
@@ -59,9 +59,9 @@ public class Weapon
 		GL11.glLoadIdentity();
 		GL11.glTranslatef(120, 20, 0.0f);
 		MyFont.instance().drawString(owner.getName()+"'s weapon", 20, 460, 0.2f, Color.WHITE);
-		for(int i = 0; i < Blame.N_x; i++)
+		for(int i = 0; i < 20; i++)
 		{
-			for(int j = 0; j < Blame.N_y; j++)
+			for(int j = 0; j < 20; j++)
 			{
 				if(!"SocketPlace".equals(weaponView[i][j].getName()) || isSelectSocket)
 					MyFont.instance().drawChar(weaponView[i][j].getSymbol(), i*20, j*20, 0.2f, 
