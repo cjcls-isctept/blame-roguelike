@@ -86,7 +86,7 @@ public class Field
 			{
 				if(!objects[x][y].getLast().isDrawPrevented())
 				{
-					MyFont.instance().drawChar(objects[x][y].getLast().getSymbol(), x*Blame.scale, y*Blame.scale, Blame.scale*0.01f, objects[x][y].getLast().getColor());
+					MyFont.instance().drawChar(objects[x][y].getLast().getSymbol(), x*Blame.scale*3/4, y*Blame.scale, Blame.scale*0.01f, objects[x][y].getLast().getColor());
 					objects[x][y].getFirst().wasDrawed = true;
 				}
 			}			
@@ -136,12 +136,6 @@ public class Field
 		objects[p.x][p.y].set(0, ao);
 	}
 	
-	public Vector2D getCoordForPoint(Point player_point, Point p)
-	{
-		return new Vector2D(220-player_point.x*Blame.scale, 240-player_point.y*Blame.scale).plus
-		      (new Vector2D(p.x*Blame.scale, p.y*Blame.scale));
-	}
-	
 	public void draw()
 	{
 		GL11.glPushMatrix();
@@ -165,19 +159,23 @@ public class Field
 	public void draw(Point player_point)
 	{
 		GL11.glPushMatrix();
-		if(playerMoves == 0)playerMovingCoord = new Vector2D(player_point.x*Blame.scale, player_point.y*Blame.scale);
+		if(playerMoves == 0)playerMovingCoord = new Vector2D(player_point.x*Blame.scale*3/4, 
+															 player_point.y*Blame.scale);
 		GL11.glTranslatef(220-playerMovingCoord.x, 
 			  		  	  240-playerMovingCoord.y, 
 			  		  	  0.0f);
-		for(int i = /*Math.max(0, player_point.x-20*7/Blame.scale)*/0; i < Math.min(player_point.x+20*10/Blame.scale, N_x); i++)
+		for(int i = Math.max(0, player_point.x-20*7/Blame.scale); i < Math.min(player_point.x+20*10/Blame.scale, N_x); i++)
 		{
 			for(int j = Math.max(0, player_point.y-20*7/Blame.scale); j < /*Math.min(player_point.y+20*7/Blame.scale, N_y)*/N_y; j++)
 			{
 				if(objects[i][j].getLast().isAlwaysDraw())
 				{
-					MyFont.instance().drawChar(objects[i][j].getLast().getSymbol(), i*Blame.scale, j*Blame.scale, Blame.scale*0.01f, objects[i][j].getLast().getColor());
+					MyFont.instance().drawChar(objects[i][j].getLast().getSymbol(), i*Blame.scale*3/4, 
+																					j*Blame.scale, Blame.scale*0.01f, objects[i][j].getLast().getColor());
 				}
-				else if(objects[i][j].getFirst().wasDrawed)MyFont.instance().drawChar(objects[i][j].getFirst().getSymbol(), i*Blame.scale, j*Blame.scale, Blame.scale*0.01f, Color.GRAY);
+				else if(objects[i][j].getFirst().wasDrawed)MyFont.instance().drawChar(objects[i][j].getFirst().getSymbol(), 
+																					  i*Blame.scale*3/4, 
+																					  j*Blame.scale, Blame.scale*0.01f, Color.GRAY);
 			}
 		}
 		for(AObject source: lightSources)
@@ -285,10 +283,10 @@ public class Field
 		return neighbours;
 	}
 	
-	public LinkedList<AObject> getObjectsAtPoint(Point p)
+	public LinkObject getObjectsAtPoint(Point p)
 	{
 		if(p.x >= 0 && p.x < N_x && p.y >= 0 && p.y < N_y)return objects[p.x][p.y];
-		else return new LinkedList<AObject>();
+		else return new LinkObject();
 	}
 	
 	public Point findObject(AObject ao)

@@ -31,19 +31,20 @@ public class Moving extends AAnimation
 		if((Blame.playCibo?"Cibo":"Killy").equals(ao.getName()))
 		{
 			field.playerMoves++;
-			if(field.playerMovingCoord == null)field.playerMovingCoord = new Vector2D(pFrom.x*Blame.scale, pFrom.y*Blame.scale);
+			if(field.playerMovingCoord == null)
+				field.playerMovingCoord = new Vector2D(pFrom.x*Blame.scale*3/4, pFrom.y*Blame.scale);
 		}
 	}
 
 	@Override public void nextFrame()
 	{
 		MyFont.instance().drawChar(ao.getSymbol(), 
-								   pFrom.x*Blame.scale+dir.x*cur_frame*Blame.scale/frames, 
+								   pFrom.x*Blame.scale*3/4+dir.x*cur_frame*Blame.scale*3/4/frames, 
 								   pFrom.y*Blame.scale+dir.y*cur_frame*Blame.scale/frames, 
 								   Blame.scale*0.01f, ao.getColor());
 		if((Blame.playCibo?"Cibo":"Killy").equals(ao.getName()))
 		{
-			field.playerMovingCoord = new Vector2D(pFrom.x*Blame.scale+dir.x*cur_frame*Blame.scale/frames, 
+			field.playerMovingCoord = new Vector2D(pFrom.x*Blame.scale*3/4+dir.x*cur_frame*Blame.scale*3/4/frames, 
 					   							   pFrom.y*Blame.scale+dir.y*cur_frame*Blame.scale/frames);
 		}
 		

@@ -5,6 +5,7 @@ import java.util.ListIterator;
 
 import su.msk.dunno.blame.containers.Field;
 import su.msk.dunno.blame.containers.Inventory;
+import su.msk.dunno.blame.containers.Livings;
 import su.msk.dunno.blame.containers.Weapon;
 import su.msk.dunno.blame.decisions.Move;
 import su.msk.dunno.blame.items.ColdPart;
@@ -61,8 +62,9 @@ public abstract class ALiving extends AObject
 		old_pos = cur_pos;
 	}
 	
-	public void nextStep(int cur_time)
+	public void nextStep()
 	{
+		int cur_time = Livings.instance().getTime();
 		if(cur_time - lastActionTime >= actionPeriod)
 		{
 			if(decision == null)
@@ -209,6 +211,11 @@ public abstract class ALiving extends AObject
 	public void setDecision(ADecision d)
 	{
 		decision = d;
+		int cur_time = Livings.instance().getTime();
+		decision.doAction(cur_time);
+		actionPeriod = decision.getActionPeriod();
+		decision = null;
+		if(!this.getState().containsKey("CancelMove"))lastActionTime = cur_time;
 	}
 	
 	public int getHealth() 

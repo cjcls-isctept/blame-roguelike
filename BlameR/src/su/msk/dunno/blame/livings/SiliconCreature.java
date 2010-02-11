@@ -97,7 +97,7 @@ public class SiliconCreature extends ALiving
 		}
 		if(args.containsKey("Kick"))
 		{
-			setDecision(new Move(this, 1, field));
+			setDecision(new Move(this, Integer.valueOf(args.get("Kick")), field));
 		}
 	}
 
