@@ -26,7 +26,7 @@ public class LightningPart extends AItem
 
 	@Override public char getSymbol() 
 	{
-		return 'w';
+		return '*';
 	}
 
 	@Override public boolean getTransparency() 

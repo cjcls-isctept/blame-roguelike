@@ -9,7 +9,7 @@ import org.lwjgl.opengl.GL11;
 
 import su.msk.dunno.blame.containers.Field;
 import su.msk.dunno.blame.containers.Inventory;
-import su.msk.dunno.blame.containers.LivingList;
+import su.msk.dunno.blame.containers.Livings;
 import su.msk.dunno.blame.decisions.Close;
 import su.msk.dunno.blame.decisions.MeleeAttack;
 import su.msk.dunno.blame.decisions.Move;
@@ -33,8 +33,6 @@ import su.msk.dunno.blame.symbols.MinorSelector;
 
 public class Killy extends ALiving 
 {
-	protected LivingList livings;
-	
 	protected EventManager playerEvents;
 	protected boolean isNextStep;
 	
@@ -52,15 +50,14 @@ public class Killy extends ALiving
 	
 	boolean isCancelMove;
 	
-	public Killy(Point p, Field field, LivingList livings) 
+	public Killy(Point p, Field field) 
 	{
-		this(p.x, p.y, field, livings);
+		this(p.x, p.y, field);
 	}
 	
-	public Killy(int i, int j, Field field, LivingList livings) 
+	public Killy(int i, int j, Field field) 
 	{
 		super(i, j, field);
-		this.livings = livings;
 		initEvents();
 		dov = 5;
 		health = 100;
@@ -527,7 +524,7 @@ public class Killy extends ALiving
 			playerEvents.checkEvents();
 			if(isNextStep)
 			{
-				livings.nextStep();
+				Livings.instance().nextStep();
 				isNextStep = false;
 				reset_keys();	
 			}
@@ -538,7 +535,7 @@ public class Killy extends ALiving
 			Messages.instance().showMessages();
 			MyFont.instance().drawString(getName(), 450, 460, 0.2f, Color.WHITE);
 			MyFont.instance().drawString("HP: "+health, 450, 445, 0.2f, Color.WHITE);
-			MyFont.instance().drawString("Time: "+livings.time, 450, 430, 0.2f, Color.WHITE);
+			MyFont.instance().drawString("Time: "+Livings.instance().getTime(), 450, 430, 0.2f, Color.WHITE);
 			MyFont.instance().drawString("FPS: "+Blame.fps, 450, 415, 0.2f, Color.WHITE);
 			MyFont.instance().drawString("Anima: "+field.animations.size(), 450, 400, 0.2f, Color.WHITE);
 			MyFont.instance().drawString("PlayerMoves: "+field.playerMoves, 450, 385, 0.2f, Color.WHITE);

@@ -10,21 +10,36 @@ import su.msk.dunno.blame.main.Blame;
 import su.msk.dunno.blame.prototypes.ALiving;
 
 
-public class LivingList
+public class Livings
 {
 	private static final long serialVersionUID = 7325672295995481834L;
+	private static Livings instance;
+	
+	public static Livings instance()
+	{
+		if(instance == null)
+		{
+			instance = new Livings();
+		}
+		return instance;
+	}
+	
+	private Livings()
+	{
+		
+	}
+	
 	private Field field;
 	
-	public int time;	// must be private in the release!
+	private int time;	// must be private in the release!
 	
-	private LinkedList<ALiving> livings;
+	private LinkedList<ALiving> livings = new LinkedList<ALiving>();
 	private Killy killy;
 	private Cibo cibo;
 	
-	public LivingList(Field field)
+	public void addField(Field field)
 	{
 		this.field = field;		
-		livings = new LinkedList<ALiving>();
 	}
 	
 	public void addKilly(Killy killy)
@@ -60,7 +75,7 @@ public class LivingList
 		{
 			(Blame.playCibo?cibo:killy).checkPlayerStatus();
 			(Blame.playCibo?cibo:killy).updateOldPos();
-			(Blame.playCibo?cibo:killy).nextStep(time);
+			(Blame.playCibo?cibo:killy).nextStep();
 			if((Blame.playCibo?cibo:killy).getState().containsKey("CancelMove")) return;
 		}
 		
@@ -69,20 +84,24 @@ public class LivingList
 		{
 			(Blame.playCibo?killy:cibo).checkPlayerStatus();
 			(Blame.playCibo?killy:cibo).updateOldPos();
-			(Blame.playCibo?killy:cibo).nextStep(time);
+			(Blame.playCibo?killy:cibo).nextStep();
 		}
 		
 		// update monsters
-		while(time - (Blame.playCibo?cibo:killy).getLastActionTime() < (Blame.playCibo?cibo:killy).getActionPeriod())
+		while(getTime() - (Blame.playCibo?cibo:killy).getLastActionTime() < (Blame.playCibo?cibo:killy).getActionPeriod())
 		{
 			for(ListIterator<ALiving> li = livings.listIterator(); li.hasNext();)
 			{
 				ALiving al = li.next();
 				al.checkStatus(li);
 				al.updateOldPos();
-				al.nextStep(time);
+				al.nextStep();
 			}
 			time++;
 		}
+	}
+
+	public int getTime() {
+		return time;
 	}
 }

@@ -80,9 +80,19 @@ public class Weapon
 		Display.update();
 	}
 	
-	public HashMap<String, String> getDamage()
+	public HashMap<String, String> getEffects()
 	{
-		return null;
+		HashMap<String, String> effects = new HashMap<String, String>();
+		for(AObject ao: sockets)
+		{
+			int num = Integer.valueOf(ao.getState().get("EffectsCapacity"));
+			for(int i = 0; i < num; i++)
+			{
+				String effect = ao.getState().get("Effect"+i);
+				effects.put(effect, ao.getState().get(effect));
+			}
+		}
+		return effects;
 	}
 	
 	public void addPart(AObject ao)

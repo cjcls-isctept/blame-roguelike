@@ -1,7 +1,5 @@
 package su.msk.dunno.blame.main;
 
-import java.util.Calendar;
-
 import org.lwjgl.LWJGLException;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.Display;
@@ -10,7 +8,7 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.glu.GLU;
 
 import su.msk.dunno.blame.containers.Field;
-import su.msk.dunno.blame.containers.LivingList;
+import su.msk.dunno.blame.containers.Livings;
 import su.msk.dunno.blame.livings.Cibo;
 import su.msk.dunno.blame.livings.Killy;
 import su.msk.dunno.blame.main.support.MyFont;
@@ -37,11 +35,10 @@ public class Blame
 	public static boolean playCibo;
 	
 	Field field;
-	LivingList livings;
 
 	// variables below are for infinite (with pressed key) moving purposes
 	private int frames;
-	private long msek = Calendar.getInstance().getTimeInMillis();
+	private long msek = System.currentTimeMillis();
 	public static int fps;
 	
 	public Blame()
@@ -51,14 +48,12 @@ public class Blame
 
 		/*for(int i=0; i < 5000; i++)*/field = new Field(N_x, N_y, "random");
 		
-		livings = new LivingList(field);
-		killy = new Killy(field.getRandomPos(), 
-						  field, livings);
-		cibo = new Cibo(field.getRandomPos(killy.cur_pos.plus(-2,2), killy.cur_pos.plus(2,-2)), 
-				        field, livings);	// generate cibo near killy
-		livings.addKilly(killy);
-		livings.addCibo(cibo);
-		livings.addCreatures(40);
+		Livings.instance().addField(field);
+		killy = new Killy(field.getRandomPos(), field);
+		cibo = new Cibo(field.getRandomPos(killy.cur_pos.plus(-2,2), killy.cur_pos.plus(2,-2)), field);	// generate cibo near killy
+		Livings.instance().addKilly(killy);
+		Livings.instance().addCibo(cibo);
+		Livings.instance().addCreatures(40);
 		
 		isRunning = true;
 		run();
@@ -144,11 +139,11 @@ public class Blame
 	private void getFPS()
 	{
 		frames++;
-		if (Calendar.getInstance().getTimeInMillis() - msek >= 1000)
+		if (System.currentTimeMillis() - msek >= 1000)
 		{
 			fps = frames;
 			frames = 0;
-			msek = Calendar.getInstance().getTimeInMillis();
+			msek = System.currentTimeMillis();
 		}
 	}
 	

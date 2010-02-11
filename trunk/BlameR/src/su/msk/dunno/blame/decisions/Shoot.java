@@ -22,12 +22,13 @@ public class Shoot extends ADecision
 		this.field = field;
 		shootTo = selectPoint;
 		//args.put("Damage", (int)(Math.random()*20)+"");
-		args.put("Kick", "");
+		args.put("Kick", ""+field.getDirection(al.cur_pos, shootTo));
 	}
 
 	@Override public void doAction(int actionMoment) 
 	{
-		for(AObject ao: field.getObjectsAtPoint(shootTo))
+		LinkedList<AObject> lao = field.getObjectsAtPoint(shootTo).clone(); 
+		for(AObject ao: lao)
 		{
 			if(al.isEnemy(ao))
 			{
