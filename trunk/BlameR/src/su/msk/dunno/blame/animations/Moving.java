@@ -32,7 +32,8 @@ public class Moving extends AAnimation
 		{
 			field.playerMoves++;
 			if(field.playerMovingCoord == null)
-				field.playerMovingCoord = new Vector2D(pFrom.x*Blame.scale*3/4, pFrom.y*Blame.scale);
+				field.playerMovingCoord = new Vector2D(pFrom.x*Blame.scale*3/4, 
+													   pFrom.y*Blame.scale);
 		}
 	}
 

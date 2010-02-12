@@ -86,7 +86,11 @@ public class Field
 			{
 				if(!objects[x][y].getLast().isDrawPrevented())
 				{
-					MyFont.instance().drawChar(objects[x][y].getLast().getSymbol(), x*Blame.scale*3/4, y*Blame.scale, Blame.scale*0.01f, objects[x][y].getLast().getColor());
+					MyFont.instance().drawChar(objects[x][y].getLast().getSymbol(), 
+											   x*Blame.scale*3/4, 
+											   y*Blame.scale, 
+											   Blame.scale*0.01f, 
+											   objects[x][y].getLast().getColor());
 					objects[x][y].getFirst().wasDrawed = true;
 				}
 			}			
@@ -166,16 +170,20 @@ public class Field
 			  		  	  0.0f);
 		for(int i = Math.max(0, player_point.x-20*15/Blame.scale); i < Math.min(player_point.x+20*15/Blame.scale, N_x); i++)
 		{
-			for(int j = Math.max(0, player_point.y-20*11/Blame.scale*3/4); j < Math.min(player_point.y+20*16/Blame.scale*3/4, N_y); j++)
+			for(int j = Math.max(0, player_point.y-20*8/Blame.scale); j < Math.min(player_point.y+20*12/Blame.scale, N_y); j++)
 			{
 				if(objects[i][j].getLast().isAlwaysDraw())
 				{
 					MyFont.instance().drawChar(objects[i][j].getLast().getSymbol(), i*Blame.scale*3/4, 
-																					j*Blame.scale, Blame.scale*0.01f, objects[i][j].getLast().getColor());
+																					j*Blame.scale, 
+																					Blame.scale*0.01f, 
+																					objects[i][j].getLast().getColor());
 				}
 				else if(objects[i][j].getFirst().wasDrawed)MyFont.instance().drawChar(objects[i][j].getFirst().getSymbol(), 
 																					  i*Blame.scale*3/4, 
-																					  j*Blame.scale, Blame.scale*0.01f, Color.GRAY);
+																					  j*Blame.scale, 
+																					  Blame.scale*0.01f, 
+																					  Color.GRAY);
 			}
 		}
 		for(AObject source: lightSources)
