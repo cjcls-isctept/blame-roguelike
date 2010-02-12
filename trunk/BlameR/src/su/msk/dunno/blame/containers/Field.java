@@ -164,9 +164,9 @@ public class Field
 		GL11.glTranslatef(220-playerMovingCoord.x, 
 			  		  	  240-playerMovingCoord.y, 
 			  		  	  0.0f);
-		for(int i = Math.max(0, player_point.x-20*7/Blame.scale); i < Math.min(player_point.x+20*10/Blame.scale, N_x); i++)
+		for(int i = Math.max(0, player_point.x-20*15/Blame.scale); i < Math.min(player_point.x+20*15/Blame.scale, N_x); i++)
 		{
-			for(int j = Math.max(0, player_point.y-20*7/Blame.scale); j < /*Math.min(player_point.y+20*7/Blame.scale, N_y)*/N_y; j++)
+			for(int j = Math.max(0, player_point.y-20*11/Blame.scale*3/4); j < Math.min(player_point.y+20*16/Blame.scale*3/4, N_y); j++)
 			{
 				if(objects[i][j].getLast().isAlwaysDraw())
 				{
