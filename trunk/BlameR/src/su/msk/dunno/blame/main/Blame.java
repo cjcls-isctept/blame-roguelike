@@ -7,13 +7,13 @@ import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.glu.GLU;
 
-import su.msk.dunno.blame.containers.Field;
-import su.msk.dunno.blame.containers.Livings;
-import su.msk.dunno.blame.livings.Cibo;
-import su.msk.dunno.blame.livings.Killy;
 import su.msk.dunno.blame.main.support.MyFont;
 import su.msk.dunno.blame.main.support.listeners.EventManager;
 import su.msk.dunno.blame.main.support.listeners.KeyListener;
+import su.msk.dunno.blame.map.Field;
+import su.msk.dunno.blame.objects.Livings;
+import su.msk.dunno.blame.objects.livings.Cibo;
+import su.msk.dunno.blame.objects.livings.Killy;
 
 public class Blame 
 {
