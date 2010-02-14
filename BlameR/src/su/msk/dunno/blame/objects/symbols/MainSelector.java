@@ -1,4 +1,4 @@
-package su.msk.dunno.blame.symbols;
+package su.msk.dunno.blame.objects.symbols;
 
 import su.msk.dunno.blame.main.support.Point;
 

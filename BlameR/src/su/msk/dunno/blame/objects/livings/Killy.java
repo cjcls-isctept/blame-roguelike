@@ -23,13 +23,13 @@ import su.msk.dunno.blame.main.support.listeners.KeyListener;
 import su.msk.dunno.blame.map.Field;
 import su.msk.dunno.blame.objects.Livings;
 import su.msk.dunno.blame.objects.items.PlayerCorpse;
+import su.msk.dunno.blame.objects.symbols.MainSelector;
+import su.msk.dunno.blame.objects.symbols.MinorSelector;
 import su.msk.dunno.blame.prototypes.ADecision;
 import su.msk.dunno.blame.prototypes.ALiving;
 import su.msk.dunno.blame.prototypes.AObject;
 import su.msk.dunno.blame.prototypes.IScreenInterface;
 import su.msk.dunno.blame.screens.Inventory;
-import su.msk.dunno.blame.symbols.MainSelector;
-import su.msk.dunno.blame.symbols.MinorSelector;
 
 
 public class Killy extends ALiving implements IScreenInterface

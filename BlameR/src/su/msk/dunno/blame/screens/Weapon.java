@@ -20,13 +20,13 @@ import su.msk.dunno.blame.objects.items.FirePart;
 import su.msk.dunno.blame.objects.items.LightningPart;
 import su.msk.dunno.blame.objects.items.PoisonPart;
 import su.msk.dunno.blame.objects.items.SocketExtender;
+import su.msk.dunno.blame.objects.symbols.EmptySpace;
+import su.msk.dunno.blame.objects.symbols.MinorSelector;
+import su.msk.dunno.blame.objects.symbols.SocketSymbol;
+import su.msk.dunno.blame.objects.symbols.WeaponBase;
 import su.msk.dunno.blame.prototypes.ALiving;
 import su.msk.dunno.blame.prototypes.AObject;
 import su.msk.dunno.blame.prototypes.IScreenInterface;
-import su.msk.dunno.blame.symbols.EmptySpace;
-import su.msk.dunno.blame.symbols.MinorSelector;
-import su.msk.dunno.blame.symbols.SocketSymbol;
-import su.msk.dunno.blame.symbols.WeaponBase;
 
 public class Weapon implements IScreenInterface
 {
