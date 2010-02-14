@@ -1,24 +1,24 @@
-package su.msk.dunno.blame.symbols;
+package su.msk.dunno.blame.objects.symbols;
 
 import su.msk.dunno.blame.main.support.Point;
 import su.msk.dunno.blame.prototypes.AObject;
 
-public class EmptySpace extends AObject
+public class SocketSymbol extends AObject
 {
 
-	public EmptySpace(int i, int j) 
+	public SocketSymbol(int i, int j) 
 	{
 		super(i, j);
 	}
 
-	public EmptySpace(Point cur_pos) 
+	public SocketSymbol(Point cur_pos) 
 	{
 		super(cur_pos);
 	}
 
 	@Override public String getName() 
 	{
-		return "Empty";
+		return "SocketPlace";
 	}
 
 	@Override public boolean getPassability() 
@@ -28,7 +28,7 @@ public class EmptySpace extends AObject
 
 	@Override public char getSymbol() 
 	{
-		return ' ';
+		return 'o';
 	}
 
 	@Override public boolean getTransparency()	

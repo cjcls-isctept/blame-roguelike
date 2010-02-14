@@ -1,20 +1,24 @@
-package su.msk.dunno.blame.symbols;
+package su.msk.dunno.blame.objects.symbols;
 
-import su.msk.dunno.blame.main.support.Color;
 import su.msk.dunno.blame.main.support.Point;
 import su.msk.dunno.blame.prototypes.AObject;
 
-public class Bullet extends AObject
+public class WeaponBase extends AObject 
 {
-	public Bullet(Point p) 
+
+	public WeaponBase(Point p) 
 	{
 		super(p);
-		dov = 3;
+	}
+
+	public WeaponBase(int i, int j) 
+	{
+		super(i, j);
 	}
 
 	@Override public String getName() 
 	{
-		return "Bullet";
+		return "Weapon Sceleton";
 	}
 
 	@Override public boolean getPassability() 
@@ -24,7 +28,7 @@ public class Bullet extends AObject
 
 	@Override public char getSymbol() 
 	{
-		return '*';
+		return 'w';
 	}
 
 	@Override public boolean getTransparency() 
@@ -32,13 +36,4 @@ public class Bullet extends AObject
 		return true;
 	}
 
-	@Override public Color getColor()
-	{
-		return Color.YELLOW;
-	}
-	
-	@Override public boolean isLightSource()
-	{
-		return true;
-	}
 }
