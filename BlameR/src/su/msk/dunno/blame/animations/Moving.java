@@ -1,10 +1,10 @@
 package su.msk.dunno.blame.animations;
 
-import su.msk.dunno.blame.containers.Field;
 import su.msk.dunno.blame.main.Blame;
 import su.msk.dunno.blame.main.support.MyFont;
 import su.msk.dunno.blame.main.support.Point;
 import su.msk.dunno.blame.main.support.Vector2D;
+import su.msk.dunno.blame.map.Field;
 import su.msk.dunno.blame.prototypes.AAnimation;
 import su.msk.dunno.blame.prototypes.AObject;
 

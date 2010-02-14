@@ -3,19 +3,19 @@ package su.msk.dunno.blame.prototypes;
 import java.util.LinkedList;
 import java.util.ListIterator;
 
-import su.msk.dunno.blame.containers.Field;
-import su.msk.dunno.blame.containers.Inventory;
-import su.msk.dunno.blame.containers.Livings;
-import su.msk.dunno.blame.containers.Weapon;
 import su.msk.dunno.blame.decisions.Move;
-import su.msk.dunno.blame.items.ColdPart;
-import su.msk.dunno.blame.items.FirePart;
-import su.msk.dunno.blame.items.LightningPart;
-import su.msk.dunno.blame.items.PoisonPart;
-import su.msk.dunno.blame.items.SocketExtender;
 import su.msk.dunno.blame.main.Blame;
 import su.msk.dunno.blame.main.support.Color;
 import su.msk.dunno.blame.main.support.Point;
+import su.msk.dunno.blame.map.Field;
+import su.msk.dunno.blame.objects.Livings;
+import su.msk.dunno.blame.objects.items.ColdPart;
+import su.msk.dunno.blame.objects.items.FirePart;
+import su.msk.dunno.blame.objects.items.LightningPart;
+import su.msk.dunno.blame.objects.items.PoisonPart;
+import su.msk.dunno.blame.objects.items.SocketExtender;
+import su.msk.dunno.blame.screens.Inventory;
+import su.msk.dunno.blame.screens.Weapon;
 
 
 public abstract class ALiving extends AObject 
