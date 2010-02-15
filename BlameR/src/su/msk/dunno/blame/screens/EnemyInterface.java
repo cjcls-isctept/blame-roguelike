@@ -53,7 +53,7 @@ public class EnemyInterface implements IScreenInterface
 	{
 		int k = Blame.height-20;
 		MyFont.instance().drawString(al.getName()+"'s mind", 20, k, 0.2f, Color.WHITE); k-=20; k-=20;
-		MyFont.instance().drawString("ERROR: Unknown system format!", 20, k, 0.2f, Color.WHITE); k-=20;
+		MyFont.instance().drawString("ERROR: Unknown data format!", 20, k, 0.2f, Color.WHITE); k-=20;
 		MyFont.instance().drawString("1. Exit", 20, k, 0.2f, Color.WHITE);
 	}
 }
