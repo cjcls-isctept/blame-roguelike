@@ -53,13 +53,14 @@ public class Inventory implements IScreenInterface
 	{
 		GL11.glClear(GL11.GL_COLOR_BUFFER_BIT/* | GL11.GL_DEPTH_BUFFER_BIT*/);		
 		GL11.glLoadIdentity();
-		int k = 460;
+		int k = Blame.height-20;
 		int num = 1;
 		MyFont.instance().drawString(owner.getName()+"'s inventory", 20, k, 0.2f, Color.WHITE); k -= 30;
 		if(selectedItem != null)
 		{
-			int pos = 430-15*items.indexOf(selectedItem);
-			MyFont.instance().drawString(selectedItem.getState().get("Info"), (selectedItem.getName().length()+3)*12+36, pos, 0.2f, Color.WHITE);
+			MyFont.instance().drawString(selectedItem.getName()+":", 20, k, 0.2f, Color.WHITE); k -= 30;
+			MyFont.instance().drawString(selectedItem.getState().get("Info"), 
+										20, k, 0.2f, Color.WHITE);
 		}
 		else if(mode == TO_SELECT_SOCKET)
 		{
@@ -89,7 +90,6 @@ public class Inventory implements IScreenInterface
 		if(o.getState().containsKey("Item") && !isFull())
 		{
 			items.add(o);
-			field.removeObject(o);
 			return true;
 		}
 		return false;

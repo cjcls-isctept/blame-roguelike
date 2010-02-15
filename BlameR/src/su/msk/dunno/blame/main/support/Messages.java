@@ -20,7 +20,7 @@ public class Messages
 	public Messages()
 	{
 		messages = new LinkedList<String>();
-		message_capacity = 4;
+		message_capacity = 5;
 	}
 	
 	public void addMessage(String s)
@@ -31,7 +31,7 @@ public class Messages
 	
 	public void showMessages()
 	{
-		int h = 60;
+		int h = 75;
 		for(String mes: messages)
 		{
 			MyFont.instance().drawString(mes, 20, h, 0.2f, Color.WHITE); h -=15;

@@ -62,7 +62,7 @@ public class Killy extends ALiving implements IScreenInterface
 		initEvents();
 		dov = 5;
 		health = 100;
-		speed = 4;		
+		speed = 4;
 	}
 
 	@Override public ADecision livingAI() 
@@ -207,7 +207,7 @@ public class Killy extends ALiving implements IScreenInterface
 		else if(keys[8])return new Move(this, Move.STAY, field);
 		else if(wantOpen)return new Open(this);
 		else if(wantClose)return new Close(this);
-		else if(wantTake)return new Take(this);
+		else if(wantTake)return new Take(this, field);
 		else if(wantShoot) 
 		{
 			if(selectLine.size() > 0)
@@ -477,9 +477,19 @@ public class Killy extends ALiving implements IScreenInterface
         {
         	public void onKeyDown()
         	{
-        		clearLine();
-        		selectPoint = null;
-        		//isNextStep = true;
+        		if(selectLine.size() > 0)
+        		{
+        			clearLine();
+            		selectPoint = null;
+        		}
+        		//else System.exit(0);
+        	}
+        });
+		playerEvents.addListener(Keyboard.KEY_F12, new KeyListener(0)
+        {
+        	public void onKeyDown()
+        	{
+        		System.exit(0);
         	}
         });
 		playerEvents.addListener(Keyboard.KEY_COMMA, new KeyListener(0)
@@ -534,12 +544,20 @@ public class Killy extends ALiving implements IScreenInterface
 			
 			field.draw(cur_pos);		
 			Messages.instance().showMessages();
-			MyFont.instance().drawString(getName(), 450, 460, 0.2f, Color.WHITE);
-			MyFont.instance().drawString("HP: "+health, 450, 445, 0.2f, Color.WHITE);
-			MyFont.instance().drawString("Time: "+Livings.instance().getTime(), 450, 430, 0.2f, Color.WHITE);
-			MyFont.instance().drawString("FPS: "+Blame.fps, 450, 415, 0.2f, Color.WHITE);
-			MyFont.instance().drawString("Anima: "+field.animations.size(), 450, 400, 0.2f, Color.WHITE);
-			MyFont.instance().drawString("PlayerMoves: "+field.playerMoves, 450, 385, 0.2f, Color.WHITE);
+			// statistics
+			int k = Blame.height-20;
+			MyFont.instance().drawString(getName(),                             
+					Blame.width-190, k, 0.2f, Color.WHITE); k-= 15;
+			MyFont.instance().drawString("HP: "+health,                         
+					Blame.width-190, k, 0.2f, Color.WHITE); k-= 15;
+			MyFont.instance().drawString("Time: "+Livings.instance().getTime(), 
+					Blame.width-190, k, 0.2f, Color.WHITE); k-= 15;
+			MyFont.instance().drawString("FPS: "+Blame.fps,                     
+					Blame.width-190, k, 0.2f, Color.WHITE); k-= 15;
+			MyFont.instance().drawString("Anima: "+field.animations.size(),     
+					Blame.width-190, k, 0.2f, Color.WHITE); k-= 15;
+			MyFont.instance().drawString("PlayerMoves: "+field.playerMoves,     
+					Blame.width-190, k, 0.2f, Color.WHITE);
 			
 			Display.sync(Blame.framerate);
 			Display.update();

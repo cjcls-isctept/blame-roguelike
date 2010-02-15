@@ -1,5 +1,10 @@
 package su.msk.dunno.blame.main;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.Properties;
+
 import org.lwjgl.LWJGLException;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.Display;
@@ -7,6 +12,7 @@ import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.glu.GLU;
 
+import su.msk.dunno.blame.main.support.Color;
 import su.msk.dunno.blame.main.support.MyFont;
 import su.msk.dunno.blame.main.support.listeners.EventManager;
 import su.msk.dunno.blame.main.support.listeners.KeyListener;
@@ -19,8 +25,8 @@ public class Blame
 {
 	public static boolean isFullscreen = false;
 	
-	public static int width = 640;
-	public static int height = 480;
+	public static int width = 800;
+	public static int height = 600;
 	
 	public static int N_x = 100;
 	public static int N_y = 100;
@@ -43,7 +49,13 @@ public class Blame
 	
 	public Blame()
 	{
-		initGL();				
+		fillVariables();
+		initGL();
+		GL11.glClear(GL11.GL_COLOR_BUFFER_BIT/* | GL11.GL_DEPTH_BUFFER_BIT*/);		
+		GL11.glLoadIdentity();
+		MyFont.instance().drawString("Loading system...", 20, height-20, 0.2f, Color.GREEN);
+		Display.sync(Blame.framerate);
+		Display.update();
 		initEvents();
 
 		/*for(int i=0; i < 5000; i++)*/field = new Field(N_x, N_y, "random");
@@ -57,8 +69,8 @@ public class Blame
 		
 		isRunning = true;
 		run();
-	}
-	
+	}	
+
 	public void run()
 	{
 		while(isRunning)
@@ -83,8 +95,7 @@ public class Blame
 	public void initGL() {
 		try {
 			if(isFullscreen)Display.setFullscreen(true);
-			else {
-				Display.setDisplayMode(new DisplayMode(width, height)); }
+			else Display.setDisplayMode(new DisplayMode(width, height));
 			
 			Display.setTitle("Blame v0.0.1");
 			Display.setVSyncEnabled(true);
@@ -144,6 +155,33 @@ public class Blame
 			fps = frames;
 			frames = 0;
 			msek = System.currentTimeMillis();
+		}
+	}
+	
+	private void fillVariables() 
+	{
+		Properties p = new Properties();
+		try 
+		{
+			p.load(new FileInputStream("options.txt"));
+			framerate = Integer.valueOf(p.getProperty("framerate"));
+			isFullscreen = p.getProperty("fullscreen").equalsIgnoreCase("yes");
+			width = Integer.valueOf(p.getProperty("width"));
+			height = Integer.valueOf(p.getProperty("height"));
+		} 
+		catch (FileNotFoundException e) 
+		{
+			framerate = 70;
+			isFullscreen = false;
+			width = 800;
+			height = 600;
+		} 
+		catch (IOException e) 
+		{
+			framerate = 70;
+			isFullscreen = false;
+			width = 800;
+			height = 600;
 		}
 	}
 	

@@ -23,6 +23,7 @@ public class Shoot extends ADecision
 		shootTo = selectPoint;
 		//args.put("Damage", (int)(Math.random()*20)+"");
 		args.put("Kick", ""+field.getDirection(al.cur_pos, shootTo));
+		args.put("MindHack", "");
 	}
 
 	@Override public void doAction(int actionMoment) 

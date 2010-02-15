@@ -140,7 +140,7 @@ public class Field
 		objects[p.x][p.y].set(0, ao);
 	}
 	
-	public void draw()
+	public void draw(int scale)
 	{
 		GL11.glPushMatrix();
 		GL11.glTranslatef(20, 
@@ -150,9 +150,13 @@ public class Field
 		{
 			for(int j = 0; j < N_y; j++)
 			{
-				if(!objects[i][j].getLast().isDrawPrevented())
+				if(objects[i][j].getLast().wasDrawed)
 				{
-					MyFont.instance().drawChar(objects[i][j].getLast().getSymbol(), i*20, j*20, 0.2f, objects[i][j].getLast().getColor());
+					MyFont.instance().drawChar(objects[i][j].getLast().getSymbol(), 
+											   i*scale*3/4, 
+											   j*scale, 
+											   scale*0.01f, 
+											   objects[i][j].getLast().getColor());
 				}
 			}
 		}
@@ -165,12 +169,18 @@ public class Field
 		GL11.glPushMatrix();
 		if(playerMoves == 0)playerMovingCoord = new Vector2D(player_point.x*Blame.scale*3/4, 
 															 player_point.y*Blame.scale);
-		GL11.glTranslatef(220-playerMovingCoord.x, 
-			  		  	  240-playerMovingCoord.y, 
+		int x = (Blame.width-190)/2;
+		int y = (Blame.height-75)/2+75;
+		int nx = x/15;
+		int ny = y/20;
+		GL11.glTranslatef(x-playerMovingCoord.x, 
+			  		  	  y-playerMovingCoord.y, 
 			  		  	  0.0f);
-		for(int i = Math.max(0, player_point.x-20*15/Blame.scale); i < Math.min(player_point.x+20*15/Blame.scale, N_x); i++)
+		for(int i = Math.max(0, player_point.x-20*(nx-1)/Blame.scale); 
+				i < Math.min(player_point.x+20*nx/Blame.scale, N_x); i++)
 		{
-			for(int j = Math.max(0, player_point.y-20*8/Blame.scale); j < Math.min(player_point.y+20*12/Blame.scale, N_y); j++)
+			for(int j = Math.max(0, player_point.y-20*(ny-5)/Blame.scale); 
+					j < Math.min(player_point.y+20*(ny-4)/Blame.scale, N_y); j++)
 			{
 				if(objects[i][j].getLast().isAlwaysDraw())
 				{

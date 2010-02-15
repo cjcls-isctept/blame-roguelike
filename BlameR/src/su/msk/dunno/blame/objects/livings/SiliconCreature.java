@@ -12,19 +12,22 @@ import su.msk.dunno.blame.map.path.astar.AStarPathFinder;
 import su.msk.dunno.blame.prototypes.ADecision;
 import su.msk.dunno.blame.prototypes.ALiving;
 import su.msk.dunno.blame.prototypes.AObject;
+import su.msk.dunno.blame.prototypes.IScreenInterface;
+import su.msk.dunno.blame.screens.EnemyInterface;
 
 
 public class SiliconCreature extends ALiving 
 {
 	PathFinder find;
 	int steps;
+	IScreenInterface mind = new EnemyInterface(this);
 	
 	public SiliconCreature(Point p, Field field) 
 	{
 		super(p, field);
 		health = 20;
 		dov = 5;
-		speed = 2;
+		speed = 6;
 		find = new AStarPathFinder(field);
 	}
 
@@ -98,6 +101,10 @@ public class SiliconCreature extends ALiving
 		if(args.containsKey("Kick"))
 		{
 			setDecision(new Move(this, Integer.valueOf(args.get("Kick")), field));
+		}
+		if(args.containsKey("MindHack"))
+		{
+			mind.process();
 		}
 	}
 
