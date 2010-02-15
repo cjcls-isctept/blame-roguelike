@@ -1,5 +1,5 @@
 framerate = 70
 
-fullscreen = yes
+fullscreen = no
 width = 640
 height = 480
