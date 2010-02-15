@@ -9,9 +9,9 @@ public class FirePart extends AItem
 	public FirePart(Point p) 
 	{
 		super(p);
-		state.put("Part", "");
-		state.put("Info", "Adds fire damage to weapon");
-		state.put("Fire", "");
+		item_properties.put("Part", "");
+		item_properties.put("Info", "Adds fire damage to weapon");
+		item_properties.put("Fire", "");
 	}
 
 	@Override public String getName() 

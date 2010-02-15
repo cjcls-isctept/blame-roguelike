@@ -218,6 +218,19 @@ public abstract class ALiving extends AObject
 		if(!this.getState().containsKey("CancelMove"))lastActionTime = cur_time;
 	}
 	
+	public void setDecisions(LinkedList<ADecision> decisions)
+	{
+		for(ADecision d: decisions)
+		{
+			decision = d;
+			int cur_time = Livings.instance().getTime();
+			decision.doAction(cur_time);
+			actionPeriod = decision.getActionPeriod();
+			decision = null;
+			if(!this.getState().containsKey("CancelMove"))lastActionTime = cur_time;
+		}
+	}
+	
 	public int getHealth() 
 	{
 		return health;

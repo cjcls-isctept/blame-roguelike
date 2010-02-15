@@ -18,6 +18,7 @@ import su.msk.dunno.blame.main.support.listeners.KeyListener;
 import su.msk.dunno.blame.objects.items.ColdPart;
 import su.msk.dunno.blame.objects.items.FirePart;
 import su.msk.dunno.blame.objects.items.LightningPart;
+import su.msk.dunno.blame.objects.items.MindPart;
 import su.msk.dunno.blame.objects.items.PoisonPart;
 import su.msk.dunno.blame.objects.items.SocketExtender;
 import su.msk.dunno.blame.objects.symbols.EmptySpace;
@@ -30,10 +31,13 @@ import su.msk.dunno.blame.prototypes.IScreenInterface;
 
 public class Weapon implements IScreenInterface
 {
+	private int weapon_width = 52;
+	private int weapon_height = 32;
+	
 	private ALiving owner;
 	private Inventory inventory;
 	private EventManager weaponEvents = new EventManager();
-	private AObject[][] weaponView = new AObject[20][20];
+	private AObject[][] weaponView = new AObject[weapon_width][weapon_height];
 	private LinkedList<AObject> sockets = new LinkedList<AObject>();
 	private HashMap<String, String> effects = new HashMap<String, String>();
 	
@@ -65,18 +69,20 @@ public class Weapon implements IScreenInterface
 	{
 		GL11.glClear(GL11.GL_COLOR_BUFFER_BIT/* | GL11.GL_DEPTH_BUFFER_BIT*/);		
 		GL11.glLoadIdentity();
-		GL11.glTranslatef(120, 20, 0.0f);
-		MyFont.instance().drawString(owner.getName()+"'s weapon", 20, 460, 0.2f, Color.WHITE);
-		for(int i = 0; i < 20; i++)
+		MyFont.instance().drawString(owner.getName()+"'s weapon", 20, Blame.height-20, 0.2f, Color.WHITE);
+		GL11.glTranslatef(20, 100, 0.0f);
+		for(int i = 0; i < weapon_width; i++)
 		{
-			for(int j = 0; j < 20; j++)
+			for(int j = 0; j < weapon_height; j++)
 			{
 				if(!"SocketPlace".equals(weaponView[i][j].getName()) || isSelectSocket)
-					MyFont.instance().drawChar(weaponView[i][j].getSymbol(), i*20, j*20, 0.2f, 
+					MyFont.instance().drawChar(weaponView[i][j].getSymbol(), i*15, j*15, 0.2f, 
 											   weaponView[i][j].getColor());
 			}
 		}
-		if(isSelectSocket)MyFont.instance().drawChar(selector.getSymbol(), selector.cur_pos.x*20, selector.cur_pos.y*20, 0.2f, selector.getColor());
+		if(isSelectSocket)MyFont.instance().drawChar(selector.getSymbol(), 
+													 selector.cur_pos.x*15, 
+													 selector.cur_pos.y*15, 0.2f, selector.getColor());
 		Messages.instance().showMessages();
 		Display.sync(Blame.framerate);
 		Display.update();
@@ -102,6 +108,8 @@ public class Weapon implements IScreenInterface
 		}
 		return effects;
 	}
+	
+	
 	
 	public void addPart(AObject ao)
 	{
@@ -263,7 +271,13 @@ public class Weapon implements IScreenInterface
 		Point p;
 		int rand;
 		AObject ao;
-		for(int i = 0; i < amount; i++)
+		p = getFreeRandomSocket();
+		if(p != null)
+		{
+			selector.cur_pos = p;
+			addPart(new MindPart(p));
+		}
+		for(int i = 0; i < amount-1; i++)
 		{
 			p = getFreeRandomSocket();
 			if(p != null)
@@ -285,9 +299,9 @@ public class Weapon implements IScreenInterface
 	private int getFreeSocketsNum()
 	{
 		int sum = 0;
-		for(int i = 0; i < 20; i++)
+		for(int i = 0; i < weapon_width; i++)
 		{
-			for(int j = 0; j < 20; j++)
+			for(int j = 0; j < weapon_height; j++)
 			{
 				if("SocketPlace".equals(weaponView[i][j].getName()))sum++;
 			}
@@ -299,12 +313,12 @@ public class Weapon implements IScreenInterface
 	{
 		if(getFreeSocketsNum() > 0)
 		{
-			int x = (int)(Math.random()*20);
-			int y = (int)(Math.random()*20);
+			int x = (int)(Math.random()*weapon_width);
+			int y = (int)(Math.random()*weapon_height);
 			while(!"SocketPlace".equals(weaponView[x][y].getName()))
 			{
-				x = (int)(Math.random()*20);
-				y = (int)(Math.random()*20);
+				x = (int)(Math.random()*weapon_width);
+				y = (int)(Math.random()*weapon_height);
 			}
 			return new Point(x,y);
 		}

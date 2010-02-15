@@ -71,7 +71,7 @@ public class Move extends ADecision
 			args.put("MoveFail", "");
 			al.changeState(args);
 		}
-		else if(!al.isPlayer() && al.isNearPlayer() && dir != Move.STAY)field.addAnimation(new Moving(actionMoment, field, al, old, al.cur_pos));
+		//else if(!al.isPlayer() && al.isNearPlayer() && dir != Move.STAY)field.addAnimation(new Moving(actionMoment, field, al, old, al.cur_pos));
 		wasExecuted = true;				
 	}
 }

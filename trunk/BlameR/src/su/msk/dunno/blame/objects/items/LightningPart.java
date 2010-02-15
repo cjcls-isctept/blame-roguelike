@@ -9,9 +9,9 @@ public class LightningPart extends AItem
 	public LightningPart(Point p) 
 	{
 		super(p);
-		state.put("Part", "");
-		state.put("Info", "Adds lightning damage to weapon");
-		state.put("Light", "");
+		item_properties.put("Part", "");
+		item_properties.put("Info", "Adds lightning damage to weapon");
+		item_properties.put("Light", "");
 	}
 
 	@Override public String getName() 
