@@ -5,14 +5,18 @@ import su.msk.dunno.blame.prototypes.AItem;
 
 public class PlayerCorpse extends AItem 
 {
-	public PlayerCorpse(Point p) 
+	String name;
+	
+	public PlayerCorpse(String name, Point p) 
 	{
 		super(p);
+		this.name = name;
+		item_properties.put("Info", name+"'s genetic information. "+name+" can be restored in rebuild station.");
 	}
 
 	@Override public String getName() 
 	{
-		return "Player Corpse";
+		return name+"'s genetic data";
 	}
 
 	@Override public boolean getPassability() 
