@@ -34,20 +34,6 @@ public class EnemyInterface implements IScreenInterface
 			}
 		});
 	}
-
-	@Override public void process() 
-	{
-		isRunning = true;
-		while(isRunning)
-		{
-			events.checkEvents();
-			GL11.glClear(GL11.GL_COLOR_BUFFER_BIT/* | GL11.GL_DEPTH_BUFFER_BIT*/);		
-			GL11.glLoadIdentity();
-			showInterface();
-			Display.sync(Blame.framerate);
-			Display.update();
-		}
-	}
 	
 	public void showInterface()
 	{
@@ -55,5 +41,19 @@ public class EnemyInterface implements IScreenInterface
 		MyFont.instance().drawString(al.getName()+"'s mind", 20, k, 0.2f, Color.WHITE); k-=20; k-=20;
 		MyFont.instance().drawString("ERROR: Unknown data format!", 20, k, 0.2f, Color.WHITE); k-=20;
 		MyFont.instance().drawString("1. Exit", 20, k, 0.2f, Color.WHITE);
+	}
+
+	public void process() 
+	{
+		isRunning = true;
+		while(isRunning)
+		{
+			events.checkEvents();
+			GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);		
+			GL11.glLoadIdentity();
+			showInterface();
+			Display.sync(Blame.framerate);
+			Display.update();
+		}
 	}
 }
