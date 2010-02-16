@@ -338,7 +338,7 @@ public class Killy extends ALiving implements IScreenInterface
 		if(isDead)
 		{
 			field.removeObject(this);
-			field.addObject(new PlayerCorpse(cur_pos));
+			field.addObject(new PlayerCorpse(getName(), cur_pos));
 		}
 	}
 	
