@@ -240,6 +240,11 @@ public class Killy extends ALiving implements IScreenInterface
 	{
 		return '@';
 	}
+	
+	@Override public int getCode()
+	{
+		return MyFont.PLAYER;
+	}
 
 	@Override public String getName() 
 	{

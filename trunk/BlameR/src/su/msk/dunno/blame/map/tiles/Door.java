@@ -2,6 +2,7 @@ package su.msk.dunno.blame.map.tiles;
 
 import java.util.HashMap;
 
+import su.msk.dunno.blame.main.support.MyFont;
 import su.msk.dunno.blame.prototypes.AObject;
 
 
@@ -29,6 +30,12 @@ public class Door extends AObject
 	{
 		if(!isOpen)return '+';
 		else return '\'';
+	}
+	
+	@Override public int getCode()
+	{
+		if(isOpen)return MyFont.DOOR_OPENED;
+		else return MyFont.DOOR_CLOSED;
 	}
 
 	@Override public boolean getTransparency() 

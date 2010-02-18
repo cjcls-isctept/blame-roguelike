@@ -42,7 +42,7 @@ public class Field
 	public Field(int N_x, int N_y, String mapname)	// constructor for map generation or map loading
 	{
 		this(N_x, N_y);
-		if("random".equals(mapname))
+		/*if("random".equals(mapname))
 		{
 			int[][] map = RecursiveDivisionMethod.generate(this);
 			for(int i = 0; i < N_x; i++)
@@ -57,7 +57,7 @@ public class Field
 					}
 				}
 			}
-		}
+		}*/
 	}
 	
 	public Field(int N_x, int N_y)	// std constructor with only floor as map
@@ -86,11 +86,10 @@ public class Field
 			{
 				if(!objects[x][y].getLast().isDrawPrevented())
 				{
-					MyFont.instance().drawChar(objects[x][y].getLast().getSymbol(), 
-											   x*Blame.scale*3/4, 
-											   y*Blame.scale, 
-											   Blame.scale*0.01f, 
-											   objects[x][y].getLast().getColor());
+					MyFont.instance().drawDisplayList(objects[x][y].getLast().getCode(), 
+											   		  x*100*3/4, 
+											   		  y*100, 
+											   		  objects[x][y].getLast().getColor());
 					objects[x][y].getFirst().wasDrawed = true;
 				}
 			}			
@@ -146,18 +145,18 @@ public class Field
 		GL11.glTranslatef(20, 
 				  		  80, 
 				  		  0.0f);
+		GL11.glScalef(scale*0.01f, scale*0.01f, 1.0f);
 		for(int i = 0; i < N_x; i++)
 		{
 			for(int j = 0; j < N_y; j++)
 			{
-				if(objects[i][j].getLast().wasDrawed)
+				/*if(objects[i][j].getLast().wasDrawed)
 				{
-					MyFont.instance().drawChar(objects[i][j].getLast().getSymbol(), 
-											   i*scale*3/4, 
-											   j*scale, 
-											   scale*0.01f, 
-											   objects[i][j].getLast().getColor());
-				}
+					*/MyFont.instance().drawDisplayList(objects[i][j].getLast().getCode(), 
+											     		i*100*3/4, 
+											     		j*100, 
+											     		objects[i][j].getLast().getColor());
+				//}
 			}
 		}
 		playAnimations();
@@ -167,7 +166,7 @@ public class Field
 	public void draw(Point player_point)
 	{
 		GL11.glPushMatrix();
-		if(playerMoves == 0)playerMovingCoord = new Vector2D(player_point.x*Blame.scale*3/4, 
+		if(playerMoves == 0)playerMovingCoord = new Vector2D(player_point.x*(Blame.scale*3/4), 
 															 player_point.y*Blame.scale);
 		int x = (Blame.width-190)/2;
 		int y = (Blame.height-75)/2+75;
@@ -176,6 +175,7 @@ public class Field
 		GL11.glTranslatef(x-playerMovingCoord.x, 
 			  		  	  y-playerMovingCoord.y, 
 			  		  	  0.0f);
+		GL11.glScalef(Blame.scale*0.01f, Blame.scale*0.01f, 1.0f);
 		for(int i = Math.max(0, player_point.x-20*(nx-1)/Blame.scale); 
 				i < Math.min(player_point.x+20*nx/Blame.scale, N_x); i++)
 		{
@@ -184,16 +184,22 @@ public class Field
 			{
 				if(objects[i][j].getLast().isAlwaysDraw())
 				{
-					MyFont.instance().drawChar(objects[i][j].getLast().getSymbol(), i*Blame.scale*3/4, 
+					MyFont.instance().drawDisplayList(objects[i][j].getLast().getCode(), 
+													  i*100*3/4, 
+													  j*100, 
+													  objects[i][j].getLast().getColor());
+					/*MyFont.instance().drawChar(objects[i][j].getLast().getSymbol(), i*Blame.scale*3/4, 
 																					j*Blame.scale, 
-																					Blame.scale*0.01f, 
-																					objects[i][j].getLast().getColor());
+																					objects[i][j].getLast().getColor());*/
 				}
-				else if(objects[i][j].getFirst().wasDrawed)MyFont.instance().drawChar(objects[i][j].getFirst().getSymbol(), 
+				/*else if(objects[i][j].getFirst().wasDrawed)MyFont.instance().drawChar(objects[i][j].getFirst().getSymbol(), 
 																					  i*Blame.scale*3/4, 
 																					  j*Blame.scale, 
-																					  Blame.scale*0.01f, 
-																					  Color.GRAY);
+																					  Color.GRAY);*/
+				else if(objects[i][j].getFirst().wasDrawed)MyFont.instance().drawDisplayList(objects[i][j].getFirst().getCode(), 
+						 																	 i*100*3/4, 
+						 																	 j*100, 
+						 																	 Color.GRAY);
 			}
 		}
 		for(AObject source: lightSources)

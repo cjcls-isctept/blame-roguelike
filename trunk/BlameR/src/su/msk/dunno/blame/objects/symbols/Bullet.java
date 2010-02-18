@@ -1,6 +1,7 @@
 package su.msk.dunno.blame.objects.symbols;
 
 import su.msk.dunno.blame.main.support.Color;
+import su.msk.dunno.blame.main.support.MyFont;
 import su.msk.dunno.blame.main.support.Point;
 import su.msk.dunno.blame.prototypes.AObject;
 
@@ -25,6 +26,11 @@ public class Bullet extends AObject
 	@Override public char getSymbol() 
 	{
 		return '*';
+	}
+	
+	@Override public int getCode()
+	{
+		return MyFont.BULLET;
 	}
 
 	@Override public boolean getTransparency() 

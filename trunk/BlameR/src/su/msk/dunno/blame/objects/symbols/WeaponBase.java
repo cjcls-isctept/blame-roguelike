@@ -1,5 +1,6 @@
 package su.msk.dunno.blame.objects.symbols;
 
+import su.msk.dunno.blame.main.support.MyFont;
 import su.msk.dunno.blame.main.support.Point;
 import su.msk.dunno.blame.prototypes.AObject;
 
@@ -29,6 +30,11 @@ public class WeaponBase extends AObject
 	@Override public char getSymbol() 
 	{
 		return 'w';
+	}
+	
+	@Override public int getCode()
+	{
+		return MyFont.WEAPONBASE;
 	}
 
 	@Override public boolean getTransparency() 

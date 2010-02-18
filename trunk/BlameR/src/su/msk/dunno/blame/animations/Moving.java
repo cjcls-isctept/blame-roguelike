@@ -39,10 +39,10 @@ public class Moving extends AAnimation
 
 	@Override public void nextFrame()
 	{
-		MyFont.instance().drawChar(ao.getSymbol(), 
-								   pFrom.x*Blame.scale*3/4+dir.x*cur_frame*Blame.scale*3/4/frames, 
-								   pFrom.y*Blame.scale+dir.y*cur_frame*Blame.scale/frames, 
-								   Blame.scale*0.01f, ao.getColor());
+		MyFont.instance().drawDisplayList(ao.getCode(), 
+								   		  pFrom.x*100*3/4+dir.x*cur_frame*100*3/4/frames, 
+								   		  pFrom.y*100+dir.y*cur_frame*100/frames, 
+								   		  ao.getColor());
 		if((Blame.playCibo?"Cibo":"Killy").equals(ao.getName()))
 		{
 			field.playerMovingCoord = new Vector2D(pFrom.x*Blame.scale*3/4+dir.x*cur_frame*Blame.scale*3/4/frames, 

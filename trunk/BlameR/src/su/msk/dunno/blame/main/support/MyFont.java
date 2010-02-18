@@ -13,8 +13,24 @@ import javax.imageio.ImageIO;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 
+import su.msk.dunno.blame.main.Blame;
+
 public class MyFont 
 {
+	public final static int WALL            = 1;
+	public final static int FLOOR           = 2;
+	public final static int DOOR_CLOSED     = 3;
+	public final static int DOOR_OPENED     = 4;
+	public final static int PLAYER          = 5;
+	public final static int SILICONCREATURE = 6;
+	public final static int BULLET 			= 7;
+	public final static int IMP				= 8;
+	public final static int MAINSELECTOR	= 9;
+	public final static int MINORSELECTOR	= 10;
+	public final static int WEAPONBASE		= 11;
+	public final static int SOCKET			= 12;
+	public final static int CORPSE			= 13;
+	
 	private Texture myFont;
 	
 	private int charWidth = 32;
@@ -35,6 +51,83 @@ public class MyFont
 		myFont = loadTexture("res/i/font2.png",0, 0, 1024, 1024);
 	}
 	
+	public void initDisplayLists()
+	{
+		createList(myFont, '#', WALL);
+		createList(myFont, '.', FLOOR);
+		createList(myFont, '+', DOOR_CLOSED);
+		createList(myFont, '\'', DOOR_OPENED);
+		createList(myFont, '@', PLAYER);
+		createList(myFont, 'S', SILICONCREATURE);
+		createList(myFont, '*', BULLET);
+		createList(myFont, '*', IMP);
+		createList(myFont, 'X', MAINSELECTOR);
+		createList(myFont, 'x', MINORSELECTOR);
+		createList(myFont, 'w', WEAPONBASE);
+		createList(myFont, 'o', SOCKET);
+		createList(myFont, '%', CORPSE);
+	}
+	
+	public void createList(Texture texture, char ch, int list_name)
+	{
+		float t_width = texture.getTextureWidth();
+		float t_height = texture.getTextureHeight();
+		Vector2D start_v = getCharCoord(ch);
+		GL11.glNewList(list_name, GL11.GL_COMPILE);
+		GL11.glBindTexture(GL11.GL_TEXTURE_2D, texture.getTextureId());
+		GL11.glBegin(GL11.GL_QUADS);
+			GL11.glTexCoord2f(start_v.x/t_width, start_v.y/t_height);
+	    	GL11.glVertex2f(-charWidth, charHeight+50);
+	    	
+			GL11.glTexCoord2f((start_v.x+charWidth)/t_width, start_v.y/t_height);
+			GL11.glVertex2f(charWidth, charHeight+50);
+			
+			GL11.glTexCoord2f((start_v.x+charWidth)/t_width, (start_v.y+charHeight)/t_height);
+			GL11.glVertex2f(charWidth, -charHeight);			
+			
+	    	GL11.glTexCoord2f(start_v.x/t_width, (start_v.y+charHeight)/t_height);
+			GL11.glVertex2f(-charWidth, -charHeight);
+		GL11.glEnd();
+		GL11.glEndList();
+	}
+	
+	private Vector2D getCharCoord(char ch)
+	{
+		Vector2D start_v = new Vector2D();
+		int code = Integer.valueOf(ch);
+		if(code >= 32 && code <= 47)
+		{
+			start_v.x = (code - 32)*charWidth;
+			start_v.y = charHeight*2;
+		}
+		else if(code >= 48 && code <= 63)
+		{
+			start_v.x = (code - 48)*charWidth;
+			start_v.y = charHeight*3;
+		}
+		else if(code >= 64 && code <= 79)
+		{
+			start_v.x = (code - 64)*charWidth;
+			start_v.y = charHeight*4;
+		}
+		else if(code >= 80 && code <= 95)
+		{
+			start_v.x = (code - 80)*charWidth;
+			start_v.y = charHeight*5;
+		}
+		else if(code >= 96 && code <= 111)
+		{
+			start_v.x = (code - 96)*charWidth;
+			start_v.y = charHeight*6;
+		}
+		else if(code >= 112 && code <= 126)
+		{
+			start_v.x = (code - 112)*charWidth;
+			start_v.y = charHeight*7;
+		}
+		return start_v;
+	}
+	
 	public void drawString(String s, int i, int j, float size, Color c)
 	{
 		this.drawString(s, new Vector2D(i, j), size, c);
@@ -44,84 +137,52 @@ public class MyFont
 	{
 		GL11.glPushMatrix();
 		GL11.glLoadIdentity();
-		Vector2D vec = new Vector2D(60*size, 0);
+		GL11.glScalef(size, size, 1.0f);
+		coord = coord.mul(1.0f/size);
+		Vector2D vec = new Vector2D(60, 0);
 		for(int i = 0; i < s.length(); i++)
 		{
-			drawChar(s.charAt(i), coord, size, c);
+			drawChar(s.charAt(i), coord, c);
 			coord = coord.plus(vec);
 		}
 		GL11.glPopMatrix();
 	}
 	
-	public void drawChar(char ch, Vector2D coord, float size, Color c)
+	public void drawChar(char ch, Vector2D coord, Color c)
 	{
-		this.drawChar(ch, (int)coord.x, (int)coord.y, size, c);
+		this.drawChar(ch, coord.x, coord.y, c);
 	}
 	
-	public void drawChar(char ch, int x, int y, float size, Color c)
+	public void drawChar(char ch, float x, float y, Color c)
 	{
-		int code = Integer.valueOf(ch);
-		int startx=0, starty=0;
-		if(code >= 32 && code <= 47)
-		{
-			startx = (code - 32)*charWidth;
-			starty = charHeight*2;
-		}
-		else if(code >= 48 && code <= 63)
-		{
-			startx = (code - 48)*charWidth;
-			starty = charHeight*3;
-		}
-		else if(code >= 64 && code <= 79)
-		{
-			startx = (code - 64)*charWidth;
-			starty = charHeight*4;
-		}
-		else if(code >= 80 && code <= 95)
-		{
-			startx = (code - 80)*charWidth;
-			starty = charHeight*5;
-		}
-		else if(code >= 96 && code <= 111)
-		{
-			startx = (code - 96)*charWidth;
-			starty = charHeight*6;
-		}
-		else if(code >= 112 && code <= 126)
-		{
-			startx = (code - 112)*charWidth;
-			starty = charHeight*7;
-		}
-		else return;
+		Vector2D start_v = getCharCoord(ch);
 		
 		GL11.glPushMatrix();		
 		GL11.glTranslatef(x, y, 0.0f);
-		GL11.glScalef(size, size, 1.0f);
 		GL11.glColor3f(c.getRed(), c.getGreen(), c.getBlue());
 		GL11.glBindTexture(GL11.GL_TEXTURE_2D, myFont.getTextureId());
 		float t_width = myFont.getTextureWidth();
 		float t_height = myFont.getTextureHeight();
 		GL11.glBegin(GL11.GL_QUADS);
-			GL11.glTexCoord2f(startx/t_width, starty/t_height);
+			GL11.glTexCoord2f(start_v.x/t_width, start_v.y/t_height);
 	    	GL11.glVertex2f(-charWidth, charHeight+50);	// +50: lifts up symbols
 	    	
-			GL11.glTexCoord2f((startx+charWidth)/t_width, starty/t_height);
+			GL11.glTexCoord2f((start_v.x+charWidth)/t_width, start_v.y/t_height);
 			GL11.glVertex2f(charWidth, charHeight+50);
 			
-			GL11.glTexCoord2f((startx+charWidth)/t_width, (starty+charHeight)/t_height);
+			GL11.glTexCoord2f((start_v.x+charWidth)/t_width, (start_v.y+charHeight)/t_height);
 			GL11.glVertex2f(charWidth, -charHeight);			
 			
-	    	GL11.glTexCoord2f(startx/t_width, (starty+charHeight)/t_height);
+	    	GL11.glTexCoord2f(start_v.x/t_width, (start_v.y+charHeight)/t_height);
 			GL11.glVertex2f(-charWidth, -charHeight);
 		GL11.glEnd();
 		GL11.glPopMatrix();
 	}
 	
-	public void drawDisplayList(int code, int x, int y, float size, Color c)
+	public void drawDisplayList(int code, int x, int y, Color c)
 	{
 		GL11.glPushMatrix();
 		GL11.glTranslatef(x, y, 0.0f);
-		GL11.glScalef(size, size, 1.0f);
 		GL11.glColor3f(c.getRed(), c.getGreen(), c.getBlue());
     	GL11.glCallList(code);				
 		GL11.glPopMatrix();

@@ -28,8 +28,8 @@ public class Blame
 	public static int width = 800;
 	public static int height = 600;
 	
-	public static int N_x = 100;
-	public static int N_y = 100;
+	public static int N_x = 20;
+	public static int N_y = 20;
 	
 	private boolean isRunning;
 	
@@ -51,11 +51,14 @@ public class Blame
 	{
 		fillVariables();
 		initGL();
+		
 		GL11.glClear(GL11.GL_COLOR_BUFFER_BIT/* | GL11.GL_DEPTH_BUFFER_BIT*/);		
 		GL11.glLoadIdentity();
 		MyFont.instance().drawString("Loading system...", 20, height-20, 0.2f, Color.GREEN);
 		Display.sync(Blame.framerate);
 		Display.update();
+		
+		MyFont.instance().initDisplayLists();
 		initEvents();
 
 		/*for(int i=0; i < 5000; i++)*/field = new Field(N_x, N_y, "random");
@@ -76,7 +79,12 @@ public class Blame
 		while(isRunning)
 		{
 			checkRequests();
+			/*GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);		
+			GL11.glLoadIdentity();
+			MyFont.instance().drawDisplayList(MyFont.WALL, 320, 240, Color.GREEN);*/
 			(playCibo?cibo:killy).process();
+			/*Display.sync(Blame.framerate);
+			Display.update();*/
 			getFPS();
 		}
 		MyFont.instance().destroy();
@@ -119,7 +127,7 @@ public class Blame
         GLU.gluOrtho2D(0, width, 0, height);
         
         GL11.glMatrixMode(GL11.GL_MODELVIEW);
-        GL11.glLoadIdentity(); 
+        GL11.glLoadIdentity();
     }
 	
 	public void initEvents()
