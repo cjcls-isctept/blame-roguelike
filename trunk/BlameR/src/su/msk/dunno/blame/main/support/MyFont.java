@@ -117,6 +117,16 @@ public class MyFont
 		GL11.glPopMatrix();
 	}
 	
+	public void drawDisplayList(int code, int x, int y, float size, Color c)
+	{
+		GL11.glPushMatrix();
+		GL11.glTranslatef(x, y, 0.0f);
+		GL11.glScalef(size, size, 1.0f);
+		GL11.glColor3f(c.getRed(), c.getGreen(), c.getBlue());
+    	GL11.glCallList(code);				
+		GL11.glPopMatrix();
+	}
+	
 	public static byte[] intToByteArray(int value) {
         return new byte[] {
                 (byte)(value >>> 24),
