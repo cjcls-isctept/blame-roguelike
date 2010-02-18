@@ -1,5 +1,6 @@
 package su.msk.dunno.blame.map.tiles;
 
+import su.msk.dunno.blame.main.support.MyFont;
 import su.msk.dunno.blame.prototypes.AObject;
 
 public class Floor extends AObject 
@@ -17,6 +18,11 @@ public class Floor extends AObject
 	@Override public char getSymbol() 
 	{
 		return '.';
+	}
+	
+	@Override public int getCode()
+	{
+		return MyFont.FLOOR;
 	}
 
 	@Override public boolean getTransparency()

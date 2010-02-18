@@ -1,5 +1,6 @@
 package su.msk.dunno.blame.objects.items;
 
+import su.msk.dunno.blame.main.support.MyFont;
 import su.msk.dunno.blame.main.support.Point;
 import su.msk.dunno.blame.prototypes.AItem;
 
@@ -27,6 +28,11 @@ public class PlayerCorpse extends AItem
 	@Override public char getSymbol() 
 	{
 		return '@';
+	}
+	
+	@Override public int getCode()
+	{
+		return MyFont.PLAYER;
 	}
 
 	@Override public boolean getTransparency() 

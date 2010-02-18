@@ -1,6 +1,7 @@
 package su.msk.dunno.blame.objects.items;
 
 import su.msk.dunno.blame.main.support.Color;
+import su.msk.dunno.blame.main.support.MyFont;
 import su.msk.dunno.blame.main.support.Point;
 import su.msk.dunno.blame.prototypes.AItem;
 
@@ -27,6 +28,11 @@ public class PoisonPart extends AItem
 	@Override public char getSymbol() 
 	{
 		return '*';
+	}
+	
+	@Override public int getCode()
+	{
+		return MyFont.IMP;
 	}
 
 	@Override public boolean getTransparency() 

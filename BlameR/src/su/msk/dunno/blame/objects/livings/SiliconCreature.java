@@ -5,6 +5,7 @@ import java.util.HashMap;
 import su.msk.dunno.blame.decisions.Move;
 import su.msk.dunno.blame.decisions.Open;
 import su.msk.dunno.blame.main.support.Color;
+import su.msk.dunno.blame.main.support.MyFont;
 import su.msk.dunno.blame.main.support.Point;
 import su.msk.dunno.blame.map.Field;
 import su.msk.dunno.blame.map.path.PathFinder;
@@ -85,6 +86,11 @@ public class SiliconCreature extends ALiving
 	@Override public char getSymbol() 
 	{
 		return 'S';
+	}
+	
+	@Override public int getCode()
+	{
+		return MyFont.SILICONCREATURE;
 	}
 	
 	@Override public Color getColor()

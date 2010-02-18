@@ -71,18 +71,19 @@ public class Weapon implements IScreenInterface
 		GL11.glLoadIdentity();
 		MyFont.instance().drawString(owner.getName()+"'s weapon", 20, Blame.height-20, 0.2f, Color.WHITE);
 		GL11.glTranslatef(20, 100, 0.0f);
+		GL11.glScalef(0.2f, 0.2f, 1.0f);
 		for(int i = 0; i < weapon_width; i++)
 		{
 			for(int j = 0; j < weapon_height; j++)
 			{
 				if(!"SocketPlace".equals(weaponView[i][j].getName()) || isSelectSocket)
-					MyFont.instance().drawChar(weaponView[i][j].getSymbol(), i*15, j*15, 0.2f, 
+					MyFont.instance().drawChar(weaponView[i][j].getSymbol(), i*15, j*15, 
 											   weaponView[i][j].getColor());
 			}
 		}
 		if(isSelectSocket)MyFont.instance().drawChar(selector.getSymbol(), 
 													 selector.cur_pos.x*15, 
-													 selector.cur_pos.y*15, 0.2f, selector.getColor());
+													 selector.cur_pos.y*15, selector.getColor());
 		Messages.instance().showMessages();
 		Display.sync(Blame.framerate);
 		Display.update();
