@@ -19,7 +19,7 @@ public class RecursiveDivisionMethod
 		int[][] map = new int[field.getN_x()][field.getN_y()];
 		
 		create4Rooms(map, field, 1, 1, field.getN_x()-2, field.getN_y()-2);
-		for(int i = 0; i < 3; i++)addStations(map, 5);
+		for(int i = 0; i < 3; i++)addStation(map);
 		createSolidEdges(map);
 		return map;
 	}
@@ -137,11 +137,15 @@ public class RecursiveDivisionMethod
     	}
 	}
 	
-    public static void addStation(int[][] map, Point p)
+    public static void addStation(int[][] map)
     {    	
     	int N_x = map.length;
     	int N_y = map[0].length;
     	float even = 0;
+    	
+    	Point p = new Point((int)(Math.random()*(N_x-1))+1,
+    						(int)(Math.random()*(N_y-1))+1);
+    	
         int min_x = p.x-4;
         int max_x = p.x+4;
         int min_y = p.y-4;
@@ -158,9 +162,9 @@ public class RecursiveDivisionMethod
         	even++;
         	if(i >= 0 && i < N_x)
         	{
-        		if(even == 3 && min_y >= 0)map[i][min_y+1] = 2;
+        		if(even == 4 && min_y >= 0)map[i][min_y+1] = 2;
     	        else if(min_y+1 >= 0)map[i][min_y+1] = 1;
-        		if(even == 3 && max_y < N_y)map[i][max_y-1] = 2;
+        		if(even == 4 && max_y < N_y)map[i][max_y-1] = 2;
         		else if(max_y-1 < N_y)map[i][max_y-1] = 1;
         	}
         }
@@ -169,9 +173,9 @@ public class RecursiveDivisionMethod
         	even++;
         	if(j >= 0 && j < N_y)
         	{
-        		if(even == 7 && min_x >= 0)map[min_x+1][j] = 2;
+        		if(even == 10 && min_x >= 0)map[min_x+1][j] = 2;
         		else if(min_x+1 >= 0)map[min_x+1][j] = 1;
-        		if(even == 7 && max_x < N_x)map[max_x-1][j] = 2;
+        		if(even == 10 && max_x < N_x)map[max_x-1][j] = 2;
             	else if(max_x-1 < N_x)map[max_x-1][j] = 1;
         	}
         }
