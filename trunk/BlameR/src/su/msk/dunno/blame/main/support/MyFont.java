@@ -30,6 +30,8 @@ public class MyFont
 	public final static int WEAPONBASE		= 11;
 	public final static int SOCKET			= 12;
 	public final static int CORPSE			= 13;
+	public final static int EMPTY			= 14;
+	public static final int STATION 		= 15;
 	
 	private Texture myFont;
 	
@@ -66,6 +68,8 @@ public class MyFont
 		createList(myFont, 'w', WEAPONBASE);
 		createList(myFont, 'o', SOCKET);
 		createList(myFont, '%', CORPSE);
+		createList(myFont, ' ', EMPTY);
+		createList(myFont, 'A', STATION);
 	}
 	
 	public void createList(Texture texture, char ch, int list_name)

@@ -77,13 +77,15 @@ public class Weapon implements IScreenInterface
 			for(int j = 0; j < weapon_height; j++)
 			{
 				if(!"SocketPlace".equals(weaponView[i][j].getName()) || isSelectSocket)
-					MyFont.instance().drawChar(weaponView[i][j].getSymbol(), i*15, j*15, 
-											   weaponView[i][j].getColor());
+					MyFont.instance().drawDisplayList(weaponView[i][j].getCode(), 
+													  i*100*3/4, j*100, 
+											   		  weaponView[i][j].getColor());
 			}
 		}
 		if(isSelectSocket)MyFont.instance().drawChar(selector.getSymbol(), 
-													 selector.cur_pos.x*15, 
-													 selector.cur_pos.y*15, selector.getColor());
+													 selector.cur_pos.x*100*3/4, 
+													 selector.cur_pos.y*100, 
+													 selector.getColor());
 		Messages.instance().showMessages();
 		Display.sync(Blame.framerate);
 		Display.update();
@@ -157,8 +159,7 @@ public class Weapon implements IScreenInterface
 		sockets.remove(ao);
 		weaponView[ao.cur_pos.x][ao.cur_pos.y] = new SocketSymbol(ao.cur_pos);
 		if("Socket Extender".equals(ao.getName()))
-		{
-			
+		{			
 			removeSockets(ao);
 		}
 		if(!inventory.isFull())
