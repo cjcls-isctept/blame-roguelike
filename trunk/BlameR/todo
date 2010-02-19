@@ -7,6 +7,8 @@
 анимаци€ действи€ достигала бы врага и потом включалс€ бы взлом)
 баг со сн€тием импов-расширителей с вепона
 пропуск хода после принудительного дропа импов из вепона при заполненном инвентаре
+возможно: перейти на задание свойств классов-наследников в конструкторе, а не через имплементацию 
+абстрактных методов базового класса. ѕлюсы: уменьшит размеры
 ****
 
 ƒень первый. 
@@ -64,12 +66,13 @@ e - открывать инвентарь с надетыми итемами. выбор - сн€ть итем, если одет...
 поиск.
 
 Ќа уровне расположены Factories - компьютерные станции, узлы 
-Welcome to the North-West Public Unit! What do you want to do?
-Welcome to the East Emergency Center!
-Welcome to the Public Tech Factory!
+Welcome to North-West Public Unit! What do you want to do?
+Welcome to East Emergency Center!
+Welcome to Public Tech Factory!
 South-East Cyber Station welcomes you!
 PCell Tech Station ready to serve you
-Welcome to the West Lain Rebuild Node!
+Welcome to West Lain Rebuild Node!
+Welcome to 23 Subnetwork's Unit (Point)
 –азных типов: 
 * Rebuild Station. ¬осстановить убитого игрока из его генетической информации. ¬осстановить хп. —низить уровень зражени€.
 Ќадо будет продумать ограничени€ ресурса станции, чтобы нельз€ было посто€нно тусить в одном районе, посто€нно восстанавлива€сь. 
