@@ -21,6 +21,7 @@ import su.msk.dunno.blame.map.gen.RecursiveDivisionMethod;
 import su.msk.dunno.blame.map.tiles.Door;
 import su.msk.dunno.blame.map.tiles.Floor;
 import su.msk.dunno.blame.map.tiles.Wall;
+import su.msk.dunno.blame.objects.Livings;
 import su.msk.dunno.blame.objects.buildings.RebuildStation;
 import su.msk.dunno.blame.prototypes.AAnimation;
 import su.msk.dunno.blame.prototypes.ALiving;
@@ -55,7 +56,11 @@ public class Field
 					case 0: objects[i][j].set(0, new Floor(i, j)); break;
 					case 1: objects[i][j].set(0, new Wall(i, j)); break;
 					case 2: objects[i][j].set(0, new Door(i, j)); break;
-					case 3: objects[i][j].set(0, new RebuildStation(i, j, this)); break;
+					case 3:
+						RebuildStation rs = new RebuildStation(i, j, this);
+						objects[i][j].set(0, rs); 
+						Livings.instance().addObject(rs);
+						break;
 					}
 				}
 			}
@@ -144,7 +149,7 @@ public class Field
 	public void draw(int scale)
 	{
 		GL11.glPushMatrix();
-		GL11.glTranslatef(200, 
+		GL11.glTranslatef(20, 
 				  		  80, 
 				  		  0.0f);
 		GL11.glScalef(scale*0.01f, scale*0.01f, 1.0f);

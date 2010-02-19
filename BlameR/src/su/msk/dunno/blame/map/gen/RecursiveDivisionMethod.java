@@ -1,5 +1,7 @@
 package su.msk.dunno.blame.map.gen;
 
+import java.util.LinkedList;
+
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
 
@@ -17,8 +19,8 @@ public class RecursiveDivisionMethod
 		int[][] map = new int[field.getN_x()][field.getN_y()];
 		
 		create4Rooms(map, field, 1, 1, field.getN_x()-2, field.getN_y()-2);
+		for(int i = 0; i < 3; i++)addStations(map, 5);
 		createSolidEdges(map);
-		for(int i = 0; i < 3; i++)addStation(map);
 		return map;
 	}
 	
@@ -114,11 +116,31 @@ public class RecursiveDivisionMethod
 		}
 	}
 	
-    public static void addStation(int[][] map)
-    {
+	public static void addStations(int[][] map, int num)
+	{
+		int N_x = map.length;
+    	int N_y = map[0].length;
+		LinkedList<Point> points = new LinkedList<Point>();
+		Point new_p = new Point();
+    	for(int i = 0; i < num; i++)
+    	{
+    		int count = 10;
+    		for(int j = 0; j < count; j++)
+    		{
+    			new_p = new Point((int)(Math.random()*N_x-2)+1, (int)(Math.random()*N_y-2)+1);
+    			boolean addStation = true;
+    			for(Point p: points)
+    			{
+    				if(p.getDist2(new_p) < 64)addStation = false;
+    			}
+    		}
+    	}
+	}
+	
+    public static void addStation(int[][] map, Point p)
+    {    	
     	int N_x = map.length;
     	int N_y = map[0].length;
-    	Point p = new Point((int)(Math.random()*N_x-1)+1, (int)(Math.random()*N_y-1)+1);
     	float even = 0;
         int min_x = p.x-4;
         int max_x = p.x+4;
