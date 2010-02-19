@@ -1,6 +1,5 @@
 package su.msk.dunno.blame.map.gen;
 
-
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
 
@@ -10,7 +9,7 @@ import su.msk.dunno.blame.map.tiles.Door;
 import su.msk.dunno.blame.map.tiles.Floor;
 import su.msk.dunno.blame.map.tiles.Wall;
 
-//	0 - floor, 1 - wall, 2 - door
+//	0 - floor, 1 - wall, 2 - door, 3 - station
 public class RecursiveDivisionMethod 
 {
 	public static int[][] generate(Field field)
@@ -19,6 +18,7 @@ public class RecursiveDivisionMethod
 		
 		create4Rooms(map, field, 1, 1, field.getN_x()-2, field.getN_y()-2);
 		createSolidEdges(map);
+		for(int i = 0; i < 3; i++)addStation(map);
 		return map;
 	}
 	
@@ -113,4 +113,46 @@ public class RecursiveDivisionMethod
 			map[map.length-1][j] = 1;
 		}
 	}
+	
+    public static void addStation(int[][] map)
+    {
+    	int N_x = map.length;
+    	int N_y = map[0].length;
+    	Point p = new Point((int)(Math.random()*N_x-1)+1, (int)(Math.random()*N_y-1)+1);
+    	float even = 0;
+        int min_x = p.x-4;
+        int max_x = p.x+4;
+        int min_y = p.y-4;
+        int max_y = p.y+4;
+        for(int i = min_x; i <= max_x; i++)
+        {
+        	for(int j = min_y; j <= max_y; j++)
+        	{
+        		if(i >= 0 && i < N_x && j >= 0 && j < N_y && (map[i][j] == 1 || map[i][j] == 2))map[i][j] = 0;
+        	}
+        }
+        for(int i = min_x+1; i <= max_x-1; i++)
+        {
+        	even++;
+        	if(i >= 0 && i < N_x)
+        	{
+        		if(even == 3 && min_y >= 0)map[i][min_y+1] = 2;
+    	        else if(min_y+1 >= 0)map[i][min_y+1] = 1;
+        		if(even == 3 && max_y < N_y)map[i][max_y-1] = 2;
+        		else if(max_y-1 < N_y)map[i][max_y-1] = 1;
+        	}
+        }
+        for(int j = min_y+2; j <= max_y-2; j++)
+        {
+        	even++;
+        	if(j >= 0 && j < N_y)
+        	{
+        		if(even == 7 && min_x >= 0)map[min_x+1][j] = 2;
+        		else if(min_x+1 >= 0)map[min_x+1][j] = 1;
+        		if(even == 7 && max_x < N_x)map[max_x-1][j] = 2;
+            	else if(max_x-1 < N_x)map[max_x-1][j] = 1;
+        	}
+        }
+        map[p.x][p.y] = 3;
+    }
 }

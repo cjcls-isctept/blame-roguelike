@@ -68,7 +68,7 @@ public class Inventory implements IScreenInterface
 			{
 				if(i.getState().containsKey("Part"))
 				{
-					MyFont.instance().drawString(num+". "+i.getName(), 20, k, 0.2f, Color.WHITE); k -= 15;
+					MyFont.instance().drawString(num+". "+i.getName(), 20, k, 0.2f, i.getColor()); k -= 15;
 					num++;
 				}
 			}
@@ -77,7 +77,7 @@ public class Inventory implements IScreenInterface
 		{
 			for(AObject i: items)
 			{
-				MyFont.instance().drawString(num+". "+i.getName(), 20, k, 0.2f, Color.WHITE); k -= 15;
+				MyFont.instance().drawString(num+". "+i.getName(), 20, k, 0.2f, i.getColor()); k -= 15;
 				num++;
 			}
 		}

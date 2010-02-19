@@ -21,6 +21,7 @@ import su.msk.dunno.blame.map.gen.RecursiveDivisionMethod;
 import su.msk.dunno.blame.map.tiles.Door;
 import su.msk.dunno.blame.map.tiles.Floor;
 import su.msk.dunno.blame.map.tiles.Wall;
+import su.msk.dunno.blame.objects.buildings.RebuildStation;
 import su.msk.dunno.blame.prototypes.AAnimation;
 import su.msk.dunno.blame.prototypes.ALiving;
 import su.msk.dunno.blame.prototypes.AObject;
@@ -42,7 +43,7 @@ public class Field
 	public Field(int N_x, int N_y, String mapname)	// constructor for map generation or map loading
 	{
 		this(N_x, N_y);
-		/*if("random".equals(mapname))
+		if("random".equals(mapname))
 		{
 			int[][] map = RecursiveDivisionMethod.generate(this);
 			for(int i = 0; i < N_x; i++)
@@ -54,10 +55,11 @@ public class Field
 					case 0: objects[i][j].set(0, new Floor(i, j)); break;
 					case 1: objects[i][j].set(0, new Wall(i, j)); break;
 					case 2: objects[i][j].set(0, new Door(i, j)); break;
+					case 3: objects[i][j].set(0, new RebuildStation(i, j, this)); break;
 					}
 				}
 			}
-		}*/
+		}
 	}
 	
 	public Field(int N_x, int N_y)	// std constructor with only floor as map
@@ -142,7 +144,7 @@ public class Field
 	public void draw(int scale)
 	{
 		GL11.glPushMatrix();
-		GL11.glTranslatef(20, 
+		GL11.glTranslatef(200, 
 				  		  80, 
 				  		  0.0f);
 		GL11.glScalef(scale*0.01f, scale*0.01f, 1.0f);
@@ -188,14 +190,7 @@ public class Field
 													  i*100*3/4, 
 													  j*100, 
 													  objects[i][j].getLast().getColor());
-					/*MyFont.instance().drawChar(objects[i][j].getLast().getSymbol(), i*Blame.scale*3/4, 
-																					j*Blame.scale, 
-																					objects[i][j].getLast().getColor());*/
 				}
-				/*else if(objects[i][j].getFirst().wasDrawed)MyFont.instance().drawChar(objects[i][j].getFirst().getSymbol(), 
-																					  i*Blame.scale*3/4, 
-																					  j*Blame.scale, 
-																					  Color.GRAY);*/
 				else if(objects[i][j].getFirst().wasDrawed)MyFont.instance().drawDisplayList(objects[i][j].getFirst().getCode(), 
 						 																	 i*100*3/4, 
 						 																	 j*100, 
