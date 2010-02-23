@@ -1,4 +1,4 @@
-package su.msk.dunno.blame.main.support;
+package su.msk.dunno.blame.support;
 
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferByte;
@@ -68,7 +68,7 @@ public class MyFont
 		createList(myFont, 'w', WEAPONBASE);
 		createList(myFont, 'o', SOCKET);
 		createList(myFont, '%', CORPSE);
-		createList(myFont, ' ', EMPTY);
+		//createList(myFont, ' ', EMPTY);	// its suppose to draw emptiness anyway... :)
 		createList(myFont, 'A', STATION);
 	}
 	

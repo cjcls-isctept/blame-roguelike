@@ -5,11 +5,11 @@ import java.util.LinkedList;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
 
-import su.msk.dunno.blame.main.support.Point;
 import su.msk.dunno.blame.map.Field;
 import su.msk.dunno.blame.map.tiles.Door;
 import su.msk.dunno.blame.map.tiles.Floor;
 import su.msk.dunno.blame.map.tiles.Wall;
+import su.msk.dunno.blame.support.Point;
 
 //	0 - floor, 1 - wall, 2 - door, 3 - station
 public class RecursiveDivisionMethod 

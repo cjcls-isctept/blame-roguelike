@@ -8,17 +8,17 @@ import org.lwjgl.opengl.GL11;
 
 import su.msk.dunno.blame.decisions.Drop;
 import su.msk.dunno.blame.main.Blame;
-import su.msk.dunno.blame.main.support.Color;
-import su.msk.dunno.blame.main.support.Messages;
-import su.msk.dunno.blame.main.support.MyFont;
-import su.msk.dunno.blame.main.support.listeners.EventManager;
-import su.msk.dunno.blame.main.support.listeners.KeyListener;
 import su.msk.dunno.blame.map.Field;
 import su.msk.dunno.blame.prototypes.ALiving;
 import su.msk.dunno.blame.prototypes.AObject;
-import su.msk.dunno.blame.prototypes.IScreenInterface;
+import su.msk.dunno.blame.prototypes.IScreen;
+import su.msk.dunno.blame.support.Color;
+import su.msk.dunno.blame.support.Messages;
+import su.msk.dunno.blame.support.MyFont;
+import su.msk.dunno.blame.support.listeners.EventManager;
+import su.msk.dunno.blame.support.listeners.KeyListener;
 
-public class Inventory implements IScreenInterface
+public class Inventory implements IScreen
 {
 	public static final int TO_DROP = 0;
 	public static final int TO_CHECK = 1;
@@ -140,7 +140,7 @@ public class Inventory implements IScreenInterface
         			}
         			else if(mode == TO_SELECT_SOCKET)
         			{
-        				owner.weapon.addPart(items.get(0));
+        				owner.weapon.addImp(items.get(0));
         				items.remove(0);
         				closeInventory();
         			}
@@ -164,7 +164,7 @@ public class Inventory implements IScreenInterface
         			}
           			else if(mode == TO_SELECT_SOCKET)
         			{
-        				owner.weapon.addPart(items.get(1));
+        				owner.weapon.addImp(items.get(1));
         				items.remove(1);
         				closeInventory();
         			}
@@ -188,7 +188,7 @@ public class Inventory implements IScreenInterface
         			}
           			else if(mode == TO_SELECT_SOCKET)
         			{
-        				owner.weapon.addPart(items.get(2));
+        				owner.weapon.addImp(items.get(2));
         				items.remove(2);
         				closeInventory();
         			}
@@ -212,7 +212,7 @@ public class Inventory implements IScreenInterface
         			}
           			else if(mode == TO_SELECT_SOCKET)
         			{
-        				owner.weapon.addPart(items.get(3));
+        				owner.weapon.addImp(items.get(3));
         				items.remove(3);
         				closeInventory();
         			}
@@ -236,7 +236,7 @@ public class Inventory implements IScreenInterface
         			}
           			else if(mode == TO_SELECT_SOCKET)
         			{
-        				owner.weapon.addPart(items.get(4));
+        				owner.weapon.addImp(items.get(4));
         				items.remove(4);
         				closeInventory();
         			}
@@ -260,7 +260,7 @@ public class Inventory implements IScreenInterface
         			}
           			else if(mode == TO_SELECT_SOCKET)
         			{
-        				owner.weapon.addPart(items.get(5));
+        				owner.weapon.addImp(items.get(5));
         				items.remove(5);
         				closeInventory();
         			}
@@ -284,7 +284,7 @@ public class Inventory implements IScreenInterface
         			}
           			else if(mode == TO_SELECT_SOCKET)
         			{
-        				owner.weapon.addPart(items.get(6));
+        				owner.weapon.addImp(items.get(6));
         				items.remove(6);
         				closeInventory();
         			}
@@ -308,7 +308,7 @@ public class Inventory implements IScreenInterface
         			}
           			else if(mode == TO_SELECT_SOCKET)
         			{
-        				owner.weapon.addPart(items.get(7));
+        				owner.weapon.addImp(items.get(7));
         				items.remove(7);
         				closeInventory();
         			}
@@ -332,7 +332,7 @@ public class Inventory implements IScreenInterface
         			}
           			else if(mode == TO_SELECT_SOCKET)
         			{
-        				owner.weapon.addPart(items.get(8));
+        				owner.weapon.addImp(items.get(8));
         				items.remove(8);
         				closeInventory();
         			}
@@ -356,7 +356,7 @@ public class Inventory implements IScreenInterface
         			}
           			else if(mode == TO_SELECT_SOCKET)
         			{
-        				owner.weapon.addPart(items.get(9));
+        				owner.weapon.addImp(items.get(9));
         				items.remove(9);
         				closeInventory();
         			}

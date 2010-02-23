@@ -1,4 +1,4 @@
-package su.msk.dunno.blame.main.support;
+package su.msk.dunno.blame.support;
 
 import java.awt.Point;
 import java.awt.event.MouseEvent;

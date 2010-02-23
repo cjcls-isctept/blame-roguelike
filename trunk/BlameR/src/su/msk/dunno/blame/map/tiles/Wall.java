@@ -1,7 +1,7 @@
 package su.msk.dunno.blame.map.tiles;
 
-import su.msk.dunno.blame.main.support.MyFont;
 import su.msk.dunno.blame.prototypes.AObject;
+import su.msk.dunno.blame.support.MyFont;
 
 public class Wall extends AObject
 {
@@ -18,11 +18,6 @@ public class Wall extends AObject
 	@Override public boolean getPassability() 
 	{
 		return false;
-	}
-
-	@Override public char getSymbol() 
-	{
-		return '#';
 	}
 	
 	@Override public int getCode()

@@ -5,14 +5,14 @@ import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
 
 import su.msk.dunno.blame.main.Blame;
-import su.msk.dunno.blame.main.support.Color;
-import su.msk.dunno.blame.main.support.MyFont;
-import su.msk.dunno.blame.main.support.listeners.EventManager;
-import su.msk.dunno.blame.main.support.listeners.KeyListener;
 import su.msk.dunno.blame.prototypes.ALiving;
-import su.msk.dunno.blame.prototypes.IScreenInterface;
+import su.msk.dunno.blame.prototypes.IScreen;
+import su.msk.dunno.blame.support.Color;
+import su.msk.dunno.blame.support.MyFont;
+import su.msk.dunno.blame.support.listeners.EventManager;
+import su.msk.dunno.blame.support.listeners.KeyListener;
 
-public class EnemyInterface implements IScreenInterface 
+public class EnemyInterface implements IScreen 
 {
 	ALiving al;
 	EventManager events = new EventManager();
@@ -49,7 +49,7 @@ public class EnemyInterface implements IScreenInterface
 		while(isRunning)
 		{
 			events.checkEvents();
-			GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);		
+			GL11.glClear(GL11.GL_COLOR_BUFFER_BIT/* | GL11.GL_DEPTH_BUFFER_BIT*/);		
 			GL11.glLoadIdentity();
 			showInterface();
 			Display.sync(Blame.framerate);

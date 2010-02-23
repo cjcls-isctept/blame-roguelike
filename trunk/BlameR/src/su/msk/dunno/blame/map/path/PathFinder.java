@@ -3,7 +3,7 @@ package su.msk.dunno.blame.map.path;
 import java.io.Serializable;
 import java.util.LinkedList;
 
-import su.msk.dunno.blame.main.support.Point;
+import su.msk.dunno.blame.support.Point;
 
 
 /**

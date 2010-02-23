@@ -11,15 +11,10 @@ import su.msk.dunno.blame.decisions.Close;
 import su.msk.dunno.blame.decisions.MeleeAttack;
 import su.msk.dunno.blame.decisions.Move;
 import su.msk.dunno.blame.decisions.Open;
+import su.msk.dunno.blame.decisions.SelectTarget;
 import su.msk.dunno.blame.decisions.Shoot;
 import su.msk.dunno.blame.decisions.Take;
 import su.msk.dunno.blame.main.Blame;
-import su.msk.dunno.blame.main.support.Color;
-import su.msk.dunno.blame.main.support.Messages;
-import su.msk.dunno.blame.main.support.MyFont;
-import su.msk.dunno.blame.main.support.Point;
-import su.msk.dunno.blame.main.support.listeners.EventManager;
-import su.msk.dunno.blame.main.support.listeners.KeyListener;
 import su.msk.dunno.blame.map.Field;
 import su.msk.dunno.blame.objects.Livings;
 import su.msk.dunno.blame.objects.items.PlayerCorpse;
@@ -28,11 +23,18 @@ import su.msk.dunno.blame.objects.symbols.MinorSelector;
 import su.msk.dunno.blame.prototypes.ADecision;
 import su.msk.dunno.blame.prototypes.ALiving;
 import su.msk.dunno.blame.prototypes.AObject;
-import su.msk.dunno.blame.prototypes.IScreenInterface;
+import su.msk.dunno.blame.prototypes.IScreen;
+import su.msk.dunno.blame.screens.HelpScreen;
 import su.msk.dunno.blame.screens.Inventory;
+import su.msk.dunno.blame.support.Color;
+import su.msk.dunno.blame.support.Messages;
+import su.msk.dunno.blame.support.MyFont;
+import su.msk.dunno.blame.support.Point;
+import su.msk.dunno.blame.support.listeners.EventManager;
+import su.msk.dunno.blame.support.listeners.KeyListener;
 
 
-public class Killy extends ALiving implements IScreenInterface
+public class Killy extends ALiving implements IScreen
 {
 	protected EventManager playerEvents;
 	protected boolean isNextStep;
@@ -44,10 +46,6 @@ public class Killy extends ALiving implements IScreenInterface
 	protected boolean wantClose;
 	protected boolean wantTake;
 	protected boolean wantShoot;
-	
-	protected boolean isSelectTarget;
-	protected Point selectPoint;
-	protected LinkedList<MinorSelector> selectLine = new LinkedList<MinorSelector>();
 	
 	boolean isCancelMove;
 	
@@ -70,138 +68,67 @@ public class Killy extends ALiving implements IScreenInterface
 		
 		if(keys[0])
 		{
-			if(selectLine.size() > 0)
+			if(isEnemyAtDir(Move.UP))return new MeleeAttack(this, Move.UP);
+			else/* if(!isMoving)*/
 			{
-				selectPoint = new Point(selectPoint.x, selectPoint.y+1);
-				buildLine();
-				isSelectTarget = true;
-			}
-			else
-			{
-				if(isEnemyAtDir(Move.UP))return new MeleeAttack(this, Move.UP);
-				else/* if(!isMoving)*/
-				{
-					return new Move(this, Move.UP, field);
-				}
+				return new Move(this, Move.UP, field);
 			}
 		}
 		else if(keys[1])
 		{
-			if(selectLine.size() > 0)
+			if(isEnemyAtDir(Move.LEFT))return new MeleeAttack(this, Move.LEFT);
+			else/* if(!isMoving)*/
 			{
-				selectPoint = new Point(selectPoint.x-1, selectPoint.y);
-				buildLine();
-				isSelectTarget = true;
-			}
-			else
-			{
-				if(isEnemyAtDir(Move.LEFT))return new MeleeAttack(this, Move.LEFT);
-				else/* if(!isMoving)*/
-				{
-					return new Move(this, Move.LEFT, field);
-				}
+				return new Move(this, Move.LEFT, field);
 			}
 		}
 		else if(keys[2])
 		{
-			if(selectLine.size() > 0)
+			if(isEnemyAtDir(Move.DOWN))return new MeleeAttack(this, Move.DOWN);
+			else/* if(!isMoving)*/
 			{
-				selectPoint = new Point(selectPoint.x, selectPoint.y-1);
-				buildLine();
-				isSelectTarget = true;
-			}
-			else
-			{
-				if(isEnemyAtDir(Move.DOWN))return new MeleeAttack(this, Move.DOWN);
-				else/* if(!isMoving)*/
-				{
-					return new Move(this, Move.DOWN, field);
-				}
+				return new Move(this, Move.DOWN, field);
 			}
 		}
 		else if(keys[3])
 		{
-			if(selectLine.size() > 0)
+			if(isEnemyAtDir(Move.RIGHT))return new MeleeAttack(this, Move.RIGHT);
+			else/* if(!isMoving)*/
 			{
-				selectPoint = new Point(selectPoint.x+1, selectPoint.y);
-				buildLine();
-				isSelectTarget = true;
-			}
-			else
-			{
-				if(isEnemyAtDir(Move.RIGHT))return new MeleeAttack(this, Move.RIGHT);
-				else/* if(!isMoving)*/
-				{
-					return new Move(this, Move.RIGHT, field);
-				}
+				return new Move(this, Move.RIGHT, field);
 			}
 		}
 		else if(keys[4])
 		{
-			if(selectLine.size() > 0)
+			if(isEnemyAtDir(Move.UPRIGHT))return new MeleeAttack(this, Move.UPRIGHT);
+			else/* if(!isMoving)*/
 			{
-				selectPoint = new Point(selectPoint.x+1, selectPoint.y+1);
-				buildLine();
-				isSelectTarget = true;
-			}
-			else
-			{
-				if(isEnemyAtDir(Move.UPRIGHT))return new MeleeAttack(this, Move.UPRIGHT);
-				else/* if(!isMoving)*/
-				{
-					return new Move(this, Move.UPRIGHT, field);
-				}
+				return new Move(this, Move.UPRIGHT, field);
 			}
 		}
 		else if(keys[5])
 		{
-			if(selectLine.size() > 0)
+			if(isEnemyAtDir(Move.UPLEFT))return new MeleeAttack(this, Move.UPLEFT);
+			else/* if(!isMoving)*/
 			{
-				selectPoint = new Point(selectPoint.x-1, selectPoint.y+1);
-				buildLine();
-				isSelectTarget = true;
+				return new Move(this, Move.UPLEFT, field);
 			}
-			else
-			{
-				if(isEnemyAtDir(Move.UPLEFT))return new MeleeAttack(this, Move.UPLEFT);
-				else/* if(!isMoving)*/
-				{
-					return new Move(this, Move.UPLEFT, field);
-				}
-			}
+			
 		}
 		else if(keys[6])
 		{
-			if(selectLine.size() > 0)
+			if(isEnemyAtDir(Move.DOWNLEFT))return new MeleeAttack(this, Move.DOWNLEFT);
+			else/* if(!isMoving)*/
 			{
-				selectPoint = new Point(selectPoint.x-1, selectPoint.y-1);
-				buildLine();
-				isSelectTarget = true;
-			}
-			else
-			{
-				if(isEnemyAtDir(Move.DOWNLEFT))return new MeleeAttack(this, Move.DOWNLEFT);
-				else/* if(!isMoving)*/
-				{
-					return new Move(this, Move.DOWNLEFT, field);
-				}
+				return new Move(this, Move.DOWNLEFT, field);
 			}
 		}
 		else if(keys[7])
 		{
-			if(selectLine.size() > 0)
+			if(isEnemyAtDir(Move.DOWNRIGHT))return new MeleeAttack(this, Move.DOWNRIGHT);
+			else/* if(!isMoving)*/
 			{
-				selectPoint = new Point(selectPoint.x+1, selectPoint.y-1);
-				buildLine();
-				isSelectTarget = true;
-			}
-			else
-			{
-				if(isEnemyAtDir(Move.DOWNRIGHT))return new MeleeAttack(this, Move.DOWNRIGHT);
-				else/* if(!isMoving)*/
-				{
-					return new Move(this, Move.DOWNRIGHT, field);
-				}
+				return new Move(this, Move.DOWNRIGHT, field);
 			}
 		}
 		else if(keys[8])return new Move(this, Move.STAY, field);
@@ -210,35 +137,9 @@ public class Killy extends ALiving implements IScreenInterface
 		else if(wantTake)return new Take(this, field);
 		else if(wantShoot) 
 		{
-			if(selectLine.size() > 0)
-			{
-				clearLine();
-				Shoot sh = new Shoot(this, selectPoint, field);
-				selectPoint = null;
-				return sh;
-			}
-			else 
-			{
-				selectPoint = cur_pos;
-				LinkedList<AObject> neighbours = getMyNeighbours();
-				for(AObject ao: neighbours)
-				{
-					if(isEnemy(ao))
-					{
-						selectPoint = ao.cur_pos;
-						break;
-					}
-				}
-				buildLine();
-				isSelectTarget = true;
-			}
+			return new SelectTarget(this, field, new Shoot(this, field));
 		}
 		return null;
-	}
-
-	@Override public char getSymbol() 
-	{
-		return '@';
 	}
 	
 	@Override public int getCode()
@@ -264,7 +165,6 @@ public class Killy extends ALiving implements IScreenInterface
 		wantClose = false;
 		wantTake = false;
 		wantShoot = false;
-		isSelectTarget = false;
 	}
 	
 	@Override public void changeState(HashMap<String, String> args)
@@ -286,45 +186,12 @@ public class Killy extends ALiving implements IScreenInterface
 	@Override public HashMap<String, String> getState() 
 	{
 		HashMap<String, String> state = new HashMap<String, String>();
-		if(isSelectTarget || isCancelMove || inventory.isOpen())
+		if(isCancelMove || inventory.isOpen())
 		{
 			state.put("CancelMove", "");
 			isCancelMove = false;
 		}
 		return state;
-	}
-	
-	protected void buildLine()
-	{
-		clearLine();
-		LinkedList<Point> line = field.getLine(cur_pos, selectPoint);
-		int i = 0;
-		for(Point p: line)
-		{
-			i++;
-			if(line.size() > 1 && i == 1)continue;	//	skip the first element if amount of elements is more than 1
-			if(field.onArea(p) && field.isMapVisible(p, cur_pos, dov))
-			{
-				MinorSelector s = new MinorSelector(p);
-				selectLine.add(s);
-			}
-			else break;
-		}
-		if(selectLine.size() > 0)
-		{
-			selectLine.set(selectLine.size()-1, new MainSelector(selectLine.getLast().cur_pos));
-			selectPoint = selectLine.getLast().cur_pos;
-		}
-		for(MinorSelector s: selectLine)field.addObject(s);
-	}
-	
-	public void clearLine()
-	{
-		for(MinorSelector s: selectLine)
-		{
-			field.removeObject(s);
-		}
-		selectLine.clear();
 	}
 	
 	@Override public boolean isLightSource()
@@ -350,7 +217,7 @@ public class Killy extends ALiving implements IScreenInterface
 	public void initEvents()
 	{
 		playerEvents = new EventManager();
-		playerEvents.addListener(Keyboard.KEY_UP, new KeyListener(100)
+		playerEvents.addListener(Keyboard.KEY_UP, new KeyListener(500, 100)
         {
         	public void onKeyDown()
         	{
@@ -358,7 +225,7 @@ public class Killy extends ALiving implements IScreenInterface
         		isNextStep = true;
          	}
         });
-		playerEvents.addListener(Keyboard.KEY_NUMPAD8, new KeyListener(100)
+		playerEvents.addListener(Keyboard.KEY_NUMPAD8, new KeyListener(500, 100)
         {
         	public void onKeyDown()
         	{
@@ -366,7 +233,7 @@ public class Killy extends ALiving implements IScreenInterface
         		isNextStep = true;
          	}
         });
-		playerEvents.addListener(Keyboard.KEY_LEFT, new KeyListener(100)
+		playerEvents.addListener(Keyboard.KEY_LEFT, new KeyListener(500, 100)
         {
         	public void onKeyDown()
         	{
@@ -374,7 +241,7 @@ public class Killy extends ALiving implements IScreenInterface
         		isNextStep = true;
         	}
         });
-		playerEvents.addListener(Keyboard.KEY_NUMPAD4, new KeyListener(100)
+		playerEvents.addListener(Keyboard.KEY_NUMPAD4, new KeyListener(500, 100)
         {
         	public void onKeyDown()
         	{
@@ -382,7 +249,7 @@ public class Killy extends ALiving implements IScreenInterface
         		isNextStep = true;
         	}
         });
-		playerEvents.addListener(Keyboard.KEY_DOWN, new KeyListener(100)
+		playerEvents.addListener(Keyboard.KEY_DOWN, new KeyListener(500, 100)
         {
         	public void onKeyDown()
         	{
@@ -390,7 +257,7 @@ public class Killy extends ALiving implements IScreenInterface
         		isNextStep = true;
         	}
         });
-		playerEvents.addListener(Keyboard.KEY_NUMPAD2, new KeyListener(100)
+		playerEvents.addListener(Keyboard.KEY_NUMPAD2, new KeyListener(500, 100)
         {
         	public void onKeyDown()
         	{
@@ -398,7 +265,7 @@ public class Killy extends ALiving implements IScreenInterface
         		isNextStep = true;
         	}
         });
-		playerEvents.addListener(Keyboard.KEY_RIGHT, new KeyListener(100)
+		playerEvents.addListener(Keyboard.KEY_RIGHT, new KeyListener(500, 100)
         {
         	public void onKeyDown()
         	{
@@ -406,7 +273,7 @@ public class Killy extends ALiving implements IScreenInterface
         		isNextStep = true;
         	}
         });
-		playerEvents.addListener(Keyboard.KEY_NUMPAD6, new KeyListener(100)
+		playerEvents.addListener(Keyboard.KEY_NUMPAD6, new KeyListener(500, 100)
         {
         	public void onKeyDown()
         	{
@@ -414,7 +281,7 @@ public class Killy extends ALiving implements IScreenInterface
         		isNextStep = true;
         	}
         });
-		playerEvents.addListener(Keyboard.KEY_NUMPAD9, new KeyListener(100)
+		playerEvents.addListener(Keyboard.KEY_NUMPAD9, new KeyListener(500, 100)
         {
         	public void onKeyDown()
         	{
@@ -422,7 +289,7 @@ public class Killy extends ALiving implements IScreenInterface
         		isNextStep = true;
         	}
         });
-		playerEvents.addListener(Keyboard.KEY_NUMPAD7, new KeyListener(100)
+		playerEvents.addListener(Keyboard.KEY_NUMPAD7, new KeyListener(500, 100)
         {
         	public void onKeyDown()
         	{
@@ -430,7 +297,7 @@ public class Killy extends ALiving implements IScreenInterface
         		isNextStep = true;
         	}
         });
-		playerEvents.addListener(Keyboard.KEY_NUMPAD1, new KeyListener(100)
+		playerEvents.addListener(Keyboard.KEY_NUMPAD1, new KeyListener(500, 100)
         {
         	public void onKeyDown()
         	{
@@ -438,7 +305,7 @@ public class Killy extends ALiving implements IScreenInterface
         		isNextStep = true;
         	}
         });
-		playerEvents.addListener(Keyboard.KEY_NUMPAD3, new KeyListener(100)
+		playerEvents.addListener(Keyboard.KEY_NUMPAD3, new KeyListener(500, 100)
         {
         	public void onKeyDown()
         	{
@@ -446,7 +313,7 @@ public class Killy extends ALiving implements IScreenInterface
         		isNextStep = true;
         	}
         });
-		playerEvents.addListener(Keyboard.KEY_NUMPAD5, new KeyListener(100)
+		playerEvents.addListener(Keyboard.KEY_NUMPAD5, new KeyListener(500, 100)
         {
         	public void onKeyDown()
         	{
@@ -482,11 +349,6 @@ public class Killy extends ALiving implements IScreenInterface
         {
         	public void onKeyDown()
         	{
-        		if(selectLine.size() > 0)
-        		{
-        			clearLine();
-            		selectPoint = null;
-        		}
         		//else System.exit(0);
         	}
         });
@@ -529,12 +391,20 @@ public class Killy extends ALiving implements IScreenInterface
         		isNextStep = true;
         	}
         });
+		playerEvents.addListener(Keyboard.KEY_F1, new KeyListener(0)
+        {
+        	public void onKeyDown()
+        	{
+        		HelpScreen.instance().openHelp();
+        	}
+        });
 	}
 	
 	public void process()
 	{
 		if(inventory.isOpen())inventory.process();
 		else if(weapon.isOpen())weapon.process();
+		else if(HelpScreen.instance().isOpen())HelpScreen.instance().process();
 		else
 		{
 			playerEvents.checkEvents();
@@ -547,26 +417,36 @@ public class Killy extends ALiving implements IScreenInterface
 			GL11.glClear(GL11.GL_COLOR_BUFFER_BIT/* | GL11.GL_DEPTH_BUFFER_BIT*/);		
 			GL11.glLoadIdentity();
 			
-			field.draw(Blame.scale);		
-			Messages.instance().showMessages();
-			// statistics
-			int k = Blame.height-20;
-			MyFont.instance().drawString(getName(),                             
-					Blame.width-190, k, 0.2f, Color.WHITE); k-= 15;
-			MyFont.instance().drawString("HP: "+health,                         
-					Blame.width-190, k, 0.2f, Color.WHITE); k-= 15;
-			MyFont.instance().drawString("Time: "+Livings.instance().getTime(), 
-					Blame.width-190, k, 0.2f, Color.WHITE); k-= 15;
-			MyFont.instance().drawString("FPS: "+Blame.fps,                     
-					Blame.width-190, k, 0.2f, Color.WHITE); k-= 15;
-			MyFont.instance().drawString("Anima: "+field.animations.size(),     
-					Blame.width-190, k, 0.2f, Color.WHITE); k-= 15;
-			MyFont.instance().drawString("PlayerMoves: "+field.playerMoves,     
-					Blame.width-190, k, 0.2f, Color.WHITE);
-			
+			field.draw(cur_pos);		
+			drawStats();
 			Display.sync(Blame.framerate);
 			Display.update();
 		}
+	}
+	
+	public void drawStats()
+	{
+		Messages.instance().showMessages();
+		// statistics
+		int k = Blame.height-20;
+		MyFont.instance().drawString(getName(),                             
+				Blame.width-190, k, 0.2f, Color.WHITE); k-= 15;
+		MyFont.instance().drawString("HP: "+health,                         
+				Blame.width-190, k, 0.2f, Color.WHITE); k-= 15;
+		MyFont.instance().drawString("Damage: "+weapon.showDamage(),                         
+				Blame.width-190, k, 0.2f, Color.WHITE); k-= 15;
+		MyFont.instance().drawString("Energy: "+weapon.showEnergy(),                         
+				Blame.width-190, k, 0.2f, Color.WHITE); k-= 15;
+		MyFont.instance().drawString("Fill Rate: "+weapon.energy_fill_rate,                         
+				Blame.width-190, k, 0.2f, Color.WHITE); k-= 15;				
+		MyFont.instance().drawString("Time: "+Livings.instance().getTime(), 
+				Blame.width-190, k, 0.2f, Color.WHITE); k-= 15;
+		MyFont.instance().drawString("FPS: "+Blame.fps,                     
+				Blame.width-190, k, 0.2f, Color.WHITE); k-= 15;
+		MyFont.instance().drawString("Anima: "+field.animations.size(),     
+				Blame.width-190, k, 0.2f, Color.WHITE); k-= 15;
+		MyFont.instance().drawString("PlayerMoves: "+field.playerMoves,     
+				Blame.width-190, k, 0.2f, Color.WHITE);
 	}
 
 	@Override public boolean isPlayer() 

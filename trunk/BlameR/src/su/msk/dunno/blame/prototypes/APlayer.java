@@ -1,7 +1,7 @@
 package su.msk.dunno.blame.prototypes;
 
-import su.msk.dunno.blame.main.support.Point;
 import su.msk.dunno.blame.map.Field;
+import su.msk.dunno.blame.support.Point;
 
 public abstract class APlayer extends ALiving 
 {

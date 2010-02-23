@@ -1,6 +1,6 @@
 package su.msk.dunno.blame.prototypes;
 
-public interface IScreenInterface 
+public interface IScreen 
 {
 	public void process();
 }

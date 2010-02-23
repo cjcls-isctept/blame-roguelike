@@ -1,4 +1,4 @@
-package su.msk.dunno.blame.main.support.listeners;
+package su.msk.dunno.blame.support.listeners;
 
 import java.util.LinkedList;
 

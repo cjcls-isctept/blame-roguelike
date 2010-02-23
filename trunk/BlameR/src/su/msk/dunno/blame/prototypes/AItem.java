@@ -2,7 +2,7 @@ package su.msk.dunno.blame.prototypes;
 
 import java.util.HashMap;
 
-import su.msk.dunno.blame.main.support.Point;
+import su.msk.dunno.blame.support.Point;
 
 
 public abstract class AItem extends AObject

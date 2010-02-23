@@ -1,12 +1,12 @@
 package su.msk.dunno.blame.objects.buildings;
 
-import su.msk.dunno.blame.main.support.Color;
-import su.msk.dunno.blame.main.support.Messages;
-import su.msk.dunno.blame.main.support.MyFont;
 import su.msk.dunno.blame.map.Field;
 import su.msk.dunno.blame.prototypes.ADecision;
 import su.msk.dunno.blame.prototypes.ALiving;
 import su.msk.dunno.blame.prototypes.AObject;
+import su.msk.dunno.blame.support.Color;
+import su.msk.dunno.blame.support.Messages;
+import su.msk.dunno.blame.support.MyFont;
 
 public class RebuildStation extends ALiving 
 {
@@ -53,11 +53,6 @@ public class RebuildStation extends ALiving
 	@Override public String getName() 
 	{
 		return "Rebuild Station";
-	}
-
-	@Override public char getSymbol() 
-	{
-		return 'A';
 	}
 
 	@Override public int getCode()
