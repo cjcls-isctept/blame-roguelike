@@ -1,9 +1,9 @@
 package su.msk.dunno.blame.decisions;
 
-import su.msk.dunno.blame.main.support.Messages;
-import su.msk.dunno.blame.main.support.MyFont;
 import su.msk.dunno.blame.prototypes.ADecision;
 import su.msk.dunno.blame.prototypes.ALiving;
+import su.msk.dunno.blame.support.Messages;
+import su.msk.dunno.blame.support.MyFont;
 
 public class DoNothing extends ADecision 
 {

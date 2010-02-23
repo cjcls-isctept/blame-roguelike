@@ -9,12 +9,6 @@ import org.lwjgl.opengl.GL11;
 
 import su.msk.dunno.blame.decisions.Drop;
 import su.msk.dunno.blame.main.Blame;
-import su.msk.dunno.blame.main.support.Color;
-import su.msk.dunno.blame.main.support.Messages;
-import su.msk.dunno.blame.main.support.MyFont;
-import su.msk.dunno.blame.main.support.Point;
-import su.msk.dunno.blame.main.support.listeners.EventManager;
-import su.msk.dunno.blame.main.support.listeners.KeyListener;
 import su.msk.dunno.blame.objects.items.ColdPart;
 import su.msk.dunno.blame.objects.items.FirePart;
 import su.msk.dunno.blame.objects.items.LightningPart;
@@ -27,9 +21,15 @@ import su.msk.dunno.blame.objects.symbols.SocketSymbol;
 import su.msk.dunno.blame.objects.symbols.WeaponBase;
 import su.msk.dunno.blame.prototypes.ALiving;
 import su.msk.dunno.blame.prototypes.AObject;
-import su.msk.dunno.blame.prototypes.IScreenInterface;
+import su.msk.dunno.blame.prototypes.IScreen;
+import su.msk.dunno.blame.support.Color;
+import su.msk.dunno.blame.support.Messages;
+import su.msk.dunno.blame.support.MyFont;
+import su.msk.dunno.blame.support.Point;
+import su.msk.dunno.blame.support.listeners.EventManager;
+import su.msk.dunno.blame.support.listeners.KeyListener;
 
-public class Weapon implements IScreenInterface
+public class Weapon implements IScreen
 {
 	private int weapon_width = 52;
 	private int weapon_height = 32;
@@ -42,9 +42,17 @@ public class Weapon implements IScreenInterface
 	private HashMap<String, String> effects = new HashMap<String, String>();
 	
 	private MinorSelector selector = new MinorSelector(0, 0);
-	private boolean isSelectSocket;
-	
+	private boolean isSelectSocket;	
 	private boolean isWeaponView;
+	
+	private int maxEnergy;
+	private float energy;
+	public float energy_fill_rate;
+	
+	private int maxShield;
+	private int shield;
+	
+	private int damage;
 	
 	public Weapon(ALiving l, Inventory inv)
 	{
@@ -76,22 +84,28 @@ public class Weapon implements IScreenInterface
 		{
 			for(int j = 0; j < weapon_height; j++)
 			{
-				if(!"SocketPlace".equals(weaponView[i][j].getName()) || isSelectSocket)
-					MyFont.instance().drawDisplayList(weaponView[i][j].getCode(), 
+				if(!"Empty".equals(weaponView[i][j].getName()) && 
+				  (!"SocketPlace".equals(weaponView[i][j].getName()) || isSelectSocket))
+					MyFont.instance().drawDisplayList(/*isSelectSocket?*/weaponView[i][j].getCode()/*:MyFont.WEAPONBASE*/, 
 													  i*100*3/4, j*100, 
 											   		  weaponView[i][j].getColor());
 			}
 		}
-		if(isSelectSocket)MyFont.instance().drawChar(selector.getSymbol(), 
-													 selector.cur_pos.x*100*3/4, 
-													 selector.cur_pos.y*100, 
-													 selector.getColor());
+		if(isSelectSocket)MyFont.instance().drawDisplayList(selector.getCode(), 
+													 		selector.cur_pos.x*100*3/4, 
+													 		selector.cur_pos.y*100, 
+													 		selector.getColor());
+		int k = Blame.height-40;
+		for(String s: effects.keySet())
+		{
+			MyFont.instance().drawString(s+": "+effects.get(s), 20, k, 0.2f, Color.GREEN); k -= 15;
+		}
 		Messages.instance().showMessages();
 		Display.sync(Blame.framerate);
 		Display.update();
 	}
 	
-	public HashMap<String, String> calculateEffects()
+	public void calculateEffects()
 	{
 		effects.clear();
 		for(AObject ao: sockets)
@@ -109,12 +123,40 @@ public class Weapon implements IScreenInterface
 				else effects.put(effect, ao.getState().get(effect));
 			}
 		}
-		return effects;
+		if(effects.containsKey("Damage"))damage = Integer.valueOf(effects.get("Damage"));
+		if(effects.containsKey("Energy"))maxEnergy = Integer.valueOf(effects.get("Energy"));
+		else maxEnergy = 0;
+		if(energy > maxEnergy)energy = maxEnergy;
+		energy_fill_rate = maxEnergy/20.0f;
 	}
 	
+	public HashMap<String, String> applyEffects()
+	{
+		if(energy - damage/5 > 0)
+		{
+			energy -= damage/5;
+			return effects;
+		}
+		else return null;
+	}
 	
+	public int showDamage()
+	{
+		return damage;
+	}
 	
-	public void addPart(AObject ao)
+	public String showEnergy()
+	{
+		return (int)energy+"/"+maxEnergy;
+	}
+	
+	public void energyRefill()
+	{
+		if(energy + energy_fill_rate < maxEnergy)energy += energy_fill_rate;
+		else energy = maxEnergy;
+	}
+	
+	public void addImp(AObject ao)
 	{
 		ao.cur_pos = selector.cur_pos;
 		sockets.add(ao);
@@ -123,6 +165,7 @@ public class Weapon implements IScreenInterface
 		{
 			addNewSockets(ao);
 		}
+		calculateEffects();
 	}
 	
 	private void addNewSockets(AObject ao) 
@@ -154,9 +197,10 @@ public class Weapon implements IScreenInterface
 		else return false;
 	}
 	
-	public boolean removePart(AObject ao)
+	public boolean removeImp(AObject ao)
 	{
 		sockets.remove(ao);
+		calculateEffects();
 		weaponView[ao.cur_pos.x][ao.cur_pos.y] = new SocketSymbol(ao.cur_pos);
 		if("Socket Extender".equals(ao.getName()))
 		{			
@@ -171,7 +215,7 @@ public class Weapon implements IScreenInterface
 		{
 			owner.setDecision(new Drop(owner, ao));
 			return false;
-		}		
+		}
 	}
 
 	private void removeSockets(AObject ao) 
@@ -188,7 +232,7 @@ public class Weapon implements IScreenInterface
 				{
 					if(noBasePartsNear(weaponView[i][j]))
 					{
-						removePart(weaponView[i][j]);
+						removeImp(weaponView[i][j]);
 						weaponView[i][j] = new EmptySpace(i,j);
 					}
 				}
@@ -196,7 +240,7 @@ public class Weapon implements IScreenInterface
 		}
 	}
 
-	private boolean noBasePartsNear(AObject ao) 
+	private boolean noBasePartsNear(AObject ao)	// rewrite this!!!
 	{
 		for(int i = Math.max(0, ao.cur_pos.x-1); i <= Math.min(weaponView.length-1, ao.cur_pos.x+1); i++)
 		{
@@ -256,11 +300,6 @@ public class Weapon implements IScreenInterface
 		return isWeaponView;
 	}
 	
-	private void closeWeaponView()
-	{
-		isWeaponView = false;
-	}
-	
 	public void openWeaponView()
 	{
 		Messages.instance().clear();
@@ -277,7 +316,7 @@ public class Weapon implements IScreenInterface
 		if(p != null)
 		{
 			selector.cur_pos = p;
-			addPart(new MindPart(p));
+			addImp(new MindPart(p));
 		}
 		for(int i = 0; i < amount-1; i++)
 		{
@@ -288,14 +327,16 @@ public class Weapon implements IScreenInterface
 				selector.cur_pos = p;
 				switch(rand)
 				{
-				case 0: ao = new ColdPart(p); addPart(ao); continue;
-				case 1: ao = new FirePart(p); addPart(ao); continue;
-				case 2: ao = new LightningPart(p); addPart(ao); continue;
-				case 3: ao = new PoisonPart(p); addPart(ao); continue;
-				case 4: ao = new SocketExtender(p); addPart(ao); continue;			
+				case 0: ao = new ColdPart(p); addImp(ao); continue;
+				case 1: ao = new FirePart(p); addImp(ao); continue;
+				case 2: ao = new LightningPart(p); addImp(ao); continue;
+				case 3: ao = new PoisonPart(p); addImp(ao); continue;
+				case 4: ao = new SocketExtender(p); addImp(ao); continue;			
 				}
 			}
 		}
+		energy = maxEnergy;
+		energy_fill_rate = maxEnergy/20.0f;
 	}
 	
 	private int getFreeSocketsNum()
@@ -385,7 +426,7 @@ public class Weapon implements IScreenInterface
         		}
         		else if(weaponView[selector.cur_pos.x][selector.cur_pos.y].getState().containsKey("Part"))
         		{
-        			if(!removePart(weaponView[selector.cur_pos.x][selector.cur_pos.y]))
+        			if(!removeImp(weaponView[selector.cur_pos.x][selector.cur_pos.y]))
         				Messages.instance().addMessage("Inventory is full. Drop the part to the ground");
         		}
         		else
@@ -397,7 +438,7 @@ public class Weapon implements IScreenInterface
         	public void onKeyDown()
         	{
         		if(isSelectSocket)isSelectSocket = false;
-        		else closeWeaponView();
+        		else isWeaponView = false;;
         	}
         });
 	}

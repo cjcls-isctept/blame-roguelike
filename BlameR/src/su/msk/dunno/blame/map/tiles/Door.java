@@ -2,8 +2,8 @@ package su.msk.dunno.blame.map.tiles;
 
 import java.util.HashMap;
 
-import su.msk.dunno.blame.main.support.MyFont;
 import su.msk.dunno.blame.prototypes.AObject;
+import su.msk.dunno.blame.support.MyFont;
 
 
 public class Door extends AObject 
@@ -24,12 +24,6 @@ public class Door extends AObject
 	@Override public boolean getPassability()
 	{
 		return isOpen;
-	}
-
-	@Override public char getSymbol() 
-	{
-		if(!isOpen)return '+';
-		else return '\'';
 	}
 	
 	@Override public int getCode()

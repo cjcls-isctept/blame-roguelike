@@ -4,9 +4,9 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 
-import su.msk.dunno.blame.main.support.Point;
 import su.msk.dunno.blame.map.Field;
 import su.msk.dunno.blame.map.path.PathFinder;
+import su.msk.dunno.blame.support.Point;
 
 
 /**

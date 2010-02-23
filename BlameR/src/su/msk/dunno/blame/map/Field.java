@@ -12,20 +12,21 @@ import rlforj.los.PrecisePermissive;
 import rlforj.math.Point2I;
 import su.msk.dunno.blame.decisions.Move;
 import su.msk.dunno.blame.main.Blame;
-import su.msk.dunno.blame.main.support.Color;
-import su.msk.dunno.blame.main.support.LinkObject;
-import su.msk.dunno.blame.main.support.MyFont;
-import su.msk.dunno.blame.main.support.Point;
-import su.msk.dunno.blame.main.support.Vector2D;
 import su.msk.dunno.blame.map.gen.RecursiveDivisionMethod;
 import su.msk.dunno.blame.map.tiles.Door;
 import su.msk.dunno.blame.map.tiles.Floor;
 import su.msk.dunno.blame.map.tiles.Wall;
 import su.msk.dunno.blame.objects.Livings;
 import su.msk.dunno.blame.objects.buildings.RebuildStation;
+import su.msk.dunno.blame.objects.livings.Killy;
 import su.msk.dunno.blame.prototypes.AAnimation;
 import su.msk.dunno.blame.prototypes.ALiving;
 import su.msk.dunno.blame.prototypes.AObject;
+import su.msk.dunno.blame.support.Color;
+import su.msk.dunno.blame.support.LinkObject;
+import su.msk.dunno.blame.support.MyFont;
+import su.msk.dunno.blame.support.Point;
+import su.msk.dunno.blame.support.Vector2D;
 
 public class Field 
 {
@@ -36,10 +37,15 @@ public class Field
 	
 	private RL4JMapView drawView;
 	private RL4JMapView lineView;
-	private PrecisePermissive pp = new PrecisePermissive();;
+	private PrecisePermissive pp = new PrecisePermissive();
 	
 	public Vector2D playerMovingCoord;
 	public int playerMoves;
+	
+	private int center_x = (Blame.width-190)/2;		// variables for draw methods 
+	private int center_y = (Blame.height-75)/2+75;
+	private int nx = center_x/15;
+	private int ny = center_y/20;
 	
 	public Field(int N_x, int N_y, String mapname)	// constructor for map generation or map loading
 	{
@@ -91,7 +97,12 @@ public class Field
 
 			public void visit(int x, int y) 
 			{
-				if(!objects[x][y].getLast().isDrawPrevented())
+				Point player_point = Blame.getCurrentPlayer().cur_pos;
+				if(!objects[x][y].getLast().isDrawPrevented() &&
+				   player_point.x - x < center_x/(Blame.scale*3/4) &&
+				   x - player_point.x < center_x/(Blame.scale*3/4) &&
+				   player_point.y - y < center_y/(Blame.scale)-4 &&
+				   y - player_point.y < center_y/(Blame.scale)-4)
 				{
 					MyFont.instance().drawDisplayList(objects[x][y].getLast().getCode(), 
 											   		  x*100*3/4, 
@@ -175,12 +186,8 @@ public class Field
 		GL11.glPushMatrix();
 		if(playerMoves == 0)playerMovingCoord = new Vector2D(player_point.x*(Blame.scale*3/4), 
 															 player_point.y*Blame.scale);
-		int x = (Blame.width-190)/2;
-		int y = (Blame.height-75)/2+75;
-		int nx = x/15;
-		int ny = y/20;
-		GL11.glTranslatef(x-playerMovingCoord.x, 
-			  		  	  y-playerMovingCoord.y, 
+		GL11.glTranslatef(center_x-playerMovingCoord.x, 
+			  		  	  center_y-playerMovingCoord.y, 
 			  		  	  0.0f);
 		GL11.glScalef(Blame.scale*0.01f, Blame.scale*0.01f, 1.0f);
 		for(int i = Math.max(0, player_point.x-20*(nx-1)/Blame.scale); 
@@ -207,6 +214,10 @@ public class Field
 			pp.visitFieldOfView(drawView, source.cur_pos.x, source.cur_pos.y, source.getDov());
 		}
 		playAnimations();
+		/*MyFont.instance().drawString(""+Blame.scale,     
+				 					 Blame.width-190, 100, 0.2f, Color.WHITE);
+		MyFont.instance().drawString(""+(center_x-playerMovingCoord.x),     
+									 Blame.width-190, 80, 0.2f, Color.WHITE);*/	
 		GL11.glPopMatrix();
 	}
 	

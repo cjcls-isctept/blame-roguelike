@@ -5,8 +5,6 @@ import java.util.ListIterator;
 
 import su.msk.dunno.blame.decisions.Move;
 import su.msk.dunno.blame.main.Blame;
-import su.msk.dunno.blame.main.support.Color;
-import su.msk.dunno.blame.main.support.Point;
 import su.msk.dunno.blame.map.Field;
 import su.msk.dunno.blame.objects.Livings;
 import su.msk.dunno.blame.objects.items.ColdPart;
@@ -16,6 +14,8 @@ import su.msk.dunno.blame.objects.items.PoisonPart;
 import su.msk.dunno.blame.objects.items.SocketExtender;
 import su.msk.dunno.blame.screens.Inventory;
 import su.msk.dunno.blame.screens.Weapon;
+import su.msk.dunno.blame.support.Color;
+import su.msk.dunno.blame.support.Point;
 
 
 public abstract class ALiving extends AObject 
@@ -65,18 +65,19 @@ public abstract class ALiving extends AObject
 	public void nextStep()
 	{
 		int cur_time = Livings.instance().getTime();
+		weapon.energyRefill();
 		if(cur_time - lastActionTime >= actionPeriod)
 		{
-			if(decision == null)
-			{
+			/*if(decision == null)
+			{*/
 				decision = livingAI();
-			}
+			/*}*/
 			if(decision != null)
 			{
-				decision.doAction(cur_time);
-				actionPeriod = decision.getActionPeriod();
+				actionPeriod = decision.getActionPeriod();	// doAction AFTER getActionPeriod is necessary...
+				decision.doAction(cur_time);		// At least until I'd need getActionPeriod to obtain its result depends on doAction results
 			}
-			decision = null;
+			//decision = null;
 			if(!this.getState().containsKey("CancelMove"))lastActionTime = cur_time;
 		}
 	}
@@ -210,25 +211,10 @@ public abstract class ALiving extends AObject
 	
 	public void setDecision(ADecision d)
 	{
-		decision = d;
 		int cur_time = Livings.instance().getTime();
-		decision.doAction(cur_time);
-		actionPeriod = decision.getActionPeriod();
-		decision = null;
+		actionPeriod = d.getActionPeriod();
+		d.doAction(cur_time);
 		if(!this.getState().containsKey("CancelMove"))lastActionTime = cur_time;
-	}
-	
-	public void setDecisions(LinkedList<ADecision> decisions)
-	{
-		for(ADecision d: decisions)
-		{
-			decision = d;
-			int cur_time = Livings.instance().getTime();
-			decision.doAction(cur_time);
-			actionPeriod = decision.getActionPeriod();
-			decision = null;
-			if(!this.getState().containsKey("CancelMove"))lastActionTime = cur_time;
-		}
 	}
 	
 	public int getHealth() 

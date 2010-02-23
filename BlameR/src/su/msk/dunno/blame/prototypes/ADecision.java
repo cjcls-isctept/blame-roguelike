@@ -2,6 +2,8 @@ package su.msk.dunno.blame.prototypes;
 
 import java.util.HashMap;
 
+import su.msk.dunno.blame.support.Point;
+
 public abstract class ADecision 
 {
 	protected ALiving al;
@@ -24,5 +26,10 @@ public abstract class ADecision
 	public int getActionPeriod()
 	{
 		return al.getStat("Speed");
+	}
+
+	public void setSelectPoint(Point selectPoint) 
+	{
+		
 	}
 }

@@ -12,14 +12,14 @@ import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.glu.GLU;
 
-import su.msk.dunno.blame.main.support.Color;
-import su.msk.dunno.blame.main.support.MyFont;
-import su.msk.dunno.blame.main.support.listeners.EventManager;
-import su.msk.dunno.blame.main.support.listeners.KeyListener;
 import su.msk.dunno.blame.map.Field;
 import su.msk.dunno.blame.objects.Livings;
 import su.msk.dunno.blame.objects.livings.Cibo;
 import su.msk.dunno.blame.objects.livings.Killy;
+import su.msk.dunno.blame.support.Color;
+import su.msk.dunno.blame.support.MyFont;
+import su.msk.dunno.blame.support.listeners.EventManager;
+import su.msk.dunno.blame.support.listeners.KeyListener;
 
 public class Blame 
 {
@@ -28,8 +28,8 @@ public class Blame
 	public static int width = 800;
 	public static int height = 600;
 	
-	public static int N_x = 20;
-	public static int N_y = 20;
+	public static int N_x = 100;
+	public static int N_y = 100;
 	
 	private boolean isRunning;
 	
@@ -164,6 +164,11 @@ public class Blame
 			frames = 0;
 			msek = System.currentTimeMillis();
 		}
+	}
+	
+	public static Killy getCurrentPlayer()
+	{
+		return playCibo?cibo:killy;
 	}
 	
 	private void fillVariables() 

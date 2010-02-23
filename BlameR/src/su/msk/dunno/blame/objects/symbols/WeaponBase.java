@@ -1,8 +1,8 @@
 package su.msk.dunno.blame.objects.symbols;
 
-import su.msk.dunno.blame.main.support.MyFont;
-import su.msk.dunno.blame.main.support.Point;
 import su.msk.dunno.blame.prototypes.AObject;
+import su.msk.dunno.blame.support.MyFont;
+import su.msk.dunno.blame.support.Point;
 
 public class WeaponBase extends AObject 
 {
@@ -25,11 +25,6 @@ public class WeaponBase extends AObject
 	@Override public boolean getPassability() 
 	{
 		return true;
-	}
-
-	@Override public char getSymbol() 
-	{
-		return 'w';
 	}
 	
 	@Override public int getCode()

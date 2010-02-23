@@ -2,9 +2,9 @@ package su.msk.dunno.blame.prototypes;
 
 import java.util.HashMap;
 
-import su.msk.dunno.blame.main.support.Color;
-import su.msk.dunno.blame.main.support.MyFont;
-import su.msk.dunno.blame.main.support.Point;
+import su.msk.dunno.blame.support.Color;
+import su.msk.dunno.blame.support.MyFont;
+import su.msk.dunno.blame.support.Point;
 
 
 public abstract class AObject 
@@ -26,12 +26,7 @@ public abstract class AObject
 		cur_pos = p;
 	}
 	
-	public abstract char getSymbol();
-	
-	public int getCode()
-	{
-		return MyFont.WALL;
-	}
+	public abstract int getCode();
 	
 	public abstract boolean getTransparency();
 	

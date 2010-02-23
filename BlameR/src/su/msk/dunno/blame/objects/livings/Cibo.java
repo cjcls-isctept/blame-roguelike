@@ -1,9 +1,9 @@
 package su.msk.dunno.blame.objects.livings;
 
-import su.msk.dunno.blame.main.support.Color;
-import su.msk.dunno.blame.main.support.Point;
 import su.msk.dunno.blame.map.Field;
 import su.msk.dunno.blame.objects.Livings;
+import su.msk.dunno.blame.support.Color;
+import su.msk.dunno.blame.support.Point;
 
 public class Cibo extends Killy 
 {

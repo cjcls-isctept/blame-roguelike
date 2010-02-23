@@ -89,7 +89,7 @@ public class Livings
 		}
 		
 		// update monsters
-		while(getTime() - (Blame.playCibo?cibo:killy).getLastActionTime() < (Blame.playCibo?cibo:killy).getActionPeriod())
+		while(time - (Blame.playCibo?cibo:killy).getLastActionTime() < (Blame.playCibo?cibo:killy).getActionPeriod())
 		{
 			for(ListIterator<ALiving> li = livings.listIterator(); li.hasNext();)
 			{

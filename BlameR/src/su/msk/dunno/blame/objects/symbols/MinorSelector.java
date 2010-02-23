@@ -1,8 +1,8 @@
 package su.msk.dunno.blame.objects.symbols;
 
-import su.msk.dunno.blame.main.support.MyFont;
-import su.msk.dunno.blame.main.support.Point;
 import su.msk.dunno.blame.prototypes.AObject;
+import su.msk.dunno.blame.support.MyFont;
+import su.msk.dunno.blame.support.Point;
 
 public class MinorSelector extends AObject 
 {
@@ -19,11 +19,6 @@ public class MinorSelector extends AObject
 	@Override public String getName() 
 	{
 		return "MinorSelecter";
-	}
-
-	@Override public char getSymbol() 
-	{
-		return 'x';
 	}
 	
 	@Override public int getCode()

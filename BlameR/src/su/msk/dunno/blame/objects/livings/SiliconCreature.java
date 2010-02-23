@@ -4,31 +4,31 @@ import java.util.HashMap;
 
 import su.msk.dunno.blame.decisions.Move;
 import su.msk.dunno.blame.decisions.Open;
-import su.msk.dunno.blame.main.support.Color;
-import su.msk.dunno.blame.main.support.MyFont;
-import su.msk.dunno.blame.main.support.Point;
 import su.msk.dunno.blame.map.Field;
 import su.msk.dunno.blame.map.path.PathFinder;
 import su.msk.dunno.blame.map.path.astar.AStarPathFinder;
 import su.msk.dunno.blame.prototypes.ADecision;
 import su.msk.dunno.blame.prototypes.ALiving;
 import su.msk.dunno.blame.prototypes.AObject;
-import su.msk.dunno.blame.prototypes.IScreenInterface;
+import su.msk.dunno.blame.prototypes.IScreen;
 import su.msk.dunno.blame.screens.EnemyInterface;
+import su.msk.dunno.blame.support.Color;
+import su.msk.dunno.blame.support.MyFont;
+import su.msk.dunno.blame.support.Point;
 
 
 public class SiliconCreature extends ALiving 
 {
 	PathFinder find;
 	int steps;
-	IScreenInterface mind = new EnemyInterface(this);
+	IScreen mind = new EnemyInterface(this);
 	
 	public SiliconCreature(Point p, Field field) 
 	{
 		super(p, field);
 		health = 20;
 		dov = 5;
-		speed = 6;
+		speed = 2;
 		find = new AStarPathFinder(field);
 	}
 
@@ -81,11 +81,6 @@ public class SiliconCreature extends ALiving
 	@Override public String getName() 
 	{
 		return "Silicon Creature";
-	}
-
-	@Override public char getSymbol() 
-	{
-		return 'S';
 	}
 	
 	@Override public int getCode()

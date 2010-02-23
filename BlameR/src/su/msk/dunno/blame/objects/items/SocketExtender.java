@@ -1,9 +1,9 @@
 package su.msk.dunno.blame.objects.items;
 
-import su.msk.dunno.blame.main.support.Color;
-import su.msk.dunno.blame.main.support.MyFont;
-import su.msk.dunno.blame.main.support.Point;
 import su.msk.dunno.blame.prototypes.AItem;
+import su.msk.dunno.blame.support.Color;
+import su.msk.dunno.blame.support.MyFont;
+import su.msk.dunno.blame.support.Point;
 
 public class SocketExtender extends AItem 
 {
@@ -13,7 +13,9 @@ public class SocketExtender extends AItem
 		super(p);
 		item_properties.put("Part", "");
 		item_properties.put("Info", "Adds new socket places to weapon");
-		item_properties.put("Extender", "");
+		item_properties.put("EffectsCapacity", "1");
+		item_properties.put("Effect1", "Extender");
+		item_properties.put("Extender", "1");
 	}
 
 	@Override public String getName() 
@@ -24,11 +26,6 @@ public class SocketExtender extends AItem
 	@Override public boolean getPassability() 
 	{
 		return true;
-	}
-
-	@Override public char getSymbol() 
-	{
-		return 'w';
 	}
 	
 	@Override public int getCode()
