@@ -47,7 +47,10 @@ public class Killy extends ALiving implements IScreen
 	protected boolean wantTake;
 	protected boolean wantShoot;
 	
-	boolean isCancelMove;
+	private boolean isCancelMove;
+	
+	protected float infection_level;
+	protected float infection_expansion_rate = 1/1000.0f;
 	
 	public Killy(Point p, Field field) 
 	{
@@ -438,7 +441,9 @@ public class Killy extends ALiving implements IScreen
 		MyFont.instance().drawString("Energy: "+weapon.showEnergy(),                         
 				Blame.width-190, k, 0.2f, Color.WHITE); k-= 15;
 		MyFont.instance().drawString("Fill Rate: "+weapon.energy_fill_rate,                         
-				Blame.width-190, k, 0.2f, Color.WHITE); k-= 15;				
+				Blame.width-190, k, 0.2f, Color.WHITE); k-= 15;
+		MyFont.instance().drawString("Infection level: "+infection_level,                         
+				Blame.width-190, k, 0.2f, Color.GREEN); k-= 15;
 		MyFont.instance().drawString("Time: "+Livings.instance().getTime(), 
 				Blame.width-190, k, 0.2f, Color.WHITE); k-= 15;
 		MyFont.instance().drawString("FPS: "+Blame.fps,                     
