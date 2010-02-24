@@ -40,19 +40,20 @@ public class Weapon implements IScreen
 	private AObject[][] weaponView = new AObject[weapon_width][weapon_height];
 	private LinkedList<AObject> sockets = new LinkedList<AObject>();
 	private HashMap<String, String> effects = new HashMap<String, String>();
+	private HashMap<String, String> bonuses = new HashMap<String, String>();
 	
 	private MinorSelector selector = new MinorSelector(0, 0);
 	private boolean isSelectSocket;	
 	private boolean isWeaponView;
 	
-	private int maxEnergy;
+	private float maxEnergy;
 	private float energy;
 	public float energy_fill_rate;
 	
 	private int maxShield;
 	private int shield;
 	
-	private int damage;
+	private float damage;
 	
 	public Weapon(ALiving l, Inventory inv)
 	{
@@ -98,7 +99,8 @@ public class Weapon implements IScreen
 		int k = Blame.height-40;
 		for(String s: effects.keySet())
 		{
-			MyFont.instance().drawString(s+": "+effects.get(s), 20, k, 0.2f, Color.GREEN); k -= 15;
+			MyFont.instance().drawString(s+": "+String.format("%1.0f", Float.valueOf(effects.get(s)))+
+					(bonuses.containsKey(s)?" (+"+String.format("%1$.0f", Float.valueOf(bonuses.get(s))/Float.valueOf(effects.get(s))*100)+"% bonus)":""), 20, k, 0.2f, Color.GREEN); k -= 15;
 		}
 		Messages.instance().showMessages();
 		Display.sync(Blame.framerate);
@@ -108,23 +110,41 @@ public class Weapon implements IScreen
 	public void calculateEffects()
 	{
 		effects.clear();
+		bonuses.clear();
 		for(AObject ao: sockets)
 		{
 			int num = Integer.valueOf(ao.getState().get("EffectsCapacity"));
 			for(int i = 1; i <= num; i++)
 			{
 				String effect = ao.getState().get("Effect"+i);
+				float toAdd = Float.valueOf(ao.getState().get(effect));
+				int sameImps = sameImpsNear(ao, null);
 				if(effects.containsKey(effect))
 				{
-					int value = Integer.valueOf(effects.get(effect)) + 
-								Integer.valueOf(ao.getState().get(effect));
-					effects.put(effect, value+"");
+					float value = Float.valueOf(effects.get(effect)) + toAdd;
+					if(sameImps > 0 && !ao.getState().containsKey("Extender"))
+					{
+						effects.put(effect, (value+sameImps*toAdd/10.0f)+"");
+						if(bonuses.containsKey(effect))bonuses.put(effect, (Float.valueOf(bonuses.get(effect))+sameImps*toAdd/10.0f)+"");
+						else bonuses.put(effect, sameImps*toAdd/10.0f+"");
+					}
+					else effects.put(effect, (value)+"");
 				}
-				else effects.put(effect, ao.getState().get(effect));
+				else 
+				{
+					if(sameImps > 0 && !ao.getState().containsKey("Extender"))
+					{
+						effects.put(effect, (toAdd+sameImps*toAdd/10.0f)+"");
+						if(bonuses.containsKey(effect))bonuses.put(effect, (Float.valueOf(bonuses.get(effect))+sameImps*toAdd/10.0f)+"");
+						else bonuses.put(effect, sameImps*toAdd/10.0f+"");
+					}
+					else effects.put(effect, toAdd+"");
+				}
 			}
 		}
-		if(effects.containsKey("Damage"))damage = Integer.valueOf(effects.get("Damage"));
-		if(effects.containsKey("Energy"))maxEnergy = Integer.valueOf(effects.get("Energy"));
+		if(effects.containsKey("Damage"))damage = Float.valueOf(effects.get("Damage"));
+		else damage = 0;
+		if(effects.containsKey("Energy"))maxEnergy = Float.valueOf(effects.get("Energy"));
 		else maxEnergy = 0;
 		if(energy > maxEnergy)energy = maxEnergy;
 		energy_fill_rate = maxEnergy/20.0f;
@@ -142,12 +162,12 @@ public class Weapon implements IScreen
 	
 	public int showDamage()
 	{
-		return damage;
+		return (int)damage;
 	}
 	
 	public String showEnergy()
 	{
-		return (int)energy+"/"+maxEnergy;
+		return (int)energy+"/"+(int)maxEnergy;
 	}
 	
 	public void energyRefill()
@@ -200,8 +220,8 @@ public class Weapon implements IScreen
 	public boolean removeImp(AObject ao)
 	{
 		sockets.remove(ao);
-		calculateEffects();
 		weaponView[ao.cur_pos.x][ao.cur_pos.y] = new SocketSymbol(ao.cur_pos);
+		calculateEffects();
 		if("Socket Extender".equals(ao.getName()))
 		{			
 			removeSockets(ao);
@@ -238,6 +258,34 @@ public class Weapon implements IScreen
 				}
 			}
 		}
+	}
+	
+	private int sameImpsNear(AObject ao, AObject prev)
+	{
+		int num = 0;
+		int x = ao.cur_pos.x;
+		int y = ao.cur_pos.y;
+		if(x < weapon_width-1 && weaponView[x+1][y].getName().equals(ao.getName()) && (prev == null || !weaponView[x+1][y].equals(prev)))
+		{
+			num++;
+			num += (sameImpsNear(weaponView[x+1][y], ao));
+		}
+		if(x >= 1 && weaponView[x-1][y].getName().equals(ao.getName()) && (prev == null || !weaponView[x-1][y].equals(prev)))
+		{
+			num++;
+			num += (sameImpsNear(weaponView[x-1][y], ao));
+		}
+		if(y < weapon_height-1 && weaponView[x][y+1].getName().equals(ao.getName()) && (prev == null || !weaponView[x][y+1].equals(prev)))
+		{
+			num++;
+			num += (sameImpsNear(weaponView[x][y+1], ao));
+		}
+		if(y >= 1 && weaponView[x][y-1].getName().equals(ao.getName()) && (prev == null || !weaponView[x][y-1].equals(prev)))
+		{
+			num++;
+			num += (sameImpsNear(weaponView[x][y-1], ao));
+		}
+		return num;
 	}
 
 	private boolean noBasePartsNear(AObject ao)	// rewrite this!!!

@@ -33,13 +33,13 @@ public class Shoot extends ADecision implements ISelector
 		args = al.weapon.applyEffects();
 		if(args != null)
 		{
-			LinkedList<AObject> lao = field.getObjectsAtPoint(shootTo).clone(); 
+			LinkedList<AObject> lao = field.getObjectsAtPoint(shootTo).clone();		// clone() due to some bugs if not...
 			for(AObject ao: lao)
 			{
 				if(al.isEnemy(ao))
 				{
+					if(al.isNearPlayer()) Messages.instance().addMessage(al.getName()+" shoots to "+ao.getName());
 					ao.changeState(args);
-					if(al.isNearPlayer()) Messages.instance().addMessage(al.getName()+" deals "+args.get("Damage")+" damage to "+ao.getName());
 				}
 			}
 			LinkedList<Point> line = field.getLine(al.cur_pos, shootTo);
@@ -47,7 +47,7 @@ public class Shoot extends ADecision implements ISelector
 			{
 				// animation
 				field.addAnimation(new BulletFlight(actionMoment, line.get(1), shootTo, field));
-				// kickback
+				// shooter's kickback
 				Point old = al.cur_pos;
 				al.cur_pos = al.cur_pos.mul(2).minus(line.get(1));
 				//field.changeLocation(al);

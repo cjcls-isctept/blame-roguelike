@@ -13,6 +13,7 @@ import su.msk.dunno.blame.prototypes.AObject;
 import su.msk.dunno.blame.prototypes.IScreen;
 import su.msk.dunno.blame.screens.EnemyInterface;
 import su.msk.dunno.blame.support.Color;
+import su.msk.dunno.blame.support.Messages;
 import su.msk.dunno.blame.support.MyFont;
 import su.msk.dunno.blame.support.Point;
 
@@ -97,15 +98,20 @@ public class SiliconCreature extends ALiving
 	{
 		if(args.containsKey("Damage"))
 		{
-			health -= Integer.valueOf(args.get("Damage"));
+			int d = (int)(Math.random()*Float.valueOf(args.get("Damage")));
+			health -= d;
+			if(isNearPlayer())Messages.instance().addMessage(getName()+" receives "+d+" damage");
+			
 		}
 		if(args.containsKey("Kick"))
 		{
 			setDecision(new Move(this, Integer.valueOf(args.get("Kick")), field));
+			if(isNearPlayer())Messages.instance().addMessage(getName()+" kicks back!");
 		}
 		if(args.containsKey("MindHack"))
 		{
 			mind.process();
+			if(isNearPlayer())Messages.instance().addMessage(getName()+"'s mind get hacked!");
 		}
 	}
 
