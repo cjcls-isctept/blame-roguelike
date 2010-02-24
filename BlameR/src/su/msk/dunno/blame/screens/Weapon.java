@@ -118,7 +118,7 @@ public class Weapon implements IScreen
 			{
 				String effect = ao.getState().get("Effect"+i);
 				float toAdd = Float.valueOf(ao.getState().get(effect));
-				int sameImps = sameImpsNear(ao, null);
+				int sameImps = sameImpsNear(ao, ao.cur_pos, null);
 				if(effects.containsKey(effect))
 				{
 					float value = Float.valueOf(effects.get(effect)) + toAdd;
@@ -246,11 +246,11 @@ public class Weapon implements IScreen
 			{
 				if("SocketPlace".equals(weaponView[i][j].getName()))
 				{
-					if(noBasePartsNear(weaponView[i][j]))weaponView[i][j] = new EmptySpace(i,j);
+					if(noBasePartsNear(weaponView[i][j], null))weaponView[i][j] = new EmptySpace(i,j);
 				}
 				else if(weaponView[i][j].getState().containsKey("Part"))
 				{
-					if(noBasePartsNear(weaponView[i][j]))
+					if(noBasePartsNear(weaponView[i][j], null))
 					{
 						removeImp(weaponView[i][j]);
 						weaponView[i][j] = new EmptySpace(i,j);
@@ -260,49 +260,61 @@ public class Weapon implements IScreen
 		}
 	}
 	
-	private int sameImpsNear(AObject ao, AObject prev)
+	private int sameImpsNear(AObject ao, Point initP, AObject prev)
 	{
+		if(ao.cur_pos.equals(initP) && prev != null)return 0;	// prevents circularity
 		int num = 0;
 		int x = ao.cur_pos.x;
 		int y = ao.cur_pos.y;
 		if(x < weapon_width-1 && weaponView[x+1][y].getName().equals(ao.getName()) && (prev == null || !weaponView[x+1][y].equals(prev)))
 		{
 			num++;
-			num += (sameImpsNear(weaponView[x+1][y], ao));
+			num += (sameImpsNear(weaponView[x+1][y], initP, ao));
 		}
 		if(x >= 1 && weaponView[x-1][y].getName().equals(ao.getName()) && (prev == null || !weaponView[x-1][y].equals(prev)))
 		{
 			num++;
-			num += (sameImpsNear(weaponView[x-1][y], ao));
+			num += (sameImpsNear(weaponView[x-1][y], initP, ao));
 		}
 		if(y < weapon_height-1 && weaponView[x][y+1].getName().equals(ao.getName()) && (prev == null || !weaponView[x][y+1].equals(prev)))
 		{
 			num++;
-			num += (sameImpsNear(weaponView[x][y+1], ao));
+			num += (sameImpsNear(weaponView[x][y+1], initP, ao));
 		}
 		if(y >= 1 && weaponView[x][y-1].getName().equals(ao.getName()) && (prev == null || !weaponView[x][y-1].equals(prev)))
 		{
 			num++;
-			num += (sameImpsNear(weaponView[x][y-1], ao));
+			num += (sameImpsNear(weaponView[x][y-1], initP, ao));
 		}
 		return num;
 	}
-
-	private boolean noBasePartsNear(AObject ao)	// rewrite this!!!
+	
+	private boolean noBasePartsNear(AObject ao, AObject prev)
 	{
-		for(int i = Math.max(0, ao.cur_pos.x-1); i <= Math.min(weaponView.length-1, ao.cur_pos.x+1); i++)
+		boolean b = true;
+		int x = ao.cur_pos.x;
+		int y = ao.cur_pos.y;
+		if(x < weapon_width-1 && (prev == null || !weaponView[x+1][y].equals(prev)) && true)
 		{
-			for(int j = Math.max(0, ao.cur_pos.y-1); j <= Math.min(weaponView[0].length-1, ao.cur_pos.y+1); j++)
-			{
-				if(!ao.equals(weaponView[i][j]))
-				{
-					String name = weaponView[i][j].getName();
-					if(("Weapon Sceleton".equals(name) || "Socket Extender".equals(name)) && 
-						!isDiagonal(ao.cur_pos, new Point(i,j)))return false;
-				}
-			}
+			if("Weapon Sceleton".equals(weaponView[x+1][y].getName()))return false;
+			else if("Socket Extender".equals(weaponView[x+1][y].getName()))b = b && noBasePartsNear(weaponView[x+1][y], ao); 
 		}
-		return true;
+		if(x >= 1 && (prev == null || !weaponView[x-1][y].equals(prev)) && true)
+		{
+			if("Weapon Sceleton".equals(weaponView[x-1][y].getName()))return false;
+			else if("Socket Extender".equals(weaponView[x-1][y].getName()))b = b && noBasePartsNear(weaponView[x-1][y], ao);
+		}
+		if(y < weapon_height-1 && (prev == null || !weaponView[x][y+1].equals(prev)) && true)
+		{
+			if("Weapon Sceleton".equals(weaponView[x][y+1].getName()))return false;
+			else if("Socket Extender".equals(weaponView[x][y+1].getName()))b = b && noBasePartsNear(weaponView[x][y+1], ao);
+		}
+		if(y >= 1 && (prev == null || !weaponView[x][y-1].equals(prev)) && true)
+		{
+			if("Weapon Sceleton".equals(weaponView[x][y-1].getName()))return false;
+			else if("Socket Extender".equals(weaponView[x][y-1].getName()))b = b && noBasePartsNear(weaponView[x][y-1], ao);
+		}
+		return b;
 	}
 
 	public void initWeaponView()
@@ -418,6 +430,17 @@ public class Weapon implements IScreen
 		
 	public void initEvents()
 	{
+		weaponEvents.addListener(Keyboard.KEY_NUMPAD9, new KeyListener(100)
+        {
+        	public void onKeyDown()
+        	{
+        		if(selector.cur_pos.x < weaponView.length-1 && selector.cur_pos.y < weaponView[0].length-1)
+        		{
+        			selector.cur_pos = selector.cur_pos.plus(1,1);
+        			isSelectSocket = true;
+        		}
+        	}
+        });
 		weaponEvents.addListener(Keyboard.KEY_UP, new KeyListener(100)
         {
         	public void onKeyDown()
@@ -429,18 +452,40 @@ public class Weapon implements IScreen
         		}
         	}
         });
-		weaponEvents.addListener(Keyboard.KEY_DOWN, new KeyListener(100)
+		weaponEvents.addListener(Keyboard.KEY_NUMPAD8, new KeyListener(100)
         {
         	public void onKeyDown()
         	{
-        		if(selector.cur_pos.y > 0)
+        		if(selector.cur_pos.y < weaponView[0].length-1)
         		{
-        			selector.cur_pos = selector.cur_pos.plus(0,-1);
+        			selector.cur_pos = selector.cur_pos.plus(0,1);
+        			isSelectSocket = true;
+        		}
+        	}
+        });
+		weaponEvents.addListener(Keyboard.KEY_NUMPAD7, new KeyListener(100)
+        {
+        	public void onKeyDown()
+        	{
+        		if(selector.cur_pos.x > 0 && selector.cur_pos.y < weaponView[0].length-1)
+        		{
+        			selector.cur_pos = selector.cur_pos.plus(-1,1);
         			isSelectSocket = true;
         		}
         	}
         });
 		weaponEvents.addListener(Keyboard.KEY_RIGHT, new KeyListener(100)
+        {
+        	public void onKeyDown()
+        	{
+        		if(selector.cur_pos.x < weaponView.length-1)
+        		{
+        			selector.cur_pos = selector.cur_pos.plus(1,0);
+        			isSelectSocket = true;
+        		}
+        	}
+        });
+		weaponEvents.addListener(Keyboard.KEY_NUMPAD6, new KeyListener(100)
         {
         	public void onKeyDown()
         	{
@@ -458,6 +503,61 @@ public class Weapon implements IScreen
         		if(selector.cur_pos.x > 0)
         		{
         			selector.cur_pos = selector.cur_pos.plus(-1,0);
+        			isSelectSocket = true;
+        		}
+        	}
+        });
+		weaponEvents.addListener(Keyboard.KEY_NUMPAD4, new KeyListener(100)
+        {
+        	public void onKeyDown()
+        	{
+        		if(selector.cur_pos.x > 0)
+        		{
+        			selector.cur_pos = selector.cur_pos.plus(-1,0);
+        			isSelectSocket = true;
+        		}
+        	}
+        });
+		weaponEvents.addListener(Keyboard.KEY_NUMPAD3, new KeyListener(100)
+        {
+        	public void onKeyDown()
+        	{
+        		if(selector.cur_pos.x < weaponView.length-1 && selector.cur_pos.y > 0)
+        		{
+        			selector.cur_pos = selector.cur_pos.plus(1,-1);
+        			isSelectSocket = true;
+        		}
+        	}
+        });
+		weaponEvents.addListener(Keyboard.KEY_DOWN, new KeyListener(100)
+        {
+        	public void onKeyDown()
+        	{
+        		if(selector.cur_pos.y > 0)
+        		{
+        			selector.cur_pos = selector.cur_pos.plus(0,-1);
+        			isSelectSocket = true;
+        		}
+        	}
+        });
+		weaponEvents.addListener(Keyboard.KEY_NUMPAD2, new KeyListener(100)
+        {
+        	public void onKeyDown()
+        	{
+        		if(selector.cur_pos.y > 0)
+        		{
+        			selector.cur_pos = selector.cur_pos.plus(0,-1);
+        			isSelectSocket = true;
+        		}
+        	}
+        });
+		weaponEvents.addListener(Keyboard.KEY_NUMPAD1, new KeyListener(100)
+        {
+        	public void onKeyDown()
+        	{
+        		if(selector.cur_pos.x > 0 && selector.cur_pos.y > 0)
+        		{
+        			selector.cur_pos = selector.cur_pos.plus(-1,-1);
         			isSelectSocket = true;
         		}
         	}

@@ -30,11 +30,11 @@ public class SelectTarget extends ADecision implements IScreen
 	
 	private boolean isSelectTarget;
 	
-	public SelectTarget(ALiving al, Field field, ADecision actionAfterd) 
+	public SelectTarget(ALiving al, Field field, ADecision actionAfter) 
 	{
 		super(al);
 		this.field = field;
-		this.actionAfter = actionAfterd;
+		this.actionAfter = actionAfter;
 		initEvents();
 	}
 	
