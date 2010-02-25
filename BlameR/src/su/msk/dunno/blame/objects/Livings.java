@@ -74,6 +74,7 @@ public class Livings
 		// update state of the current player
 		if(!(Blame.playCibo?cibo:killy).isDead)
 		{
+			(Blame.playCibo?cibo:killy).increaseInfectionLevel();
 			(Blame.playCibo?cibo:killy).checkPlayerStatus();
 			(Blame.playCibo?cibo:killy).updateOldPos();
 			(Blame.playCibo?cibo:killy).nextStep();
@@ -83,6 +84,7 @@ public class Livings
 		// update state of the second player (if not CancelMove)
 		if(!(Blame.playCibo?killy:cibo).isDead)
 		{
+			(Blame.playCibo?killy:cibo).increaseInfectionLevel();
 			(Blame.playCibo?killy:cibo).checkPlayerStatus();
 			(Blame.playCibo?killy:cibo).updateOldPos();
 			(Blame.playCibo?killy:cibo).nextStep();

@@ -8,6 +8,7 @@ import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
 
 import su.msk.dunno.blame.decisions.Close;
+import su.msk.dunno.blame.decisions.EnterStation;
 import su.msk.dunno.blame.decisions.MeleeAttack;
 import su.msk.dunno.blame.decisions.Move;
 import su.msk.dunno.blame.decisions.Open;
@@ -16,6 +17,8 @@ import su.msk.dunno.blame.decisions.Shoot;
 import su.msk.dunno.blame.decisions.Take;
 import su.msk.dunno.blame.main.Blame;
 import su.msk.dunno.blame.map.Field;
+import su.msk.dunno.blame.map.path.PathFinder;
+import su.msk.dunno.blame.map.path.astar.AStarPathFinder;
 import su.msk.dunno.blame.objects.Livings;
 import su.msk.dunno.blame.objects.items.PlayerCorpse;
 import su.msk.dunno.blame.objects.symbols.MainSelector;
@@ -46,11 +49,16 @@ public class Killy extends ALiving implements IScreen
 	protected boolean wantClose;
 	protected boolean wantTake;
 	protected boolean wantShoot;
+	protected boolean wantEnterStation;
 	
 	private boolean isCancelMove;
 	
 	protected float infection_level;
-	protected float infection_expansion_rate = 1/50.0f;
+	protected float infection_expansion_rate = 1/3.0f;
+	
+	protected PathFinder find;
+	protected boolean isFollowPlayer = false;
+	protected boolean isAttackEnemies = false;
 	
 	public Killy(Point p, Field field) 
 	{
@@ -64,11 +72,42 @@ public class Killy extends ALiving implements IScreen
 		dov = 5;
 		health = 100;
 		speed = 4;
+		find = new AStarPathFinder(field);
 	}
 
 	@Override public ADecision livingAI() 
 	{
-		
+		if(isAttackEnemies)
+		{
+			int minDist = field.getN_x();
+			for(AObject ao: getMyNeighbours())
+			{
+				if(isEnemy(ao))return new Shoot(this, field, ao.cur_pos);
+			}
+		}
+		if(isFollowPlayer)
+		{
+			find.findPath(cur_pos, field.getNearestFree(Blame.getCurrentPlayer().cur_pos, 1));
+			// remove first point
+			if(!find.path.isEmpty() && cur_pos.equals(find.path.getFirst()))find.path.removeFirst();
+			if(find.path.isEmpty())	
+			{// couldn't create a path - go to random direction or there is an obstacle on our way
+				return new Move(this, (int)(Math.random()*9), field);
+			}
+			// if everything ok - go to the next point in our path
+			else 
+			{
+				if("Close door".equals(field.getObjectsAtPoint(find.path.getFirst()).getFirst().getName()))
+				{	//found a door near us
+					return new Open(this);	// open it
+				}
+				else if(!field.getPassability(find.path.getFirst()))
+				{
+					return new Move(this, (int)(Math.random()*9), field);
+				}
+				else return new Move(this, field.getDirection(cur_pos, find.path.getFirst()), field);
+			}
+		}
 		if(keys[0])
 		{
 			if(isEnemyAtDir(Move.UP))return new MeleeAttack(this, Move.UP);
@@ -142,6 +181,10 @@ public class Killy extends ALiving implements IScreen
 		{
 			return new SelectTarget(this, field, new Shoot(this, field));
 		}
+		else if(wantEnterStation)
+		{
+			return new EnterStation(this, field);
+		}
 		return null;
 	}
 	
@@ -168,6 +211,7 @@ public class Killy extends ALiving implements IScreen
 		wantClose = false;
 		wantTake = false;
 		wantShoot = false;
+		wantEnterStation = false;
 	}
 	
 	public int getInfectionLevel()
@@ -412,6 +456,33 @@ public class Killy extends ALiving implements IScreen
         		HelpScreen.instance().openHelp();
         	}
         });
+		playerEvents.addListener(Keyboard.KEY_F5, new KeyListener(0)
+        {
+        	public void onKeyDown()
+        	{
+        		isFollowPlayer = !isFollowPlayer;
+        	}
+        });
+		playerEvents.addListener(Keyboard.KEY_F6, new KeyListener(0)
+        {
+        	public void onKeyDown()
+        	{
+        		isAttackEnemies = !isAttackEnemies;
+        	}
+        });
+		playerEvents.addListener(Keyboard.KEY_RETURN, new KeyListener(0)
+        {
+        	public void onKeyDown()
+        	{
+        		wantEnterStation = true;
+        		isNextStep = true;
+        	}
+        });		
+	}
+	
+	public void increaseInfectionLevel()
+	{
+		infection_level += infection_expansion_rate;
 	}
 	
 	public void process()
@@ -424,7 +495,6 @@ public class Killy extends ALiving implements IScreen
 			playerEvents.checkEvents();
 			if(isNextStep)
 			{
-				infection_level += infection_expansion_rate;
 				Livings.instance().nextStep();
 				isNextStep = false;
 				reset_keys();	
@@ -463,7 +533,22 @@ public class Killy extends ALiving implements IScreen
 		MyFont.instance().drawString("Anima: "+field.animations.size(),     
 				Blame.width-190, k, 0.2f, Color.WHITE); k-= 15;
 		MyFont.instance().drawString("PlayerMoves: "+field.playerMoves,     
-				Blame.width-190, k, 0.2f, Color.WHITE);
+				Blame.width-190, k, 0.2f, Color.WHITE); k -= 15;
+		if(isFollowPlayer)
+		{
+			MyFont.instance().drawString("Following "+("Killy".equals(getName())?"Cibo":"Killy"),     
+					Blame.width-190, k, 0.2f, Color.WHITE); k -= 15;
+		}
+		if(isAttackEnemies)
+		{
+			MyFont.instance().drawString("Attack on sight",     
+					Blame.width-190, k, 0.2f, Color.WHITE);
+		}
+	}
+	
+	public void drawFollowMessage()
+	{
+
 	}
 
 	@Override public boolean isPlayer() 

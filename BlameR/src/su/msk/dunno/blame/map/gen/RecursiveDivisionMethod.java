@@ -19,7 +19,7 @@ public class RecursiveDivisionMethod
 		int[][] map = new int[field.getN_x()][field.getN_y()];
 		
 		create4Rooms(map, field, 1, 1, field.getN_x()-2, field.getN_y()-2);
-		for(int i = 0; i < 3; i++)addStation(map);
+		addStations(map, 10);
 		createSolidEdges(map);
 		return map;
 	}
@@ -118,33 +118,48 @@ public class RecursiveDivisionMethod
 	
 	public static void addStations(int[][] map, int num)
 	{
-		int N_x = map.length;
-    	int N_y = map[0].length;
-		LinkedList<Point> points = new LinkedList<Point>();
-		Point new_p = new Point();
-    	for(int i = 0; i < num; i++)
-    	{
-    		int count = 10;
-    		for(int j = 0; j < count; j++)
-    		{
-    			new_p = new Point((int)(Math.random()*N_x-2)+1, (int)(Math.random()*N_y-2)+1);
-    			boolean addStation = true;
-    			for(Point p: points)
-    			{
-    				if(p.getDist2(new_p) < 64)addStation = false;
-    			}
-    		}
-    	}
+		int out_r = Math.max(9, Math.min(map.length, map[0].length)/num);
+		LinkedList<Point> station_points = new LinkedList<Point>();
+		for(int i = 0; i < num; i++)
+		{
+			Point p = addStation(map, out_r, station_points);
+			if(p != null)station_points.add(p);
+		}
 	}
 	
-    public static void addStation(int[][] map)
+    public static Point addStation(int[][] map, int out_r, LinkedList<Point> prev_points)
     {    	
     	int N_x = map.length;
     	int N_y = map[0].length;
     	float even = 0;
     	
-    	Point p = new Point((int)(Math.random()*(N_x-1))+1,
-    						(int)(Math.random()*(N_y-1))+1);
+    	Point p = new Point((int)(Math.random()*(N_x-2))+1,
+    						(int)(Math.random()*(N_y-2))+1);
+    	int count = 10;
+    	boolean isChosen = false;
+    	while(!isChosen)
+    	{
+    		count--;
+    		if(count < 0)return null;
+    		p = new Point((int)(Math.random()*(N_x-2))+1,
+						  (int)(Math.random()*(N_y-2))+1);
+    		isChosen = true;
+    		if(p.x == 4 || p.x == N_x-5 || p.y == 4 || p.y == N_y-5)
+    		{
+    			isChosen = false;
+    		}
+    		if(isChosen)
+    		{
+    			for(Point prev: prev_points)
+        		{
+        			if(p.getDist2(prev) < out_r*out_r)
+        			{
+        				isChosen = false;
+        				break;
+        			}
+        		}
+    		}
+    	}
     	
         int min_x = p.x-4;
         int max_x = p.x+4;
@@ -180,5 +195,6 @@ public class RecursiveDivisionMethod
         	}
         }
         map[p.x][p.y] = 3;
+        return p;
     }
 }
