@@ -28,8 +28,8 @@ public class Blame
 	public static int width = 800;
 	public static int height = 600;
 	
-	public static int N_x = 100;
-	public static int N_y = 100;
+	public static int N_x = 20;
+	public static int N_y = 20;
 	
 	private boolean isRunning;
 	
@@ -68,7 +68,7 @@ public class Blame
 		cibo = new Cibo(field.getRandomPos(killy.cur_pos.plus(-2,2), killy.cur_pos.plus(2,-2)), field);	// generate cibo near killy
 		Livings.instance().addKilly(killy);
 		Livings.instance().addCibo(cibo);
-		Livings.instance().addCreatures(40);
+		//Livings.instance().addCreatures(40);
 		
 		isRunning = true;
 		run();
@@ -169,6 +169,13 @@ public class Blame
 	public static Killy getCurrentPlayer()
 	{
 		return playCibo?cibo:killy;
+	}
+	
+	public static Killy getPlayer(String name)
+	{
+		if("Killy".equals(name))return killy;
+		else if("Cibo".equals(name))return cibo;
+		else return null;
 	}
 	
 	private void fillVariables() 

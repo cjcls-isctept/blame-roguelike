@@ -63,8 +63,8 @@ public class Field
 					case 1: objects[i][j].set(0, new Wall(i, j)); break;
 					case 2: objects[i][j].set(0, new Door(i, j)); break;
 					case 3:
+						objects[i][j].set(0, new Floor(i, j));
 						RebuildStation rs = new RebuildStation(i, j, this);
-						objects[i][j].set(0, rs); 
 						Livings.instance().addObject(rs);
 						break;
 					}
@@ -255,30 +255,7 @@ public class Field
 		}
 		return true;
 	}
-	
-	/*public String getDirection(Point from, Point to)
-	{
-		if(from.equals(to))return "stays still";
-		int x = to.x - from.x;
-		int y = to.y - from.y;
-		if(y > 0)
-		{
-			if(x > 0)return "up/right";
-			else if(x == 0)return "up";
-			else if(x < 0)return "up/left";
-		}
-		else if(y == 0)
-		{
-			if(x > 0)return "right";
-			else if(x < 0)return "left";
-		}
-		else if(y < 0)
-		{
-			if(x > 0)return "down/right";
-			else if(x == 0)return "down";
-			else if(x < 0)return "down/left";
-		}
-	}*/
+
 	public int getDirection(Point from, Point to)
 	{
 		if(from.equals(to))return Move.STAY;
@@ -301,6 +278,21 @@ public class Field
 			else if(x == 0)return Move.DOWN;
 			else/* if(x < 0)*/return Move.DOWNLEFT;
 		}
+	}
+	
+	public Point getNearestFree(Point p, int radius)
+	{
+		for(int k = 1; k <= radius; k++)
+		{
+			for(int i = p.x-k; i <= p.x+k; i++)
+			{
+				for(int j = p.y-k; j <= p.y+k; j++)
+				{
+					if(getPassability(i, j))return new Point(i,j);
+				}
+			}
+		}
+		return null;
 	}
 	
 	public LinkedList<AObject> getNeighbours(AObject player, int dov) // dov = depth of vision

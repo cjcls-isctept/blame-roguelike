@@ -55,5 +55,6 @@ public class Moving extends AAnimation
 	{
 		ao.allowDraw();
 		if("Cibo".equals(ao.getName()) || "Killy".equals(ao.getName()))field.playerMoves--;
+		if(field.playerMoves < 0)field.playerMoves = 0;
 	}
 }

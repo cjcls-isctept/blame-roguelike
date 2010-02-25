@@ -92,15 +92,21 @@ public class Weapon implements IScreen
 											   		  weaponView[i][j].getColor());
 			}
 		}
-		if(isSelectSocket)MyFont.instance().drawDisplayList(selector.getCode(), 
-													 		selector.cur_pos.x*100*3/4, 
-													 		selector.cur_pos.y*100, 
-													 		selector.getColor());
 		int k = Blame.height-40;
 		for(String s: effects.keySet())
 		{
 			MyFont.instance().drawString(s+": "+String.format("%1.0f", Float.valueOf(effects.get(s)))+
 					(bonuses.containsKey(s)?" (+"+String.format("%1$.0f", Float.valueOf(bonuses.get(s))/Float.valueOf(effects.get(s))*100)+"% bonus)":""), 20, k, 0.2f, Color.GREEN); k -= 15;
+		}
+		if(isSelectSocket)
+		{
+			MyFont.instance().drawDisplayList(selector.getCode(), 
+			 								  selector.cur_pos.x*100*3/4, 
+			 								  selector.cur_pos.y*100, 
+			 								  selector.getColor());
+			k -= 15;
+			MyFont.instance().drawString(weaponView[selector.cur_pos.x][selector.cur_pos.y].getName(), 20, k, 0.2f, 
+										 weaponView[selector.cur_pos.x][selector.cur_pos.y].getColor());
 		}
 		Messages.instance().showMessages();
 		Display.sync(Blame.framerate);

@@ -5,6 +5,7 @@ import java.util.LinkedList;
 import su.msk.dunno.blame.animations.BulletFlight;
 import su.msk.dunno.blame.animations.Moving;
 import su.msk.dunno.blame.map.Field;
+import su.msk.dunno.blame.objects.livings.Killy;
 import su.msk.dunno.blame.prototypes.ADecision;
 import su.msk.dunno.blame.prototypes.ALiving;
 import su.msk.dunno.blame.prototypes.AObject;
@@ -23,6 +24,12 @@ public class Shoot extends ADecision implements ISelector
 		this.field = field;
 	}
 	
+	public Shoot(ALiving al, Field field, Point selectPoint) 
+	{
+		this(al, field);
+		shootTo = selectPoint;
+	}
+
 	@Override public void setSelectPoint(Point selectPoint) 
 	{
 		shootTo = selectPoint;
@@ -50,7 +57,6 @@ public class Shoot extends ADecision implements ISelector
 				// shooter's kickback
 				Point old = al.cur_pos;
 				al.cur_pos = al.cur_pos.mul(2).minus(line.get(1));
-				//field.changeLocation(al);
 				if(field.changeLocation(al) && al.isNearPlayer())
 				{
 					field.addAnimation(new Moving(actionMoment, field, al, old, al.cur_pos));

@@ -15,6 +15,7 @@ import su.msk.dunno.blame.objects.items.SocketExtender;
 import su.msk.dunno.blame.screens.Inventory;
 import su.msk.dunno.blame.screens.Weapon;
 import su.msk.dunno.blame.support.Color;
+import su.msk.dunno.blame.support.Messages;
 import su.msk.dunno.blame.support.Point;
 
 
@@ -156,6 +157,7 @@ public abstract class ALiving extends AObject
 		if(health < 0)isDead = true;
 		if(isDead)
 		{
+			if(isNearPlayer())Messages.instance().addMessage(getName()+" is dead");
 			li.remove();
 			field.removeObject(this);
 			int rand = (int)(Math.random()*5);
