@@ -50,7 +50,7 @@ public class Killy extends ALiving implements IScreen
 	private boolean isCancelMove;
 	
 	protected float infection_level;
-	protected float infection_expansion_rate = 1/1000.0f;
+	protected float infection_expansion_rate = 1/50.0f;
 	
 	public Killy(Point p, Field field) 
 	{
@@ -170,6 +170,11 @@ public class Killy extends ALiving implements IScreen
 		wantShoot = false;
 	}
 	
+	public int getInfectionLevel()
+	{
+		return (int)infection_level;
+	}
+	
 	@Override public void changeState(HashMap<String, String> args)
 	{
 		if(args.containsKey("Damage"))
@@ -179,6 +184,11 @@ public class Killy extends ALiving implements IScreen
 		if(args.containsKey("HealthPlus"))
 		{
 			health += Integer.valueOf(args.get("HealthPlus"));
+		}
+		if(args.containsKey("InfectionHeal"))
+		{
+			infection_level -= Integer.valueOf(args.get("InfectionHeal"));
+			if(infection_level < 0)infection_level = 0;
 		}
 		if(args.containsKey("MoveFail"))
 		{
@@ -210,6 +220,7 @@ public class Killy extends ALiving implements IScreen
 	public void checkPlayerStatus()
 	{
 		if(health < 0)isDead = true;
+		if(infection_level >= 100)isDead = true;
 		if(isDead)
 		{
 			field.removeObject(this);
@@ -413,6 +424,7 @@ public class Killy extends ALiving implements IScreen
 			playerEvents.checkEvents();
 			if(isNextStep)
 			{
+				infection_level += infection_expansion_rate;
 				Livings.instance().nextStep();
 				isNextStep = false;
 				reset_keys();	
@@ -442,7 +454,7 @@ public class Killy extends ALiving implements IScreen
 				Blame.width-190, k, 0.2f, Color.WHITE); k-= 15;
 		MyFont.instance().drawString("Fill Rate: "+weapon.energy_fill_rate,                         
 				Blame.width-190, k, 0.2f, Color.WHITE); k-= 15;
-		MyFont.instance().drawString("Infection level: "+infection_level,                         
+		MyFont.instance().drawString("Infection: "+(int)infection_level,                         
 				Blame.width-190, k, 0.2f, Color.GREEN); k-= 15;
 		MyFont.instance().drawString("Time: "+Livings.instance().getTime(), 
 				Blame.width-190, k, 0.2f, Color.WHITE); k-= 15;
