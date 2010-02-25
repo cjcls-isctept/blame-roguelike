@@ -79,7 +79,7 @@ public class Weapon implements IScreen
 		GL11.glClear(GL11.GL_COLOR_BUFFER_BIT/* | GL11.GL_DEPTH_BUFFER_BIT*/);		
 		GL11.glLoadIdentity();
 		MyFont.instance().drawString(owner.getName()+"'s weapon", 20, Blame.height-20, 0.2f, Color.WHITE);
-		GL11.glTranslatef(20, 100, 0.0f);
+		GL11.glTranslatef((Blame.width-800)/2, (Blame.height-600)/2, 0.0f);
 		GL11.glScalef(0.2f, 0.2f, 1.0f);
 		for(int i = 0; i < weapon_width; i++)
 		{
