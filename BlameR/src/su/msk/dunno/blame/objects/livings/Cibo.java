@@ -10,6 +10,7 @@ public class Cibo extends Killy
 	public Cibo(Point p, Field field) 
 	{
 		super(p, field);
+		infection_level = 90;
 	}
 
 	@Override public String getName() 

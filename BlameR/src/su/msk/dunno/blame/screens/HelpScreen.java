@@ -64,6 +64,8 @@ public class HelpScreen implements IScreen
 		MyFont.instance().drawString("Esc - exit from current screen", 20, k, 0.2f, Color.WHITE); k -=15;
 		MyFont.instance().drawString("      (Weapon, Inventory, etc)", 20, k, 0.2f, Color.WHITE); k -=15;
 		MyFont.instance().drawString("+/- - scale up/down", 20, k, 0.2f, Color.WHITE); k -=15;
+		MyFont.instance().drawString("F5 - follow partner on/off", 20, k, 0.2f, Color.WHITE); k -=15;
+		MyFont.instance().drawString("F6 - attack enemies on sight on/off", 20, k, 0.2f, Color.WHITE); k -=15;
 		Display.sync(Blame.framerate);
 		Display.update();
 	}

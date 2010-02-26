@@ -2,7 +2,11 @@ package su.msk.dunno.blame.decisions;
 
 import java.util.HashMap;
 
+import org.lwjgl.opengl.Display;
+import org.lwjgl.opengl.GL11;
+
 import su.msk.dunno.blame.animations.Moving;
+import su.msk.dunno.blame.main.Blame;
 import su.msk.dunno.blame.map.Field;
 import su.msk.dunno.blame.prototypes.ADecision;
 import su.msk.dunno.blame.prototypes.ALiving;
@@ -71,7 +75,21 @@ public class Move extends ADecision
 			args.put("MoveFail", "");
 			al.changeState(args);
 		}
-		//else if(!al.isPlayer() && al.isNearPlayer() && dir != Move.STAY)field.addAnimation(new Moving(actionMoment, field, al, old, al.cur_pos));
+		/*else if(!al.isPlayer() && al.isNearPlayer() && dir != Move.STAY)
+		{
+			Moving mv = new Moving(actionMoment, field, al, old, al.cur_pos);
+			field.addAnimation(mv);
+			while(!mv.isEnded)
+			{
+				GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);		
+				GL11.glLoadIdentity();
+				
+				field.draw(Blame.getCurrentPlayer().cur_pos);		
+				Blame.getCurrentPlayer().drawStats();
+				Display.sync(Blame.framerate);
+				Display.update();
+			}
+		}*/
 		wasExecuted = true;				
 	}
 }
