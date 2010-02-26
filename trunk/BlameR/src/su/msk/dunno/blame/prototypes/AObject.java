@@ -11,7 +11,7 @@ public abstract class AObject
 {
 	public Point cur_pos;	// current position
 	
-	public boolean wasDrawed/* = true*/;
+	public boolean wasDrawed = true;
 	private int preventDrawRequests;
 	
 	protected int dov;	// dov = depth of vision

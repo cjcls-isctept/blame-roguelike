@@ -28,8 +28,8 @@ public class Blame
 	public static int width = 800;
 	public static int height = 600;
 	
-	public static int N_x = 20;
-	public static int N_y = 20;
+	public static int N_x = 100;
+	public static int N_y = 100;
 	
 	private boolean isRunning;
 	
@@ -43,8 +43,8 @@ public class Blame
 	Field field;
 
 	// variables below are for infinite (with pressed key) moving purposes
-	private int frames;
-	private long msek = System.currentTimeMillis();
+	private static int frames;
+	private static long msek = System.currentTimeMillis();
 	public static int fps;
 	
 	public Blame()
@@ -155,7 +155,7 @@ public class Blame
         });
 	}
 	
-	private void getFPS()
+	public static void getFPS()
 	{
 		frames++;
 		if (System.currentTimeMillis() - msek >= 1000)
