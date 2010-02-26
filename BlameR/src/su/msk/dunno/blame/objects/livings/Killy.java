@@ -79,7 +79,6 @@ public class Killy extends ALiving implements IScreen
 	{
 		if(isAttackEnemies)
 		{
-			int minDist = field.getN_x();
 			for(AObject ao: getMyNeighbours())
 			{
 				if(isEnemy(ao))return new Shoot(this, field, ao.cur_pos);
@@ -87,7 +86,8 @@ public class Killy extends ALiving implements IScreen
 		}
 		if(isFollowPlayer)
 		{
-			find.findPath(cur_pos, field.getNearestFree(Blame.getCurrentPlayer().cur_pos, 1));
+			Point near = field.getNearestFree(Blame.getCurrentPlayer().cur_pos, 1);
+			if(near != null)find.findPath(cur_pos, near);
 			// remove first point
 			if(!find.path.isEmpty() && cur_pos.equals(find.path.getFirst()))find.path.removeFirst();
 			if(find.path.isEmpty())	
@@ -267,8 +267,16 @@ public class Killy extends ALiving implements IScreen
 	
 	public void checkPlayerStatus()
 	{
-		if(health < 0)isDead = true;
-		if(infection_level >= 100)isDead = true;
+		if(health < 0)
+		{
+			isDead = true;
+			if(isNearPlayer())Messages.instance().addMessage(getName()+" dies");
+		}
+		if(infection_level >= 100)
+		{
+			isDead = true;
+			if(isNearPlayer())Messages.instance().addMessage(getName()+" dies from the infection");
+		}
 		if(isDead)
 		{
 			field.removeObject(this);

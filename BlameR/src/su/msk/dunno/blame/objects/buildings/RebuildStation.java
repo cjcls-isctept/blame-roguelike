@@ -33,8 +33,7 @@ public class RebuildStation extends ALiving implements IScreen
 	{
 		super(i, j, field);
 		dov = 2;
-		initEvents();
-		
+		initEvents();		
 	}
 
 	@Override public Color getColor() 
@@ -96,6 +95,7 @@ public class RebuildStation extends ALiving implements IScreen
 		if(args.containsKey("Enter"))
 		{
 			player = Blame.getPlayer(args.get("Enter"));
+			Messages.instance().clear();
 			process();
 		}
 	}
@@ -108,17 +108,27 @@ public class RebuildStation extends ALiving implements IScreen
 			events.checkEvents();
 			GL11.glClear(GL11.GL_COLOR_BUFFER_BIT/* | GL11.GL_DEPTH_BUFFER_BIT*/);		
 			GL11.glLoadIdentity();
-			showInterface();
+			showStationInterface();
 			Display.sync(Blame.framerate);
 			Display.update();
 		}
 	}
 	
-	public void showInterface()
+	public void showStationInterface()
 	{
 		int k = Blame.height-20;
 		MyFont.instance().drawString(getName()+" welcomes you, "+player.getName()+"!", 20, k, 0.2f, Color.WHITE); k-=20; k-=20;
-		MyFont.instance().drawString("Mixture capacity: "+this.mixture_capacity, 20, k, 0.2f, Color.WHITE); k-=20; k-=20;
+		
+		MyFont.instance().drawString("Mixture capacity: "+this.mixture_capacity, 20, k, 0.2f, Color.WHITE); k-=20;		
+		StringBuilder sb = new StringBuilder();
+		int n = mixture_capacity/10;
+		Color c = Color.WHITE;
+		if(n >= 7 )c = Color.CYAN;
+		else if(n >= 3)c = Color.YELLOW;
+		else c = Color.RED;
+		for(int i = 0; i < n; i++)sb.append("#");
+		MyFont.instance().drawString(sb.toString(), 20, k, 0.2f, c); k-=20; k-=20;
+		
 		MyFont.instance().drawString(player.getName()+"'s health: "+player.getHealth(), 20, k, 0.2f, Color.WHITE); k-=20;
 		MyFont.instance().drawString(player.getName()+"'s infection level: "+player.getInfectionLevel(), 20, k, 0.2f, Color.WHITE); k-=20; k-=20;
 		MyFont.instance().drawString("1. Improve health by 10", 20, k, 0.2f, Color.WHITE); k-=20;
@@ -126,6 +136,8 @@ public class RebuildStation extends ALiving implements IScreen
 		MyFont.instance().drawString("3. Reduce infection level by 10", 20, k, 0.2f, Color.WHITE); k-=20;
 		MyFont.instance().drawString("4. Reduce infection level by 1", 20, k, 0.2f, Color.WHITE); k-=20;
 		MyFont.instance().drawString("5. Exit", 20, k, 0.2f, Color.WHITE); k-=20;
+		
+		Messages.instance().showMessages();
 	}
 	
 	private void initEvents() 
@@ -141,6 +153,7 @@ public class RebuildStation extends ALiving implements IScreen
 					player.changeState(args);
 					mixture_capacity -= 10;
 				}
+				else Messages.instance().addMessage("Not enough mixture!");
 			}
 		});
 		events.addListener(Keyboard.KEY_2, new KeyListener(0)
@@ -154,6 +167,7 @@ public class RebuildStation extends ALiving implements IScreen
 					player.changeState(args);
 					mixture_capacity -= 1;
 				}
+				else Messages.instance().addMessage("Not enough mixture!");
 			}
 		});
 		events.addListener(Keyboard.KEY_3, new KeyListener(0)
@@ -167,6 +181,7 @@ public class RebuildStation extends ALiving implements IScreen
 					player.changeState(args);
 					mixture_capacity -= 10;
 				}
+				else Messages.instance().addMessage("Not enough mixture!");
 			}
 		});
 		events.addListener(Keyboard.KEY_4, new KeyListener(0)
@@ -180,6 +195,7 @@ public class RebuildStation extends ALiving implements IScreen
 					player.changeState(args);
 					mixture_capacity -= 1;
 				}
+				else Messages.instance().addMessage("Not enough mixture!");
 			}
 		});
 		events.addListener(Keyboard.KEY_5, new KeyListener(0)
