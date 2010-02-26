@@ -8,7 +8,7 @@ import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
 
 import su.msk.dunno.blame.decisions.Close;
-//import su.msk.dunno.blame.decisions.EnterStation;
+import su.msk.dunno.blame.decisions.EnterStation;
 import su.msk.dunno.blame.decisions.MeleeAttack;
 import su.msk.dunno.blame.decisions.Move;
 import su.msk.dunno.blame.decisions.Open;
@@ -183,7 +183,7 @@ public class Killy extends ALiving implements IScreen
 		}
 		else if(wantEnterStation)
 		{
-			//return new EnterStation(this, field);
+			return new EnterStation(this, field);
 		}
 		return null;
 	}
