@@ -100,7 +100,7 @@ public class RebuildStation extends ALiving implements IScreen
 		}
 	}
 
-	@Override public void process() 
+	public void process() 
 	{
 		isRunning = true;
 		while(isRunning)
@@ -119,8 +119,8 @@ public class RebuildStation extends ALiving implements IScreen
 		int k = Blame.height-20;
 		MyFont.instance().drawString(getName()+" welcomes you, "+player.getName()+"!", 20, k, 0.2f, Color.WHITE); k-=20; k-=20;
 		MyFont.instance().drawString("Mixture capacity: "+this.mixture_capacity, 20, k, 0.2f, Color.WHITE); k-=20; k-=20;
-		MyFont.instance().drawString(player.getName()+"'s health: "+this.mixture_capacity, 20, k, 0.2f, Color.WHITE); k-=20;
-		MyFont.instance().drawString(player.getName()+"'s infection level: "+this.mixture_capacity, 20, k, 0.2f, Color.WHITE); k-=20; k-=20;
+		MyFont.instance().drawString(player.getName()+"'s health: "+player.getHealth(), 20, k, 0.2f, Color.WHITE); k-=20;
+		MyFont.instance().drawString(player.getName()+"'s infection level: "+player.getInfectionLevel(), 20, k, 0.2f, Color.WHITE); k-=20; k-=20;
 		MyFont.instance().drawString("1. Improve health by 10", 20, k, 0.2f, Color.WHITE); k-=20;
 		MyFont.instance().drawString("2. Improve health by 1", 20, k, 0.2f, Color.WHITE); k-=20;
 		MyFont.instance().drawString("3. Reduce infection level by 10", 20, k, 0.2f, Color.WHITE); k-=20;
