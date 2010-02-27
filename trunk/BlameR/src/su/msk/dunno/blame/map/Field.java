@@ -396,7 +396,15 @@ public class Field
 	
 	public Point getRandomCorner()
 	{
-		return null;
+		int corner = (int)(Math.random()*4);
+		switch(corner)
+		{
+		case 0: return getRandomPos(1,1,3,3);
+		case 1: return getRandomPos(N_x-4,3,N_x-2,1);
+		case 2: return getRandomPos(1,N_y-2,3,N_y-4);
+		case 3: return getRandomPos(N_x-4,N_y-4,N_x-2,N_y-2);
+		default: return new Point();
+		}
 	}
 	
 	public Point getRandomPos()

@@ -2,6 +2,7 @@ package su.msk.dunno.blame.objects.livings;
 
 import java.util.HashMap;
 
+import su.msk.dunno.blame.decisions.MeleeAttack;
 import su.msk.dunno.blame.decisions.Move;
 import su.msk.dunno.blame.decisions.Open;
 import su.msk.dunno.blame.map.Field;
@@ -42,7 +43,7 @@ public class SiliconCreature extends ALiving
 			{
 				minDist = Math.min(this.cur_pos.getDist2(ao.cur_pos), minDist);
 				int dir = field.getDirection(cur_pos, ao.cur_pos);
-				if(this.isEnemyAtDir(dir))return /*new MeleeAttack(this, dir)*/null;
+				if(this.isEnemyAtDir(dir))return new MeleeAttack(this, dir)/*null*/;
 				else  
 				{
 					if(getPassabilityAtDir(dir))
