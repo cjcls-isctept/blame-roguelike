@@ -319,53 +319,53 @@ public class Killy extends ALiving implements IScreen
 		// statistics
 		int k = Blame.height-20;
 		MyFont.instance().drawString(getName(),                             
-				Blame.width-190, k, 0.2f, Color.WHITE); k-= 15;
+				Blame.width-185, k, 0.2f, Color.WHITE); k-= 15;
 		MyFont.instance().drawString("HP: "+health,                         
-				Blame.width-190, k, 0.2f, Color.WHITE); k-= 15;
+				Blame.width-185, k, 0.2f, Color.WHITE); k-= 15;
 		MyFont.instance().drawString("Damage: "+weapon.showDamage(),                         
-				Blame.width-190, k, 0.2f, Color.WHITE); k-= 15;
+				Blame.width-185, k, 0.2f, Color.WHITE); k-= 15;
 		MyFont.instance().drawString("Energy: "+weapon.showEnergy(),                         
-				Blame.width-190, k, 0.2f, Color.WHITE); k-= 15;
+				Blame.width-185, k, 0.2f, Color.WHITE); k-= 15;
 		/*MyFont.instance().drawString("Fill Rate: "+weapon.energy_fill_rate,                         
 				Blame.width-190, k, 0.2f, Color.WHITE); k-= 15;*/
 		if(infection_level < 35)
 		{
 			MyFont.instance().drawString("Infection: Low",                         
-					Blame.width-190, k, 0.2f, Color.GREEN); k-= 15;
+					Blame.width-185, k, 0.2f, Color.GREEN); k-= 15;
 		}
 		else if(infection_level >= 35 && infection_level < 75)
 		{
 			MyFont.instance().drawString("Infection: Medium",                         
-					Blame.width-190, k, 0.2f, Color.YELLOW); k-= 15;
+					Blame.width-185, k, 0.2f, Color.YELLOW); k-= 15;
 		}
 		else if(infection_level >= 75 && infection_level < 100)
 		{
 			MyFont.instance().drawString("Infection: High!",                         
-					Blame.width-190, k, 0.2f, Color.RED); k-= 15;
+					Blame.width-185, k, 0.2f, Color.RED); k-= 15;
 		}
 		else if(infection_level >= 100)
 		{
 			MyFont.instance().drawString("Infection: Mortal",                         
-					Blame.width-190, k, 0.2f, Color.WHITE); k-= 15;
+					Blame.width-185, k, 0.2f, Color.WHITE); k-= 15;
 		}
 				
 		MyFont.instance().drawString("Time: "+Livings.instance().getTime(), 
-				Blame.width-190, k, 0.2f, Color.WHITE); k-= 15;
+				Blame.width-185, k, 0.2f, Color.WHITE); k-= 15;
 		MyFont.instance().drawString("FPS: "+Blame.fps,                     
-				Blame.width-190, k, 0.2f, Color.WHITE); k-= 15;
+				Blame.width-185, k, 0.2f, Color.WHITE); k-= 15;
 		MyFont.instance().drawString("Anima: "+field.animations.size(),     
-				Blame.width-190, k, 0.2f, Color.WHITE); k-= 15;
+				Blame.width-185, k, 0.2f, Color.WHITE); k-= 15;
 		MyFont.instance().drawString("PlayerMoves: "+field.playerMoves,     
-				Blame.width-190, k, 0.2f, Color.WHITE); k -= 15;
+				Blame.width-185, k, 0.2f, Color.WHITE); k -= 15;
 		if(isFollowPlayer)
 		{
 			MyFont.instance().drawString("Following "+("Killy".equals(getName())?"Cibo":"Killy"),     
-					Blame.width-190, k, 0.2f, Color.WHITE); k -= 15;
+					Blame.width-185, k, 0.2f, Color.WHITE); k -= 15;
 		}
 		if(isAttackEnemies)
 		{
 			MyFont.instance().drawString("Attack on sight",     
-					Blame.width-190, k, 0.2f, Color.WHITE);
+					Blame.width-185, k, 0.2f, Color.WHITE);
 		}
 	}
 
