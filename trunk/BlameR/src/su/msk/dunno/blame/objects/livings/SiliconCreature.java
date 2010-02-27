@@ -29,7 +29,7 @@ public class SiliconCreature extends ALiving
 		super(p, field);
 		health = 20;
 		dov = 5;
-		speed = 2;
+		speed = 5;
 		find = new AStarPathFinder(field);
 	}
 

@@ -42,7 +42,7 @@ public class Field
 	public Vector2D playerMovingCoord;
 	public int playerMoves;
 	
-	private int center_x = (Blame.width-190)/2;		// variables for draw methods 
+	private int center_x = (Blame.width-180)/2;		// variables for draw methods 
 	private int center_y = (Blame.height-75)/2+75;
 	private int nx = center_x/15;
 	private int ny = center_y/20;
@@ -392,6 +392,11 @@ public class Field
 	public boolean onArea(int i, int j)
 	{
 		return i >= 0 && i < N_x && j >= 0 && j < N_y;
+	}
+	
+	public Point getRandomCorner()
+	{
+		return null;
 	}
 	
 	public Point getRandomPos()

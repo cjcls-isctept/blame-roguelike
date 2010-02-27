@@ -68,7 +68,7 @@ public class Blame
 		cibo = new Cibo(field.getRandomPos(killy.cur_pos.plus(-2,2), killy.cur_pos.plus(2,-2)), field);	// generate cibo near killy
 		Livings.instance().addKilly(killy);
 		Livings.instance().addCibo(cibo);
-		Livings.instance().addCreatures(40);
+		Livings.instance().addCreatures(60);
 		
 		isRunning = true;
 		run();

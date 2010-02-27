@@ -119,12 +119,12 @@ public class RebuildStation extends ALiving implements IScreen
 		int k = Blame.height-20;
 		MyFont.instance().drawString(getName()+" welcomes you, "+player.getName()+"!", 20, k, 0.2f, Color.WHITE); k-=20; k-=20;
 		
-		MyFont.instance().drawString("Mixture capacity: "+this.mixture_capacity, 20, k, 0.2f, Color.WHITE); k-=20;		
+		MyFont.instance().drawString("Mixture capacity:", 20, k, 0.2f, Color.WHITE); k-=20;		
 		StringBuilder sb = new StringBuilder();
-		int n = mixture_capacity/10;
+		int n = mixture_capacity/5;
 		Color c = Color.WHITE;
-		if(n >= 7 )c = Color.CYAN;
-		else if(n >= 3)c = Color.YELLOW;
+		if(n >= 14)c = Color.CYAN;
+		else if(n >= 9)c = Color.YELLOW;
 		else c = Color.RED;
 		for(int i = 0; i < n; i++)sb.append("#");
 		MyFont.instance().drawString(sb.toString(), 20, k, 0.2f, c); k-=20; k-=20;
@@ -199,6 +199,13 @@ public class RebuildStation extends ALiving implements IScreen
 			}
 		});
 		events.addListener(Keyboard.KEY_5, new KeyListener(0)
+		{
+			public void onKeyDown()
+			{
+				isRunning = false;
+			}
+		});
+		events.addListener(Keyboard.KEY_ESCAPE, new KeyListener(0)
 		{
 			public void onKeyDown()
 			{
