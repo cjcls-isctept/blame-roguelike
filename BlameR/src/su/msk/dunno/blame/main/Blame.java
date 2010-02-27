@@ -28,8 +28,8 @@ public class Blame
 	public static int width = 800;
 	public static int height = 600;
 	
-	public static int N_x = 100;
-	public static int N_y = 100;
+	public static int N_x = 20;
+	public static int N_y = 20;
 	
 	private boolean isRunning;
 	
@@ -64,11 +64,11 @@ public class Blame
 		/*for(int i=0; i < 5000; i++)*/field = new Field(N_x, N_y, "random");
 		
 		Livings.instance().addField(field);
-		killy = new Killy(field.getRandomPos(), field);
+		killy = new Killy(field.getRandomCorner(), field);
 		cibo = new Cibo(field.getRandomPos(killy.cur_pos.plus(-2,2), killy.cur_pos.plus(2,-2)), field);	// generate cibo near killy
 		Livings.instance().addKilly(killy);
 		Livings.instance().addCibo(cibo);
-		Livings.instance().addCreatures(60);
+		Livings.instance().addCreatures(5);
 		
 		isRunning = true;
 		run();
