@@ -9,7 +9,6 @@ import su.msk.dunno.blame.animations.BulletFlight;
 import su.msk.dunno.blame.animations.Moving;
 import su.msk.dunno.blame.main.Blame;
 import su.msk.dunno.blame.map.Field;
-import su.msk.dunno.blame.objects.livings.Killy;
 import su.msk.dunno.blame.prototypes.ADecision;
 import su.msk.dunno.blame.prototypes.ALiving;
 import su.msk.dunno.blame.prototypes.AObject;
@@ -87,7 +86,7 @@ public class Shoot extends ADecision implements ISelector
 				if(al.isEnemy(ao))
 				{
 					if(al.isNearPlayer()) Messages.instance().addMessage(al.getName()+" shoots to "+ao.getName());
-					ao.changeState(args);
+					ao.changeState(al, args);
 				}
 			}
 		}

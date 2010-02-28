@@ -19,6 +19,7 @@ import su.msk.dunno.blame.support.MyFont;
 import su.msk.dunno.blame.support.listeners.EventManager;
 import su.msk.dunno.blame.support.listeners.KeyListener;
 
+// Rewrite this!!!!!! (initEvents section, changeState() arguments)
 public class RebuildStation extends ALiving implements IScreen
 {
 	private boolean isGreetingsMessageDone;
@@ -32,6 +33,7 @@ public class RebuildStation extends ALiving implements IScreen
 	public RebuildStation(int i, int j, Field field) 
 	{
 		super(i, j, field);
+		health = 10;
 		dov = 2;
 		initEvents();		
 	}
@@ -90,7 +92,7 @@ public class RebuildStation extends ALiving implements IScreen
 		return args;
 	}
 	
-	@Override public void changeState(HashMap<String, String> args)
+	@Override public void changeState(ALiving changer, HashMap<String, String> args)
 	{
 		if(args.containsKey("Enter"))
 		{
@@ -150,7 +152,7 @@ public class RebuildStation extends ALiving implements IScreen
 				{
 					args.clear();
 					args.put("HealthPlus", "10");
-					player.changeState(args);
+					player.changeState(player, args);
 					mixture_capacity -= 10;
 				}
 				else Messages.instance().addMessage("Not enough mixture!");
@@ -164,7 +166,7 @@ public class RebuildStation extends ALiving implements IScreen
 				{
 					args.clear();
 					args.put("HealthPlus", "1");
-					player.changeState(args);
+					player.changeState(player, args);
 					mixture_capacity -= 1;
 				}
 				else Messages.instance().addMessage("Not enough mixture!");
@@ -178,7 +180,7 @@ public class RebuildStation extends ALiving implements IScreen
 				{
 					args.clear();
 					args.put("InfectionHeal", "10");
-					player.changeState(args);
+					player.changeState(player, args);
 					mixture_capacity -= 10;
 				}
 				else Messages.instance().addMessage("Not enough mixture!");
@@ -192,7 +194,7 @@ public class RebuildStation extends ALiving implements IScreen
 				{
 					args.clear();
 					args.put("InfectionHeal", "1");
-					player.changeState(args);
+					player.changeState(player, args);
 					mixture_capacity -= 1;
 				}
 				else Messages.instance().addMessage("Not enough mixture!");

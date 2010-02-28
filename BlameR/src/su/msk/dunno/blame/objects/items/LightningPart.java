@@ -11,7 +11,7 @@ public class LightningPart extends AItem
 	{
 		super(p);
 		item_properties.put("Part", "");
-		item_properties.put("Info", "Adds lightning damage to weapon");
+		item_properties.put("Info", "Adds lightning energy to weapon (energy capacity +10)");
 		item_properties.put("EffectsCapacity", "1");
 		item_properties.put("Effect1", "Energy");
 		item_properties.put("Energy", "10");

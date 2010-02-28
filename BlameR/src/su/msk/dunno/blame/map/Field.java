@@ -18,7 +18,6 @@ import su.msk.dunno.blame.map.tiles.Floor;
 import su.msk.dunno.blame.map.tiles.Wall;
 import su.msk.dunno.blame.objects.Livings;
 import su.msk.dunno.blame.objects.buildings.RebuildStation;
-import su.msk.dunno.blame.objects.livings.Killy;
 import su.msk.dunno.blame.prototypes.AAnimation;
 import su.msk.dunno.blame.prototypes.ALiving;
 import su.msk.dunno.blame.prototypes.AObject;
@@ -42,7 +41,7 @@ public class Field
 	public Vector2D playerMovingCoord;
 	public int playerMoves;
 	
-	private int center_x = (Blame.width-180)/2;		// variables for draw methods 
+	private int center_x = (Blame.width-195)/2;		// variables for draw methods 
 	private int center_y = (Blame.height-75)/2+75;
 	private int nx = center_x/15;
 	private int ny = center_y/20;

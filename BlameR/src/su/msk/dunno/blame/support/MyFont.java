@@ -13,8 +13,6 @@ import javax.imageio.ImageIO;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 
-import su.msk.dunno.blame.main.Blame;
-
 public class MyFont 
 {
 	public final static int WALL            = 1;

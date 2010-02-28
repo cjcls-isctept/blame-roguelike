@@ -3,7 +3,6 @@ package su.msk.dunno.blame.prototypes;
 import java.util.HashMap;
 
 import su.msk.dunno.blame.support.Color;
-import su.msk.dunno.blame.support.MyFont;
 import su.msk.dunno.blame.support.Point;
 
 
@@ -39,7 +38,7 @@ public abstract class AObject
 		return Color.WHITE;
 	}
 	
-	public void changeState(HashMap<String, String> args)
+	public void changeState(ALiving changer, HashMap<String, String> args)
 	{
 		
 	}

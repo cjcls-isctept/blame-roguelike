@@ -1,7 +1,6 @@
 package su.msk.dunno.blame.objects.livings;
 
 import java.util.HashMap;
-import java.util.LinkedList;
 
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.Display;
@@ -21,8 +20,6 @@ import su.msk.dunno.blame.map.path.PathFinder;
 import su.msk.dunno.blame.map.path.astar.AStarPathFinder;
 import su.msk.dunno.blame.objects.Livings;
 import su.msk.dunno.blame.objects.items.PlayerCorpse;
-import su.msk.dunno.blame.objects.symbols.MainSelector;
-import su.msk.dunno.blame.objects.symbols.MinorSelector;
 import su.msk.dunno.blame.prototypes.ADecision;
 import su.msk.dunno.blame.prototypes.ALiving;
 import su.msk.dunno.blame.prototypes.AObject;
@@ -53,8 +50,9 @@ public class Killy extends ALiving implements IScreen
 	
 	private boolean isCancelMove;
 	
-	protected float infection_level;
-	protected float infection_expansion_rate = 1/3.0f;
+	private float infection_level;
+	private float infection_expansion_rate_move = 1/3.0f;
+	private float infection_expansion_rate_stay = 1/6.0f;
 	
 	protected PathFinder find;
 	protected boolean isFollowPlayer = false;
@@ -223,11 +221,12 @@ public class Killy extends ALiving implements IScreen
 		return "";
 	}
 	
-	@Override public void changeState(HashMap<String, String> args)
+	@Override public void changeState(ALiving changer, HashMap<String, String> args)
 	{
 		if(args.containsKey("Damage"))
 		{
 			health -= Integer.valueOf(args.get("Damage"));
+			if(isNearPlayer())Messages.instance().addMessage(getName()+" receives "+args.get("Damage")+" damage");
 		}
 		if(args.containsKey("HealthPlus"))
 		{
@@ -265,7 +264,7 @@ public class Killy extends ALiving implements IScreen
 		return "Silicon Creature".equals(ao.getName());
 	}
 	
-	public void checkPlayerStatus()
+	public boolean checkPlayerStatus()
 	{
 		if(health < 0)
 		{
@@ -282,11 +281,13 @@ public class Killy extends ALiving implements IScreen
 			field.removeObject(this);
 			field.addObject(new PlayerCorpse(getName(), cur_pos));
 		}
+		return isDead;
 	}	
 	
 	public void increaseInfectionLevel()
 	{
-		infection_level += infection_expansion_rate;
+		if(cur_pos.equals(old_pos))infection_level += infection_expansion_rate_stay;
+		else infection_level += infection_expansion_rate_move;
 	}
 	
 	public void process()
@@ -319,53 +320,53 @@ public class Killy extends ALiving implements IScreen
 		// statistics
 		int k = Blame.height-20;
 		MyFont.instance().drawString(getName(),                             
-				Blame.width-185, k, 0.2f, Color.WHITE); k-= 15;
+				Blame.width-200, k, 0.2f, Color.WHITE); k-= 20;
 		MyFont.instance().drawString("HP: "+health,                         
-				Blame.width-185, k, 0.2f, Color.WHITE); k-= 15;
+				Blame.width-200, k, 0.2f, Color.WHITE); k-= 20;
 		MyFont.instance().drawString("Damage: "+weapon.showDamage(),                         
-				Blame.width-185, k, 0.2f, Color.WHITE); k-= 15;
+				Blame.width-200, k, 0.2f, Color.WHITE); k-= 20;
 		MyFont.instance().drawString("Energy: "+weapon.showEnergy(),                         
-				Blame.width-185, k, 0.2f, Color.WHITE); k-= 15;
-		/*MyFont.instance().drawString("Fill Rate: "+weapon.energy_fill_rate,                         
+				Blame.width-200, k, 0.2f, Color.WHITE); k-= 20;
+		/*MyFont.instance().drawString("Infection: "+this.infection_level,                         
 				Blame.width-190, k, 0.2f, Color.WHITE); k-= 15;*/
 		if(infection_level < 35)
 		{
 			MyFont.instance().drawString("Infection: Low",                         
-					Blame.width-185, k, 0.2f, Color.GREEN); k-= 15;
+					Blame.width-200, k, 0.2f, Color.GREEN); k-= 20;
 		}
 		else if(infection_level >= 35 && infection_level < 75)
 		{
 			MyFont.instance().drawString("Infection: Medium",                         
-					Blame.width-185, k, 0.2f, Color.YELLOW); k-= 15;
+					Blame.width-200, k, 0.2f, Color.YELLOW); k-= 20;
 		}
 		else if(infection_level >= 75 && infection_level < 100)
 		{
 			MyFont.instance().drawString("Infection: High!",                         
-					Blame.width-185, k, 0.2f, Color.RED); k-= 15;
+					Blame.width-200, k, 0.2f, Color.RED); k-= 20;
 		}
 		else if(infection_level >= 100)
 		{
 			MyFont.instance().drawString("Infection: Mortal",                         
-					Blame.width-185, k, 0.2f, Color.WHITE); k-= 15;
+					Blame.width-200, k, 0.2f, Color.WHITE); k-= 20;
 		}
 				
 		MyFont.instance().drawString("Time: "+Livings.instance().getTime(), 
-				Blame.width-185, k, 0.2f, Color.WHITE); k-= 15;
+				Blame.width-200, k, 0.2f, Color.WHITE); k-= 20;
 		MyFont.instance().drawString("FPS: "+Blame.fps,                     
-				Blame.width-185, k, 0.2f, Color.WHITE); k-= 15;
+				Blame.width-200, k, 0.2f, Color.WHITE); k-= 20;
 		MyFont.instance().drawString("Anima: "+field.animations.size(),     
-				Blame.width-185, k, 0.2f, Color.WHITE); k-= 15;
+				Blame.width-200, k, 0.2f, Color.WHITE); k-= 20;
 		MyFont.instance().drawString("PlayerMoves: "+field.playerMoves,     
-				Blame.width-185, k, 0.2f, Color.WHITE); k -= 15;
+				Blame.width-200, k, 0.2f, Color.WHITE); k -= 20;
 		if(isFollowPlayer)
 		{
 			MyFont.instance().drawString("Following "+("Killy".equals(getName())?"Cibo":"Killy"),     
-					Blame.width-185, k, 0.2f, Color.WHITE); k -= 15;
+					Blame.width-200, k, 0.2f, Color.WHITE); k -= 20;
 		}
 		if(isAttackEnemies)
 		{
 			MyFont.instance().drawString("Attack on sight",     
-					Blame.width-185, k, 0.2f, Color.WHITE);
+					Blame.width-200, k, 0.2f, Color.WHITE);
 		}
 	}
 

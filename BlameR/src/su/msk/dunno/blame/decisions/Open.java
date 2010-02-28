@@ -23,7 +23,7 @@ public class Open extends ADecision
 		{
 			if("Close door".equals(ao.getName()))
 			{
-				ao.changeState(args);
+				ao.changeState(al, args);
 				if(al.isNearPlayer())Messages.instance().addMessage(al.getName()+" opens a door");
 			}
 		}

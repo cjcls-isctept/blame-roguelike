@@ -28,8 +28,11 @@ public class Blame
 	public static int width = 800;
 	public static int height = 600;
 	
-	public static int N_x = 20;
-	public static int N_y = 20;
+	public static int N_x = 100;
+	public static int N_y = 100;
+
+	private int num_creatures = 60;
+	public static int num_stations = 10;
 	
 	private boolean isRunning;
 	
@@ -68,7 +71,7 @@ public class Blame
 		cibo = new Cibo(field.getRandomPos(killy.cur_pos.plus(-2,2), killy.cur_pos.plus(2,-2)), field);	// generate cibo near killy
 		Livings.instance().addKilly(killy);
 		Livings.instance().addCibo(cibo);
-		Livings.instance().addCreatures(5);
+		Livings.instance().addCreatures(num_creatures);
 		
 		isRunning = true;
 		run();
@@ -105,7 +108,7 @@ public class Blame
 			if(isFullscreen)Display.setFullscreen(true);
 			else Display.setDisplayMode(new DisplayMode(width, height));
 			
-			Display.setTitle("Blame v0.0.1");
+			Display.setTitle("Blame v0.0.2");
 			Display.setVSyncEnabled(true);
 			Display.create(); } 
 		catch (LWJGLException e) {
@@ -188,6 +191,10 @@ public class Blame
 			isFullscreen = p.getProperty("fullscreen").equalsIgnoreCase("yes");
 			width = Integer.valueOf(p.getProperty("width"));
 			height = Integer.valueOf(p.getProperty("height"));
+			N_x = Integer.valueOf(p.getProperty("N_x"));
+			N_y = Integer.valueOf(p.getProperty("N_y"));
+			num_creatures = Integer.valueOf(p.getProperty("creatures"));
+			num_stations = Integer.valueOf(p.getProperty("stations"));
 		} 
 		catch (FileNotFoundException e) 
 		{

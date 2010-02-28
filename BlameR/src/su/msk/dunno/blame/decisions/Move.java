@@ -73,7 +73,7 @@ public class Move extends ADecision
 		{
 			HashMap<String, String> args = new HashMap<String, String>();
 			args.put("MoveFail", "");
-			al.changeState(args);
+			al.changeState(al, args);
 		}
 		else if(!al.isPlayer() && al.isNearPlayer() && dir != Move.STAY)
 		{

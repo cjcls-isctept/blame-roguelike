@@ -31,7 +31,7 @@ public abstract class ALiving extends AObject
 	public Inventory inventory;
 	public Weapon weapon;
 	
-	private Point old_pos = cur_pos;	// previous position: set private to prevent some possibilities "to hack" the system :)
+	protected Point old_pos = cur_pos;	// previous position: set private to prevent some possibilities "to hack" the system :)
 	private int lastActionTime;
 	private int actionPeriod;
 	private ADecision decision;
@@ -58,7 +58,7 @@ public abstract class ALiving extends AObject
 	{//	trying to predict some possible bugs... :3
 		if(!field.getObjectsAtPoint(cur_pos).contains(this))
 		{
-			field.findObject(this);
+			field.findObject(this);	// fail. what a dumbass :)
 		}
 		old_pos = cur_pos;
 	}
@@ -152,9 +152,9 @@ public abstract class ALiving extends AObject
 		return enemies;
 	}
 
-	public void checkStatus(ListIterator<ALiving> li) 
+	public boolean checkStatus(ListIterator<ALiving> li) 
 	{
-		if(health < 0)isDead = true;
+		if(health <= 0)isDead = true;
 		if(isDead)
 		{
 			if(isNearPlayer())Messages.instance().addMessage(getName()+" is dead");
@@ -163,13 +163,14 @@ public abstract class ALiving extends AObject
 			int rand = (int)(Math.random()*5);
 			switch(rand)
 			{
-			case 0: field.addObject(new ColdPart(cur_pos)); return;
-			case 1: field.addObject(new FirePart(cur_pos)); return;
-			case 2: field.addObject(new LightningPart(cur_pos)); return;
-			case 3: field.addObject(new PoisonPart(cur_pos)); return;
-			case 4: field.addObject(new SocketExtender(cur_pos)); return;			
+			case 0: field.addObject(new ColdPart(cur_pos)); return isDead;
+			case 1: field.addObject(new FirePart(cur_pos)); return isDead;
+			case 2: field.addObject(new LightningPart(cur_pos)); return isDead;
+			case 3: field.addObject(new PoisonPart(cur_pos)); return isDead;
+			case 4: field.addObject(new SocketExtender(cur_pos)); return isDead;			
 			}
 		}
+		return isDead;
 	}
 	
 	@Override public abstract boolean isEnemy(AObject ao);
