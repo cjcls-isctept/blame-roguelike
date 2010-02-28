@@ -1,5 +1,6 @@
 package su.msk.dunno.blame.decisions;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 
 import org.lwjgl.input.Keyboard;
@@ -14,7 +15,6 @@ import su.msk.dunno.blame.prototypes.ADecision;
 import su.msk.dunno.blame.prototypes.ALiving;
 import su.msk.dunno.blame.prototypes.AObject;
 import su.msk.dunno.blame.prototypes.IScreen;
-import su.msk.dunno.blame.prototypes.ISelector;
 import su.msk.dunno.blame.support.Point;
 import su.msk.dunno.blame.support.listeners.EventManager;
 import su.msk.dunno.blame.support.listeners.KeyListener;
@@ -203,6 +203,9 @@ public class SelectTarget extends ADecision implements IScreen
 			{
 				clearLine();
 				isSelectTarget = false;
+				HashMap<String, String> args = new HashMap<String, String>();
+				args.put("MoveFail", "");
+				al.changeState(al, args);
 			}
 		});
 	}

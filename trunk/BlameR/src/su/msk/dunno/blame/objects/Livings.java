@@ -76,9 +76,12 @@ public class Livings
 		{
 			(Blame.playCibo?cibo:killy).increaseInfectionLevel();
 			(Blame.playCibo?cibo:killy).checkPlayerStatus();
-			(Blame.playCibo?cibo:killy).updateOldPos();
-			(Blame.playCibo?cibo:killy).nextStep();
-			if((Blame.playCibo?cibo:killy).getState().containsKey("CancelMove")) return;
+			if(!(Blame.playCibo?cibo:killy).checkPlayerStatus())
+			{
+				(Blame.playCibo?cibo:killy).nextStep();
+				(Blame.playCibo?cibo:killy).updateOldPos();				
+				if((Blame.playCibo?cibo:killy).getState().containsKey("CancelMove"))return;
+			}
 		}
 		
 		// update state of the second player (if not CancelMove)
@@ -86,8 +89,11 @@ public class Livings
 		{
 			(Blame.playCibo?killy:cibo).increaseInfectionLevel();
 			(Blame.playCibo?killy:cibo).checkPlayerStatus();
-			(Blame.playCibo?killy:cibo).updateOldPos();
-			(Blame.playCibo?killy:cibo).nextStep();
+			if(!(Blame.playCibo?cibo:killy).checkPlayerStatus())
+			{
+				(Blame.playCibo?killy:cibo).nextStep();
+				(Blame.playCibo?killy:cibo).updateOldPos();
+			}
 		}
 		
 		// update monsters
@@ -96,9 +102,11 @@ public class Livings
 			for(ListIterator<ALiving> li = livings.listIterator(); li.hasNext();)
 			{
 				ALiving al = li.next();
-				al.checkStatus(li);
-				al.updateOldPos();
-				al.nextStep();
+				if(!al.checkStatus(li))
+				{
+					al.nextStep();
+					al.updateOldPos();
+				}
 			}
 			time++;
 		}

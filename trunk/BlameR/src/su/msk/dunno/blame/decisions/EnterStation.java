@@ -27,7 +27,7 @@ public class EnterStation extends ADecision
 			{
 				HashMap<String, String> args = new HashMap<String, String>();
 				args.put("Enter", al.getName());
-				ao.changeState(args);
+				ao.changeState(al, args);
 			}
 		}
 	}

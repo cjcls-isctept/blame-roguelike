@@ -4,7 +4,6 @@ import java.util.HashMap;
 
 import su.msk.dunno.blame.decisions.MeleeAttack;
 import su.msk.dunno.blame.decisions.Move;
-import su.msk.dunno.blame.decisions.Open;
 import su.msk.dunno.blame.map.Field;
 import su.msk.dunno.blame.map.path.PathFinder;
 import su.msk.dunno.blame.map.path.astar.AStarPathFinder;
@@ -30,7 +29,7 @@ public class SiliconCreature extends ALiving
 		super(p, field);
 		health = 20;
 		dov = 5;
-		speed = 5;
+		speed = 3;
 		find = new AStarPathFinder(field);
 	}
 
@@ -95,7 +94,7 @@ public class SiliconCreature extends ALiving
 		return Color.CYAN;
 	}
 	
-	@Override public void changeState(HashMap<String, String> args)
+	@Override public void changeState(ALiving changer, HashMap<String, String> args)
 	{
 		if(args.containsKey("Damage"))
 		{
@@ -106,7 +105,7 @@ public class SiliconCreature extends ALiving
 		}
 		if(args.containsKey("Kick"))
 		{
-			setDecision(new Move(this, Integer.valueOf(args.get("Kick")), field));
+			setDecision(new Move(this, field.getDirection(changer.cur_pos, cur_pos), field));
 			if(isNearPlayer())Messages.instance().addMessage(getName()+" kicks back!");
 		}
 		if(args.containsKey("MindHack"))

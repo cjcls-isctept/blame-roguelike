@@ -1,7 +1,6 @@
 package su.msk.dunno.blame.objects.items;
 
 import su.msk.dunno.blame.prototypes.AItem;
-import su.msk.dunno.blame.support.Color;
 import su.msk.dunno.blame.support.MyFont;
 import su.msk.dunno.blame.support.Point;
 

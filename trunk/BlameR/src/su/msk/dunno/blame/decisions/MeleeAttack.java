@@ -22,11 +22,8 @@ public class MeleeAttack extends ADecision
 		{
 			if(al.isEnemy(ao))
 			{
-				ao.changeState(args);
-				if(al.isNearPlayer())
-				{
-					if(al.isNearPlayer())Messages.instance().addMessage(al.getName()+" deals "+args.get("Damage")+" damage to "+ao.getName());
-				}
+				if(al.isNearPlayer())if(al.isNearPlayer())Messages.instance().addMessage(al.getName()+" strikes at "+ao.getName());
+				ao.changeState(al, args);
 			}
 		}
 		wasExecuted = true;

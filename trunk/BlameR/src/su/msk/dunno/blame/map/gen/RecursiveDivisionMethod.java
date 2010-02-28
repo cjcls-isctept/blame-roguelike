@@ -5,6 +5,7 @@ import java.util.LinkedList;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
 
+import su.msk.dunno.blame.main.Blame;
 import su.msk.dunno.blame.map.Field;
 import su.msk.dunno.blame.map.tiles.Door;
 import su.msk.dunno.blame.map.tiles.Floor;
@@ -19,7 +20,7 @@ public class RecursiveDivisionMethod
 		int[][] map = new int[field.getN_x()][field.getN_y()];
 		
 		create4Rooms(map, field, 1, 1, field.getN_x()-2, field.getN_y()-2);
-		addStations(map, 10);
+		addStations(map, Blame.num_stations);
 		createSolidEdges(map);
 		return map;
 	}
