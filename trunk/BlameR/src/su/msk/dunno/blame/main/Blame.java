@@ -18,6 +18,7 @@ import su.msk.dunno.blame.objects.livings.Cibo;
 import su.msk.dunno.blame.objects.livings.Killy;
 import su.msk.dunno.blame.support.Color;
 import su.msk.dunno.blame.support.MyFont;
+import su.msk.dunno.blame.support.TrueTypeFont;
 import su.msk.dunno.blame.support.listeners.EventManager;
 import su.msk.dunno.blame.support.listeners.KeyListener;
 
@@ -57,7 +58,7 @@ public class Blame
 		
 		GL11.glClear(GL11.GL_COLOR_BUFFER_BIT/* | GL11.GL_DEPTH_BUFFER_BIT*/);		
 		GL11.glLoadIdentity();
-		MyFont.instance().drawString("Loading system...", 20, height-20, 0.2f, Color.GREEN);
+		TrueTypeFont.instance().drawString("Loading system...", 20, height-25, Color.GREEN);
 		Display.sync(Blame.framerate);
 		Display.update();
 		

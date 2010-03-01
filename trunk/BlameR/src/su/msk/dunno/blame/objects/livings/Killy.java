@@ -1,6 +1,7 @@
 package su.msk.dunno.blame.objects.livings;
 
 import java.util.HashMap;
+import java.util.ListIterator;
 
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.Display;
@@ -30,6 +31,7 @@ import su.msk.dunno.blame.support.Color;
 import su.msk.dunno.blame.support.Messages;
 import su.msk.dunno.blame.support.MyFont;
 import su.msk.dunno.blame.support.Point;
+import su.msk.dunno.blame.support.TrueTypeFont;
 import su.msk.dunno.blame.support.listeners.EventManager;
 import su.msk.dunno.blame.support.listeners.KeyListener;
 
@@ -264,7 +266,7 @@ public class Killy extends ALiving implements IScreen
 		return "Silicon Creature".equals(ao.getName());
 	}
 	
-	public boolean checkPlayerStatus()
+	@Override public boolean checkStatus(ListIterator<ALiving> li) 
 	{
 		if(health < 0)
 		{
@@ -318,55 +320,38 @@ public class Killy extends ALiving implements IScreen
 	{
 		Messages.instance().showMessages();
 		// statistics
-		int k = Blame.height-20;
-		MyFont.instance().drawString(getName(),                             
-				Blame.width-200, k, 0.2f, Color.WHITE); k-= 20;
-		MyFont.instance().drawString("HP: "+health,                         
-				Blame.width-200, k, 0.2f, Color.WHITE); k-= 20;
-		MyFont.instance().drawString("Damage: "+weapon.showDamage(),                         
-				Blame.width-200, k, 0.2f, Color.WHITE); k-= 20;
-		MyFont.instance().drawString("Energy: "+weapon.showEnergy(),                         
-				Blame.width-200, k, 0.2f, Color.WHITE); k-= 20;
-		/*MyFont.instance().drawString("Infection: "+this.infection_level,                         
-				Blame.width-190, k, 0.2f, Color.WHITE); k-= 15;*/
+		int k = Blame.height-25;
+		TrueTypeFont.instance().drawString(getName(), Blame.width-200, k, Color.WHITE); k-= 20;
+		TrueTypeFont.instance().drawString("HP: "+health, Blame.width-200, k, Color.WHITE); k-= 20;
+		TrueTypeFont.instance().drawString("Damage: "+weapon.showDamage(), Blame.width-200, k, Color.WHITE); k-= 20;
+		TrueTypeFont.instance().drawString("Energy: "+weapon.showEnergy(), Blame.width-200, k, Color.WHITE); k-= 20;
 		if(infection_level < 35)
 		{
-			MyFont.instance().drawString("Infection: Low",                         
-					Blame.width-200, k, 0.2f, Color.GREEN); k-= 20;
+			TrueTypeFont.instance().drawString("Infection: low", Blame.width-200, k, Color.GREEN); k-= 20;
 		}
 		else if(infection_level >= 35 && infection_level < 75)
 		{
-			MyFont.instance().drawString("Infection: Medium",                         
-					Blame.width-200, k, 0.2f, Color.YELLOW); k-= 20;
+			TrueTypeFont.instance().drawString("Infection: medium", Blame.width-200, k, Color.YELLOW); k-= 20;
 		}
 		else if(infection_level >= 75 && infection_level < 100)
 		{
-			MyFont.instance().drawString("Infection: High!",                         
-					Blame.width-200, k, 0.2f, Color.RED); k-= 20;
+			TrueTypeFont.instance().drawString("Infection: high!", Blame.width-200, k, Color.RED); k-= 20;
 		}
 		else if(infection_level >= 100)
 		{
-			MyFont.instance().drawString("Infection: Mortal",                         
-					Blame.width-200, k, 0.2f, Color.WHITE); k-= 20;
+			TrueTypeFont.instance().drawString("Infection: mortal", Blame.width-200, k, Color.WHITE); k-= 20;
 		}
-				
-		MyFont.instance().drawString("Time: "+Livings.instance().getTime(), 
-				Blame.width-200, k, 0.2f, Color.WHITE); k-= 20;
-		MyFont.instance().drawString("FPS: "+Blame.fps,                     
-				Blame.width-200, k, 0.2f, Color.WHITE); k-= 20;
-		MyFont.instance().drawString("Anima: "+field.animations.size(),     
-				Blame.width-200, k, 0.2f, Color.WHITE); k-= 20;
-		MyFont.instance().drawString("PlayerMoves: "+field.playerMoves,     
-				Blame.width-200, k, 0.2f, Color.WHITE); k -= 20;
+		TrueTypeFont.instance().drawString("Time: "+Livings.instance().getTime(), Blame.width-200, k, Color.WHITE); k-= 20;
+		TrueTypeFont.instance().drawString("FPS: "+Blame.fps, Blame.width-200, k, Color.WHITE); k-= 20;
+		TrueTypeFont.instance().drawString("Anima: "+field.animations.size(), Blame.width-200, k, Color.WHITE); k-= 20;
+		TrueTypeFont.instance().drawString("PlayerMoves: "+field.playerMoves, Blame.width-200, k, Color.WHITE); k-= 20;
 		if(isFollowPlayer)
 		{
-			MyFont.instance().drawString("Following "+("Killy".equals(getName())?"Cibo":"Killy"),     
-					Blame.width-200, k, 0.2f, Color.WHITE); k -= 20;
+			TrueTypeFont.instance().drawString("Following "+("Killy".equals(getName())?"Cibo":"Killy"), Blame.width-200, k, Color.WHITE); k-= 20;
 		}
 		if(isAttackEnemies)
 		{
-			MyFont.instance().drawString("Attack on sight",     
-					Blame.width-200, k, 0.2f, Color.WHITE);
+			TrueTypeFont.instance().drawString("Attack on sight", Blame.width-200, k, Color.WHITE); k-= 20;
 		}
 	}
 

@@ -15,6 +15,7 @@ import su.msk.dunno.blame.prototypes.IScreen;
 import su.msk.dunno.blame.support.Color;
 import su.msk.dunno.blame.support.Messages;
 import su.msk.dunno.blame.support.MyFont;
+import su.msk.dunno.blame.support.TrueTypeFont;
 import su.msk.dunno.blame.support.listeners.EventManager;
 import su.msk.dunno.blame.support.listeners.KeyListener;
 
@@ -52,14 +53,13 @@ public class Inventory implements IScreen
 	{
 		GL11.glClear(GL11.GL_COLOR_BUFFER_BIT/* | GL11.GL_DEPTH_BUFFER_BIT*/);		
 		GL11.glLoadIdentity();
-		int k = Blame.height-20;
+		int k = Blame.height-25;
 		int num = 1;
-		MyFont.instance().drawString(owner.getName()+"'s inventory", 20, k, 0.2f, Color.WHITE); k -= 30;
+		TrueTypeFont.instance().drawString(owner.getName()+"'s inventory", 20, k, Color.WHITE); k -= 30;
 		if(selectedItem != null)
 		{
-			MyFont.instance().drawString(selectedItem.getName()+":", 20, k, 0.2f, Color.WHITE); k -= 30;
-			MyFont.instance().drawString(selectedItem.getState().get("Info"), 
-										20, k, 0.2f, Color.WHITE);
+			TrueTypeFont.instance().drawString(selectedItem.getName()+":", 20, k, Color.WHITE); k -= 30;
+			TrueTypeFont.instance().drawString(selectedItem.getState().get("Info"), 20, k, Color.WHITE);
 		}
 		else if(mode == TO_SELECT_SOCKET)
 		{
@@ -67,7 +67,7 @@ public class Inventory implements IScreen
 			{
 				if(i.getState().containsKey("Part"))
 				{
-					MyFont.instance().drawString(num+". "+i.getName(), 20, k, 0.2f, i.getColor()); k -= 15;
+					TrueTypeFont.instance().drawString(num+". "+i.getName(), 20, k, i.getColor()); k -= 15;
 					num++;
 				}
 			}
@@ -76,7 +76,7 @@ public class Inventory implements IScreen
 		{
 			for(AObject i: items)
 			{
-				MyFont.instance().drawString(num+". "+i.getName(), 20, k, 0.2f, i.getColor()); k -= 15;
+				TrueTypeFont.instance().drawString(num+". "+i.getName(), 20, k, i.getColor()); k -= 15;
 				num++;
 			}
 		}
