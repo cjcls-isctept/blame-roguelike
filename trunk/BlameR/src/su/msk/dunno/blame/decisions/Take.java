@@ -34,7 +34,7 @@ public class Take extends ADecision
 			}
 			else if(al.isNearPlayer())Messages.instance().addMessage(al.getName()+"'s inventory is full");
 		}
-		else if(al.isNearPlayer())Messages.instance().addMessage("Nothing to pick up!");
+		else if(al.isNearPlayer())Messages.instance().addPropMessage("decision.take.noitem");
 		wasExecuted = true;
 	}
 }
