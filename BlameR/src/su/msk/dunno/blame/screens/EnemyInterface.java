@@ -9,6 +9,7 @@ import su.msk.dunno.blame.prototypes.ALiving;
 import su.msk.dunno.blame.prototypes.IScreen;
 import su.msk.dunno.blame.support.Color;
 import su.msk.dunno.blame.support.MyFont;
+import su.msk.dunno.blame.support.TrueTypeFont;
 import su.msk.dunno.blame.support.listeners.EventManager;
 import su.msk.dunno.blame.support.listeners.KeyListener;
 
@@ -37,10 +38,10 @@ public class EnemyInterface implements IScreen
 	
 	public void showInterface()
 	{
-		int k = Blame.height-20;
-		MyFont.instance().drawString(al.getName()+"'s mind", 20, k, 0.2f, Color.WHITE); k-=20; k-=20;
-		MyFont.instance().drawString("ERROR: Unknown data format!", 20, k, 0.2f, Color.WHITE); k-=20;
-		MyFont.instance().drawString("1. Exit", 20, k, 0.2f, Color.WHITE);
+		int k = Blame.height-25;
+		TrueTypeFont.instance().drawString(al.getName()+"'s mind", 20, k, Color.WHITE); k-=20; k-=20;
+		TrueTypeFont.instance().drawString("ERROR: Unknown data format!", 20, k, Color.WHITE); k-=20;
+		TrueTypeFont.instance().drawString("1. Exit", 20, k, Color.WHITE);
 	}
 
 	public void process() 

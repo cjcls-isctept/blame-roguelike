@@ -16,6 +16,7 @@ import su.msk.dunno.blame.prototypes.IScreen;
 import su.msk.dunno.blame.support.Color;
 import su.msk.dunno.blame.support.Messages;
 import su.msk.dunno.blame.support.MyFont;
+import su.msk.dunno.blame.support.TrueTypeFont;
 import su.msk.dunno.blame.support.listeners.EventManager;
 import su.msk.dunno.blame.support.listeners.KeyListener;
 
@@ -119,9 +120,9 @@ public class RebuildStation extends ALiving implements IScreen
 	public void showStationInterface()
 	{
 		int k = Blame.height-20;
-		MyFont.instance().drawString(getName()+" welcomes you, "+player.getName()+"!", 20, k, 0.2f, Color.WHITE); k-=20; k-=20;
+		TrueTypeFont.instance().drawString(getName()+" welcomes you, "+player.getName()+"!", 20, k, Color.WHITE); k-=20; k-=20;
 		
-		MyFont.instance().drawString("Mixture capacity:", 20, k, 0.2f, Color.WHITE); k-=20;		
+		TrueTypeFont.instance().drawString("Mixture capacity:", 20, k, Color.WHITE); k-=20;		
 		StringBuilder sb = new StringBuilder();
 		int n = mixture_capacity/5;
 		Color c = Color.WHITE;
@@ -129,15 +130,15 @@ public class RebuildStation extends ALiving implements IScreen
 		else if(n >= 9)c = Color.YELLOW;
 		else c = Color.RED;
 		for(int i = 0; i < n; i++)sb.append("#");
-		MyFont.instance().drawString(sb.toString(), 20, k, 0.2f, c); k-=20; k-=20;
+		TrueTypeFont.instance().drawString(sb.toString(), 20, k, c); k-=20; k-=20;
 		
-		MyFont.instance().drawString(player.getName()+"'s health: "+player.getHealth(), 20, k, 0.2f, Color.WHITE); k-=20;
-		MyFont.instance().drawString(player.getName()+"'s infection level: "+player.getInfectionLevel(), 20, k, 0.2f, Color.WHITE); k-=20; k-=20;
-		MyFont.instance().drawString("1. Improve health by 10", 20, k, 0.2f, Color.WHITE); k-=20;
-		MyFont.instance().drawString("2. Improve health by 1", 20, k, 0.2f, Color.WHITE); k-=20;
-		MyFont.instance().drawString("3. Reduce infection level by 10", 20, k, 0.2f, Color.WHITE); k-=20;
-		MyFont.instance().drawString("4. Reduce infection level by 1", 20, k, 0.2f, Color.WHITE); k-=20;
-		MyFont.instance().drawString("5. Exit", 20, k, 0.2f, Color.WHITE); k-=20;
+		TrueTypeFont.instance().drawString(player.getName()+"'s health: "+player.getHealth(), 20, k, Color.WHITE); k-=20;
+		TrueTypeFont.instance().drawString(player.getName()+"'s infection level: "+player.getInfectionLevel(), 20, k, Color.WHITE); k-=20; k-=20;
+		TrueTypeFont.instance().drawString("1. Improve health by 10", 20, k, Color.WHITE); k-=20;
+		TrueTypeFont.instance().drawString("2. Improve health by 1", 20, k, Color.WHITE); k-=20;
+		TrueTypeFont.instance().drawString("3. Reduce infection level by 10", 20, k, Color.WHITE); k-=20;
+		TrueTypeFont.instance().drawString("4. Reduce infection level by 1", 20, k, Color.WHITE); k-=20;
+		TrueTypeFont.instance().drawString("5. Exit", 20, k, Color.WHITE); k-=20;
 		
 		Messages.instance().showMessages();
 	}

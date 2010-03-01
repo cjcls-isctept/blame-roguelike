@@ -26,6 +26,7 @@ import su.msk.dunno.blame.support.Color;
 import su.msk.dunno.blame.support.Messages;
 import su.msk.dunno.blame.support.MyFont;
 import su.msk.dunno.blame.support.Point;
+import su.msk.dunno.blame.support.TrueTypeFont;
 import su.msk.dunno.blame.support.listeners.EventManager;
 import su.msk.dunno.blame.support.listeners.KeyListener;
 
@@ -78,7 +79,20 @@ public class Weapon implements IScreen
 	{
 		GL11.glClear(GL11.GL_COLOR_BUFFER_BIT/* | GL11.GL_DEPTH_BUFFER_BIT*/);		
 		GL11.glLoadIdentity();
-		MyFont.instance().drawString(owner.getName()+"'s weapon", 20, Blame.height-20, 0.2f, Color.WHITE);
+		TrueTypeFont.instance().drawString(owner.getName()+"'s weapon", 20, Blame.height-25, Color.WHITE);
+		int k = Blame.height-40;
+		for(String s: effects.keySet())
+		{
+			TrueTypeFont.instance().drawString(s+": "+String.format("%1.0f", Float.valueOf(effects.get(s)))+
+											   (bonuses.containsKey(s)?" (+"+String.format("%1$.0f", Float.valueOf(bonuses.get(s))/Float.valueOf(effects.get(s))*100)+"% bonus)":""), 20, k, Color.GREEN); k -= 15;
+		}
+		if(isSelectSocket)
+		{
+			k -= 15;
+			TrueTypeFont.instance().drawString(weaponView[selector.cur_pos.x][selector.cur_pos.y].getName(), 20, k, 
+										 	   weaponView[selector.cur_pos.x][selector.cur_pos.y].getColor());
+		}
+		Messages.instance().showMessages();
 		GL11.glTranslatef((Blame.width-800)/2, (Blame.height-600)/2, 0.0f);
 		GL11.glScalef(0.2f, 0.2f, 1.0f);
 		for(int i = 0; i < weapon_width; i++)
@@ -92,23 +106,13 @@ public class Weapon implements IScreen
 											   		  weaponView[i][j].getColor());
 			}
 		}
-		int k = Blame.height-40;
-		for(String s: effects.keySet())
-		{
-			MyFont.instance().drawString(s+": "+String.format("%1.0f", Float.valueOf(effects.get(s)))+
-					(bonuses.containsKey(s)?" (+"+String.format("%1$.0f", Float.valueOf(bonuses.get(s))/Float.valueOf(effects.get(s))*100)+"% bonus)":""), 20, k, 0.2f, Color.GREEN); k -= 15;
-		}
 		if(isSelectSocket)
 		{
 			MyFont.instance().drawDisplayList(selector.getCode(), 
 			 								  selector.cur_pos.x*100*3/4, 
 			 								  selector.cur_pos.y*100, 
 			 								  selector.getColor());
-			k -= 15;
-			MyFont.instance().drawString(weaponView[selector.cur_pos.x][selector.cur_pos.y].getName(), 20, k, 0.2f, 
-										 weaponView[selector.cur_pos.x][selector.cur_pos.y].getColor());
 		}
-		Messages.instance().showMessages();
 		Display.sync(Blame.framerate);
 		Display.update();
 	}
@@ -239,6 +243,7 @@ public class Weapon implements IScreen
 		}
 		else 
 		{
+			Messages.instance().addMessage("Inventory is full. Drop the part to the ground");
 			owner.setDecision(new Drop(owner, ao));
 			return false;
 		}
@@ -580,8 +585,7 @@ public class Weapon implements IScreen
         		}
         		else if(weaponView[selector.cur_pos.x][selector.cur_pos.y].getState().containsKey("Part"))
         		{
-        			if(!removeImp(weaponView[selector.cur_pos.x][selector.cur_pos.y]))
-        				Messages.instance().addMessage("Inventory is full. Drop the part to the ground");
+        			removeImp(weaponView[selector.cur_pos.x][selector.cur_pos.y]);
         		}
         		else
         			Messages.instance().addMessage("There is no socket or weapon part here");

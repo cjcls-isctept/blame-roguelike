@@ -75,8 +75,7 @@ public class Livings
 		if(!(Blame.playCibo?cibo:killy).isDead)
 		{
 			(Blame.playCibo?cibo:killy).increaseInfectionLevel();
-			(Blame.playCibo?cibo:killy).checkPlayerStatus();
-			if(!(Blame.playCibo?cibo:killy).checkPlayerStatus())
+			if(!(Blame.playCibo?cibo:killy).checkStatus(null))
 			{
 				(Blame.playCibo?cibo:killy).nextStep();
 				(Blame.playCibo?cibo:killy).updateOldPos();				
@@ -88,8 +87,7 @@ public class Livings
 		if(!(Blame.playCibo?killy:cibo).isDead)
 		{
 			(Blame.playCibo?killy:cibo).increaseInfectionLevel();
-			(Blame.playCibo?killy:cibo).checkPlayerStatus();
-			if(!(Blame.playCibo?cibo:killy).checkPlayerStatus())
+			if(!(Blame.playCibo?killy:cibo).checkStatus(null))
 			{
 				(Blame.playCibo?killy:cibo).nextStep();
 				(Blame.playCibo?killy:cibo).updateOldPos();
