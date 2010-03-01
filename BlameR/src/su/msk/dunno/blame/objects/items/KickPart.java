@@ -19,7 +19,7 @@ public class KickPart extends AItem
 
 	 	@Override public String getName() 
 	 	{
-	 		return "Kick";
+	 		return "KickPart";
 	 	}
 
 	 	@Override public boolean getPassability() 

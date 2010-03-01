@@ -1,12 +1,17 @@
 package su.msk.dunno.blame.support;
 
 import java.util.LinkedList;
+import java.util.Locale;
+import java.util.ResourceBundle;
+
+import su.msk.dunno.blame.main.Blame;
 
 public class Messages 
 {
 	private static Messages instance;
 	private LinkedList<String> messages;
 	private int message_capacity;
+	private ResourceBundle localized_messages;
 	
 	public static Messages instance()
 	{
@@ -21,6 +26,29 @@ public class Messages
 	{
 		messages = new LinkedList<String>();
 		message_capacity = 6;
+		if(Blame.lang != null)localized_messages = ResourceBundle.getBundle("Messages", new Locale(Blame.lang));
+		else localized_messages = ResourceBundle.getBundle("Messages", new Locale("en"));
+	}
+	
+	public void addPropMessage(String message_code)
+	{
+		String s = localized_messages.getString(message_code);
+		addMessage(s);
+	}
+	
+	public void addPropMessage(String message_code, String parameter1)
+	{
+		String s = localized_messages.getString(message_code);
+		s = s.replaceFirst("\\?", parameter1);
+		addMessage(s);
+	}
+	
+	public void addPropMessage(String message_code, String parameter1, String parameter2)
+	{
+		String s = localized_messages.getString(message_code);
+		s = s.replaceFirst("\\?", parameter1);
+		s = s.replaceFirst("\\?", parameter2);
+		addMessage(s);
 	}
 	
 	public void addMessage(String s)

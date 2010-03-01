@@ -35,6 +35,8 @@ public class Blame
 	private int num_creatures = 60;
 	public static int num_stations = 10;
 	
+	public static String lang;
+	
 	private boolean isRunning;
 	
 	public static int scale = 20;
@@ -58,7 +60,7 @@ public class Blame
 		
 		GL11.glClear(GL11.GL_COLOR_BUFFER_BIT/* | GL11.GL_DEPTH_BUFFER_BIT*/);		
 		GL11.glLoadIdentity();
-		TrueTypeFont.instance().drawString("Loading system...", 20, height-25, Color.GREEN);
+		TrueTypeFont.instance().drawString("Загружаем систему...", 20, height-25, Color.GREEN);
 		Display.sync(Blame.framerate);
 		Display.update();
 		
@@ -196,6 +198,7 @@ public class Blame
 			N_y = Integer.valueOf(p.getProperty("N_y"));
 			num_creatures = Integer.valueOf(p.getProperty("creatures"));
 			num_stations = Integer.valueOf(p.getProperty("stations"));
+			lang = p.getProperty("lang");
 		} 
 		catch (FileNotFoundException e) 
 		{
