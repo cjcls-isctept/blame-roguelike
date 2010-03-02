@@ -228,7 +228,7 @@ public class Killy extends ALiving implements IScreen
 		if(args.containsKey("Damage"))
 		{
 			health -= Integer.valueOf(args.get("Damage"));
-			if(isNearPlayer())Messages.instance().addMessage(getName()+" receives "+args.get("Damage")+" damage");
+			if(isNearPlayer())Messages.instance().addPropMessage("living.receivedamage", getName(), args.get("Damage"));
 		}
 		if(args.containsKey("HealthPlus"))
 		{
@@ -271,12 +271,12 @@ public class Killy extends ALiving implements IScreen
 		if(health < 0)
 		{
 			isDead = true;
-			if(isNearPlayer())Messages.instance().addMessage(getName()+" dies");
+			if(isNearPlayer())Messages.instance().addPropMessage("living.dies", getName());
 		}
 		if(infection_level >= 100)
 		{
 			isDead = true;
-			if(isNearPlayer())Messages.instance().addMessage(getName()+" dies from the infection");
+			if(isNearPlayer())Messages.instance().addPropMessage("player.infectiondeath", getName());
 		}
 		if(isDead)
 		{
@@ -322,24 +322,24 @@ public class Killy extends ALiving implements IScreen
 		// statistics
 		int k = Blame.height-25;
 		TrueTypeFont.instance().drawString(getName(), Blame.width-200, k, Color.WHITE); k-= 20;
-		TrueTypeFont.instance().drawString("HP: "+health, Blame.width-200, k, Color.WHITE); k-= 20;
-		TrueTypeFont.instance().drawString("Damage: "+weapon.showDamage(), Blame.width-200, k, Color.WHITE); k-= 20;
-		TrueTypeFont.instance().drawString("Energy: "+weapon.showEnergy(), Blame.width-200, k, Color.WHITE); k-= 20;
+		TrueTypeFont.instance().drawString(Messages.instance().getPropMessage("interface.hp", health+""), Blame.width-200, k, Color.WHITE); k-= 20;
+		TrueTypeFont.instance().drawString(Messages.instance().getPropMessage("interface.damage", weapon.showDamage()+""), Blame.width-200, k, Color.WHITE); k-= 20;
+		TrueTypeFont.instance().drawString(Messages.instance().getPropMessage("interface.energy", weapon.showEnergy()+""), Blame.width-200, k, Color.WHITE); k-= 20;
 		if(infection_level < 35)
 		{
-			TrueTypeFont.instance().drawString("Infection: low", Blame.width-200, k, Color.GREEN); k-= 20;
+			TrueTypeFont.instance().drawString(Messages.instance().getPropMessage("interface.infection.low"), Blame.width-200, k, Color.GREEN); k-= 20;
 		}
 		else if(infection_level >= 35 && infection_level < 75)
 		{
-			TrueTypeFont.instance().drawString("Infection: medium", Blame.width-200, k, Color.YELLOW); k-= 20;
+			TrueTypeFont.instance().drawString(Messages.instance().getPropMessage("interface.infection.medium"), Blame.width-200, k, Color.YELLOW); k-= 20;
 		}
 		else if(infection_level >= 75 && infection_level < 100)
 		{
-			TrueTypeFont.instance().drawString("Infection: high!", Blame.width-200, k, Color.RED); k-= 20;
+			TrueTypeFont.instance().drawString(Messages.instance().getPropMessage("interface.infection.high"), Blame.width-200, k, Color.RED); k-= 20;
 		}
 		else if(infection_level >= 100)
 		{
-			TrueTypeFont.instance().drawString("Infection: mortal", Blame.width-200, k, Color.WHITE); k-= 20;
+			TrueTypeFont.instance().drawString(Messages.instance().getPropMessage("interface.infection.mortal"), Blame.width-200, k, Color.WHITE); k-= 20;
 		}
 		TrueTypeFont.instance().drawString("Time: "+Livings.instance().getTime(), Blame.width-200, k, Color.WHITE); k-= 20;
 		TrueTypeFont.instance().drawString("FPS: "+Blame.fps, Blame.width-200, k, Color.WHITE); k-= 20;
@@ -518,7 +518,7 @@ public class Killy extends ALiving implements IScreen
         	public void onKeyDown()
         	{
         		inventory.openInventory(Inventory.TO_CHECK);
-        		isNextStep = true;
+        		//isNextStep = true;
         	}
         });
 		playerEvents.addListener(Keyboard.KEY_D, new KeyListener(0)
@@ -534,7 +534,7 @@ public class Killy extends ALiving implements IScreen
         	public void onKeyDown()
         	{
         		weapon.openWeaponView();
-        		isNextStep = true;
+        		//isNextStep = true;
         	}
         });
 		playerEvents.addListener(Keyboard.KEY_F1, new KeyListener(0)

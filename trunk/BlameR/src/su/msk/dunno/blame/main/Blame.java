@@ -17,6 +17,7 @@ import su.msk.dunno.blame.objects.Livings;
 import su.msk.dunno.blame.objects.livings.Cibo;
 import su.msk.dunno.blame.objects.livings.Killy;
 import su.msk.dunno.blame.support.Color;
+import su.msk.dunno.blame.support.Messages;
 import su.msk.dunno.blame.support.MyFont;
 import su.msk.dunno.blame.support.TrueTypeFont;
 import su.msk.dunno.blame.support.listeners.EventManager;
@@ -60,7 +61,7 @@ public class Blame
 		
 		GL11.glClear(GL11.GL_COLOR_BUFFER_BIT/* | GL11.GL_DEPTH_BUFFER_BIT*/);		
 		GL11.glLoadIdentity();
-		TrueTypeFont.instance().drawString("Загружаем систему...", 20, height-25, Color.GREEN);
+		TrueTypeFont.instance().drawString(Messages.instance().getPropMessage("initial.loading"), 20, height-25, Color.GREEN);
 		Display.sync(Blame.framerate);
 		Display.update();
 		

@@ -27,12 +27,12 @@ public class Take extends ADecision
 				if(field.removeObject(item))
 				{
 					al.inventory.addItem(item);
-					if(al.isNearPlayer())Messages.instance().addMessage(al.getName()+" picks up "+item.getName()+" from the floor");
+					if(al.isNearPlayer())Messages.instance().addPropMessage("decision.take", al.getName(), item.getName());
 				}
-				else if(al.isNearPlayer())Messages.instance().addMessage(item.getName()+" doesn't lie on the floor!");
+				else if(al.isNearPlayer())Messages.instance().addPropMessage("decision.take.wrongitem", item.getName());
 				
 			}
-			else if(al.isNearPlayer())Messages.instance().addMessage(al.getName()+"'s inventory is full");
+			else if(al.isNearPlayer())Messages.instance().addPropMessage("decision.take.inventoryfull", al.getName());
 		}
 		else if(al.isNearPlayer())Messages.instance().addPropMessage("decision.take.noitem");
 		wasExecuted = true;

@@ -24,7 +24,7 @@ public class Open extends ADecision
 			if("Close door".equals(ao.getName()))
 			{
 				ao.changeState(al, args);
-				if(al.isNearPlayer())Messages.instance().addMessage(al.getName()+" opens a door");
+				if(al.isNearPlayer())Messages.instance().addPropMessage("decision.open", al.getName());
 			}
 		}
 		wasExecuted = true;

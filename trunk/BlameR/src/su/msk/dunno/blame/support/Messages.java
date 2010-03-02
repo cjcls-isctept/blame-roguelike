@@ -30,6 +30,26 @@ public class Messages
 		else localized_messages = ResourceBundle.getBundle("Messages", new Locale("en"));
 	}
 	
+	public String getPropMessage(String message_code)
+	{
+		return localized_messages.getString(message_code);
+	}
+	
+	public String getPropMessage(String message_code, String parameter1)
+	{
+		String s = localized_messages.getString(message_code); 
+		s = s.replaceFirst("\\?", parameter1);
+		return s;
+	}
+	
+	public String getPropMessage(String message_code, String parameter1, String parameter2) 
+	{
+		String s = localized_messages.getString(message_code); 
+		s = s.replaceFirst("\\?", parameter1);
+		s = s.replaceFirst("\\?", parameter2);
+		return s;
+	}
+	
 	public void addPropMessage(String message_code)
 	{
 		String s = localized_messages.getString(message_code);
