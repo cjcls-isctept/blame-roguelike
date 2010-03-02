@@ -60,7 +60,7 @@ public class RebuildStation extends ALiving implements IScreen
 		{
 			if(!isGreetingsMessageDone)
 			{
-				Messages.instance().addMessage("Entering "+getName()+"!");
+				Messages.instance().addPropMessage("rebuild.enter",getName());
 				isGreetingsMessageDone = true;
 			}
 		}
@@ -120,9 +120,9 @@ public class RebuildStation extends ALiving implements IScreen
 	public void showStationInterface()
 	{
 		int k = Blame.height-20;
-		TrueTypeFont.instance().drawString(getName()+" welcomes you, "+player.getName()+"!", 20, k, Color.WHITE); k-=20; k-=20;
+		TrueTypeFont.instance().drawString(Messages.instance().getPropMessage("rebuild.welcome", getName(), player.getName()), 20, k, Color.WHITE); k-=20; k-=20;
 		
-		TrueTypeFont.instance().drawString("Mixture capacity:", 20, k, Color.WHITE); k-=20;		
+		TrueTypeFont.instance().drawString(Messages.instance().getPropMessage("rebuild.mixture.capacity"), 20, k, Color.WHITE); k-=20;		
 		StringBuilder sb = new StringBuilder();
 		int n = mixture_capacity/5;
 		Color c = Color.WHITE;
@@ -132,8 +132,8 @@ public class RebuildStation extends ALiving implements IScreen
 		for(int i = 0; i < n; i++)sb.append("#");
 		TrueTypeFont.instance().drawString(sb.toString(), 20, k, c); k-=20; k-=20;
 		
-		TrueTypeFont.instance().drawString(player.getName()+"'s health: "+player.getHealth(), 20, k, Color.WHITE); k-=20;
-		TrueTypeFont.instance().drawString(player.getName()+"'s infection level: "+player.getInfectionLevel(), 20, k, Color.WHITE); k-=20; k-=20;
+		TrueTypeFont.instance().drawString(Messages.instance().getPropMessage("rebuild.player.health", player.getName(), player.getHealth()+""), 20, k, Color.WHITE); k-=20;
+		TrueTypeFont.instance().drawString(Messages.instance().getPropMessage("rebuild.player.infection", player.getName(), player.getInfectionLevel()), 20, k, Color.WHITE); k-=20; k-=20;
 		TrueTypeFont.instance().drawString("1. Improve health by 10", 20, k, Color.WHITE); k-=20;
 		TrueTypeFont.instance().drawString("2. Improve health by 1", 20, k, Color.WHITE); k-=20;
 		TrueTypeFont.instance().drawString("3. Reduce infection level by 10", 20, k, Color.WHITE); k-=20;
@@ -156,7 +156,7 @@ public class RebuildStation extends ALiving implements IScreen
 					player.changeState(player, args);
 					mixture_capacity -= 10;
 				}
-				else Messages.instance().addMessage("Not enough mixture!");
+				else Messages.instance().addPropMessage("rebuild.nomixture");
 			}
 		});
 		events.addListener(Keyboard.KEY_2, new KeyListener(0)
@@ -170,7 +170,7 @@ public class RebuildStation extends ALiving implements IScreen
 					player.changeState(player, args);
 					mixture_capacity -= 1;
 				}
-				else Messages.instance().addMessage("Not enough mixture!");
+				else Messages.instance().addPropMessage("rebuild.nomixture");
 			}
 		});
 		events.addListener(Keyboard.KEY_3, new KeyListener(0)
@@ -184,7 +184,7 @@ public class RebuildStation extends ALiving implements IScreen
 					player.changeState(player, args);
 					mixture_capacity -= 10;
 				}
-				else Messages.instance().addMessage("Not enough mixture!");
+				else Messages.instance().addPropMessage("rebuild.nomixture");
 			}
 		});
 		events.addListener(Keyboard.KEY_4, new KeyListener(0)
@@ -198,7 +198,7 @@ public class RebuildStation extends ALiving implements IScreen
 					player.changeState(player, args);
 					mixture_capacity -= 1;
 				}
-				else Messages.instance().addMessage("Not enough mixture!");
+				else Messages.instance().addPropMessage("rebuild.nomixture");
 			}
 		});
 		events.addListener(Keyboard.KEY_5, new KeyListener(0)

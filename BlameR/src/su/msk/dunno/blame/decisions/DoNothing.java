@@ -14,7 +14,7 @@ public class DoNothing extends ADecision
 
 	@Override public void doAction(int actionMoment) 
 	{
-		Messages.instance().addMessage(al.getName()+" does nothing succefully");
+		Messages.instance().addPropMessage("decision.nothing", al.getName());
 		wasExecuted = true;
 	}
 	

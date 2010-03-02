@@ -243,7 +243,7 @@ public class Weapon implements IScreen
 		}
 		else 
 		{
-			Messages.instance().addMessage("Inventory is full. Drop the part to the ground");
+			Messages.instance().addPropMessage("weapon.inventoryfull");
 			owner.setDecision(new Drop(owner, ao));
 			return false;
 		}
@@ -581,14 +581,14 @@ public class Weapon implements IScreen
         				inventory.openInventory(Inventory.TO_SELECT_SOCKET);
         		else if("Weapon Sceleton".equals(weaponView[selector.cur_pos.x][selector.cur_pos.y].getName()))
         		{
-        			Messages.instance().addMessage("Can't remove this part");
+        			Messages.instance().addPropMessage("weapon.cantremove");
         		}
         		else if(weaponView[selector.cur_pos.x][selector.cur_pos.y].getState().containsKey("Part"))
         		{
         			removeImp(weaponView[selector.cur_pos.x][selector.cur_pos.y]);
         		}
         		else
-        			Messages.instance().addMessage("There is no socket or weapon part here");
+        			Messages.instance().addPropMessage("weapon.nosocket");
         	}
         });
 		weaponEvents.addListener(Keyboard.KEY_ESCAPE, new KeyListener(0)
@@ -596,7 +596,7 @@ public class Weapon implements IScreen
         	public void onKeyDown()
         	{
         		if(isSelectSocket)isSelectSocket = false;
-        		else isWeaponView = false;;
+        		else isWeaponView = false;
         	}
         });
 	}

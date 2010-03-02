@@ -100,18 +100,18 @@ public class SiliconCreature extends ALiving
 		{
 			int d = (int)(Math.random()*Float.valueOf(args.get("Damage")));
 			health -= d;
-			if(isNearPlayer())Messages.instance().addMessage(getName()+" receives "+d+" damage");
+			if(isNearPlayer())Messages.instance().addPropMessage("living.receivedamage", getName(), d+"");
 			
 		}
 		if(args.containsKey("Kick"))
 		{
 			setDecision(new Move(this, field.getDirection(changer.cur_pos, cur_pos), field));
-			if(isNearPlayer())Messages.instance().addMessage(getName()+" kicks back!");
+			if(isNearPlayer())Messages.instance().addPropMessage("living.kickback", getName());
 		}
 		if(args.containsKey("MindHack"))
 		{
 			mind.process();
-			if(isNearPlayer())Messages.instance().addMessage(getName()+"'s mind get hacked!");
+			if(isNearPlayer())Messages.instance().addPropMessage("living.mindhack", getName());
 		}
 	}
 

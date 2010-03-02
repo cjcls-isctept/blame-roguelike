@@ -85,12 +85,12 @@ public class Shoot extends ADecision implements ISelector
 			{
 				if(al.isEnemy(ao))
 				{
-					if(al.isNearPlayer()) Messages.instance().addMessage(al.getName()+" shoots to "+ao.getName());
+					if(al.isNearPlayer()) Messages.instance().addPropMessage("decision.shoot", al.getName(), ao.getName());
 					ao.changeState(al, args);
 				}
 			}
 		}
-		else if(al.isNearPlayer())Messages.instance().addMessage("Not enough energy!");
+		else if(al.isNearPlayer())Messages.instance().addPropMessage("decision.shoot.noenergy");
 		wasExecuted = true;
 	}
 }
