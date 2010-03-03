@@ -14,7 +14,7 @@ import su.msk.dunno.blame.decisions.Move;
 import su.msk.dunno.blame.main.Blame;
 import su.msk.dunno.blame.map.gen.AntNest;
 import su.msk.dunno.blame.map.gen.RecursiveDivisionMethod;
-import su.msk.dunno.blame.map.gen.DebskiLib;
+import su.msk.dunno.blame.map.gen.GenLib;
 import su.msk.dunno.blame.map.tiles.Door;
 import su.msk.dunno.blame.map.tiles.Floor;
 import su.msk.dunno.blame.map.tiles.Wall;
@@ -55,11 +55,11 @@ public class Field
 		{
 			int[][] map = new int[N_x][N_y];
 			if("megastructure".equals(Blame.dungeonType))map = RecursiveDivisionMethod.generate(N_x, N_y);
-			else if("antnest".equals(Blame.dungeonType))map = DebskiLib.CreateAntNest(N_x, N_y);
-			else if("caves".equals(Blame.dungeonType))map = DebskiLib.CreateCaves(N_x, N_y);
-			else if("mines".equals(Blame.dungeonType))map = DebskiLib.CreateMines(N_x, N_y);
-			else if("maze".equals(Blame.dungeonType))map = DebskiLib.CreateMaze(N_x, N_y);
-			else if("standard".equals(Blame.dungeonType))map = DebskiLib.CreateStandardDunegon(N_x, N_y);
+			else if("antnest".equals(Blame.dungeonType))map = GenLib.CreateAntNest(N_x, N_y);
+			else if("caves".equals(Blame.dungeonType))map = GenLib.CreateCaves(N_x, N_y);
+			else if("mines".equals(Blame.dungeonType))map = GenLib.CreateMines(N_x, N_y);
+			else if("maze".equals(Blame.dungeonType))map = GenLib.CreateMaze(N_x, N_y);
+			else if("standard".equals(Blame.dungeonType))map = GenLib.CreateStandardDunegon(N_x, N_y);
 			for(int i = 0; i < N_x; i++)
 			{
 				for(int j = 0; j < N_y; j++)

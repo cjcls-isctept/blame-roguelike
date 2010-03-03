@@ -5,7 +5,7 @@ import java.util.LinkedList;
 import java.util.Random;
 
 // adaptation of the algorithmes from the Jakub Debski's C++ library "RoguelikeLib 0.4 (ñ)"
-public class DebskiLib 
+public class GenLib 
 {
 	public static int LevelElementWall  = '#';
 	public static int LevelElementCorridor  = '.';
