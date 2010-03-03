@@ -1,53 +1,45 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package su.msk.dunno.blame.map.gen;
 
-import bigtroubles.Creatures.Creature;
 import java.util.Collections;
 import java.util.LinkedList;
+import java.util.Random;
 
-import su.msk.dunno.blame.support.Point;
-
-import bigtroubles.Utils.StopWatch;
-import bigtroubles.Utils.RNG;
-
-/**
- *
- * @author Sanja
- * Набор генераторов уровней
- * 
- * Адаптация алгоритмов из C++ библиотеки "RoguelikeLib 0.4 (с) Jakub Debski"
- */
-public class DebskiLib {
-    static int LevelElementWall  = '#';
-    static int LevelElementCorridor  = '.';
-    static int LevelElementGrass  = '"';
-    static int LevelElementPlant  = '&';
-    static int LevelElementRoom  = ',';
-    static int LevelElementDoorClose  = '+';
-    static int LevelElementDoorOpen  = '/';
-    static int LevelElementWater  = '~';
+// adaptation of the algorithmes from the Jakub Debski's C++ library "RoguelikeLib 0.4 (с)"
+public class DebskiLib 
+{
+	public static int LevelElementWall  = '#';
+	public static int LevelElementCorridor  = '.';
+	public static int LevelElementGrass  = '"';
+	public static int LevelElementPlant  = '&';
+	public static int LevelElementRoom  = ',';
+	public static int LevelElementDoorClose  = '+';
+	public static int LevelElementDoorOpen  = '/';
+	public static int LevelElementWater  = '~';
+	public static int LevelElementStation  = 'A';
     public static int LevelElementCorridor_value  = Integer.MAX_VALUE - 2; // Some algorithms (like pathfinding) needs values instead of tiles
     public static int LevelElementRoom_value  = Integer.MAX_VALUE - 1;
     public static int LevelElementWall_value  = Integer.MAX_VALUE;
+	
+    private static Random rng = new Random();
     
-    static StopWatch watch;
-    
-    //--------------------------------------------------------------------------
-    
-    /*::: Генераторы :::*/
+    //---------------------------- Map Generators ----------------------------------------------
     
     // default CreateAntNest
     public static int[][] CreateAntNest(int N_x, int N_y) 
     {
         return CreateAntNest(N_x, N_y, false);
     }
+    
     public static int[][] CreateAntNest(int N_x, int N_y, boolean with_rooms) 
     {
         int[][] level = new int[N_x][N_y];
+        for(int i = 0; i < N_x; i++)
+        {
+        	for(int j = 0; j < N_y; j++)
+        	{
+        		level[i][j] = LevelElementWall;
+        	}
+        }
 
         int x, y;
 
@@ -61,16 +53,16 @@ public class DebskiLib {
         for (int object = 0; object < N_x*N_y/3; ++object) 
         {
             // degree
-            k = Random(360) * 3.1419532 / 180;
+            k = Math.random()*360 * 3.1419532 / 180;
             // position on ellipse by degree
-            x1 = N_x/2 + N_x*sin(k);
-            y1 = N_y/2 + (N_y/2)*cos(k);
+            x1 = N_x/2 + N_x*Math.sin(k);
+            y1 = N_y/2 + (N_y/2)*Math.cos(k);
 
             // object will move not too horizontal and not too vertival
             do {
-                dx = Random(100);
-                dy = Random(100);
-            } while ((abs((int) dx) < 10 && abs((int) dy) < 10));
+                dx = Math.random()*100;
+                dy = Math.random()*100;
+            } while ((Math.abs(dx) < 10 && Math.abs(dy) < 10));
             dx -= 50;
             dy -= 50;
             dx /= 100;
@@ -144,44 +136,60 @@ public class DebskiLib {
                 }
             }
         } // end of if (with_rooms)
+        return level;
     }
-
-    // default CreateCaves
-    public static void CreateCaves(Map level) {
-        CreateCaves(level, 1, 0.65f);
+    
+ // default CreateCaves
+    public static int[][] CreateCaves(int N_x, int N_y) 
+    {
+        return CreateCaves(N_x, N_y, 1, 0.65f);
     }
-    public static void CreateCaves(Map level, int iterations, float density) {
-        if (level.GetWidth() == 0 || level.GetHeight() == 0) {
-            return;
+    public static int[][] CreateCaves(int N_x, int N_y, int iterations, float density) 
+    {
+    	int[][] level = new int[N_x][N_y];
+    	for(int i = 0; i < N_x; i++)
+        {
+        	for(int j = 0; j < N_y; j++)
+        	{
+        		level[i][j] = LevelElementRoom;
+        	}
         }
-
-        level.Clear(LevelElementRoom);
 
         // create a game of life cave
 
         int x, y;
 
-        for (int fill = 0; fill < (level.GetWidth() * level.GetHeight() * density); fill++) {
-            level.SetCell(Random((int) level.GetWidth()), Random((int) level.GetHeight()), LevelElementWall);
+        for (int fill = 0; fill < (N_x * N_y * density); fill++) 
+        {
+            level[Random(N_x)][Random(N_y)] = LevelElementWall;
         }
 
-        for (int iteration = 0; iteration < iterations; iteration++) {
-            for (x = 0; x < (int) level.GetWidth(); x++) {
-                for (y = 0; y < (int) level.GetHeight(); y++) {
+        for (int iteration = 0; iteration < iterations; iteration++) 
+        {
+            for (x = 0; x < N_x; x++) 
+            {
+                for (y = 0; y < N_y; y++) 
+                {
                     int neighbours = CountNeighboursOfType(level, LevelElementWall, new Point(x, y));
 
-                    if (level.GetCell(x, y) == LevelElementWall) {
-                        if (neighbours < 4) {
-                            level.SetCell(x, y, LevelElementRoom);
+                    if (level[x][y] == LevelElementWall) 
+                    {
+                        if (neighbours < 4) 
+                        {
+                            level[x][y] = LevelElementRoom;
                         }
-                    } else {
-                        if (neighbours > 4) {
-                            level.SetCell(x, y, LevelElementWall);
+                    } 
+                    else 
+                    {
+                        if (neighbours > 4) 
+                        {
+                            level[x][y] = LevelElementWall;
                         }
                     }
 
-                    if (x == 0 || x == (int) level.GetWidth() - 1 || y == 0 || y == (int) level.GetHeight() - 1) {
-                        level.SetCell(x, y, LevelElementWall);
+                    if (x == 0 || x == N_x-1 || y == 0 || y == N_y-1) 
+                    {
+                        level[x][y] = LevelElementWall;
                     }
                 }
             }
@@ -189,93 +197,26 @@ public class DebskiLib {
         
         ConnectClosestRooms(level, true);        
         ConvertValuesToTiles(level);
+        
+        return level;
     }
-
-    // default CreateMaze
-    public static void CreateMaze(Map level) {
-        CreateMaze(level, false);
+    
+ // default CreateMines
+    public static int[][] CreateMines(int N_x, int N_y) 
+    {
+        return CreateMines(N_x, N_y, 10);
     }
-    public static void CreateMaze(Map level, boolean allow_loops) {
-        if (level.GetWidth() == 0 || level.GetHeight() == 0) {
-            return;
+    public static int[][] CreateMines(int N_x, int N_y, int max_number_of_rooms) 
+    {
+        int[][] level = new int[N_x][N_y];
+    	for(int i = 0; i < N_x; i++)
+        {
+        	for(int j = 0; j < N_y; j++)
+        	{
+        		level[i][j] = LevelElementWall;
+        	}
         }
-
-        level.Clear();
-
-        LinkedList<Point> drillers = new LinkedList<Point>();
-        drillers.addLast(new Point(level.GetWidth() / 2, level.GetHeight() / 2));
-        while (drillers.size() > 0) {
-            for (int i = 0; i < drillers.size(); i++) {
-                boolean remove_driller = false;
-                Point m = drillers.get(i);
-
-                switch (Random(4)) {
-                    case 0:
-                        m.y -= 2;
-                        if (m.y < 0 || (level.GetCell(m.x, m.y) == LevelElementCorridor)) {
-                            boolean b;
-                            if (Random(5) == 0) {
-                                b = false;
-                            } else {
-                                b = true;
-                            }
-
-                            if (!allow_loops || (allow_loops && b)) {
-                                remove_driller = true;
-                                break;
-                            }
-                        }
-                        level.SetCell(m.x, m.y + 1, LevelElementCorridor);
-                        break;
-                    case 1:
-                        m.y += 2;
-                        if (m.y >= level.GetHeight() || level.GetCell(m.x, m.y) == LevelElementCorridor) {
-                            remove_driller = true;
-                            break;
-                        }
-                        level.SetCell(m.x, m.y - 1, LevelElementCorridor);
-                        break;
-                    case 2:
-                        m.x -= 2;
-                        if (m.x < 0 || level.GetCell(m.x, m.y) == LevelElementCorridor) {
-                            remove_driller = true;
-                            break;
-                        }
-                        level.SetCell(m.x + 1, m.y, LevelElementCorridor);
-                        break;
-                    case 3:
-                        m.x += 2;
-                        if (m.x >= level.GetWidth() || level.GetCell(m.x, m.y) == LevelElementCorridor) {
-                            remove_driller = true;
-                            break;
-                        }
-                        level.SetCell(m.x - 1, m.y, LevelElementCorridor);
-                        break;
-                    }
-                if (remove_driller) {
-                    drillers.remove(m);
-                } else {
-                    drillers.addLast(new Point(m.x, m.y));
-                    drillers.addLast(new Point(m.x, m.y));
-
-                    level.SetCell(m.x, m.y, LevelElementCorridor);
-                    ++i;
-                }
-            }
-        }
-    }
-
-    // default CreateMines
-    public static void CreateMines(Map level) {
-        CreateMines(level, 10);
-    }
-    public static void CreateMines(Map level, int max_number_of_rooms) {
-        if (level.GetWidth() == 0 || level.GetHeight() == 0) {
-            return;
-        }
-
-        level.Clear();
-
+        
         int x, y, sx, sy;
 
         LinkedList<SRoom> rooms = new LinkedList<SRoom>();
@@ -344,15 +285,18 @@ public class DebskiLib {
                             }
                         }
                         // Check what is on that position
-                        if (level.GetCell(x, y) == LevelElementRoom) {
+                        if (level[x][y] == LevelElementRoom) 
+                        {
                             break;
-                        } else if (level.GetCell(x, y) == LevelElementCorridor) {
+                        } 
+                        else if (level[x][y] == LevelElementCorridor) 
+                        {
                             if (CoinToss()) {
                                 break;
                             }
                         }
 
-                        level.SetCell(x, y, LevelElementCorridor);
+                        level[x][y] = LevelElementCorridor;
                     }
                 }
                 // add to list of rooms
@@ -377,11 +321,12 @@ public class DebskiLib {
                             switch (room_type) {
                                 case 0: // rectangle room
                                 case 1:
-                                    level.SetCell(p.x + x, p.y + y, LevelElementRoom);
+                                    level[p.x+x][p.y+y] = LevelElementRoom;
                                     break;
                                 case 3: // round room
-                                    if (Distance(sx / 2, sx / 2, x, y) < sx / 2) {
-                                        level.SetCell(p.x + x, p.y + y, LevelElementRoom);
+                                    if (Distance(sx / 2, sx / 2, x, y) < sx / 2) 
+                                    {
+                                        level[p.x+x][p.y+y] = LevelElementRoom;
                                     }
                                     break;
                             }
@@ -393,28 +338,123 @@ public class DebskiLib {
                     for (y = 0; y <= sy / 2; y++) {
                         for (x = 0; x <= sx / 2; x++) {
                             if (y >= x) {
-                                level.SetCell(p.x + x + sx / 2, p.y + y, LevelElementRoom);
-                                level.SetCell(p.x + x + sx / 2, p.y + sy - y, LevelElementRoom);
-                                level.SetCell(p.x + sx / 2 - x, p.y + y, LevelElementRoom);
-                                level.SetCell(p.x + sx / 2 - x, p.y + sy - y, LevelElementRoom);
+                                level[p.x+x+sx/2][p.y+y] = LevelElementRoom;
+                                level[p.x+x+sx/2][p.y+sy-y] = LevelElementRoom;
+                                level[p.x+sx/2-x][p.y+y] = LevelElementRoom;
+                                level[p.x+sx/2-x][p.y+sy-y] = LevelElementRoom;
                             }
                         }
                     }
                 }
             } // end of room addition
         }
+        
+        return level;
     }
-
-    // default CreateStandartDungeon
-    public static void CreateStandardDunegon(Map level) {
-        CreateStandardDunegon(level, 10, true);
+    
+ // default CreateMaze
+    public static int[][] CreateMaze(int N_x, int N_y) 
+    {
+        return CreateMaze(N_x, N_y, false);
     }
-    public static void CreateStandardDunegon(Map level, int max_number_of_rooms, boolean with_doors) {
-        if (level.GetWidth() == 0 || level.GetHeight() == 0) {
-            return;
+    public static int[][] CreateMaze(int N_x, int N_y, boolean allow_loops) 
+    {
+        int[][] level = new int[N_x][N_y];
+    	for(int i = 0; i < N_x; i++)
+        {
+        	for(int j = 0; j < N_y; j++)
+        	{
+        		level[i][j] = LevelElementWall;
+        	}
         }
 
-        level.Clear();
+        LinkedList<Point> drillers = new LinkedList<Point>();
+        drillers.addLast(new Point(N_x/2, N_y/2));
+        while (drillers.size() > 0) 
+        {
+            for (int i = 0; i < drillers.size(); i++) 
+            {
+                boolean remove_driller = false;
+                Point m = drillers.get(i);
+
+                switch (Random(4)) {
+                    case 0:
+                        m.y -= 2;
+                        if (m.y < 0 || (level[m.x][m.y] == LevelElementCorridor)) 
+                        {
+                            boolean b;
+                            if (Random(5) == 0) {
+                                b = false;
+                            } else {
+                                b = true;
+                            }
+
+                            if (!allow_loops || (allow_loops && b)) {
+                                remove_driller = true;
+                                break;
+                            }
+                        }
+                        level[m.x][m.y+1] = LevelElementCorridor;
+                        break;
+                    case 1:
+                        m.y += 2;
+                        if (m.y >= N_y || level[m.x][m.y] == LevelElementCorridor) 
+                        {
+                            remove_driller = true;
+                            break;
+                        }
+                        level[m.x][m.y-1] = LevelElementCorridor;
+                        break;
+                    case 2:
+                        m.x -= 2;
+                        if (m.x < 0 || level[m.x][m.y] == LevelElementCorridor) 
+                        {
+                            remove_driller = true;
+                            break;
+                        }
+                        level[m.x+1][m.y] = LevelElementCorridor;
+                        break;
+                    case 3:
+                        m.x += 2;
+                        if (m.x >= N_x || level[m.x][m.y] == LevelElementCorridor) 
+                        {
+                            remove_driller = true;
+                            break;
+                        }
+                        level[m.x-1][m.y] = LevelElementCorridor;
+                        break;
+                    }
+                if (remove_driller) {
+                    drillers.remove(m);
+                } else {
+                    drillers.addLast(new Point(m.x, m.y));
+                    drillers.addLast(new Point(m.x, m.y));
+
+                    level[m.x][m.y] = LevelElementCorridor;
+                    ++i;
+                }
+            }
+        }
+        
+        return level;
+    }
+    
+    // default CreateStandartDungeon
+    public static int[][] CreateStandardDunegon(int N_x, int N_y) 
+    {
+        return CreateStandardDunegon(N_x, N_y, 10, true);
+    }
+	
+	public static int[][] CreateStandardDunegon(int N_x, int N_y, int max_number_of_rooms, boolean with_doors) 
+	{
+        int[][] level = new int[N_x][N_y];
+        for(int i = 0; i < N_x; i++)
+        {
+        	for(int j = 0; j < N_y; j++)
+        	{
+        		level[i][j] = LevelElementWall;
+        	}
+        }
 
         Point p = new Point();
         Point room_size = new Point();
@@ -427,7 +467,7 @@ public class DebskiLib {
             if (FindOnMapRandomRectangleOfType(level, LevelElementWall, p, room_size)) {
                 for (int x = 1; x < room_size.x - 1; x++) {
                     for (int y = 1; y < room_size.y - 1; y++) {
-                        level.SetCell(p.x + x, p.y + y, LevelElementRoom);
+                        level[p.x+x][p.y+y] = LevelElementRoom;
                     }
                 }
             }
@@ -436,36 +476,55 @@ public class DebskiLib {
         ConnectClosestRooms(level, true, true); // changes tiles to values
         ConvertValuesToTiles(level);
         if (with_doors) {
-            AddDoors(level, 1, 0.5f);
+            AddDoors(level, 1, 0);
         }
+        
+        return level;
     }
-
-
+	
     //--------------------------------------------------------------------------
-
-    private static void FindOnMapAllRectanglesOfType(Map level, int type, Point size, LinkedList<Point> positions ) {
-        Map good_points;
-        good_points = new Map(null, "GoodPoints", level.width, level.height);
-
-        for (int y = 0; y < level.GetHeight(); ++y) {
-            for (int x = 0; x < level.GetWidth(); ++x) {
-                good_points.SetCell(x, y, 0);
-            }
+	
+    private static boolean FindOnMapRandomRectangleOfType(int[][] level, int type, Point pos, Point size) 
+    {
+        LinkedList<Point> positions = new LinkedList<Point>();
+        FindOnMapAllRectanglesOfType(level, type, size, positions);
+        if (positions.size() == 0) 
+        {
+            return false;
         }
+
+        // get position of Random rectangle 
+        int rnd = Random(positions.size());
+        pos.set(positions.get(rnd));
+
+        return true;
+    }
+	
+	private static void FindOnMapAllRectanglesOfType(int[][] level, int type, Point size, LinkedList<Point> positions ) 
+	{
+        int N_x = level.length;
+        int N_y = level[0].length;
+		int[][] good_points = new int[N_x][N_y];
         
         // count horizontals
 
-        for (int y = 0; y < level.GetHeight(); ++y) {
+        for (int y = 0; y < N_y; ++y) 
+        {
             int horizontal_count = 0;
-            for (int x = 0; x < level.GetWidth(); ++x) {
-                if (level.GetCell(x, y) == type) {
+            for (int x = 0; x < N_x; ++x) 
+            {
+                if (level[x][y] == type) 
+                {
                     horizontal_count++;
-                } else {
+                } 
+                else 
+                {
                     horizontal_count = 0;
                 }
 
-                if (horizontal_count == size.x) {
-                    good_points.SetCell(x - size.x + 1, y, 1);
+                if (horizontal_count == size.x) 
+                {
+                    good_points[x-size.x + 1][y] = 1;
                     horizontal_count--;
                 }
             }
@@ -473,10 +532,13 @@ public class DebskiLib {
 
         // count verticals
 
-        for (int x = 0; x < level.GetWidth(); ++x) {
+        for (int x = 0; x < N_x; ++x) 
+        {
             int vertical_count = 0;
-            for (int y = 0; y < level.GetHeight(); ++y) {
-                if (good_points.GetCell(x, y) == 1) {
+            for (int y = 0; y < N_y; ++y) 
+            {
+                if (good_points[x][y] == 1) 
+                {
                     vertical_count++;
                 } else {
                     vertical_count = 0;
@@ -489,359 +551,39 @@ public class DebskiLib {
             }
         }
     }
-
-    // default FloodFill
-    private static boolean FloodFill(Map level, Point position, int value) {
-        return FloodFill(level, position, value, true, 0, new Point(-1, -1));
-    }
-    private static boolean FloodFill(Map level, Point position, int value, boolean diagonal, int gradient, Point end) {
-        // flood fill room
-        int area_value = level.GetCell(position.x, position.y);
-        level.SetCell(position.x, position.y, value);
-
-        LinkedList<Point> positions = new LinkedList<Point>();
-        Point m = new Point();
-        positions.addLast(position);
-
-        
-        for (int i = 0; i < positions.size();) {
-            m = positions.get(i);
-
-            // Fill only to the end?
-            if (end.x != -1 && end.equals(m)) {
-                break;
-            }
-
-            int pos_x = m.x;
-            int pos_y = m.y;
-
-            int this_value = level.GetCell(pos_x, pos_y);
-
-            if (pos_x > 0) {
-                if (level.GetCell(pos_x - 1, pos_y) == area_value) {
-                    level.SetCell(pos_x - 1, pos_y, this_value + gradient);
-                    positions.addLast(new Point(pos_x - 1, pos_y));
-                }
-            }
-
-            if (pos_x < (int) level.GetWidth() - 1) {
-                if (level.GetCell(pos_x + 1, pos_y) == area_value) {
-                    level.SetCell(pos_x + 1, pos_y, this_value + gradient);
-                    positions.addLast(new Point(pos_x + 1, pos_y));
-                }
-            }
-
-            if (pos_y > 0) {
-                if (level.GetCell(pos_x, pos_y - 1) == area_value) {
-                    level.SetCell(pos_x, pos_y - 1, this_value + gradient);
-                    positions.addLast(new Point(pos_x, pos_y - 1));
-                }
-            }
-
-            if (pos_y < (int) level.GetHeight() - 1) {
-                if (level.GetCell(pos_x, pos_y + 1) == area_value) {
-                    level.SetCell(pos_x, pos_y + 1, this_value + gradient);
-                    positions.addLast(new Point(pos_x, pos_y + 1));
-                }
-            }
-
-            if (diagonal) {
-                if (pos_x > 0 && pos_y > 0) {
-                    if (level.GetCell(pos_x - 1, pos_y - 1) == area_value) {
-                        level.SetCell(pos_x - 1, pos_y - 1, this_value + gradient);
-                        positions.addLast(new Point(pos_x - 1, pos_y - 1));
-                    }
-                }
-
-                if (pos_x < (int) level.GetWidth() - 1 && pos_y < (int) level.GetHeight() - 1) {
-                    if (level.GetCell(pos_x + 1, pos_y + 1) == area_value) {
-                        level.SetCell(pos_x + 1, pos_y + 1, this_value + gradient);
-                        positions.addLast(new Point(pos_x + 1, pos_y + 1));
-                    }
-                }
-
-                if (pos_x < (int) level.GetWidth() - 1 && pos_y > 0) {
-                    if (level.GetCell(pos_x + 1, pos_y - 1) == area_value) {
-                        level.SetCell(pos_x + 1, pos_y - 1, this_value + gradient);
-                        positions.addLast(new Point(pos_x + 1, pos_y - 1));
-                    }
-                }
-
-                if (pos_x > 0 && pos_y < (int) level.GetHeight() - 1) {
-                    if (level.GetCell(pos_x - 1, pos_y + 1) == area_value) {
-                        level.SetCell(pos_x - 1, pos_y + 1, this_value + gradient);
-                        positions.addLast(new Point(pos_x - 1, pos_y + 1));
-                    }
-                }
-            }
-
-            m = positions.remove(i);
-        }
-
-        return true;
-    }
-
-    private static boolean FindOnMapRandomRectangleOfType(Map level, int type, Point pos, Point size) {
-        LinkedList<Point> positions = new LinkedList<Point>();
-        FindOnMapAllRectanglesOfType(level, type, size, positions);
-        if (positions.size() == 0) {
-            return false;
-        }
-
-        // get position of Random rectangle 
-        int rnd = Random(positions.size());
-        pos.move(positions.get(rnd).x, positions.get(rnd).y);
-
-        return true;
-    }
-
-    // default CountNeighboursOfType
-    private static int CountNeighboursOfType(int[][] level, int type, Point pos) {
-        return CountNeighboursOfType(level, type, pos, true);
-    }
-    
-    private static int CountNeighboursOfType(int[][] level, int type, Point pos, boolean diagonal) 
-    {
-    	int N_x = level.length;
-    	int N_y = level[0].length;
-        int neighbours = 0;
-        if (pos.y > 0) {
-            if (level[pos.x][pos.y-1] == type) // N
-            {
-                neighbours++;
-            }
-        }
-
-        if (pos.x < N_x-1) 
-        {
-            if (level[pos.x+1][pos.y] == type) // E
-            {
-                neighbours++;
-            }
-        }
-
-        if (pos.x > 0 && pos.y < N_y-1) 
-        {
-            if (level[pos.x][pos.y+1] == type) // S
-            {
-                neighbours++;
-            }
-        }
-
-        if (pos.x > 0 && pos.y > 0) 
-        {
-            if (level[pos.x-1][pos.y] == type) // W
-            {
-                neighbours++;
-            }
-        }
-
-        if (diagonal) {
-            if (pos.x > 0 && pos.y > 0) {
-                if (level[pos.x-1][pos.y-1] == type) // NW
-                {
-                    neighbours++;
-                }
-            }
-
-            if (pos.x < (int) N_x - 1 && pos.y > 0) {
-                if (level[pos.x+1][pos.y-1] == type) // NE
-                {
-                    neighbours++;
-                }
-            }
-
-            if (pos.x < N_x-1 && pos.y < N_y-1) // SE
-            {
-                if (level[pos.x+1][pos.y+1] == type) 
-                {
-                    neighbours++;
-                }
-            }
-
-
-            if (pos.x > 0 && pos.y < N_y-1) 
-            {
-                if (level[pos.x-1][pos.y+1] == type) // SW
-                {
-                    neighbours++;
-                }
-            }
-        }
-
-        return neighbours;
-    }
-
-    private static void AddDoors(Map level, float door_probability, float open_probability) {
-        for (int x = 0; x < level.GetWidth(); ++x) {
-            for (int y = 0; y < level.GetHeight(); ++y) {
-                Point pos = new Point(x, y);
-                int room_cells = CountNeighboursOfType(level, LevelElementRoom, pos);
-                int corridor_cells = CountNeighboursOfType(level, LevelElementCorridor, pos);
-                int open_door_cells = CountNeighboursOfType(level, LevelElementDoorOpen, pos);
-                int close_door_cells = CountNeighboursOfType(level, LevelElementDoorClose, pos);
-                int door_cells = open_door_cells + close_door_cells;
-
-                if (level.GetCell(x, y) == LevelElementCorridor) {
-                    if ((corridor_cells == 1 && door_cells == 0 && room_cells > 0 && room_cells < 4) ||
-                            (corridor_cells == 0 && door_cells == 0)) {
-                        float exist = ((float) Random(1000)) / 1000;
-                        if (exist < door_probability) {
-                            float is_open = ((float) Random(1000)) / 1000;
-                            if (is_open < open_probability) {
-                                level.SetCell(x, y, LevelElementDoorOpen);
-                            } else {
-                                level.SetCell(x, y, LevelElementDoorClose);
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    // default AddCoridor
-    private static boolean AddCorridor(Map level, int start_x1, int start_y1, int start_x2, int start_y2) {
-        return AddCorridor(level, start_x1, start_y1, start_x2, start_y2, false);
-    }
-    private static boolean AddCorridor(Map level, int start_x1, int start_y1, int start_x2, int start_y2, boolean straight) {	
-        if (!level.OnMap(start_x1, start_y1) || !level.OnMap(start_x2, start_y2)) {
-            return false;
-        }
-        // we start from both sides 
-        int x1, y1, x2, y2;
-
-        x1 = start_x1;
-        y1 = start_y1;
-        x2 = start_x2;
-        y2 = start_y2;
-
-        int dir_x;
-        int dir_y;
-
-        if (start_x2 > start_x1) {
-            dir_x = 1;
-        } else {
-            dir_x = -1;
-        }
-
-        if (start_y2 > start_y1) {
-            dir_y = 1;
-        } else {
-            dir_y = -1;
-        }
-
-
-        // move into direction of the other end
-        boolean first_horizontal = CoinToss();
-        boolean second_horizontal = CoinToss();
-
-        while (true) {
-            if (!straight) {
-                first_horizontal = CoinToss();
-                second_horizontal = CoinToss();
-            }
-
-            if (x1 != x2 && y1 != y2) {
-                if (first_horizontal) {
-                    x1 += dir_x;
-                } else {
-                    y1 += dir_y;
-                }
-            }
-            // connect rooms
-            if (x1 != x2 && y1 != y2) {
-                if (second_horizontal) {
-                    x2 -= dir_x;
-                } else {
-                    y2 -= dir_y;
-                }
-            }
-
-            if (level.GetCell(x1, y1) == LevelElementWall_value) {
-                level.SetCell(x1, y1, LevelElementCorridor_value);
-            }
-            if (level.GetCell(x2, y2) == LevelElementWall_value) {
-                level.SetCell(x2, y2, LevelElementCorridor_value);
-            }
-
-            // connect corridors if on the same level
-            if (x1 == x2) {
-                while (y1 != y2) {
-                    y1 += dir_y;
-                    if (level.GetCell(x1, y1) == LevelElementWall_value) {
-                        level.SetCell(x1, y1, LevelElementCorridor_value);
-                    }
-                }
-                if (level.GetCell(x1, y1) == LevelElementWall_value) {
-                    level.SetCell(x1, y1, LevelElementCorridor_value);
-                }
-                return true;
-            }
-            if (y1 == y2) {
-                while (x1 != x2) {
-                    x1 += dir_x;
-                    if (level.GetCell(x1, y1) == LevelElementWall_value) {
-                        level.SetCell(x1, y1, LevelElementCorridor_value);
-                    }
-                }
-                if (level.GetCell(x1, y1) == LevelElementWall_value) {
-                    level.SetCell(x1, y1, LevelElementCorridor_value);
-                }
-                return true;
-            }
-        }
-        //return true;
-    }
-
-    private static int FillDisconnectedRoomsWithDifferentValues(Map level) {
-        for (int y = 0; y < level.GetHeight(); ++y) {
-            for (int x = 0; x < level.GetWidth(); ++x) {
-                if (level.GetCell(x, y) == LevelElementRoom) {
-                    level.SetCell(x, y, LevelElementRoom_value);
-                } else if (level.GetCell(x, y) == LevelElementWall) {
-                    level.SetCell(x, y, LevelElementWall_value);
-                }
-            }
-        }
-
-        int room_number = 0;
-
-        for (int y = 0; y < level.GetHeight(); ++y) {
-            for (int x = 0; x < level.GetWidth(); ++x) {
-                if (level.GetCell(x, y) == LevelElementRoom_value) {
-                    FloodFill(level, new Point(x, y), room_number++);
-                }
-            }
-        }
-        return room_number;
-    }
-
+	
     // default ConnectClosestRooms
-    private static void ConnectClosestRooms(Map level, boolean with_doors) {
+    private static void ConnectClosestRooms(int[][] level, boolean with_doors) 
+    {
         ConnectClosestRooms(level, with_doors, false);
     }
-    private static void ConnectClosestRooms(Map level, boolean with_doors, boolean straight_connections) {
+	
+	private static void ConnectClosestRooms(int[][] level, boolean with_doors, boolean straight_connections) 
+	{
+		int N_x = level.length;
+        int N_y = level[0].length;
+		
         FillDisconnectedRoomsWithDifferentValues(level);
-
         LinkedList<LinkedList<Point>> rooms = new LinkedList<LinkedList<Point>>();
         
-        for (int y = 0; y < level.GetHeight(); ++y) {
-            for (int x = 0; x < level.GetWidth(); ++x) {
-                if (level.GetCell(x, y) != LevelElementWall_value) {
-                    if (level.GetCell(x, y) >= (int) rooms.size()) {
+        for (int y = 0; y < N_y; ++y) 
+        {
+            for (int x = 0; x < N_x; ++x) 
+            {
+                if (level[x][y] != LevelElementWall_value) 
+                {
+                    if (level[x][y] >= rooms.size()) 
+                    {
                         rooms.addLast(new LinkedList<Point>());
                     }
 
                     if (CountNeighboursOfType(level, LevelElementWall_value, new Point(x, y), false) > 0) // only border cells without diagonals
                     {
-                        rooms.get(level.GetCell(x, y)).addLast(new Point(x, y));
+                        rooms.get(level[x][y]).addLast(new Point(x, y));
                     }
                 }
             }
         }
-        
-        level.rooms = rooms;
 
         Collections.shuffle(rooms);
             
@@ -985,7 +727,7 @@ public class DebskiLib {
             if (to_connect_a != -1) {
                 // connect rooms a & b
                 do {
-                    to_connect_b = Random((int) rooms.size());
+                    to_connect_b = Random(rooms.size());
                 } while (to_connect_b == to_connect_a);
                 Pair closest_cells = make_pair(new Point(), new Point());
                 closest_cells = closest_cells_matrix.get(to_connect_a).get(to_connect_b);
@@ -1002,351 +744,237 @@ public class DebskiLib {
             }
         }
     }
-    
-    // default AddRecursiveRooms
-    private static void AddRecursiveRooms(Map level, int type, int min_size_x, int min_size_y, SRoom room) {
-        AddRecursiveRooms(level, type, min_size_x, min_size_y, room, true);
-    }
-    private static void AddRecursiveRooms(Map level, int type, int min_size_x, int min_size_y, SRoom room, boolean with_doors) {
-        int size_x = room.corner2.x - room.corner1.x;
-
-        if (size_x % 2 != 0) {
-            size_x -= CoinToss() ? 1 : 0;
-        }
-
-        int size_y = room.corner2.y - room.corner1.y;
-        if (size_y % 2 != 0) {
-            size_y -= CoinToss() ? 1 : 0;
-        }
-
-        boolean split_horizontal;
-
-        if (size_y * 4 > size_x) {
-            split_horizontal = true;
-        } else if (size_x * 4 > size_y) {
-            split_horizontal = false;
-        } else {
-            split_horizontal = CoinToss();
-        }
-
-        if (split_horizontal) // split horizontal
+	
+	private static int FillDisconnectedRoomsWithDifferentValues(int[][] level) 
+	{
+		int N_x = level.length;
+		int N_y = level[0].length;
+        for (int y = 0; y < N_y; ++y) 
         {
-            if (size_y / 2 < min_size_y) {
-                return;
-            }
-            int split = size_y / 2 + Random(size_y / 2 - min_size_y);
-            for (int x = room.corner1.x; x < room.corner2.x; x++) {
-                level.SetCell(x, room.corner1.y + split, type);
-            }
-
-            if (with_doors) {
-                level.SetCell(room.corner1.x + Random(size_x - 1) + 1, room.corner1.y + split, LevelElementDoorClose);
-            }
-
-            SRoom new_room = room;
-            new_room.corner2.y = room.corner1.y + split;
-            AddRecursiveRooms(level, type, min_size_x, min_size_y, new_room, with_doors);
-
-            new_room = room;
-            new_room.corner1.y = room.corner1.y + split;
-            AddRecursiveRooms(level, type, min_size_x, min_size_y, new_room, with_doors);
-        } else {
-            if (size_x / 2 < min_size_x) {
-                return;
-            }
-            int split = size_x / 2 + Random(size_x / 2 - min_size_x);
-            for (int y = room.corner1.y; y < room.corner2.y; y++) {
-                level.SetCell(room.corner1.x + split, y, type);
-            }
-
-            if (with_doors) {
-                level.SetCell(room.corner1.x + split, room.corner1.y + Random(size_y - 1) + 1, LevelElementDoorClose);
-            }
-
-            SRoom new_room = room;
-            new_room.corner2.x = room.corner1.x + split;
-            AddRecursiveRooms(level, type, min_size_x, min_size_y, new_room, with_doors);
-
-            new_room = room;
-            new_room.corner1.x = room.corner1.x + split;
-            AddRecursiveRooms(level, type, min_size_x, min_size_y, new_room, with_doors);
-        }
-    }
-   
-    private static void ConvertValuesToTiles(Map level) {
-        for (int y = 0; y < level.GetHeight(); ++y) {
-            for (int x = 0; x < level.GetWidth(); ++x) {
-                if (level.GetCell(x, y) == LevelElementCorridor_value) {
-                    level.SetCell(x, y, LevelElementCorridor);
-                } else if (level.GetCell(x, y) == LevelElementWall_value) {
-                    level.SetCell(x, y, LevelElementWall);
-                } else {
-                    level.SetCell(x, y, LevelElementRoom);
-                }
-            }
-        }
-    }
-
-    private static void DrawRectangleOnMap(Map level, Point p1, Point p2, int value) {
-        for (int y = p1.y; y < p2.y; ++y) {
-            for (int x = p1.x; x < p2.x; ++x) {
-                level.SetCell(x, y, value);
-            }
-        }
-    }
-    
-    
-    //--------------------------------------------------------------------------
-    
-    /*::: Поиск пути :::*/
-    // default FindPath
-    public static boolean FindPath(Map level, Point start, Point end, LinkedList<Point> path) {
-        return FindPath(level, start, end, path, true);
-    }
-    public static boolean FindPath(Map level, Point start, Point end, LinkedList<Point> path, boolean diagonals) {        
-        // Hack: Если начальная и текущая клетка совпадают, сохраняем в path
-        // стартовую клетку и выходим
-        if (start.equals(end)) {
-            path.add(start);
-            return true;
-        }
-        
-        // fill from end to start
-        if (!FloodFill(level, end, 0, false, 1, start)) {
-            return false;
-        }
-
-        // walk from start to end
-        Point pos = new Point(start);
-        Point new_pos = new Point(start);
-
-        while (true) {
-            if (pos.equals(end)) {
-                return true;
-            }
-            pos = new Point(new_pos);
-
-            if (!pos.equals(start)) {
-                path.addLast(pos);
-            }
-
-            int current_value = level.GetCell(pos.x, pos.y);
-
-            if (diagonals) {
-                if (pos.x > 0 && pos.y > 0) {
-                    if (level.GetCell(pos.x - 1, pos.y - 1) < current_value) // NW
-                    {
-                        new_pos.x--;
-                        new_pos.y--;
-                        continue;
-                    }
-                }
-
-                if (pos.x < (int) level.GetWidth() - 1 && pos.y > 0) {
-                    if (level.GetCell(pos.x + 1, pos.y - 1) < current_value) // NE
-                    {
-                        new_pos.x++;
-                        new_pos.y--;
-                        continue;
-                    }
-                }
-
-                if (pos.x < (int) level.GetWidth() - 1 && pos.y < (int) level.GetHeight() - 1) // SE
+            for (int x = 0; x < N_x; ++x) 
+            {
+                if (level[x][y] == LevelElementRoom) 
                 {
-                    if (level.GetCell(pos.x + 1, pos.y + 1) < current_value) {
-                        new_pos.x++;
-                        new_pos.y++;
-                        continue;
-                    }
-                }
-
-                if (pos.x > 0 && pos.y < (int) level.GetHeight() - 1) {
-                    if (level.GetCell(pos.x - 1, pos.y + 1) < current_value) // SW
-                    {
-                        new_pos.x--;
-                        new_pos.y++;
-                        continue;
-                    }
-                }
-            }
-
-            if (pos.y > 0) {
-                if (level.GetCell(pos.x, pos.y - 1) < current_value) // N
+                    level[x][y] = LevelElementRoom_value;
+                } 
+                else if (level[x][y] == LevelElementWall) 
                 {
-                    new_pos.y--;
-                    continue;
+                    level[x][y] = LevelElementWall_value;
                 }
-            }
-
-            if (pos.x < (int) level.GetWidth() - 1) {
-                if (level.GetCell(pos.x + 1, pos.y) < current_value) // E
-                {
-                    new_pos.x++;
-                    continue;
-                }
-            }
-
-            if (pos.x >= 0 && pos.y < (int) level.GetHeight() - 1) {
-                if (level.GetCell(pos.x, pos.y + 1) < current_value) // S
-                {
-                    new_pos.y++;
-                    continue;
-                }
-            }
-
-            if (pos.x > 0 && pos.y >= 0) {
-                if (level.GetCell(pos.x - 1, pos.y) < current_value) // W
-                {
-                    new_pos.x--;
-                    continue;
-                }
-            }
-            if (pos.equals(new_pos) && !new_pos.equals(end)) {
-                path.clear();
-                return false;
             }
         }
+
+        int room_number = 0;
+
+        for (int y = 0; y < N_y; ++y) 
+        {
+            for (int x = 0; x < N_x; ++x) 
+            {
+                if (level[x][y] == LevelElementRoom_value) 
+                {
+                    FloodFill(level, new Point(x, y), room_number++);
+                }
+            }
+        }
+        return room_number;
     }
-    
-    public static boolean MyFindPath(Map level, Point start, Point end, LinkedList<Integer> path) {
-        Point cur = new Point(start);
-        Point adj = new Point(start);
-        int[][] weightMap = new int[level.width][level.height];
-        LinkedList<Point> stack = new LinkedList<Point>();
-        
-        for (int i = 0; i < level.width; i++) {
-            for (int j = 0; j < level.height; j++) {
-                weightMap[i][j] = 0;
-            }
-        }
-        
-        while (true) {
-            // 2
-            for (int i = -1; i <= 1; i++) {                
-                for (int j = -1; j <= 1; j++) {
-                    if (level.OnMap(cur.x+i, cur.y+j) && weightMap[cur.x+i][cur.y+j] == 0) {
-                        // Если ячейка текущая - продолжаем
-                        if (i == 0 && j == 0)
-                            continue;
-                        
-                        adj = new Point(cur.x+i, cur.y+j);
-                     
-                        // 3
-                        weightMap[adj.x][adj.y] = weightMap[cur.x][cur.y] + 1;
-                        
-                        // 3 if
-                        if (adj.equals(end)) {
-                            // 7
-                            cur = new Point(end);
-                            
-                            // 8
-                            for (int k = -1; k <= 1; k++) {                
-                                for (int l = -1; l <= 1; l++) {
-                                    // 9 if
-                                    if (level.OnMap(cur.x+k, cur.y+l) && weightMap[cur.x+k][cur.y+l] == weightMap[cur.x][cur.y]-1) {
-                                        //Hack
-                                        String s = "";
-                                        for (int m = 0; m < level.width; m++) {
-                                            for (int n = 0; n < level.height; n++) {
-                                                s += Integer.valueOf(weightMap[m][n]);
-                                            }
-                                            System.out.println(s);
-                                            s = "";
-                                        }
-                                            
-                                        
-                                        adj = new Point(cur.x+k, cur.y+l);
-                                        // 10
-                                        path.addLast(Map.getDirection(adj, end));
-                                        cur = new Point(adj);    
-                                        
-                                        // 12
-                                        if (cur.equals(start))
-                                            return true;
-                                    }
-                                }
-                            }
-                        } else { // 3 else
-                            // 4
-                            stack.addFirst(adj);
-                        }
-                    }
-                }
-            }
-            
-            // 5
-            if (!stack.isEmpty())
-                cur = stack.removeFirst();
-            else
-                return true;
-        }
+	
+    // default FloodFill
+    private static boolean FloodFill(int[][] level, Point position, int value) 
+    {
+        return FloodFill(level, position, value, true, 0, new Point(-1, -1));
     }
-    
-    public static LinkedList<Point> newFindPath(Map level, Point start, Point end) {
-        LinkedList<Point> result = new LinkedList<Point>();
-        LinkedList<Point> unne = new LinkedList<Point>();
-        boolean[][] visited = new boolean[level.width][level.height];
-        Point cur = new Point();
+	
+	private static boolean FloodFill(int[][] level, Point position, int value, boolean diagonal, int gradient, Point end) 
+	{
+		int N_x = level.length;
+		int N_y = level[0].length;
+        // flood fill room
+        int area_value = level[position.x][position.y];
+        level[position.x][position.y] = value;
+
+        LinkedList<Point> positions = new LinkedList<Point>();
+        Point m = new Point();
+        positions.addLast(position);
+
         
-        for (int i = 0; i < level.width; i++) {
-            for (int j = 0; j < level.height; j++) {
-                visited[i][j] = false;
-            }
-        }
-        
-        boolean done = false;
-        cur = new Point(start);
-        unne.addLast(cur);
-        while (unne.size() > 0) {
-            cur = unne.removeFirst();
-            if (cur.equals(end)) {
-                result = new LinkedList(unne);
-                done = true;
+        for (int i = 0; i < positions.size();) {
+            m = positions.get(i);
+
+            // Fill only to the end?
+            if (end.x != -1 && end.equals(m)) {
                 break;
-            } else {
-                visited[cur.x][cur.y] = true;
-                addNode(level, unne, visited, cur.x+1, cur.y);
-                addNode(level, unne, visited, cur.x-1, cur.y);
-                addNode(level, unne, visited, cur.x, cur.y+1);
-                addNode(level, unne, visited, cur.x, cur.y-1);
+            }
+
+            int pos_x = m.x;
+            int pos_y = m.y;
+
+            int this_value = level[pos_x][pos_y];
+
+            if (pos_x > 0) 
+            {
+                if (level[pos_x-1][pos_y] == area_value) 
+                {
+                    level[pos_x-1][pos_y] = this_value + gradient;
+                    positions.addLast(new Point(pos_x - 1, pos_y));
+                }
+            }
+
+            if (pos_x < N_x-1) 
+            {
+                if (level[pos_x+1][pos_y] == area_value) 
+                {
+                    level[pos_x+1][pos_y] = this_value + gradient;
+                    positions.addLast(new Point(pos_x + 1, pos_y));
+                }
+            }
+
+            if (pos_y > 0) 
+            {
+                if (level[pos_x][pos_y-1] == area_value) 
+                {
+                    level[pos_x][pos_y-1] = this_value + gradient;
+                    positions.addLast(new Point(pos_x, pos_y - 1));
+                }
+            }
+
+            if (pos_y < N_y-1) 
+            {
+                if (level[pos_x][pos_y+1] == area_value) 
+                {
+                    level[pos_x][pos_y+1] = this_value + gradient;
+                    positions.addLast(new Point(pos_x, pos_y + 1));
+                }
+            }
+
+            if (diagonal) 
+            {
+                if (pos_x > 0 && pos_y > 0) 
+                {
+                    if (level[pos_x-1][pos_y-1] == area_value) 
+                    {
+                        level[pos_x-1][pos_y-1] = this_value + gradient;
+                        positions.addLast(new Point(pos_x - 1, pos_y - 1));
+                    }
+                }
+
+                if (pos_x < N_x-1 && pos_y < N_y-1) 
+                {
+                    if (level[pos_x+1][pos_y+1] == area_value) 
+                    {
+                        level[pos_x+1][pos_y+1] = this_value + gradient;
+                        positions.addLast(new Point(pos_x + 1, pos_y + 1));
+                    }
+                }
+
+                if (pos_x < N_x-1 && pos_y > 0) 
+                {
+                    if (level[pos_x+1][pos_y-1] == area_value) 
+                    {
+                        level[pos_x+1][pos_y-1] = this_value + gradient;
+                        positions.addLast(new Point(pos_x + 1, pos_y - 1));
+                    }
+                }
+
+                if (pos_x > 0 && pos_y < N_y-1) 
+                {
+                    if (level[pos_x-1][pos_y+1] == area_value) 
+                    {
+                        level[pos_x-1][pos_y+1] = this_value + gradient;
+                        positions.addLast(new Point(pos_x - 1, pos_y + 1));
+                    }
+                }
+            }
+
+            m = positions.remove(i);
+        }
+
+        return true;
+    }
+	
+	// default CountNeighboursOfType
+    private static int CountNeighboursOfType(int[][] level, int type, Point pos) {
+        return CountNeighboursOfType(level, type, pos, true);
+    }
+    
+    private static int CountNeighboursOfType(int[][] level, int type, Point pos, boolean diagonal) 
+    {
+    	int N_x = level.length;
+    	int N_y = level[0].length;
+        int neighbours = 0;
+        if (pos.y > 0) {
+            if (level[pos.x][pos.y-1] == type) // N
+            {
+                neighbours++;
             }
         }
-        
-        
+
+        if (pos.x < N_x-1) 
+        {
+            if (level[pos.x+1][pos.y] == type) // E
+            {
+                neighbours++;
+            }
+        }
+
+        if (pos.x > 0 && pos.y < N_y-1) 
+        {
+            if (level[pos.x][pos.y+1] == type) // S
+            {
+                neighbours++;
+            }
+        }
+
+        if (pos.x > 0 && pos.y > 0) 
+        {
+            if (level[pos.x-1][pos.y] == type) // W
+            {
+                neighbours++;
+            }
+        }
+
+        if (diagonal) {
+            if (pos.x > 0 && pos.y > 0) {
+                if (level[pos.x-1][pos.y-1] == type) // NW
+                {
+                    neighbours++;
+                }
+            }
+
+            if (pos.x < (int) N_x - 1 && pos.y > 0) {
+                if (level[pos.x+1][pos.y-1] == type) // NE
+                {
+                    neighbours++;
+                }
+            }
+
+            if (pos.x < N_x-1 && pos.y < N_y-1) // SE
+            {
+                if (level[pos.x+1][pos.y+1] == type) 
+                {
+                    neighbours++;
+                }
+            }
+
+
+            if (pos.x > 0 && pos.y < N_y-1) 
+            {
+                if (level[pos.x-1][pos.y+1] == type) // SW
+                {
+                    neighbours++;
+                }
+            }
+        }
+
+        return neighbours;
+    }
+    
+    private static Pair make_pair(Point first, Point second) {
+        Pair result = new Pair();
+        result.first = first;
+        result.second = second;
         
         return result;
-    }
-    
-    private static void addNode(Map level, LinkedList<Point> list, boolean[][] visited, int x, int y) {
-        if (level.isWalkable(x, y) && !visited[x][y])
-            list.addLast(new Point(x, y));
-    }
-    
-    //-------------------------------------------------------------------------
-    private static int abs(int value) {
-        return java.lang.Math.abs(value);
-    }
-    private static double sin(double value) {
-        return java.lang.Math.sin(value);
-    }
-    private static double cos(double value) {
-        return java.lang.Math.cos(value);
-    }
-    
-    private static int Random(int value) {
-        return RNG.getInt(value);
-    }
-    private static boolean RandomLowerThatLimit(int limit, int value) {
-        if (value == 0) {
-            return false;
-        }
-        if (Random(value) < limit) {
-            return true;
-        }
-        return false;
-    }
-    private static boolean CoinToss() {
-        return (Random(2) != 0);
     }
     
     public static double Distance(int x1, int y1, int x2, int y2) {
@@ -1358,14 +986,203 @@ public class DebskiLib {
         return Distance(p1.x, p1.y, p2.x, p2.y);
     }
     
-    private static Pair make_pair(Point first, Point second) {
-        Pair result = new Pair();
-        result.first = first;
-        result.second = second;
-        
-        return result;
+    private static boolean CoinToss() 
+    {
+        return Random(2) != 0;
     }
+    
+ // default AddCoridor
+    private static boolean AddCorridor(int[][] level, int start_x1, int start_y1, int start_x2, int start_y2) 
+    {
+        return AddCorridor(level, start_x1, start_y1, start_x2, start_y2, false);
+    }
+    
+    private static boolean AddCorridor(int[][] level, int start_x1, int start_y1, int start_x2, int start_y2, boolean straight) 
+    {	
+    	int N_x = level.length;
+    	int N_y = level[0].length;
+    	
+    	if(start_x1 < 0 || start_x1 >= N_x || start_y1 < 0 || start_y1 >= N_y)
+    	{
+    		return false;
+    	}
+        
+    	// we start from both sides 
+        int x1, y1, x2, y2;
 
+        x1 = start_x1;
+        y1 = start_y1;
+        x2 = start_x2;
+        y2 = start_y2;
+
+        int dir_x;
+        int dir_y;
+
+        if (start_x2 > start_x1) {
+            dir_x = 1;
+        } else {
+            dir_x = -1;
+        }
+
+        if (start_y2 > start_y1) {
+            dir_y = 1;
+        } else {
+            dir_y = -1;
+        }
+
+
+        // move into direction of the other end
+        boolean first_horizontal = CoinToss();
+        boolean second_horizontal = CoinToss();
+
+        while (true) {
+            if (!straight) {
+                first_horizontal = CoinToss();
+                second_horizontal = CoinToss();
+            }
+
+            if (x1 != x2 && y1 != y2) {
+                if (first_horizontal) {
+                    x1 += dir_x;
+                } else {
+                    y1 += dir_y;
+                }
+            }
+            // connect rooms
+            if (x1 != x2 && y1 != y2) {
+                if (second_horizontal) {
+                    x2 -= dir_x;
+                } else {
+                    y2 -= dir_y;
+                }
+            }
+
+            if (level[x1][y1] == LevelElementWall_value) 
+            {
+                level[x1][y1] = LevelElementCorridor_value;
+            }
+            if (level[x2][y2] == LevelElementWall_value) 
+            {
+                level[x2][y2] = LevelElementCorridor_value;
+            }
+
+            // connect corridors if on the same level
+            if (x1 == x2) 
+            {
+                while (y1 != y2) 
+                {
+                    y1 += dir_y;
+                    if (level[x1][y1] == LevelElementWall_value) 
+                    {
+                        level[x1][y1] = LevelElementCorridor_value;
+                    }
+                }
+                if (level[x1][y1] == LevelElementWall_value) 
+                {
+                    level[x1][y1] = LevelElementCorridor_value;
+                }
+                return true;
+            }
+            if (y1 == y2) 
+            {
+                while (x1 != x2) 
+                {
+                    x1 += dir_x;
+                    if (level[x1][y1] == LevelElementWall_value) 
+                    {
+                        level[x1][y1] = LevelElementCorridor_value;
+                    }
+                }
+                if (level[x1][y1] == LevelElementWall_value) 
+                {
+                    level[x1][y1] = LevelElementCorridor_value;
+                }
+                return true;
+            }
+        }
+        //return true;
+    }
+    
+    private static int Random(int value) 
+    {
+        //return RNG.getInt(value);
+    	return rng.nextInt(value);
+    }
+    
+    private static void ConvertValuesToTiles(int[][] level) 
+    {
+    	int N_x = level.length;
+    	int N_y = level[0].length;
+    	
+        for (int y = 0; y < N_y; ++y) 
+        {
+            for (int x = 0; x < N_x; ++x) 
+            {
+                if (level[x][y] == LevelElementCorridor_value) 
+                {
+                    level[x][y] = LevelElementCorridor;
+                } 
+                else if (level[x][y] == LevelElementWall_value) 
+                {
+                    level[x][y] = LevelElementWall;
+                } 
+                else 
+                {
+                    level[x][y] = LevelElementRoom;
+                }
+            }
+        }
+    }
+    
+    private static void AddDoors(int[][] level, float door_probability, float open_probability) 
+    {
+    	int N_x = level.length;
+    	int N_y = level[0].length;
+    	
+        for (int x = 0; x < N_x; ++x) 
+        {
+            for (int y = 0; y < N_y; ++y) 
+            {
+                Point pos = new Point(x, y);
+                int room_cells = CountNeighboursOfType(level, LevelElementRoom, pos);
+                int corridor_cells = CountNeighboursOfType(level, LevelElementCorridor, pos);
+                int open_door_cells = CountNeighboursOfType(level, LevelElementDoorOpen, pos);
+                int close_door_cells = CountNeighboursOfType(level, LevelElementDoorClose, pos);
+                int door_cells = open_door_cells + close_door_cells;
+
+                if (level[x][y] == LevelElementCorridor) 
+                {
+                    if ((corridor_cells == 1 && door_cells == 0 && room_cells > 0 && room_cells < 4) ||
+                            (corridor_cells == 0 && door_cells == 0)) 
+                    {
+                        float exist = ((float) Random(1000)) / 1000;
+                        if (exist < door_probability) {
+                            float is_open = ((float) Random(1000)) / 1000;
+                            if (is_open < open_probability) 
+                            {
+                                level[x][y] = LevelElementDoorOpen;
+                            } 
+                            else 
+                            {
+                                level[x][y] = LevelElementDoorClose;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+    private static boolean RandomLowerThatLimit(int limit, int value) {
+        if (value == 0) {
+            return false;
+        }
+        if (Random(value) < limit) {
+            return true;
+        }
+        return false;
+    }
+    
     static class Pair extends LinkedList {
         Point first;
         Point second;
@@ -1394,4 +1211,28 @@ public class DebskiLib {
             return (x >= corner1.x && x <= corner2.x && y >= corner1.y && y <= corner2.y);
         }
     }
+}
+
+class Point
+{
+	public int x;
+	public int y;
+	
+	public Point()
+	{
+		x = 0;
+		y = 0;
+	}
+	
+	public Point(int x, int y)
+	{
+		this.x = x;
+		this.y = y;
+	}
+	
+	public void set(Point p)
+	{
+		x = p.x;
+		y = p.y;
+	}
 }

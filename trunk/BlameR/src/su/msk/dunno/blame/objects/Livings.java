@@ -113,4 +113,9 @@ public class Livings
 	public int getTime() {
 		return time;
 	}
+
+	public void clear() 
+	{
+		livings.clear();
+	}
 }

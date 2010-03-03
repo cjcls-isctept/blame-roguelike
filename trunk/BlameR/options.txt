@@ -7,7 +7,9 @@ height = 480
 N_x = 100
 N_y = 100
 
-creatures = 60
+creatures = 0
 stations = 10
+
+dungeon_type = megastructure
 
 lang = ru

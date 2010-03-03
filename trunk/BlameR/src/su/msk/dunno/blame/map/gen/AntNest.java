@@ -4,13 +4,28 @@ import su.msk.dunno.blame.support.Point;
 
 public class AntNest 
 {
-	static int LevelElementWall  = 0;
-	static int LevelElementCorridor  = 1;
-	static int LevelElementRoom  = 1;
+    static int LevelElementWall  = '#';
+    static int LevelElementCorridor  = '.';
+    static int LevelElementGrass  = '"';
+    static int LevelElementPlant  = '&';
+    static int LevelElementRoom  = ',';
+    static int LevelElementDoorClose  = '+';
+    static int LevelElementDoorOpen  = '/';
+    static int LevelElementWater  = '~';
+    public static int LevelElementCorridor_value  = Integer.MAX_VALUE - 2; // Some algorithms (like pathfinding) needs values instead of tiles
+    public static int LevelElementRoom_value  = Integer.MAX_VALUE - 1;
+    public static int LevelElementWall_value  = Integer.MAX_VALUE;
 	
 	public static int[][] CreateAntNest(int N_x, int N_y, boolean with_rooms) 
     {
         int[][] level = new int[N_x][N_y];
+        for(int i = 0; i < N_x; i++)
+        {
+        	for(int j = 0; j < N_y; j++)
+        	{
+        		level[i][j] = '#';
+        	}
+        }
 
         int x, y;
 

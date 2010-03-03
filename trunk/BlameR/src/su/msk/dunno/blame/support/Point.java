@@ -51,4 +51,10 @@ public class Point
 	{
 		return new Point(x*k, y*k);
 	}
+
+	public void set(Point point) 
+	{
+		x = point.x;
+		y = point.y;
+	}
 }

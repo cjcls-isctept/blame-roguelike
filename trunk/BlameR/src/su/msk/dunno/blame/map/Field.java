@@ -14,7 +14,7 @@ import su.msk.dunno.blame.decisions.Move;
 import su.msk.dunno.blame.main.Blame;
 import su.msk.dunno.blame.map.gen.AntNest;
 import su.msk.dunno.blame.map.gen.RecursiveDivisionMethod;
-import su.msk.dunno.blame.map.gen.StandartDungeon;
+import su.msk.dunno.blame.map.gen.DebskiLib;
 import su.msk.dunno.blame.map.tiles.Door;
 import su.msk.dunno.blame.map.tiles.Floor;
 import su.msk.dunno.blame.map.tiles.Wall;
@@ -53,26 +53,29 @@ public class Field
 		this(N_x, N_y);
 		if("random".equals(mapname))
 		{
-			//int[][] map = RecursiveDivisionMethod.generate(this);
-			int[][] map = StandartDungeon.CreateStandardDunegon(N_x, N_y);
-			//int[][] map = AntNest.CreateAntNest(N_x, N_y, true);
+			int[][] map = new int[N_x][N_y];
+			if("megastructure".equals(Blame.dungeonType))map = RecursiveDivisionMethod.generate(N_x, N_y);
+			else if("antnest".equals(Blame.dungeonType))map = DebskiLib.CreateAntNest(N_x, N_y);
+			else if("caves".equals(Blame.dungeonType))map = DebskiLib.CreateCaves(N_x, N_y);
+			else if("mines".equals(Blame.dungeonType))map = DebskiLib.CreateMines(N_x, N_y);
+			else if("maze".equals(Blame.dungeonType))map = DebskiLib.CreateMaze(N_x, N_y);
+			else if("standard".equals(Blame.dungeonType))map = DebskiLib.CreateStandardDunegon(N_x, N_y);
 			for(int i = 0; i < N_x; i++)
 			{
 				for(int j = 0; j < N_y; j++)
 				{
 					switch(map[i][j])
 					{
-					/*case 0: objects[i][j].set(0, new Floor(i, j)); break;
-					case 1: objects[i][j].set(0, new Wall(i, j)); break;
-					case 2: objects[i][j].set(0, new Door(i, j)); break;
-					case 3:
+					case '#': objects[i][j].set(0, new Wall(i, j)); break;
+					case '.': objects[i][j].set(0, new Floor(i, j)); break;
+					case ',': objects[i][j].set(0, new Floor(i, j)); break;
+					case '+': objects[i][j].set(0, new Door(i, j)); break;
+					case '/': objects[i][j].set(0, new Door(i, j)); break;
+					case 'A':
 						objects[i][j].set(0, new Floor(i, j));
 						RebuildStation rs = new RebuildStation(i, j, this);
 						Livings.instance().addObject(rs);
-						break;*/
-					case 0: objects[i][j].set(0, new Wall(i, j)); break;
-					case 1: objects[i][j].set(0, new Floor(i, j)); break;					
-					case 2: objects[i][j].set(0, new Door(i, j)); break;
+						break;
 					}
 				}
 			}
@@ -409,32 +412,27 @@ public class Field
 		case 1: return getRandomPos(N_x-4,3,N_x-2,1);
 		case 2: return getRandomPos(1,N_y-2,3,N_y-4);
 		case 3: return getRandomPos(N_x-4,N_y-4,N_x-2,N_y-2);
-		default: return new Point();
+		default: return getRandomPos();		// if all corners unavailable return random position
 		}
 	}
 	
 	public Point getRandomPos()
 	{
-		int i, j;
-		i = (int)(Math.random()*N_x);
-		j = (int)(Math.random()*N_y);
-		while(!this.getPassability(i, j))
-		{
-			i = (int)(Math.random()*N_x);
-			j = (int)(Math.random()*N_y);
-		}
-		return new Point(i, j);
+		return getRandomPos(0, 0, N_x-1, N_y-1);
 	}
 	
 	public Point getRandomPos(int startx, int starty, int endx, int endy)
 	{
 		int i, j;
+		int count = 1000;
 		i = startx + (int)(Math.random()*(endx+1 - startx));
 		j = starty + (int)(Math.random()*(endy+1 - starty));
 		while(!this.getPassability(i, j))
 		{
+			if(count < 0)return null;
 			i = startx + (int)(Math.random()*(endx+1 - startx));
 			j = starty + (int)(Math.random()*(endy+1 - starty));
+			count--;
 		}
 		return new Point(i, j);
 	}
