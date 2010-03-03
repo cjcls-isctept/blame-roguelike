@@ -23,7 +23,7 @@ public class RecursiveDivisionMethod
         {
         	for(int j = 0; j < N_y; j++)
         	{
-        		map[i][j] = DebskiLib.LevelElementRoom;
+        		map[i][j] = GenLib.LevelElementRoom;
         	}
         }		
 		
@@ -40,7 +40,7 @@ public class RecursiveDivisionMethod
 		int y = p.y;
 		while(x <= endx/* && map[x][y] != 1*/)
 		{
-			map[x][y] = DebskiLib.LevelElementWall;
+			map[x][y] = GenLib.LevelElementWall;
 			x++;
 			//drawField(map, field);
 		}
@@ -48,7 +48,7 @@ public class RecursiveDivisionMethod
 		y = starty;
 		while(y <= endy/* && map[x][y] != 1*/)
 		{
-			map[x][y] = DebskiLib.LevelElementWall;
+			map[x][y] = GenLib.LevelElementWall;
 			y++;
 			//drawField(map, field);
 		}		
@@ -68,46 +68,46 @@ public class RecursiveDivisionMethod
 	{
 		int x = startx + (int)(Math.random()*(p.x-startx));
 		int y = p.y;
-		while((x == p.x) || (y-1 >= 0 && map[x][y-1] == DebskiLib.LevelElementWall) || 
-			  (y+1 < map[0].length && map[x][y+1] == DebskiLib.LevelElementWall))
+		while((x == p.x) || (y-1 >= 0 && map[x][y-1] == GenLib.LevelElementWall) || 
+			  (y+1 < map[0].length && map[x][y+1] == GenLib.LevelElementWall))
 		{
 			x = startx + (int)(Math.random()*(p.x-startx));
 		}
-		if(Math.random() < 0.3)map[x][y] = DebskiLib.LevelElementDoorClose;
-		else map[x][y] = DebskiLib.LevelElementRoom;
+		if(Math.random() < 0.3)map[x][y] = GenLib.LevelElementDoorClose;
+		else map[x][y] = GenLib.LevelElementRoom;
 		
 		x = p.x + (int)(Math.random()*(endx+1-p.x));
 		y = p.y;
-		while((x == p.x) || (y-1 >= 0 && map[x][y-1] == DebskiLib.LevelElementWall) || 
-			  (y+1 < map[0].length && map[x][y+1] == DebskiLib.LevelElementWall))
+		while((x == p.x) || (y-1 >= 0 && map[x][y-1] == GenLib.LevelElementWall) || 
+			  (y+1 < map[0].length && map[x][y+1] == GenLib.LevelElementWall))
 		{
 			x = p.x + (int)(Math.random()*(endx+1-p.x));
 		}
-		if(Math.random() < 0.3)map[x][y] = DebskiLib.LevelElementDoorClose;
-		else map[x][y] = DebskiLib.LevelElementRoom;
+		if(Math.random() < 0.3)map[x][y] = GenLib.LevelElementDoorClose;
+		else map[x][y] = GenLib.LevelElementRoom;
 				
 		x = p.x;
 		y = starty + (int)(Math.random()*(endy-starty));
-		while((y == p.y) || (x-1 >= 0 && map[x-1][y] == DebskiLib.LevelElementWall) || 
-			  (x+1 < map.length && map[x+1][y] == DebskiLib.LevelElementWall))
+		while((y == p.y) || (x-1 >= 0 && map[x-1][y] == GenLib.LevelElementWall) || 
+			  (x+1 < map.length && map[x+1][y] == GenLib.LevelElementWall))
 		{
 			y = starty + (int)(Math.random()*(endy-starty));
 		}
-		if(Math.random() < 0.3)map[x][y] = DebskiLib.LevelElementDoorClose;
-		else map[x][y] = DebskiLib.LevelElementRoom;
+		if(Math.random() < 0.3)map[x][y] = GenLib.LevelElementDoorClose;
+		else map[x][y] = GenLib.LevelElementRoom;
 	}
 	
 	public static void createSolidEdges(int[][] map)
 	{
 		for(int i = 0; i < map.length; i++)
 		{
-			map[i][0] = DebskiLib.LevelElementWall;
-			map[i][map[0].length-1] = DebskiLib.LevelElementWall;
+			map[i][0] = GenLib.LevelElementWall;
+			map[i][map[0].length-1] = GenLib.LevelElementWall;
 		}
 		for(int j = 0; j < map[0].length; j++)
 		{
-			map[0][j] = DebskiLib.LevelElementWall;
-			map[map.length-1][j] = DebskiLib.LevelElementWall;
+			map[0][j] = GenLib.LevelElementWall;
+			map[map.length-1][j] = GenLib.LevelElementWall;
 		}
 	}
 	
@@ -165,8 +165,8 @@ public class RecursiveDivisionMethod
         	for(int j = min_y; j <= max_y; j++)
         	{
         		if(i >= 0 && i < N_x && j >= 0 && j < N_y && 
-        		   (map[i][j] == DebskiLib.LevelElementWall || map[i][j] == DebskiLib.LevelElementDoorClose))
-        			map[i][j] = DebskiLib.LevelElementRoom;
+        		   (map[i][j] == GenLib.LevelElementWall || map[i][j] == GenLib.LevelElementDoorClose))
+        			map[i][j] = GenLib.LevelElementRoom;
         	}
         }
         for(int i = min_x+1; i <= max_x-1; i++)
@@ -174,10 +174,10 @@ public class RecursiveDivisionMethod
         	even++;
         	if(i >= 0 && i < N_x)
         	{
-        		if(even == 4 && min_y >= 0)map[i][min_y+1] = DebskiLib.LevelElementDoorClose;
-    	        else if(min_y+1 >= 0)map[i][min_y+1] = DebskiLib.LevelElementWall;
-        		if(even == 4 && max_y < N_y)map[i][max_y-1] = DebskiLib.LevelElementDoorClose;
-        		else if(max_y-1 < N_y)map[i][max_y-1] = DebskiLib.LevelElementWall;
+        		if(even == 4 && min_y >= 0)map[i][min_y+1] = GenLib.LevelElementDoorClose;
+    	        else if(min_y+1 >= 0)map[i][min_y+1] = GenLib.LevelElementWall;
+        		if(even == 4 && max_y < N_y)map[i][max_y-1] = GenLib.LevelElementDoorClose;
+        		else if(max_y-1 < N_y)map[i][max_y-1] = GenLib.LevelElementWall;
         	}
         }
         for(int j = min_y+2; j <= max_y-2; j++)
@@ -185,13 +185,13 @@ public class RecursiveDivisionMethod
         	even++;
         	if(j >= 0 && j < N_y)
         	{
-        		if(even == 10 && min_x >= 0)map[min_x+1][j] = DebskiLib.LevelElementDoorClose;
-        		else if(min_x+1 >= 0)map[min_x+1][j] = DebskiLib.LevelElementWall;
-        		if(even == 10 && max_x < N_x)map[max_x-1][j] = DebskiLib.LevelElementDoorClose;
-            	else if(max_x-1 < N_x)map[max_x-1][j] = DebskiLib.LevelElementWall;
+        		if(even == 10 && min_x >= 0)map[min_x+1][j] = GenLib.LevelElementDoorClose;
+        		else if(min_x+1 >= 0)map[min_x+1][j] = GenLib.LevelElementWall;
+        		if(even == 10 && max_x < N_x)map[max_x-1][j] = GenLib.LevelElementDoorClose;
+            	else if(max_x-1 < N_x)map[max_x-1][j] = GenLib.LevelElementWall;
         	}
         }
-        map[p.x][p.y] = DebskiLib.LevelElementStation;
+        map[p.x][p.y] = GenLib.LevelElementStation;
         return p;
     }
     
@@ -201,7 +201,7 @@ public class RecursiveDivisionMethod
 		int count = 1000;
 		i = startx + (int)(Math.random()*(endx+1 - startx));
 		j = starty + (int)(Math.random()*(endy+1 - starty));
-		while(map[i][j] != DebskiLib.LevelElementRoom)
+		while(map[i][j] != GenLib.LevelElementRoom)
 		{
 			if(count < 0)return null;
 			i = startx + (int)(Math.random()*(endx+1 - startx));
