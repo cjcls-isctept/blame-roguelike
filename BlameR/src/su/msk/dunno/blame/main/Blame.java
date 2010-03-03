@@ -71,7 +71,7 @@ public class Blame
 		/*for(int i=0; i < 5000; i++)*/field = new Field(N_x, N_y, "random");
 		
 		Livings.instance().addField(field);
-		killy = new Killy(field.getRandomCorner(), field);
+		killy = new Killy(field.getRandomPos(), field);
 		cibo = new Cibo(field.getRandomPos(killy.cur_pos.plus(-2,2), killy.cur_pos.plus(2,-2)), field);	// generate cibo near killy
 		Livings.instance().addKilly(killy);
 		Livings.instance().addCibo(cibo);

@@ -12,7 +12,9 @@ import rlforj.los.PrecisePermissive;
 import rlforj.math.Point2I;
 import su.msk.dunno.blame.decisions.Move;
 import su.msk.dunno.blame.main.Blame;
+import su.msk.dunno.blame.map.gen.AntNest;
 import su.msk.dunno.blame.map.gen.RecursiveDivisionMethod;
+import su.msk.dunno.blame.map.gen.StandartDungeon;
 import su.msk.dunno.blame.map.tiles.Door;
 import su.msk.dunno.blame.map.tiles.Floor;
 import su.msk.dunno.blame.map.tiles.Wall;
@@ -51,21 +53,26 @@ public class Field
 		this(N_x, N_y);
 		if("random".equals(mapname))
 		{
-			int[][] map = RecursiveDivisionMethod.generate(this);
+			//int[][] map = RecursiveDivisionMethod.generate(this);
+			int[][] map = StandartDungeon.CreateStandardDunegon(N_x, N_y);
+			//int[][] map = AntNest.CreateAntNest(N_x, N_y, true);
 			for(int i = 0; i < N_x; i++)
 			{
 				for(int j = 0; j < N_y; j++)
 				{
 					switch(map[i][j])
 					{
-					case 0: objects[i][j].set(0, new Floor(i, j)); break;
+					/*case 0: objects[i][j].set(0, new Floor(i, j)); break;
 					case 1: objects[i][j].set(0, new Wall(i, j)); break;
 					case 2: objects[i][j].set(0, new Door(i, j)); break;
 					case 3:
 						objects[i][j].set(0, new Floor(i, j));
 						RebuildStation rs = new RebuildStation(i, j, this);
 						Livings.instance().addObject(rs);
-						break;
+						break;*/
+					case 0: objects[i][j].set(0, new Wall(i, j)); break;
+					case 1: objects[i][j].set(0, new Floor(i, j)); break;					
+					case 2: objects[i][j].set(0, new Door(i, j)); break;
 					}
 				}
 			}

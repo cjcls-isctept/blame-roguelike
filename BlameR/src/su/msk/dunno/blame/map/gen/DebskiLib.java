@@ -6,9 +6,10 @@
 package su.msk.dunno.blame.map.gen;
 
 import bigtroubles.Creatures.Creature;
-import java.awt.Point;
 import java.util.Collections;
 import java.util.LinkedList;
+
+import su.msk.dunno.blame.support.Point;
 
 import bigtroubles.Utils.StopWatch;
 import bigtroubles.Utils.RNG;
@@ -40,9 +41,9 @@ public class DebskiLib {
     /*::: Генераторы :::*/
     
     // default CreateAntNest
-    public static void CreateAntNest(Map level) 
+    public static int[][] CreateAntNest(int N_x, int N_y) 
     {
-        CreateAntNest(level, false);
+        return CreateAntNest(N_x, N_y, false);
     }
     public static int[][] CreateAntNest(int N_x, int N_y, boolean with_rooms) 
     {
@@ -125,9 +126,9 @@ public class DebskiLib {
 
         if (with_rooms) {
             // add halls at the end of corridors
-            for (y = 1; y < (int) level.GetHeight() - 1; y++) {
-                for (x = 1; x < (int) level.GetWidth() - 1; x++) {
-                    if ((x > (int) level.GetWidth() / 2 - 10 && x < (int) level.GetWidth() / 2 + 10 && y > (int) level.GetHeight() / 2 - 5 && y < (int) level.GetHeight() / 2 + 5) || level.GetCell(x, y) == LevelElementWall) {
+            for (y = 1; y < N_y - 1; y++) {
+                for (x = 1; x < N_x - 1; x++) {
+                    if ((x > N_x/2 - 10 && x < N_x/2 + 10 && y > N_y/2 - 5 && y < N_y/2 + 5) || level[x][y] == LevelElementWall) {
                         continue;
                     }
 
@@ -136,7 +137,7 @@ public class DebskiLib {
                     if (neighbours == 1) {
                         for (px = -1; px <= 1; px++) {
                             for (py = -1; py <= 1; py++) {
-                                level.SetCell(x + px, y + py, LevelElementRoom);
+                                level[x+px][y+py] = LevelElementRoom;
                             }
                         }
                     }
@@ -595,34 +596,41 @@ public class DebskiLib {
     }
 
     // default CountNeighboursOfType
-    private static int CountNeighboursOfType(Map level, int type, Point pos) {
+    private static int CountNeighboursOfType(int[][] level, int type, Point pos) {
         return CountNeighboursOfType(level, type, pos, true);
     }
-    private static int CountNeighboursOfType(Map level, int type, Point pos, boolean diagonal) {
+    
+    private static int CountNeighboursOfType(int[][] level, int type, Point pos, boolean diagonal) 
+    {
+    	int N_x = level.length;
+    	int N_y = level[0].length;
         int neighbours = 0;
         if (pos.y > 0) {
-            if (level.GetCell(pos.x, pos.y - 1) == type) // N
+            if (level[pos.x][pos.y-1] == type) // N
             {
                 neighbours++;
             }
         }
 
-        if (pos.x < (int) level.GetWidth() - 1) {
-            if (level.GetCell(pos.x + 1, pos.y) == type) // E
+        if (pos.x < N_x-1) 
+        {
+            if (level[pos.x+1][pos.y] == type) // E
             {
                 neighbours++;
             }
         }
 
-        if (pos.x > 0 && pos.y < (int) level.GetHeight() - 1) {
-            if (level.GetCell(pos.x, pos.y + 1) == type) // S
+        if (pos.x > 0 && pos.y < N_y-1) 
+        {
+            if (level[pos.x][pos.y+1] == type) // S
             {
                 neighbours++;
             }
         }
 
-        if (pos.x > 0 && pos.y > 0) {
-            if (level.GetCell(pos.x - 1, pos.y) == type) // W
+        if (pos.x > 0 && pos.y > 0) 
+        {
+            if (level[pos.x-1][pos.y] == type) // W
             {
                 neighbours++;
             }
@@ -630,29 +638,31 @@ public class DebskiLib {
 
         if (diagonal) {
             if (pos.x > 0 && pos.y > 0) {
-                if (level.GetCell(pos.x - 1, pos.y - 1) == type) // NW
+                if (level[pos.x-1][pos.y-1] == type) // NW
                 {
                     neighbours++;
                 }
             }
 
-            if (pos.x < (int) level.GetWidth() - 1 && pos.y > 0) {
-                if (level.GetCell(pos.x + 1, pos.y - 1) == type) // NE
+            if (pos.x < (int) N_x - 1 && pos.y > 0) {
+                if (level[pos.x+1][pos.y-1] == type) // NE
                 {
                     neighbours++;
                 }
             }
 
-            if (pos.x < (int) level.GetWidth() - 1 && pos.y < (int) level.GetHeight() - 1) // SE
+            if (pos.x < N_x-1 && pos.y < N_y-1) // SE
             {
-                if (level.GetCell(pos.x + 1, pos.y + 1) == type) {
+                if (level[pos.x+1][pos.y+1] == type) 
+                {
                     neighbours++;
                 }
             }
 
 
-            if (pos.x > 0 && pos.y < (int) level.GetHeight() - 1) {
-                if (level.GetCell(pos.x - 1, pos.y + 1) == type) // SW
+            if (pos.x > 0 && pos.y < N_y-1) 
+            {
+                if (level[pos.x-1][pos.y+1] == type) // SW
                 {
                     neighbours++;
                 }
