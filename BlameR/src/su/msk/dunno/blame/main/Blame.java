@@ -19,6 +19,7 @@ import su.msk.dunno.blame.objects.livings.Killy;
 import su.msk.dunno.blame.support.Color;
 import su.msk.dunno.blame.support.Messages;
 import su.msk.dunno.blame.support.MyFont;
+import su.msk.dunno.blame.support.Point;
 import su.msk.dunno.blame.support.TrueTypeFont;
 import su.msk.dunno.blame.support.listeners.EventManager;
 import su.msk.dunno.blame.support.listeners.KeyListener;
@@ -35,6 +36,8 @@ public class Blame
 
 	private int num_creatures = 60;
 	public static int num_stations = 10;
+	
+	public static String dungeonType = "technosphere";
 	
 	public static String lang;
 	
@@ -68,11 +71,31 @@ public class Blame
 		MyFont.instance().initDisplayLists();
 		initEvents();
 
-		/*for(int i=0; i < 5000; i++)*/field = new Field(N_x, N_y, "random");
+		Point killy_point = null;
+		Point cibo_point = null;
+		int i;
+		for(i = 0; i < 10; i++)
+		{
+			System.out.println("level generation, attempt number "+i);
+			Livings.instance().clear();
+			field = new Field(N_x, N_y, "random");
+			killy_point = field.getRandomPos();
+			if(killy_point != null)killy = new Killy(killy_point, field);
+			else continue;
+			cibo_point = field.getRandomPos(killy.cur_pos.plus(-2,2), killy.cur_pos.plus(2,-2));
+			if(cibo_point != null)
+			{
+				cibo = new Cibo(cibo_point, field);	// generate cibo near killy
+				break;
+			}
+		}
+		if(i == 10 && (killy_point == null || cibo_point == null))
+		{
+			System.out.println("level cannot be created, programm will exit");
+			System.exit(0);
+		}
 		
 		Livings.instance().addField(field);
-		killy = new Killy(field.getRandomPos(), field);
-		cibo = new Cibo(field.getRandomPos(killy.cur_pos.plus(-2,2), killy.cur_pos.plus(2,-2)), field);	// generate cibo near killy
 		Livings.instance().addKilly(killy);
 		Livings.instance().addCibo(cibo);
 		Livings.instance().addCreatures(num_creatures);
@@ -199,6 +222,7 @@ public class Blame
 			N_y = Integer.valueOf(p.getProperty("N_y"));
 			num_creatures = Integer.valueOf(p.getProperty("creatures"));
 			num_stations = Integer.valueOf(p.getProperty("stations"));
+			dungeonType = p.getProperty("dungeon_type");
 			lang = p.getProperty("lang");
 		} 
 		catch (FileNotFoundException e) 
