@@ -30,6 +30,7 @@ public class MyFont
 	public final static int CORPSE			= 13;
 	public final static int EMPTY			= 14;
 	public static final int STATION 		= 15;
+	public static final int SAFEGUARD 		= 16;
 	
 	private Texture myFont;
 	
@@ -68,6 +69,7 @@ public class MyFont
 		createList(myFont, '%', CORPSE);
 		//createList(myFont, ' ', EMPTY);	// its suppose to draw emptiness anyway... :)
 		createList(myFont, 'A', STATION);
+		createList(myFont, 'T', SAFEGUARD);
 	}
 	
 	public void createList(Texture texture, char ch, int list_name)
