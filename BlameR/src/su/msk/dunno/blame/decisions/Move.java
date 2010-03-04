@@ -77,7 +77,8 @@ public class Move extends ADecision
 		}
 		else if(!al.isPlayer() && al.isNearPlayer() && dir != Move.STAY)
 		{
-			Moving mv = new Moving(actionMoment, field, al, old, al.cur_pos);
+			field.playAnimation(new Moving(actionMoment, field, al, old, al.cur_pos));
+			/*Moving mv = new Moving(actionMoment, field, al, old, al.cur_pos);
 			field.addAnimation(mv);
 			while(!mv.isEnded)
 			{
@@ -89,7 +90,7 @@ public class Move extends ADecision
 				Display.sync(Blame.framerate);
 				Display.update();
 				Blame.getFPS();
-			}
+			}*/
 		}
 		wasExecuted = true;				
 	}

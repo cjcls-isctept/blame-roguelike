@@ -28,7 +28,7 @@ public class SiliconCreature extends ALiving
 	{
 		super(p, field);
 		health = 20;
-		dov = 5;
+		dov = 8;	// higher than player's - they' sense player earlier than he do
 		speed = 3;
 		find = new AStarPathFinder(field);
 	}

@@ -1,15 +1,16 @@
-framerate = 70
+framerate = 75
 
-fullscreen = no
+fullscreen = yes
 width = 640
 height = 480
 
 N_x = 100
 N_y = 100
 
-creatures = 0
+creatures = 60
 stations = 10
 
-dungeon_type = megastructure
+#rdm, antnest, caves, mines, maze, standard
+dungeon_type = caves
 
 lang = ru

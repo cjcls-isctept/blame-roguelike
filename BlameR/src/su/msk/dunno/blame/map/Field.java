@@ -3,6 +3,7 @@ package su.msk.dunno.blame.map;
 import java.util.LinkedList;
 import java.util.ListIterator;
 
+import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
 
 import rlforj.los.BresLos;
@@ -12,8 +13,6 @@ import rlforj.los.PrecisePermissive;
 import rlforj.math.Point2I;
 import su.msk.dunno.blame.decisions.Move;
 import su.msk.dunno.blame.main.Blame;
-import su.msk.dunno.blame.map.gen.AntNest;
-import su.msk.dunno.blame.map.gen.RecursiveDivisionMethod;
 import su.msk.dunno.blame.map.gen.GenLib;
 import su.msk.dunno.blame.map.tiles.Door;
 import su.msk.dunno.blame.map.tiles.Floor;
@@ -31,7 +30,7 @@ import su.msk.dunno.blame.support.Vector2D;
 
 public class Field 
 {
-	public LinkObject[][] objects;	// must be private in the release!!!
+	private LinkObject[][] objects;	// must be private in the release!!!
 	public LinkedList<AAnimation> animations;	// must be private!!!
 	private LinkedList<AObject> lightSources;
 	private int N_x, N_y;
@@ -54,7 +53,7 @@ public class Field
 		if("random".equals(mapname))
 		{
 			int[][] map = new int[N_x][N_y];
-			if("megastructure".equals(Blame.dungeonType))map = RecursiveDivisionMethod.generate(N_x, N_y);
+			if("rdm".equals(Blame.dungeonType))map = GenLib.cretaRDM(N_x, N_y, Blame.num_stations);
 			else if("antnest".equals(Blame.dungeonType))map = GenLib.CreateAntNest(N_x, N_y);
 			else if("caves".equals(Blame.dungeonType))map = GenLib.CreateCaves(N_x, N_y);
 			else if("mines".equals(Blame.dungeonType))map = GenLib.CreateMines(N_x, N_y);
@@ -228,6 +227,21 @@ public class Field
 		MyFont.instance().drawString(""+(center_x-playerMovingCoord.x),     
 									 Blame.width-190, 80, 0.2f, Color.WHITE);*/	
 		GL11.glPopMatrix();
+	}
+	
+	public void playAnimation(AAnimation a)
+	{
+		addAnimation(a);
+		while(!a.isEnded)
+		{
+			GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);		
+			GL11.glLoadIdentity();			
+			draw(Blame.getCurrentPlayer().cur_pos);		
+			Blame.getCurrentPlayer().drawStats();
+			Display.sync(Blame.framerate);
+			Display.update();
+			Blame.getFPS();
+		}
 	}
 	
 	public void playAnimations()
