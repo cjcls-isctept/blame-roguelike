@@ -47,7 +47,8 @@ public class Shoot extends ADecision implements ISelector
 			if(line.size() > 1)
 			{
 				// animation
-				BulletFlight bf = new BulletFlight(actionMoment, line.get(1), shootTo, field);
+				field.playAnimation(new BulletFlight(actionMoment, line.get(1), shootTo, field));
+				/*BulletFlight bf = new BulletFlight(actionMoment, line.get(1), shootTo, field);
 				field.addAnimation(bf);
 				while(!bf.isEnded)
 				{
@@ -59,13 +60,14 @@ public class Shoot extends ADecision implements ISelector
 					Display.sync(Blame.framerate);
 					Display.update();
 					Blame.getFPS();
-				}
+				}*/
 				// shooter's kickback
 				Point old = al.cur_pos;
 				al.cur_pos = al.cur_pos.mul(2).minus(line.get(1));
 				if(field.changeLocation(al) && al.isNearPlayer())
 				{
-					Moving mv = new Moving(actionMoment, field, al, old, al.cur_pos);
+					field.playAnimation(new Moving(actionMoment, field, al, old, al.cur_pos));
+					/*Moving mv = new Moving(actionMoment, field, al, old, al.cur_pos);
 					field.addAnimation(mv);
 					while(!mv.isEnded)
 					{
@@ -77,7 +79,7 @@ public class Shoot extends ADecision implements ISelector
 						Display.sync(Blame.framerate);
 						Display.update();
 						Blame.getFPS();
-					}
+					}*/
 				}			
 			}
 			LinkedList<AObject> lao = field.getObjectsAtPoint(shootTo).clone();		// clone() due to some bugs if not...

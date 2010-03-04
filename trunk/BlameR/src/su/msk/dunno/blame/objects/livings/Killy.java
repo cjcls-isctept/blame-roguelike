@@ -309,7 +309,7 @@ public class Killy extends ALiving implements IScreen
 			GL11.glClear(GL11.GL_COLOR_BUFFER_BIT/* | GL11.GL_DEPTH_BUFFER_BIT*/);		
 			GL11.glLoadIdentity();
 			
-			field.draw(/*cur_pos*/Blame.scale);		
+			field.draw(cur_pos/*Blame.scale*/);		
 			drawStats();
 			Display.sync(Blame.framerate);
 			Display.update();
