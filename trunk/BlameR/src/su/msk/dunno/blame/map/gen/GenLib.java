@@ -459,7 +459,7 @@ public class GenLib
     // default CreateStandartDungeon
     public static int[][] CreateStandardDunegon(int N_x, int N_y) 
     {
-        return CreateStandardDunegon(N_x, N_y, 20, true);
+        return CreateStandardDunegon(N_x, N_y, 50, true);
     }
 	
 	public static int[][] CreateStandardDunegon(int N_x, int N_y, int max_number_of_rooms, boolean with_doors) 

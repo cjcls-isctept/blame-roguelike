@@ -6,6 +6,7 @@ import su.msk.dunno.blame.prototypes.ADecision;
 import su.msk.dunno.blame.prototypes.ALiving;
 import su.msk.dunno.blame.prototypes.AObject;
 import su.msk.dunno.blame.support.Messages;
+import su.msk.dunno.blame.support.StateMap;
 
 
 public class Open extends ADecision 
@@ -13,7 +14,7 @@ public class Open extends ADecision
 	public Open(ALiving al) 
 	{
 		super(al);
-		args.put("Open", "");
+		args.put("Open");
 	}
 
 	@Override public void doAction(int actionMoment) 

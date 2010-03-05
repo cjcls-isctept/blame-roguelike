@@ -3,11 +3,12 @@ package su.msk.dunno.blame.prototypes;
 import java.util.HashMap;
 
 import su.msk.dunno.blame.support.Point;
+import su.msk.dunno.blame.support.StateMap;
 
 public abstract class ADecision 
 {
 	protected ALiving al;
-	protected HashMap<String, String> args = new HashMap<String, String>();
+	protected StateMap args = new StateMap();
 	protected boolean wasExecuted;
 	private int actionPeriod;
 	

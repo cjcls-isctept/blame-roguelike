@@ -4,6 +4,7 @@ import java.util.HashMap;
 
 import su.msk.dunno.blame.support.Color;
 import su.msk.dunno.blame.support.Point;
+import su.msk.dunno.blame.support.StateMap;
 
 
 public abstract class AObject 
@@ -38,14 +39,14 @@ public abstract class AObject
 		return Color.WHITE;
 	}
 	
-	public void changeState(ALiving changer, HashMap<String, String> args)
+	public void changeState(ALiving changer, StateMap args)
 	{
 		
 	}
 	
-	public HashMap<String, String> getState()
+	public StateMap getState()
 	{
-		return new HashMap<String, String>();
+		return new StateMap();
 	}
 	
 	public boolean isEnemy(AObject ao)

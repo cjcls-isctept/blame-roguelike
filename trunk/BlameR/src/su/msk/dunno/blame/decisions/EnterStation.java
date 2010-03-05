@@ -7,6 +7,7 @@ import su.msk.dunno.blame.map.Field;
 import su.msk.dunno.blame.prototypes.ADecision;
 import su.msk.dunno.blame.prototypes.ALiving;
 import su.msk.dunno.blame.prototypes.AObject;
+import su.msk.dunno.blame.support.StateMap;
 
 public class EnterStation extends ADecision 
 {
@@ -25,8 +26,9 @@ public class EnterStation extends ADecision
 		{
 			if(ao.getState().containsKey("Station"))
 			{
-				HashMap<String, String> args = new HashMap<String, String>();
-				args.put("Enter", al.getName());
+				/*HashMap<String, String> args = new HashMap<String, String>();
+				args.put("Enter", al.getName());*/
+				StateMap args = new StateMap("Enter", al.getName());
 				ao.changeState(al, args);
 			}
 		}
