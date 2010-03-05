@@ -6,7 +6,6 @@ import su.msk.dunno.blame.prototypes.ADecision;
 import su.msk.dunno.blame.prototypes.ALiving;
 import su.msk.dunno.blame.prototypes.AObject;
 import su.msk.dunno.blame.support.Messages;
-import su.msk.dunno.blame.support.StateMap;
 
 
 public class Open extends ADecision 

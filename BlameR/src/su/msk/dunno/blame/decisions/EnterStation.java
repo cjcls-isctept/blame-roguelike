@@ -1,6 +1,5 @@
 package su.msk.dunno.blame.decisions;
 
-import java.util.HashMap;
 import java.util.LinkedList;
 
 import su.msk.dunno.blame.map.Field;

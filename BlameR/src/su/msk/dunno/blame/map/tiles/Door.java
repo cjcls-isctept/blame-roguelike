@@ -1,10 +1,9 @@
 package su.msk.dunno.blame.map.tiles;
 
-import java.util.HashMap;
-
 import su.msk.dunno.blame.prototypes.ALiving;
 import su.msk.dunno.blame.prototypes.AObject;
 import su.msk.dunno.blame.support.MyFont;
+import su.msk.dunno.blame.support.StateMap;
 
 
 public class Door extends AObject 
@@ -38,7 +37,7 @@ public class Door extends AObject
 		return isOpen;
 	}
 	
-	@Override public void changeState(ALiving changer, HashMap<String, String> args)
+	@Override public void changeState(ALiving changer, StateMap args)
 	{// maybe need to check for monster staying in door, but its seems not to throw any error now...
 		if(args.containsKey("Open"))isOpen = true;
 		if(args.containsKey("Close"))isOpen = false;

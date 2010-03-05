@@ -8,7 +8,6 @@ import su.msk.dunno.blame.main.Blame;
 import su.msk.dunno.blame.prototypes.ALiving;
 import su.msk.dunno.blame.prototypes.IScreen;
 import su.msk.dunno.blame.support.Color;
-import su.msk.dunno.blame.support.MyFont;
 import su.msk.dunno.blame.support.TrueTypeFont;
 import su.msk.dunno.blame.support.listeners.EventManager;
 import su.msk.dunno.blame.support.listeners.KeyListener;

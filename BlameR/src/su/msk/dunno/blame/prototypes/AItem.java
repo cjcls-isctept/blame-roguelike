@@ -1,21 +1,20 @@
 package su.msk.dunno.blame.prototypes;
 
-import java.util.HashMap;
-
 import su.msk.dunno.blame.support.Point;
+import su.msk.dunno.blame.support.StateMap;
 
 
 public abstract class AItem extends AObject
 {
-	protected HashMap<String, String> item_properties = new HashMap<String, String>();
+	protected StateMap item_properties = new StateMap();
 	
 	public AItem(Point p) 
 	{
 		super(p);
-		item_properties.put("Item", "");
+		item_properties.put("Item");
 	}
 	
-	@Override public HashMap<String, String> getState()
+	@Override public StateMap getState()
 	{
 		return item_properties;
 	}

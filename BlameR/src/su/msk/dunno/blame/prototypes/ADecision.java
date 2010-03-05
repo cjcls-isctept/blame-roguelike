@@ -1,7 +1,5 @@
 package su.msk.dunno.blame.prototypes;
 
-import java.util.HashMap;
-
 import su.msk.dunno.blame.support.Point;
 import su.msk.dunno.blame.support.StateMap;
 

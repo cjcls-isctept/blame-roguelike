@@ -10,11 +10,11 @@ public class ColdPart extends AItem
 	public ColdPart(Point p) 
 	{
 		super(p);
-		item_properties.put("Part", "");
-		item_properties.put("Info", "Adds cold damage to weapon (damage +1)");
-		item_properties.put("EffectsCapacity", "1");
-		item_properties.put("Effect1", "Damage");
-		item_properties.put("Damage", "1");
+		item_properties.put("Part");
+		item_properties.putString("Info", "Adds cold damage to weapon (damage +1)");
+		item_properties.putInt("EffectsCapacity", 1);
+		item_properties.putString("Effect1", "Damage");
+		item_properties.putFloat("Damage", 1);
 	}
 
 	@Override public String getName() 

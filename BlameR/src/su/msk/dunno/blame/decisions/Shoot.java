@@ -2,12 +2,8 @@ package su.msk.dunno.blame.decisions;
 
 import java.util.LinkedList;
 
-import org.lwjgl.opengl.Display;
-import org.lwjgl.opengl.GL11;
-
 import su.msk.dunno.blame.animations.BulletFlight;
 import su.msk.dunno.blame.animations.Moving;
-import su.msk.dunno.blame.main.Blame;
 import su.msk.dunno.blame.map.Field;
 import su.msk.dunno.blame.prototypes.ADecision;
 import su.msk.dunno.blame.prototypes.ALiving;

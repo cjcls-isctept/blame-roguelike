@@ -10,11 +10,11 @@ public class PoisonPart extends AItem
 	public PoisonPart(Point p) 
 	{
 		super(p);
-		item_properties.put("Part", "");
-		item_properties.put("Info", "Adds poison damage to weapon (damage +3)");
-		item_properties.put("EffectsCapacity", "1");
-		item_properties.put("Effect1", "Damage");
-		item_properties.put("Damage", "3");
+		item_properties.put("Part");
+		item_properties.putString("Info", "Adds poison damage to weapon (damage +3)");
+		item_properties.putInt("EffectsCapacity", 1);
+		item_properties.putString("Effect1", "Damage");
+		item_properties.putFloat("Damage", 3);
 	}
 
 	@Override public String getName() 

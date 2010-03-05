@@ -10,11 +10,11 @@ public class KickPart extends AItem
 	 	public KickPart(Point p) 
 	 	{
 	 		super(p);
-	 		item_properties.put("Part", "");
-	 		item_properties.put("Info", "Kicks enemies back!");
-	 		item_properties.put("EffectsCapacity", "1");
-	 		item_properties.put("Effect1", "Kick");
-	 		item_properties.put("Kick", "1");
+	 		item_properties.put("Part");
+	 		item_properties.putString("Info", "Kicks enemies back!");
+	 		item_properties.putInt("EffectsCapacity", 1);
+	 		item_properties.putString("Effect1", "Kick");
+	 		item_properties.putFloat("Kick", 1);
 	 	}
 
 	 	@Override public String getName() 

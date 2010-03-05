@@ -11,11 +11,11 @@ public class MindPart extends AItem
 	public MindPart(Point p) 
 	{
 		super(p);
-		item_properties.put("Part", "");
-		item_properties.put("Info", "Allows to enter to target's mind");
-		item_properties.put("EffectsCapacity", "1");
-		item_properties.put("Effect1", "MindHack");
-		item_properties.put("MindHack", "1");
+		item_properties.put("Part");
+		item_properties.putString("Info", "Allows to enter to target's mind");
+		item_properties.putInt("EffectsCapacity", 1);
+		item_properties.putString("Effect1", "MindHack");
+		item_properties.putFloat("MindHack", 1);
 	}
 
 	@Override public String getName() 
