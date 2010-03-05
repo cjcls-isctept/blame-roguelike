@@ -16,6 +16,7 @@ import su.msk.dunno.blame.prototypes.IScreen;
 import su.msk.dunno.blame.support.Color;
 import su.msk.dunno.blame.support.Messages;
 import su.msk.dunno.blame.support.MyFont;
+import su.msk.dunno.blame.support.StateMap;
 import su.msk.dunno.blame.support.TrueTypeFont;
 import su.msk.dunno.blame.support.listeners.EventManager;
 import su.msk.dunno.blame.support.listeners.KeyListener;
@@ -86,18 +87,16 @@ public class RebuildStation extends ALiving implements IScreen
 		return true;
 	}
 	
-	@Override public HashMap<String, String> getState()
+	@Override public StateMap getState()
 	{
-		HashMap<String, String> args = new HashMap<String, String>();
-		args.put("Station", "");
-		return args;
+		return new StateMap("Station");
 	}
 	
-	@Override public void changeState(ALiving changer, HashMap<String, String> args)
+	@Override public void changeState(ALiving changer, StateMap args)
 	{
 		if(args.containsKey("Enter"))
 		{
-			player = Blame.getPlayer(args.get("Enter"));
+			player = Blame.getPlayer(args.getString("Enter"));
 			Messages.instance().clear();
 			process();
 		}

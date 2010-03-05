@@ -4,6 +4,7 @@ import su.msk.dunno.blame.prototypes.ADecision;
 import su.msk.dunno.blame.prototypes.ALiving;
 import su.msk.dunno.blame.prototypes.AObject;
 import su.msk.dunno.blame.support.Messages;
+import su.msk.dunno.blame.support.StateMap;
 
 public class MeleeAttack extends ADecision
 {
@@ -13,7 +14,6 @@ public class MeleeAttack extends ADecision
 	{
 		super(al);
 		this.dir = dir;
-		args.put("Damage", (int)(Math.random()*20)+"");
 	}
 
 	@Override public void doAction(int actionMoment) 
@@ -23,7 +23,7 @@ public class MeleeAttack extends ADecision
 			if(al.isEnemy(ao))
 			{
 				if(al.isNearPlayer())if(al.isNearPlayer())Messages.instance().addPropMessage("decision.shoot", al.getName(), ao.getName());
-				ao.changeState(al, args);
+				ao.changeState(al, new StateMap("Damage", (int)(Math.random()*20)));
 			}
 		}
 		wasExecuted = true;

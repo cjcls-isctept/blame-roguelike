@@ -11,6 +11,7 @@ import su.msk.dunno.blame.map.Field;
 import su.msk.dunno.blame.prototypes.ADecision;
 import su.msk.dunno.blame.prototypes.ALiving;
 import su.msk.dunno.blame.support.Point;
+import su.msk.dunno.blame.support.StateMap;
 
 
 public class Move extends ADecision 
@@ -71,26 +72,11 @@ public class Move extends ADecision
 		}
 		if(!field.changeLocation(al))
 		{
-			HashMap<String, String> args = new HashMap<String, String>();
-			args.put("MoveFail", "");
-			al.changeState(al, args);
+			al.changeState(al, new StateMap("MoveFail"));
 		}
 		else if(!al.isPlayer() && al.isNearPlayer() && dir != Move.STAY)
 		{
 			field.playAnimation(new Moving(actionMoment, field, al, old, al.cur_pos));
-			/*Moving mv = new Moving(actionMoment, field, al, old, al.cur_pos);
-			field.addAnimation(mv);
-			while(!mv.isEnded)
-			{
-				GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);		
-				GL11.glLoadIdentity();
-				
-				field.draw(Blame.getCurrentPlayer().cur_pos);		
-				Blame.getCurrentPlayer().drawStats();
-				Display.sync(Blame.framerate);
-				Display.update();
-				Blame.getFPS();
-			}*/
 		}
 		wasExecuted = true;				
 	}
