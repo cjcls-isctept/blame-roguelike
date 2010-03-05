@@ -1,6 +1,5 @@
 package su.msk.dunno.blame.screens;
 
-import java.util.HashMap;
 import java.util.LinkedList;
 
 import org.lwjgl.input.Keyboard;
@@ -26,6 +25,7 @@ import su.msk.dunno.blame.support.Color;
 import su.msk.dunno.blame.support.Messages;
 import su.msk.dunno.blame.support.MyFont;
 import su.msk.dunno.blame.support.Point;
+import su.msk.dunno.blame.support.StateMap;
 import su.msk.dunno.blame.support.TrueTypeFont;
 import su.msk.dunno.blame.support.listeners.EventManager;
 import su.msk.dunno.blame.support.listeners.KeyListener;
@@ -40,8 +40,8 @@ public class Weapon implements IScreen
 	private EventManager weaponEvents = new EventManager();
 	private AObject[][] weaponView = new AObject[weapon_width][weapon_height];
 	private LinkedList<AObject> sockets = new LinkedList<AObject>();
-	private HashMap<String, String> effects = new HashMap<String, String>();
-	private HashMap<String, String> bonuses = new HashMap<String, String>();
+	private StateMap effects = new StateMap();
+	private StateMap bonuses = new StateMap();
 	
 	private MinorSelector selector = new MinorSelector(0, 0);
 	private boolean isSelectSocket;	
@@ -81,10 +81,11 @@ public class Weapon implements IScreen
 		GL11.glLoadIdentity();
 		TrueTypeFont.instance().drawString(owner.getName()+"'s weapon", 20, Blame.height-25, Color.WHITE);
 		int k = Blame.height-40;
-		for(String s: effects.keySet())
+		for(String key: effects.getKeys())
 		{
-			TrueTypeFont.instance().drawString(s+": "+String.format("%1.0f", Float.valueOf(effects.get(s)))+
-											   (bonuses.containsKey(s)?" (+"+String.format("%1$.0f", Float.valueOf(bonuses.get(s))/Float.valueOf(effects.get(s))*100)+"% bonus)":""), 20, k, Color.GREEN); k -= 15;
+			TrueTypeFont.instance().drawString(key+": "+effects.getInt(key)+
+											   (bonuses.containsKey(key)?" (+"+(int)(bonuses.getFloat(key)/effects.getFloat(key)*100)+"% bonus)":""), 
+											   20, k, Color.GREEN); k -= 15;
 		}
 		if(isSelectSocket)
 		{
@@ -123,44 +124,44 @@ public class Weapon implements IScreen
 		bonuses.clear();
 		for(AObject ao: sockets)
 		{
-			int num = Integer.valueOf(ao.getState().get("EffectsCapacity"));
+			int num = Integer.valueOf(ao.getState().getInt("EffectsCapacity"));
 			for(int i = 1; i <= num; i++)
 			{
-				String effect = ao.getState().get("Effect"+i);
-				float toAdd = Float.valueOf(ao.getState().get(effect));
+				String effect = ao.getState().getString("Effect"+i);
+				float toAdd = ao.getState().getFloat(effect);
 				int sameImps = sameImpsNear(ao, ao.cur_pos, null);
 				if(effects.containsKey(effect))
 				{
-					float value = Float.valueOf(effects.get(effect)) + toAdd;
+					float value = effects.getFloat(effect) + toAdd;
 					if(sameImps > 0 && !ao.getState().containsKey("Extender"))
 					{
-						effects.put(effect, (value+sameImps*toAdd/10.0f)+"");
-						if(bonuses.containsKey(effect))bonuses.put(effect, (Float.valueOf(bonuses.get(effect))+sameImps*toAdd/10.0f)+"");
-						else bonuses.put(effect, sameImps*toAdd/10.0f+"");
+						effects.putFloat(effect, (value+sameImps*toAdd/10.0f));
+						if(bonuses.containsKey(effect))bonuses.putFloat(effect, (bonuses.getFloat(effect)+sameImps*toAdd/10.0f));
+						else bonuses.putFloat(effect, sameImps*toAdd/10.0f);
 					}
-					else effects.put(effect, (value)+"");
+					else effects.putFloat(effect, value);
 				}
 				else 
 				{
 					if(sameImps > 0 && !ao.getState().containsKey("Extender"))
 					{
-						effects.put(effect, (toAdd+sameImps*toAdd/10.0f)+"");
-						if(bonuses.containsKey(effect))bonuses.put(effect, (Float.valueOf(bonuses.get(effect))+sameImps*toAdd/10.0f)+"");
-						else bonuses.put(effect, sameImps*toAdd/10.0f+"");
+						effects.putFloat(effect, (toAdd+sameImps*toAdd/10.0f));
+						if(bonuses.containsKey(effect))bonuses.putFloat(effect, (bonuses.getFloat(effect)+sameImps*toAdd/10.0f));
+						else bonuses.putFloat(effect, sameImps*toAdd/10.0f);
 					}
-					else effects.put(effect, toAdd+"");
+					else effects.putFloat(effect, toAdd);
 				}
 			}
 		}
-		if(effects.containsKey("Damage"))damage = Float.valueOf(effects.get("Damage"));
+		if(effects.containsKey("Damage"))damage = effects.getFloat("Damage");
 		else damage = 0;
-		if(effects.containsKey("Energy"))maxEnergy = Float.valueOf(effects.get("Energy"));
+		if(effects.containsKey("Energy"))maxEnergy = effects.getFloat("Energy");
 		else maxEnergy = 0;
 		if(energy > maxEnergy)energy = maxEnergy;
 		energy_fill_rate = maxEnergy/20.0f;
 	}
 	
-	public HashMap<String, String> applyEffects()
+	public StateMap applyEffects()
 	{
 		if(energy - damage/5 > 0)
 		{

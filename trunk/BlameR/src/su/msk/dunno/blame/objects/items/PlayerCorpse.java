@@ -12,7 +12,7 @@ public class PlayerCorpse extends AItem
 	{
 		super(p);
 		this.name = name;
-		item_properties.put("Info", name+"'s genetic information. "+name+" can be restored in rebuild station.");
+		item_properties.putString("Info", name+"'s genetic information. "+name+" can be restored in rebuild station.");
 	}
 
 	@Override public String getName() 

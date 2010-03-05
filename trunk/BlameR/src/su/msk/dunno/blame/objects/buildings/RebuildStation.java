@@ -1,7 +1,5 @@
 package su.msk.dunno.blame.objects.buildings;
 
-import java.util.HashMap;
-
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
@@ -30,7 +28,7 @@ public class RebuildStation extends ALiving implements IScreen
 	private EventManager events = new EventManager();
 	private int mixture_capacity = 100;
 	
-	private HashMap<String, String> args = new HashMap<String, String>();
+	private StateMap args = new StateMap();
 	
 	public RebuildStation(int i, int j, Field field) 
 	{
@@ -151,7 +149,7 @@ public class RebuildStation extends ALiving implements IScreen
 				if(mixture_capacity >= 10)
 				{
 					args.clear();
-					args.put("HealthPlus", "10");
+					args.putInt("HealthPlus", 10);
 					player.changeState(player, args);
 					mixture_capacity -= 10;
 				}
@@ -165,7 +163,7 @@ public class RebuildStation extends ALiving implements IScreen
 				if(mixture_capacity >= 1)
 				{
 					args.clear();
-					args.put("HealthPlus", "1");
+					args.putInt("HealthPlus", 1);
 					player.changeState(player, args);
 					mixture_capacity -= 1;
 				}
@@ -179,7 +177,7 @@ public class RebuildStation extends ALiving implements IScreen
 				if(mixture_capacity >= 10)
 				{
 					args.clear();
-					args.put("InfectionHeal", "10");
+					args.putInt("InfectionHeal", 10);
 					player.changeState(player, args);
 					mixture_capacity -= 10;
 				}
@@ -193,7 +191,7 @@ public class RebuildStation extends ALiving implements IScreen
 				if(mixture_capacity >= 1)
 				{
 					args.clear();
-					args.put("InfectionHeal", "1");
+					args.putInt("InfectionHeal", 1);
 					player.changeState(player, args);
 					mixture_capacity -= 1;
 				}

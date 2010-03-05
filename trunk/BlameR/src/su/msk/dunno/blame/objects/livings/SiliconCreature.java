@@ -1,7 +1,5 @@
 package su.msk.dunno.blame.objects.livings;
 
-import java.util.HashMap;
-
 import su.msk.dunno.blame.decisions.MeleeAttack;
 import su.msk.dunno.blame.decisions.Move;
 import su.msk.dunno.blame.map.Field;
@@ -16,6 +14,7 @@ import su.msk.dunno.blame.support.Color;
 import su.msk.dunno.blame.support.Messages;
 import su.msk.dunno.blame.support.MyFont;
 import su.msk.dunno.blame.support.Point;
+import su.msk.dunno.blame.support.StateMap;
 
 
 public class SiliconCreature extends ALiving 
@@ -94,11 +93,11 @@ public class SiliconCreature extends ALiving
 		return Color.CYAN;
 	}
 	
-	@Override public void changeState(ALiving changer, HashMap<String, String> args)
+	@Override public void changeState(ALiving changer, StateMap args)
 	{
 		if(args.containsKey("Damage"))
 		{
-			int d = (int)(Math.random()*Float.valueOf(args.get("Damage")));
+			int d = (int)(Math.random()*args.getInt("Damage"));
 			health -= d;
 			if(isNearPlayer())Messages.instance().addPropMessage("living.receivedamage", getName(), d+"");
 			

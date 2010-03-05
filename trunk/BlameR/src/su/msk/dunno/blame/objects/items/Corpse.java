@@ -10,7 +10,7 @@ public class Corpse extends AItem
 	public Corpse(Point p) 
 	{
 		super(p);
-		item_properties.put("Info", "Piece of silicon shit");
+		item_properties.putString("Info", "Piece of silicon shit");
 	}
 
 	@Override public String getName() 

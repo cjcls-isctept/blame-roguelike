@@ -10,11 +10,11 @@ public class LightningPart extends AItem
 	public LightningPart(Point p) 
 	{
 		super(p);
-		item_properties.put("Part", "");
-		item_properties.put("Info", "Adds lightning energy to weapon (energy capacity +10)");
-		item_properties.put("EffectsCapacity", "1");
-		item_properties.put("Effect1", "Energy");
-		item_properties.put("Energy", "10");
+		item_properties.put("Part");
+		item_properties.putString("Info", "Adds lightning energy to weapon (energy capacity +10)");
+		item_properties.putInt("EffectsCapacity", 1);
+		item_properties.putString("Effect1", "Energy");
+		item_properties.putFloat("Energy", 10);
 	}
 
 	@Override public String getName() 

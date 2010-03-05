@@ -1,6 +1,5 @@
 package su.msk.dunno.blame.objects.livings;
 
-import java.util.HashMap;
 import java.util.ListIterator;
 
 import org.lwjgl.input.Keyboard;
@@ -31,6 +30,7 @@ import su.msk.dunno.blame.support.Color;
 import su.msk.dunno.blame.support.Messages;
 import su.msk.dunno.blame.support.MyFont;
 import su.msk.dunno.blame.support.Point;
+import su.msk.dunno.blame.support.StateMap;
 import su.msk.dunno.blame.support.TrueTypeFont;
 import su.msk.dunno.blame.support.listeners.EventManager;
 import su.msk.dunno.blame.support.listeners.KeyListener;
@@ -223,20 +223,20 @@ public class Killy extends ALiving implements IScreen
 		return "";
 	}
 	
-	@Override public void changeState(ALiving changer, HashMap<String, String> args)
+	@Override public void changeState(ALiving changer, StateMap args)
 	{
 		if(args.containsKey("Damage"))
 		{
-			health -= Integer.valueOf(args.get("Damage"));
-			if(isNearPlayer())Messages.instance().addPropMessage("living.receivedamage", getName(), args.get("Damage"));
+			health -= args.getInt("Damage");
+			if(isNearPlayer())Messages.instance().addPropMessage("living.receivedamage", getName(), args.getString("Damage"));
 		}
 		if(args.containsKey("HealthPlus"))
 		{
-			health += Integer.valueOf(args.get("HealthPlus"));
+			health += args.getInt("HealthPlus");
 		}
 		if(args.containsKey("InfectionHeal"))
 		{
-			infection_level -= Integer.valueOf(args.get("InfectionHeal"));
+			infection_level -= args.getInt("InfectionHeal");
 			if(infection_level < 0)infection_level = 0;
 		}
 		if(args.containsKey("MoveFail"))
@@ -245,12 +245,12 @@ public class Killy extends ALiving implements IScreen
 		}
 	}
 	
-	@Override public HashMap<String, String> getState() 
+	@Override public StateMap getState() 
 	{
-		HashMap<String, String> state = new HashMap<String, String>();
+		StateMap state = new StateMap();
 		if(isCancelMove || inventory.isOpen())
 		{
-			state.put("CancelMove", "");
+			state.put("CancelMove");
 			isCancelMove = false;
 		}
 		return state;
