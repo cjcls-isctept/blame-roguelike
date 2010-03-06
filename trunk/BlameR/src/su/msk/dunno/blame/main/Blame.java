@@ -135,7 +135,7 @@ public class Blame
 			if(isFullscreen)Display.setFullscreen(true);
 			else Display.setDisplayMode(new DisplayMode(width, height));
 			
-			Display.setTitle("Blame v0.0.2");
+			Display.setTitle(Messages.instance().getPropMessage("project.version"));
 			Display.setVSyncEnabled(true);
 			Display.create(); } 
 		catch (LWJGLException e) {
