@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<project name="Blamer">
+	<target name="create-archive">
+		<delete dir="blamer-${project.version}" />
+		<delete file="blamer-${project.version}.zip" />
+		<mkdir dir="blamer-${project.version}" />
+		<mkdir dir="blamer-${project.version}/res" />
+		<mkdir dir="blamer-${project.version}/res/i" />
+		<mkdir dir="blamer-${project.version}/res/lib" />
+		<jar destfile="blamer-${project.version}/Blame.jar" filesetmanifest="mergewithoutmain">
+			<manifest>
+				<attribute name="Built-By" value="${user.name}"/>
+				<attribute name="Main-Class" value="su.msk.dunno.blame.main.Blame"/>
+				<attribute name="Class-Path" value="."/>
+			</manifest>
+			<fileset dir="E:/Java/workspace/BlameR/bin"/>
+			<zipfileset excludes="META-INF/*.SF" src="E:/Java/workspace/BlameR/res/lib/jar/jinput.jar"/>
+			<zipfileset excludes="META-INF/*.SF" src="E:/Java/workspace/BlameR/res/lib/jar/lwjgl_util.jar"/>
+			<zipfileset excludes="META-INF/*.SF" src="E:/Java/workspace/BlameR/res/lib/jar/lwjgl.jar"/>
+			<zipfileset excludes="META-INF/*.SF" src="E:/Java/workspace/BlameR/res/lib/jar/rlforj.0.2.jar"/>
+		</jar>
+		<copy file="options.txt" tofile="blamer-${project.version}/options.txt" />
+		<copy file="res/i/font.png" tofile="blamer-${project.version}/res/i/font.png" />
+		<copy toDir="blamer-${project.version}/res/lib">
+			<fileset dir="res/lib/" excludes="jar/" />
+		</copy>
+		<copy file="run.bat" tofile="blamer-${project.version}/run.bat" />
+		<zip destfile="blamer-${project.version}.zip" basedir="blamer-${project.version}" />
+	</target>
+</project>
