@@ -58,6 +58,7 @@ public class HelpScreen implements IScreen
 		TrueTypeFont.instance().drawString("Arrow Keys/Numpad Keys - movement", 20, k, Color.WHITE); k -=25;
 		TrueTypeFont.instance().drawString("Tab - switch between characters", 20, k, Color.WHITE); k -=25;
 		TrueTypeFont.instance().drawString("F - shoot", 20, k, Color.WHITE); k -=25;
+		TrueTypeFont.instance().drawString("L - look at target", 20, k, Color.WHITE); k -=25;
 		TrueTypeFont.instance().drawString("I - open Inventory", 20, k, Color.WHITE); k -=25;
 		TrueTypeFont.instance().drawString("W - open weapon", 20, k, Color.WHITE); k -=25;
 		TrueTypeFont.instance().drawString(", - pick up item from the floor", 20, k, Color.WHITE); k -=25;

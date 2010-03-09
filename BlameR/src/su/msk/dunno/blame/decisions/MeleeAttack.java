@@ -20,9 +20,9 @@ public class MeleeAttack extends ADecision
 	{
 		for(AObject ao: al.getObjectsAtDir(dir))
 		{
-			if(al.isEnemy(ao))
+			if(al.isEnemy(ao) || ao.isEnemy(al))
 			{
-				if(al.isNearPlayer())if(al.isNearPlayer())Messages.instance().addPropMessage("decision.shoot", al.getName(), ao.getName());
+				if(al.isNearPlayer())if(al.isNearPlayer())Messages.instance().addPropMessage("decision.melee", al.getName(), ao.getName());
 				ao.changeState(al, new StateMap("Damage", (int)(Math.random()*20)));
 			}
 		}

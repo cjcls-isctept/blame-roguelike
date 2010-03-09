@@ -35,9 +35,9 @@ public class SiliconCreature extends ALiving
 	@Override public ADecision livingAI() 
 	{
 		int minDist = field.getN_x();
-		for(AObject ao: this.getMyNeighbours())
+		for(AObject ao: getMyNeighbours())
 		{
-			if(this.isEnemy(ao))	// attack sequence
+			if(isEnemy(ao) || ao.isEnemy(this))	// attack sequence
 			{
 				minDist = Math.min(this.cur_pos.getDist2(ao.cur_pos), minDist);
 				int dir = field.getDirection(cur_pos, ao.cur_pos);
@@ -113,10 +113,15 @@ public class SiliconCreature extends ALiving
 			if(isNearPlayer())Messages.instance().addPropMessage("living.mindhack", getName());
 		}
 	}
+	
+	@Override public StateMap getState()
+	{
+		return new StateMap("SiliconCreature");
+	}
 
 	@Override public boolean isEnemy(AObject ao) 
 	{
-		return "Killy".equals(ao.getName()) || "Cibo".equals(ao.getName());
+		return ao.getState().containsKey("Player");
 	}
 
 	@Override public boolean isPlayer() 

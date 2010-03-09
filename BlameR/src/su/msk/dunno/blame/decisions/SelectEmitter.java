@@ -8,57 +8,74 @@ import org.lwjgl.opengl.GL11;
 
 import su.msk.dunno.blame.main.Blame;
 import su.msk.dunno.blame.map.Field;
-import su.msk.dunno.blame.objects.symbols.MainSelector;
-import su.msk.dunno.blame.objects.symbols.MinorSelector;
+import su.msk.dunno.blame.objects.Livings;
 import su.msk.dunno.blame.prototypes.ADecision;
 import su.msk.dunno.blame.prototypes.ALiving;
 import su.msk.dunno.blame.prototypes.AObject;
-import su.msk.dunno.blame.prototypes.IScreen;
+import su.msk.dunno.blame.support.Color;
 import su.msk.dunno.blame.support.MyFont;
 import su.msk.dunno.blame.support.Point;
 import su.msk.dunno.blame.support.StateMap;
-import su.msk.dunno.blame.support.listeners.EventManager;
 import su.msk.dunno.blame.support.listeners.KeyListener;
 
-public class SelectTarget extends ADecision implements IScreen 
+public class SelectEmitter extends SelectTarget 
 {
-	protected Field field; 
-	protected EventManager selectEvents = new EventManager();
-	protected ADecision actionAfter;
-	
-	protected Point selectPoint;
-	protected LinkedList<AObject> selectLine = new LinkedList<AObject>();
-	
-	protected boolean isSelectTarget;
-	
-	public SelectTarget(ALiving al, Field field, ADecision actionAfter) 
+	private boolean isNextStep;
+	private int weaponPower = 0;
+	private int powerIncreaseSpeed = 20;
+	private boolean isTargetSelected;
+
+	public SelectEmitter(ALiving al, Field field) 
 	{
-		super(al);
-		this.field = field;
-		this.actionAfter = actionAfter;
-		initEvents();
-	}
-	
-	@Override public void doAction(int actionMoment) 
-	{
-		isSelectTarget = true;
-		process();
-		wasExecuted = true;
+		super(al, field, new EmitterShoot(al, field));
 	}
 	
 	public void process() 
 	{
-		while(isSelectTarget)
+		while(isSelectTarget && !al.isDead)
 		{
 			selectEvents.checkEvents();
 			GL11.glClear(GL11.GL_COLOR_BUFFER_BIT/* | GL11.GL_DEPTH_BUFFER_BIT*/);		
 			GL11.glLoadIdentity();
+			if(isNextStep)
+			{
+				Livings.instance().nextStep();
+				weaponPower += powerIncreaseSpeed;
+				isNextStep = false;
+			}
 			field.draw(al.cur_pos);
 			field.drawLine(selectLine);
 			Blame.getCurrentPlayer().drawStats();
+			drawPercentage();
 			Display.sync(Blame.framerate);
 			Display.update();
+			if(isTargetSelected)
+			{
+				if(weaponPower < 100)
+				{
+					Shoot sh = new Shoot(al, field);
+					sh.setSelectPoint(selectPoint);
+					al.setDecision(sh);
+				}
+				else 
+				{
+					actionAfter.setSelectPoint(selectPoint);
+					al.setDecision(actionAfter);
+				}
+			}
 		}
+		clearLine();
+	}
+	
+	public void drawPercentage()
+	{
+		GL11.glDisable(GL11.GL_TEXTURE_2D);
+		MyFont.instance().drawDisplayList(MyFont.CIRCLE, Blame.width/2, 150, Color.WHITE);
+		if(weaponPower > 25)MyFont.instance().drawDisplayList(MyFont.RECTANGLE1, Blame.width/2-5, 165, Color.WHITE);
+		if(weaponPower > 50)MyFont.instance().drawDisplayList(MyFont.RECTANGLE2, Blame.width/2+15, 145, Color.WHITE);
+		if(weaponPower > 75)MyFont.instance().drawDisplayList(MyFont.RECTANGLE1, Blame.width/2-5, 115, Color.WHITE);
+		if(weaponPower >= 100)MyFont.instance().drawDisplayList(MyFont.RECTANGLE2, Blame.width/2-35, 145, Color.WHITE);
+		GL11.glEnable(GL11.GL_TEXTURE_2D);
 	}
 	
 	public void initEvents()
@@ -69,6 +86,7 @@ public class SelectTarget extends ADecision implements IScreen
 			{
 				selectPoint = new Point(selectPoint.x, selectPoint.y+1);
 				buildLine();
+				isNextStep = true;
 			}
 		});
 		
@@ -78,6 +96,7 @@ public class SelectTarget extends ADecision implements IScreen
 			{
 				selectPoint = new Point(selectPoint.x+1, selectPoint.y+1);
 				buildLine();
+				isNextStep = true;
 			}
 		});
 		
@@ -87,6 +106,7 @@ public class SelectTarget extends ADecision implements IScreen
 			{
 				selectPoint = new Point(selectPoint.x, selectPoint.y+1);
 				buildLine();
+				isNextStep = true;
 			}
 		});
 		
@@ -96,6 +116,7 @@ public class SelectTarget extends ADecision implements IScreen
 			{
 				selectPoint = new Point(selectPoint.x-1, selectPoint.y+1);
 				buildLine();
+				isNextStep = true;
 			}
 		});
 		
@@ -105,6 +126,7 @@ public class SelectTarget extends ADecision implements IScreen
 			{
 				selectPoint = new Point(selectPoint.x+1, selectPoint.y);
 				buildLine();
+				isNextStep = true;
 			}
 		});
 		
@@ -114,6 +136,15 @@ public class SelectTarget extends ADecision implements IScreen
 			{
 				selectPoint = new Point(selectPoint.x+1, selectPoint.y);
 				buildLine();
+				isNextStep = true;
+			}
+		});
+		
+		selectEvents.addListener(Keyboard.KEY_NUMPAD5, new KeyListener(100)
+		{
+			public void onKeyDown()
+			{
+				isNextStep = true;
 			}
 		});
 		
@@ -123,6 +154,7 @@ public class SelectTarget extends ADecision implements IScreen
 			{
 				selectPoint = new Point(selectPoint.x-1, selectPoint.y);
 				buildLine();
+				isNextStep = true;
 			}
 		});
 		
@@ -132,6 +164,7 @@ public class SelectTarget extends ADecision implements IScreen
 			{
 				selectPoint = new Point(selectPoint.x-1, selectPoint.y);
 				buildLine();
+				isNextStep = true;
 			}
 		});
 		
@@ -141,6 +174,7 @@ public class SelectTarget extends ADecision implements IScreen
 			{
 				selectPoint = new Point(selectPoint.x, selectPoint.y-1);
 				buildLine();
+				isNextStep = true;
 			}
 		});
 		
@@ -150,6 +184,7 @@ public class SelectTarget extends ADecision implements IScreen
 			{
 				selectPoint = new Point(selectPoint.x+1, selectPoint.y-1);
 				buildLine();
+				isNextStep = true;
 			}
 		});
 		
@@ -159,6 +194,7 @@ public class SelectTarget extends ADecision implements IScreen
 			{
 				selectPoint = new Point(selectPoint.x, selectPoint.y-1);
 				buildLine();
+				isNextStep = true;
 			}
 		});
 		
@@ -168,6 +204,7 @@ public class SelectTarget extends ADecision implements IScreen
 			{
 				selectPoint = new Point(selectPoint.x-1, selectPoint.y-1);
 				buildLine();
+				isNextStep = true;
 			}
 		});
 		
@@ -178,8 +215,7 @@ public class SelectTarget extends ADecision implements IScreen
 				if(selectLine.size() > 0)
 				{
 					clearLine();
-					actionAfter.setSelectPoint(selectPoint);
-					al.setDecision(actionAfter);
+					isTargetSelected = true;
 					isSelectTarget = false;
 				}
 				else
@@ -210,52 +246,8 @@ public class SelectTarget extends ADecision implements IScreen
 		});
 	}
 	
-	protected void buildLine()
-	{
-		clearLine();
-		LinkedList<Point> line = field.getLine(al.cur_pos, selectPoint);
-		int i = 0;
-		for(Point p: line)
-		{
-			i++;
-			if(line.size() > 1 && i == 1)continue;	//	skip the first element if amount of elements is more than 1
-			if(field.onArea(p) && field.isMapVisible(p, al.cur_pos, al.getDov()))
-			{
-				MinorSelector s = new MinorSelector(p);
-				selectLine.add(s);
-			}
-			else break;
-		}
-		if(selectLine.size() > 0)
-		{
-			selectLine.set(selectLine.size()-1, new MainSelector(selectLine.getLast().cur_pos));
-			selectPoint = selectLine.getLast().cur_pos;
-		}
-		for(AObject s: selectLine)
-		{
-			for(AObject ao: field.getObjectsAtPoint(s.cur_pos))
-			{
-				ao.preventDraw();
-			}
-			//field.addObject(s);
-		}
-	}
-	
-	protected void clearLine()
-	{
-		for(AObject s: selectLine)
-		{
-			for(AObject ao: field.getObjectsAtPoint(s.cur_pos))
-			{
-				ao.allowDraw();
-			}
-			//field.removeObject(s);
-		}
-		selectLine.clear();
-	}
-	
 	@Override public int getActionPeriod()
 	{
-		return 0;
+		return al.getStat("Speed");
 	}
 }

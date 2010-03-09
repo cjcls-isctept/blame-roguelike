@@ -8,7 +8,7 @@ import su.msk.dunno.blame.support.Color;
 import su.msk.dunno.blame.support.MyFont;
 import su.msk.dunno.blame.support.Point;
 
-public class SafeGuard extends ALiving 
+public class SafeGuard extends SiliconCreature 
 {
 
 	public SafeGuard(Point p, Field field) 
@@ -22,16 +22,6 @@ public class SafeGuard extends ALiving
 	@Override public Color getColor() 
 	{
 		return Color.CORNFLOWER;
-	}
-
-	@Override public boolean isEnemy(AObject ao) 
-	{
-		return "Killy".equals(ao.getName()) || "Cibo".equals(ao.getName());
-	}
-
-	@Override public boolean isPlayer() 
-	{
-		return false;
 	}
 
 	@Override public ADecision livingAI() 

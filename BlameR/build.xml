@@ -9,7 +9,7 @@
 		<mkdir dir="blamer-${project.version}/res/lib" />
 		<jar destfile="blamer-${project.version}/Blame.jar" filesetmanifest="mergewithoutmain">
 			<manifest>
-				<attribute name="Built-By" value="${user.name}"/>
+				<attribute name="Built-By" value="dunno"/>
 				<attribute name="Main-Class" value="su.msk.dunno.blame.main.Blame"/>
 				<attribute name="Class-Path" value="."/>
 			</manifest>

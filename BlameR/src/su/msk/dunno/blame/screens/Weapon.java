@@ -171,6 +171,11 @@ public class Weapon implements IScreen
 		else return null;
 	}
 	
+	public StateMap showEffects()
+	{
+		return effects;
+	}
+	
 	public int showDamage()
 	{
 		return (int)damage;

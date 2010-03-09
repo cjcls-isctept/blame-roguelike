@@ -211,10 +211,13 @@ public class Field
 													  j*100, 
 													  objects[i][j].getLast().getColor());
 				}
-				else if(objects[i][j].getFirst().wasDrawed)MyFont.instance().drawDisplayList(objects[i][j].getFirst().getCode(), 
-						 																	 i*100*3/4, 
-						 																	 j*100, 
-						 																	 Color.GRAY);
+				else if(objects[i][j].getFirst().wasDrawed && !objects[i][j].getFirst().isDrawPrevented())
+				{
+					MyFont.instance().drawDisplayList(objects[i][j].getFirst().getCode(), 
+						 							  i*100*3/4, 
+						 							  j*100, 
+						 							  Color.GRAY);
+				}
 			}
 		}
 		for(AObject source: lightSources)
@@ -257,6 +260,20 @@ public class Field
 				if(a.isEnded)li.remove();
 			}
 		}
+	}
+	
+	public void drawLine(LinkedList<AObject> selectLine)
+	{
+		GL11.glPushMatrix();
+		GL11.glTranslatef(center_x-playerMovingCoord.x, 
+	  		  	  		  center_y-playerMovingCoord.y, 
+	  		  	  		  0.0f);
+		GL11.glScalef(Blame.scale*0.01f, Blame.scale*0.01f, 1.0f);
+		for(AObject ao: selectLine)
+		{
+			MyFont.instance().drawDisplayList(ao.getCode(), ao.cur_pos.x*100*3/4, ao.cur_pos.y*100, ao.getColor());
+		}
+		GL11.glPopMatrix();
 	}
 	
 	public boolean changeLocation(ALiving al)	// add checks for edges and passability!

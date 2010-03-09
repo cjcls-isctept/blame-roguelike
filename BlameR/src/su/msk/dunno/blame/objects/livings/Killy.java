@@ -7,10 +7,13 @@ import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
 
 import su.msk.dunno.blame.decisions.Close;
+import su.msk.dunno.blame.decisions.SelectEmitter;
+import su.msk.dunno.blame.decisions.EmitterShoot;
 import su.msk.dunno.blame.decisions.EnterStation;
 import su.msk.dunno.blame.decisions.MeleeAttack;
 import su.msk.dunno.blame.decisions.Move;
 import su.msk.dunno.blame.decisions.Open;
+import su.msk.dunno.blame.decisions.SelectLook;
 import su.msk.dunno.blame.decisions.SelectTarget;
 import su.msk.dunno.blame.decisions.Shoot;
 import su.msk.dunno.blame.decisions.Take;
@@ -19,6 +22,8 @@ import su.msk.dunno.blame.map.Field;
 import su.msk.dunno.blame.map.path.PathFinder;
 import su.msk.dunno.blame.map.path.astar.AStarPathFinder;
 import su.msk.dunno.blame.objects.Livings;
+import su.msk.dunno.blame.objects.items.EmitterPart;
+import su.msk.dunno.blame.objects.items.KickPart;
 import su.msk.dunno.blame.objects.items.PlayerCorpse;
 import su.msk.dunno.blame.prototypes.ADecision;
 import su.msk.dunno.blame.prototypes.ALiving;
@@ -49,6 +54,7 @@ public class Killy extends ALiving implements IScreen
 	protected boolean wantTake;
 	protected boolean wantShoot;
 	protected boolean wantEnterStation;
+	protected boolean wantLook;
 	
 	private boolean isCancelMove;
 	
@@ -63,6 +69,7 @@ public class Killy extends ALiving implements IScreen
 	public Killy(Point p, Field field) 
 	{
 		this(p.x, p.y, field);
+		inventory.addItem(new EmitterPart(new Point()));
 	}
 	
 	public Killy(int i, int j, Field field) 
@@ -81,7 +88,7 @@ public class Killy extends ALiving implements IScreen
 		{
 			for(AObject ao: getMyNeighbours())
 			{
-				if(isEnemy(ao))return new Shoot(this, field, ao.cur_pos);
+				if(isEnemy(ao) || ao.isEnemy(this))return new Shoot(this, field, ao.cur_pos);
 			}
 		}
 		if(isFollowPlayer)
@@ -90,12 +97,11 @@ public class Killy extends ALiving implements IScreen
 			if(near != null)find.findPath(cur_pos, near);
 			// remove first point
 			if(!find.path.isEmpty() && cur_pos.equals(find.path.getFirst()))find.path.removeFirst();
-			if(find.path.isEmpty())	
+			if(find.path.isEmpty() || find.path.size() == 1)	
 			{// couldn't create a path - go to random direction or there is an obstacle on our way
 				return new Move(this, (int)(Math.random()*9), field);
 			}
-			// if everything ok - go to the next point in our path
-			else 
+			else 			// if everything ok - go to the next point in our path 
 			{
 				if("Close door".equals(field.getObjectsAtPoint(find.path.getFirst()).getFirst().getName()))
 				{	//found a door near us
@@ -179,11 +185,16 @@ public class Killy extends ALiving implements IScreen
 		else if(wantTake)return new Take(this, field);
 		else if(wantShoot) 
 		{
-			return new SelectTarget(this, field, new Shoot(this, field));
+			if(weapon.showEffects().containsKey("Level2"))return new SelectEmitter(this, field);
+			else return new SelectTarget(this, field, new Shoot(this, field));
 		}
 		else if(wantEnterStation)
 		{
 			return new EnterStation(this, field);
+		}
+		else if(wantLook) 
+		{
+			return new SelectLook(this, field, null);
 		}
 		return null;
 	}
@@ -212,6 +223,7 @@ public class Killy extends ALiving implements IScreen
 		wantTake = false;
 		wantShoot = false;
 		wantEnterStation = false;
+		wantLook = false;
 	}
 	
 	public String getInfectionLevel()
@@ -247,7 +259,7 @@ public class Killy extends ALiving implements IScreen
 	
 	@Override public StateMap getState() 
 	{
-		StateMap state = new StateMap();
+		StateMap state = new StateMap("Player");
 		if(isCancelMove || inventory.isOpen())
 		{
 			state.put("CancelMove");
@@ -263,7 +275,7 @@ public class Killy extends ALiving implements IScreen
 
 	@Override public boolean isEnemy(AObject ao) 
 	{
-		return "Silicon Creature".equals(ao.getName());
+		return ao.getState().containsKey("Corrupted");
 	}
 	
 	@Override public boolean checkStatus(ListIterator<ALiving> li) 
@@ -488,6 +500,14 @@ public class Killy extends ALiving implements IScreen
         	public void onKeyDown()
         	{
         		wantShoot = true;
+        		isNextStep = true;
+        	}
+        });
+		playerEvents.addListener(Keyboard.KEY_L, new KeyListener(0)
+        {
+        	public void onKeyDown()
+        	{
+        		wantLook = true;
         		isNextStep = true;
         	}
         });

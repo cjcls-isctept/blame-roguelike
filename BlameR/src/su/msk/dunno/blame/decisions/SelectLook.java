@@ -8,45 +8,22 @@ import org.lwjgl.opengl.GL11;
 
 import su.msk.dunno.blame.main.Blame;
 import su.msk.dunno.blame.map.Field;
-import su.msk.dunno.blame.objects.symbols.MainSelector;
-import su.msk.dunno.blame.objects.symbols.MinorSelector;
 import su.msk.dunno.blame.prototypes.ADecision;
 import su.msk.dunno.blame.prototypes.ALiving;
 import su.msk.dunno.blame.prototypes.AObject;
-import su.msk.dunno.blame.prototypes.IScreen;
-import su.msk.dunno.blame.support.MyFont;
 import su.msk.dunno.blame.support.Point;
 import su.msk.dunno.blame.support.StateMap;
-import su.msk.dunno.blame.support.listeners.EventManager;
+import su.msk.dunno.blame.support.TrueTypeFont;
 import su.msk.dunno.blame.support.listeners.KeyListener;
 
-public class SelectTarget extends ADecision implements IScreen 
+public class SelectLook extends SelectTarget 
 {
-	protected Field field; 
-	protected EventManager selectEvents = new EventManager();
-	protected ADecision actionAfter;
-	
-	protected Point selectPoint;
-	protected LinkedList<AObject> selectLine = new LinkedList<AObject>();
-	
-	protected boolean isSelectTarget;
-	
-	public SelectTarget(ALiving al, Field field, ADecision actionAfter) 
+	public SelectLook(ALiving al, Field field, ADecision actionAfter) 
 	{
-		super(al);
-		this.field = field;
-		this.actionAfter = actionAfter;
-		initEvents();
+		super(al, field, actionAfter);
 	}
 	
-	@Override public void doAction(int actionMoment) 
-	{
-		isSelectTarget = true;
-		process();
-		wasExecuted = true;
-	}
-	
-	public void process() 
+	@Override public void process() 
 	{
 		while(isSelectTarget)
 		{
@@ -56,6 +33,12 @@ public class SelectTarget extends ADecision implements IScreen
 			field.draw(al.cur_pos);
 			field.drawLine(selectLine);
 			Blame.getCurrentPlayer().drawStats();
+			if(selectLine.size() > 0)
+			{
+				String name = field.getObjectsAtPoint(selectPoint).getLast().getName();
+				boolean isHostile = field.getObjectsAtPoint(selectPoint).getLast().isEnemy(al);
+				TrueTypeFont.instance().drawString(name+(isHostile?" (Hostile!)":""), 20, 90);
+			}
 			Display.sync(Blame.framerate);
 			Display.update();
 		}
@@ -71,7 +54,6 @@ public class SelectTarget extends ADecision implements IScreen
 				buildLine();
 			}
 		});
-		
 		selectEvents.addListener(Keyboard.KEY_NUMPAD9, new KeyListener(100)
 		{
 			public void onKeyDown()
@@ -79,8 +61,7 @@ public class SelectTarget extends ADecision implements IScreen
 				selectPoint = new Point(selectPoint.x+1, selectPoint.y+1);
 				buildLine();
 			}
-		});
-		
+		});		
 		selectEvents.addListener(Keyboard.KEY_NUMPAD8, new KeyListener(100)
 		{
 			public void onKeyDown()
@@ -88,8 +69,7 @@ public class SelectTarget extends ADecision implements IScreen
 				selectPoint = new Point(selectPoint.x, selectPoint.y+1);
 				buildLine();
 			}
-		});
-		
+		});		
 		selectEvents.addListener(Keyboard.KEY_NUMPAD7, new KeyListener(100)
 		{
 			public void onKeyDown()
@@ -97,8 +77,7 @@ public class SelectTarget extends ADecision implements IScreen
 				selectPoint = new Point(selectPoint.x-1, selectPoint.y+1);
 				buildLine();
 			}
-		});
-		
+		});		
 		selectEvents.addListener(Keyboard.KEY_RIGHT, new KeyListener(100)
 		{
 			public void onKeyDown()
@@ -106,8 +85,7 @@ public class SelectTarget extends ADecision implements IScreen
 				selectPoint = new Point(selectPoint.x+1, selectPoint.y);
 				buildLine();
 			}
-		});
-		
+		});		
 		selectEvents.addListener(Keyboard.KEY_NUMPAD6, new KeyListener(100)
 		{
 			public void onKeyDown()
@@ -115,8 +93,7 @@ public class SelectTarget extends ADecision implements IScreen
 				selectPoint = new Point(selectPoint.x+1, selectPoint.y);
 				buildLine();
 			}
-		});
-		
+		});		
 		selectEvents.addListener(Keyboard.KEY_LEFT, new KeyListener(100)
 		{
 			public void onKeyDown()
@@ -124,8 +101,7 @@ public class SelectTarget extends ADecision implements IScreen
 				selectPoint = new Point(selectPoint.x-1, selectPoint.y);
 				buildLine();
 			}
-		});
-		
+		});		
 		selectEvents.addListener(Keyboard.KEY_NUMPAD4, new KeyListener(100)
 		{
 			public void onKeyDown()
@@ -133,8 +109,7 @@ public class SelectTarget extends ADecision implements IScreen
 				selectPoint = new Point(selectPoint.x-1, selectPoint.y);
 				buildLine();
 			}
-		});
-		
+		});		
 		selectEvents.addListener(Keyboard.KEY_DOWN, new KeyListener(100)
 		{
 			public void onKeyDown()
@@ -142,8 +117,7 @@ public class SelectTarget extends ADecision implements IScreen
 				selectPoint = new Point(selectPoint.x, selectPoint.y-1);
 				buildLine();
 			}
-		});
-		
+		});		
 		selectEvents.addListener(Keyboard.KEY_NUMPAD3, new KeyListener(100)
 		{
 			public void onKeyDown()
@@ -151,8 +125,7 @@ public class SelectTarget extends ADecision implements IScreen
 				selectPoint = new Point(selectPoint.x+1, selectPoint.y-1);
 				buildLine();
 			}
-		});
-		
+		});		
 		selectEvents.addListener(Keyboard.KEY_NUMPAD2, new KeyListener(100)
 		{
 			public void onKeyDown()
@@ -160,8 +133,7 @@ public class SelectTarget extends ADecision implements IScreen
 				selectPoint = new Point(selectPoint.x, selectPoint.y-1);
 				buildLine();
 			}
-		});
-		
+		});		
 		selectEvents.addListener(Keyboard.KEY_NUMPAD1, new KeyListener(100)
 		{
 			public void onKeyDown()
@@ -169,36 +141,7 @@ public class SelectTarget extends ADecision implements IScreen
 				selectPoint = new Point(selectPoint.x-1, selectPoint.y-1);
 				buildLine();
 			}
-		});
-		
-		selectEvents.addListener(Keyboard.KEY_F, new KeyListener(0)
-		{
-			public void onKeyDown()
-			{
-				if(selectLine.size() > 0)
-				{
-					clearLine();
-					actionAfter.setSelectPoint(selectPoint);
-					al.setDecision(actionAfter);
-					isSelectTarget = false;
-				}
-				else
-				{
-					selectPoint = al.cur_pos;
-					LinkedList<AObject> neighbours = al.getMyNeighbours();
-					for(AObject ao: neighbours)
-					{
-						if(al.isEnemy(ao) || ao.isEnemy(al))
-						{
-							selectPoint = ao.cur_pos;
-							break;
-						}
-					}
-					buildLine();
-				}
-			}
-		});
-		
+		});		
 		selectEvents.addListener(Keyboard.KEY_ESCAPE, new KeyListener(0)
 		{
 			public void onKeyDown()
@@ -208,54 +151,22 @@ public class SelectTarget extends ADecision implements IScreen
 				al.changeState(al, new StateMap("MoveFail"));
 			}
 		});
-	}
-	
-	protected void buildLine()
-	{
-		clearLine();
-		LinkedList<Point> line = field.getLine(al.cur_pos, selectPoint);
-		int i = 0;
-		for(Point p: line)
+		selectEvents.addListener(Keyboard.KEY_L, new KeyListener(0)
 		{
-			i++;
-			if(line.size() > 1 && i == 1)continue;	//	skip the first element if amount of elements is more than 1
-			if(field.onArea(p) && field.isMapVisible(p, al.cur_pos, al.getDov()))
+			public void onKeyDown()
 			{
-				MinorSelector s = new MinorSelector(p);
-				selectLine.add(s);
+				if(selectLine.size() > 0)
+				{
+					clearLine();
+					isSelectTarget = false;
+					al.changeState(al, new StateMap("MoveFail"));
+				}
+				else
+				{
+					selectPoint = al.cur_pos;
+					buildLine();
+				}
 			}
-			else break;
-		}
-		if(selectLine.size() > 0)
-		{
-			selectLine.set(selectLine.size()-1, new MainSelector(selectLine.getLast().cur_pos));
-			selectPoint = selectLine.getLast().cur_pos;
-		}
-		for(AObject s: selectLine)
-		{
-			for(AObject ao: field.getObjectsAtPoint(s.cur_pos))
-			{
-				ao.preventDraw();
-			}
-			//field.addObject(s);
-		}
-	}
-	
-	protected void clearLine()
-	{
-		for(AObject s: selectLine)
-		{
-			for(AObject ao: field.getObjectsAtPoint(s.cur_pos))
-			{
-				ao.allowDraw();
-			}
-			//field.removeObject(s);
-		}
-		selectLine.clear();
-	}
-	
-	@Override public int getActionPeriod()
-	{
-		return 0;
+		});
 	}
 }
