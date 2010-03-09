@@ -31,6 +31,9 @@ public class MyFont
 	public final static int EMPTY			= 14;
 	public static final int STATION 		= 15;
 	public static final int SAFEGUARD 		= 16;
+	public static final int CIRCLE	 		= 17;
+	public static final int RECTANGLE1 		= 18;
+	public static final int RECTANGLE2		= 19;
 	
 	private Texture myFont;
 	
@@ -70,6 +73,10 @@ public class MyFont
 		//createList(myFont, ' ', EMPTY);	// its suppose to draw emptiness anyway... :)
 		createList(myFont, 'A', STATION);
 		createList(myFont, 'T', SAFEGUARD);
+		
+		createCircle(CIRCLE, 10);
+		createRectangle(RECTANGLE1, 10, 20);
+		createRectangle(RECTANGLE2, 20, 10);
 	}
 	
 	public void createList(Texture texture, char ch, int list_name)
@@ -92,6 +99,34 @@ public class MyFont
 	    	GL11.glTexCoord2f(start_v.x/t_width, (start_v.y+charHeight)/t_height);
 			GL11.glVertex2f(-charWidth, -charHeight);
 		GL11.glEnd();
+		GL11.glEndList();
+	}
+	
+	public void createCircle(int list_name, int r)
+	{
+		int i;
+		float cosine, sine;
+		GL11.glNewList(list_name, GL11.GL_COMPILE);
+			GL11.glBegin(GL11.GL_POLYGON);
+				for(i = 0; i < 100; i++)
+				{
+					cosine = (float)Math.cos(i*2*Math.PI/100);
+					sine = (float)Math.sin(i*2*Math.PI/100);
+					GL11.glVertex2f(cosine*r, sine*r);
+				}
+			GL11.glEnd();
+		GL11.glEndList();
+	}
+	
+	public void createRectangle(int list_name, int width, int height)
+	{
+		GL11.glNewList(list_name, GL11.GL_COMPILE);
+			GL11.glBegin(GL11.GL_POLYGON);
+				GL11.glVertex2f(0, 0);
+				GL11.glVertex2f(0, height);
+				GL11.glVertex2f(width, height);
+				GL11.glVertex2f(width, 0);
+			GL11.glEnd();
 		GL11.glEndList();
 	}
 	

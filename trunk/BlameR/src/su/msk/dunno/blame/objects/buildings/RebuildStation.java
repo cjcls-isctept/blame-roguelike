@@ -1,5 +1,7 @@
 package su.msk.dunno.blame.objects.buildings;
 
+import java.util.ListIterator;
+
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
@@ -23,29 +25,34 @@ import su.msk.dunno.blame.support.listeners.KeyListener;
 public class RebuildStation extends ALiving implements IScreen
 {
 	private boolean isGreetingsMessageDone;
+	private boolean isGuardsDropped;
 	private Killy player;
 	private boolean isRunning;
 	private EventManager events = new EventManager();
 	private int mixture_capacity = 100;
+	private boolean isCorrupted = true;
 	
 	private StateMap args = new StateMap();
 	
 	public RebuildStation(int i, int j, Field field) 
 	{
 		super(i, j, field);
-		health = 10;
+		health = 50;
 		dov = 2;
 		initEvents();		
 	}
 
 	@Override public Color getColor() 
 	{
-		return Color.RED;
+		if(isCorrupted)return Color.GREEN;
+		else return Color.RED;
 	}
 
 	@Override public boolean isEnemy(AObject ao) 
 	{
-		return false;
+		if(ao.getState().containsKey("Player"))return isCorrupted;
+		else if(ao.getState().containsKey("SiliconCreature"))return !isCorrupted;
+		else return false;
 	}
 
 	@Override public boolean isPlayer() 
@@ -62,12 +69,23 @@ public class RebuildStation extends ALiving implements IScreen
 				Messages.instance().addPropMessage("rebuild.enter",getName());
 				isGreetingsMessageDone = true;
 			}
+			if(isCorrupted && !isGuardsDropped)
+			{
+				Messages.instance().addMessage("Intruder! Primary task: termination");
+				dropGuards();
+			}
 		}
 		else if(isGreetingsMessageDone)
 		{
 			isGreetingsMessageDone = false;
 		}
 		return null;
+	}
+
+	private void dropGuards() 
+	{
+		
+		isGuardsDropped = true;
 	}
 
 	@Override public String getName() 
@@ -87,17 +105,41 @@ public class RebuildStation extends ALiving implements IScreen
 	
 	@Override public StateMap getState()
 	{
-		return new StateMap("Station");
+		StateMap sm = new StateMap("Station");
+		if(isCorrupted)sm.put("Corrupted");
+		return sm;
 	}
 	
 	@Override public void changeState(ALiving changer, StateMap args)
 	{
 		if(args.containsKey("Enter"))
 		{
-			player = Blame.getPlayer(args.getString("Enter"));
-			Messages.instance().clear();
-			process();
+			if(!isCorrupted)
+			{
+				player = Blame.getPlayer(args.getString("Enter"));
+				Messages.instance().clear();
+				process();
+			}
+			else if(isNearPlayer())Messages.instance().addMessage("Cannot enter the corrupted station!");
 		}
+		if(args.containsKey("Damage"))
+		{
+			int d = (int)(Math.random()*args.getInt("Damage"));
+			health -= d;
+			if(isNearPlayer())Messages.instance().addPropMessage("living.receivedamage", getName(), d+"");
+			
+		}
+	}
+	
+	@Override public boolean checkStatus(ListIterator<ALiving> li) 
+	{
+		if(health <= 0)
+		{
+			isCorrupted = !isCorrupted;
+			health = 50;
+			if(isNearPlayer())Messages.instance().addMessage(getName()+" was liberated");
+		}
+		return false;
 	}
 
 	public void process() 

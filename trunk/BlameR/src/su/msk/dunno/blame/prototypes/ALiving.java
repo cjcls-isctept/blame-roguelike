@@ -69,16 +69,19 @@ public abstract class ALiving extends AObject
 		weapon.energyRefill();
 		if(cur_time - lastActionTime >= actionPeriod)
 		{
-			/*if(decision == null)
-			{*/
-				decision = livingAI();
-			/*}*/
-			if(decision != null)
+			if(decision == null || decision.wasExecuted)
 			{
-				actionPeriod = decision.getActionPeriod();	// doAction AFTER getActionPeriod is necessary...
-				decision.doAction(cur_time);		// At least until I'd need getActionPeriod to obtain its result depends on doAction results
+				/*if(decision == null)
+				{*/
+					decision = livingAI();
+				/*}*/
+				if(decision != null)
+				{
+					actionPeriod = decision.getActionPeriod();	// doAction AFTER getActionPeriod is necessary...
+					decision.doAction(cur_time);		// At least until I'd need getActionPeriod to obtain its result depends on doAction results
+				}
+				//decision = null;
 			}
-			//decision = null;
 			if(!this.getState().containsKey("CancelMove"))lastActionTime = cur_time;
 		}
 	}
@@ -87,7 +90,7 @@ public abstract class ALiving extends AObject
 	{
 		for(AObject ao: getObjectsAtDir(dir))
 		{
-			if(isEnemy(ao))return true;
+			if(isEnemy(ao) || ao.isEnemy(this))return true;
 		}
 		return false;
 	}
@@ -147,7 +150,7 @@ public abstract class ALiving extends AObject
 		LinkedList<AObject> enemies = new LinkedList<AObject>();
 		for(AObject o: getMyNeighbours())
 		{
-			if(isEnemy(o))enemies.add(o);
+			if(isEnemy(o) || o.isEnemy(this))enemies.add(o);
 		}
 		return enemies;
 	}

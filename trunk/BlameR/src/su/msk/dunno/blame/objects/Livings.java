@@ -5,6 +5,7 @@ import java.util.ListIterator;
 
 import su.msk.dunno.blame.main.Blame;
 import su.msk.dunno.blame.map.Field;
+import su.msk.dunno.blame.objects.buildings.RebuildStation;
 import su.msk.dunno.blame.objects.livings.Cibo;
 import su.msk.dunno.blame.objects.livings.Killy;
 import su.msk.dunno.blame.objects.livings.SiliconCreature;
@@ -35,6 +36,7 @@ public class Livings
 	private int time;	// must be private in the release!
 	
 	private LinkedList<ALiving> livings = new LinkedList<ALiving>();
+	private LinkedList<ALiving> stations = new LinkedList<ALiving>();
 	private Killy killy;
 	private Cibo cibo;
 	
@@ -58,9 +60,10 @@ public class Livings
 		for(int i = 0; i < num; i++)addObject(new SiliconCreature(field.getRandomPos(), field));
 	}
 	
-	public void addObject(ALiving ao)
+	public void addObject(ALiving l)
 	{
-		livings.add(ao);
+		livings.add(l);
+		if(l.getState().containsKey("Station"))stations.add(l);
 	}
 	
 	/*public void removeObject(ALiving ao)

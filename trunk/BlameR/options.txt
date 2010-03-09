@@ -1,4 +1,4 @@
-framerate = 75
+framerate = 60
 
 fullscreen = no
 
@@ -12,6 +12,6 @@ creatures = 60
 stations = 10
 
 #rdm, antnest, caves, mines, maze, standard
-dungeon_type = standard
+dungeon_type = rdm
 
 lang = ru

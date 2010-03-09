@@ -31,5 +31,6 @@ public class EnterStation extends ADecision
 				ao.changeState(al, args);
 			}
 		}
+		wasExecuted = true;
 	}
 }

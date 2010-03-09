@@ -5,6 +5,7 @@ import java.util.LinkedList;
 import su.msk.dunno.blame.animations.BulletFlight;
 import su.msk.dunno.blame.animations.Moving;
 import su.msk.dunno.blame.map.Field;
+import su.msk.dunno.blame.objects.symbols.Bullet;
 import su.msk.dunno.blame.prototypes.ADecision;
 import su.msk.dunno.blame.prototypes.ALiving;
 import su.msk.dunno.blame.prototypes.AObject;
@@ -43,45 +44,19 @@ public class Shoot extends ADecision implements ISelector
 			if(line.size() > 1)
 			{
 				// animation
-				field.playAnimation(new BulletFlight(actionMoment, line.get(1), shootTo, field));
-				/*BulletFlight bf = new BulletFlight(actionMoment, line.get(1), shootTo, field);
-				field.addAnimation(bf);
-				while(!bf.isEnded)
-				{
-					GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);		
-					GL11.glLoadIdentity();
-					
-					field.draw(Blame.getCurrentPlayer().cur_pos);		
-					Blame.getCurrentPlayer().drawStats();
-					Display.sync(Blame.framerate);
-					Display.update();
-					Blame.getFPS();
-				}*/
+				field.playAnimation(new BulletFlight(new Bullet(line.getFirst()), actionMoment, line.get(1), shootTo, field));
 				// shooter's kickback
 				Point old = al.cur_pos;
 				al.cur_pos = al.cur_pos.mul(2).minus(line.get(1));
 				if(field.changeLocation(al) && al.isNearPlayer())
 				{
 					field.playAnimation(new Moving(actionMoment, field, al, old, al.cur_pos));
-					/*Moving mv = new Moving(actionMoment, field, al, old, al.cur_pos);
-					field.addAnimation(mv);
-					while(!mv.isEnded)
-					{
-						GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);		
-						GL11.glLoadIdentity();
-						
-						field.draw(Blame.getCurrentPlayer().cur_pos);		
-						Blame.getCurrentPlayer().drawStats();
-						Display.sync(Blame.framerate);
-						Display.update();
-						Blame.getFPS();
-					}*/
 				}			
 			}
 			LinkedList<AObject> lao = field.getObjectsAtPoint(shootTo).clone();		// clone() due to some bugs if not...
 			for(AObject ao: lao)
 			{
-				if(al.isEnemy(ao))
+				if(al.isEnemy(ao) || ao.isEnemy(al))
 				{
 					if(al.isNearPlayer()) Messages.instance().addPropMessage("decision.shoot", al.getName(), ao.getName());
 					ao.changeState(al, args);
