@@ -7,6 +7,7 @@ import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
 
 import su.msk.dunno.blame.decisions.Close;
+import su.msk.dunno.blame.decisions.GiveOrder;
 import su.msk.dunno.blame.decisions.SelectEmitter;
 import su.msk.dunno.blame.decisions.EmitterShoot;
 import su.msk.dunno.blame.decisions.EnterStation;
@@ -55,6 +56,7 @@ public class Killy extends ALiving implements IScreen
 	protected boolean wantShoot;
 	protected boolean wantEnterStation;
 	protected boolean wantLook;
+	protected boolean wantGiveOrder;
 	
 	private boolean isCancelMove;
 	
@@ -188,14 +190,9 @@ public class Killy extends ALiving implements IScreen
 			if(weapon.showEffects().containsKey("Level2"))return new SelectEmitter(this, field);
 			else return new SelectTarget(this, field, new Shoot(this, field));
 		}
-		else if(wantEnterStation)
-		{
-			return new EnterStation(this, field);
-		}
-		else if(wantLook) 
-		{
-			return new SelectLook(this, field, null);
-		}
+		else if(wantEnterStation) return new EnterStation(this, field);
+		else if(wantLook) return new SelectLook(this, field, null);
+		else if(wantGiveOrder) return new GiveOrder(this, field);
 		return null;
 	}
 	
@@ -224,6 +221,7 @@ public class Killy extends ALiving implements IScreen
 		wantShoot = false;
 		wantEnterStation = false;
 		wantLook = false;
+		wantGiveOrder = false;
 	}
 	
 	public String getInfectionLevel()
@@ -254,6 +252,38 @@ public class Killy extends ALiving implements IScreen
 		if(args.containsKey("MoveFail"))
 		{
 			isCancelMove = true;
+		}
+		if(args.containsKey("FollowMe"))
+		{
+			if(changer.getState().containsKey("Player"))
+			{
+				isFollowPlayer = true;
+				if(isNearPlayer())Messages.instance().addMessage(getName()+" будет следовать за "+changer.getName());
+			}
+		}
+		if(args.containsKey("Wait"))
+		{
+			if(changer.getState().containsKey("Player"))
+			{
+				isFollowPlayer = false;
+				if(isNearPlayer())Messages.instance().addMessage(getName()+" останавливается");
+			}
+		}
+		if(args.containsKey("ShootEnemies"))
+		{
+			if(changer.getState().containsKey("Player"))
+			{
+				isAttackEnemies = true;
+				if(isNearPlayer())Messages.instance().addMessage(getName()+" будет атаковать врагов в поле зрения ");
+			}
+		}
+		if(args.containsKey("StopShoot"))
+		{
+			if(changer.getState().containsKey("Player"))
+			{
+				isAttackEnemies = false;
+				if(isNearPlayer())Messages.instance().addMessage(getName()+" прекращает атаковать цели");
+			}
 		}
 	}
 	
@@ -321,8 +351,9 @@ public class Killy extends ALiving implements IScreen
 			GL11.glClear(GL11.GL_COLOR_BUFFER_BIT/* | GL11.GL_DEPTH_BUFFER_BIT*/);		
 			GL11.glLoadIdentity();
 			
-			field.draw(cur_pos/*Blame.scale*/);		
+			field.draw(cur_pos/*Blame.scale*/);
 			drawStats();
+			Messages.instance().showMessages();
 			Display.sync(Blame.framerate);
 			Display.update();
 		}
@@ -330,7 +361,6 @@ public class Killy extends ALiving implements IScreen
 	
 	public void drawStats()
 	{
-		Messages.instance().showMessages();
 		// statistics
 		int k = Blame.height-25;
 		TrueTypeFont.instance().drawString(getName(), Blame.width-200, k, Color.WHITE); k-= 20;
@@ -585,6 +615,14 @@ public class Killy extends ALiving implements IScreen
         		wantEnterStation = true;
         		isNextStep = true;
         	}
-        });		
+        });
+		playerEvents.addListener(Keyboard.KEY_T, new KeyListener(0)
+        {
+        	public void onKeyDown()
+        	{
+        		wantGiveOrder = true;
+        		isNextStep = true;
+        	}
+        });			
 	}
 }

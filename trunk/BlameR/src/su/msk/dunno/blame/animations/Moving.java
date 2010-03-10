@@ -39,6 +39,7 @@ public class Moving extends AAnimation
 
 	@Override public void nextFrame()
 	{
+		
 		MyFont.instance().drawDisplayList(ao.getCode(), 
 								   		  pFrom.x*100*3/4+dir.x*cur_frame*100*3/4/frames, 
 								   		  pFrom.y*100+dir.y*cur_frame*100/frames, 

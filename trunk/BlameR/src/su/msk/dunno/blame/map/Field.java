@@ -24,6 +24,7 @@ import su.msk.dunno.blame.prototypes.ALiving;
 import su.msk.dunno.blame.prototypes.AObject;
 import su.msk.dunno.blame.support.Color;
 import su.msk.dunno.blame.support.LinkObject;
+import su.msk.dunno.blame.support.Messages;
 import su.msk.dunno.blame.support.MyFont;
 import su.msk.dunno.blame.support.Point;
 import su.msk.dunno.blame.support.Vector2D;
@@ -241,6 +242,7 @@ public class Field
 			GL11.glLoadIdentity();			
 			draw(Blame.getCurrentPlayer().cur_pos);		
 			Blame.getCurrentPlayer().drawStats();
+			Messages.instance().showMessages();
 			Display.sync(Blame.framerate);
 			Display.update();
 			Blame.getFPS();

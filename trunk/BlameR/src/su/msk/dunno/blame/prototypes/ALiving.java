@@ -198,9 +198,9 @@ public abstract class ALiving extends AObject
 	public boolean isNearPlayer()
 	{
 		if("Cibo".equals(getName()) || "Killy".equals(getName()))return true;
-		for(AObject ao: getMyNeighbours())
+		for(AObject ao: Blame.getCurrentPlayer().getMyNeighbours())
 		{
-			if((Blame.playCibo?"Cibo":"Killy").equals(ao.getName()))return true;
+			if(this.equals(ao))return true;
 		}
 		return false;
 	}
