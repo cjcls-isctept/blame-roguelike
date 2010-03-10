@@ -11,6 +11,7 @@ import su.msk.dunno.blame.map.Field;
 import su.msk.dunno.blame.prototypes.ADecision;
 import su.msk.dunno.blame.prototypes.ALiving;
 import su.msk.dunno.blame.prototypes.AObject;
+import su.msk.dunno.blame.support.Messages;
 import su.msk.dunno.blame.support.Point;
 import su.msk.dunno.blame.support.StateMap;
 import su.msk.dunno.blame.support.TrueTypeFont;
@@ -33,6 +34,7 @@ public class SelectLook extends SelectTarget
 			field.draw(al.cur_pos);
 			field.drawLine(selectLine);
 			Blame.getCurrentPlayer().drawStats();
+			Messages.instance().showMessages();
 			if(selectLine.size() > 0)
 			{
 				String name = field.getObjectsAtPoint(selectPoint).getLast().getName();

@@ -14,6 +14,7 @@ import su.msk.dunno.blame.prototypes.ADecision;
 import su.msk.dunno.blame.prototypes.ALiving;
 import su.msk.dunno.blame.prototypes.AObject;
 import su.msk.dunno.blame.prototypes.IScreen;
+import su.msk.dunno.blame.support.Messages;
 import su.msk.dunno.blame.support.MyFont;
 import su.msk.dunno.blame.support.Point;
 import su.msk.dunno.blame.support.StateMap;
@@ -56,6 +57,7 @@ public class SelectTarget extends ADecision implements IScreen
 			field.draw(al.cur_pos);
 			field.drawLine(selectLine);
 			Blame.getCurrentPlayer().drawStats();
+			Messages.instance().showMessages();
 			Display.sync(Blame.framerate);
 			Display.update();
 		}
