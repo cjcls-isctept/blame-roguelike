@@ -68,20 +68,18 @@ public class Killy extends ALiving implements IScreen
 	protected boolean isFollowPlayer = false;
 	protected boolean isAttackEnemies = false;
 	
+	protected ADecision playerDecision;
+	protected Killy k = this;
+	
 	public Killy(Point p, Field field) 
 	{
-		this(p.x, p.y, field);
-		inventory.addItem(new EmitterPart(new Point()));
-	}
-	
-	public Killy(int i, int j, Field field) 
-	{
-		super(i, j, field);
+		super(p.x, p.y, field);
 		initEvents();
 		dov = 5;
 		health = 100;
 		speed = 4;
 		find = new AStarPathFinder(field);
+		inventory.addItem(new EmitterPart(new Point()));
 	}
 
 	@Override public ADecision livingAI() 
@@ -116,73 +114,42 @@ public class Killy extends ALiving implements IScreen
 				else return new Move(this, field.getDirection(cur_pos, find.path.getFirst()), field);
 			}
 		}
+		return playerDecision;
 		if(keys[0])
 		{
-			if(isEnemyAtDir(Move.UP))return new MeleeAttack(this, Move.UP);
-			else/* if(!isMoving)*/
-			{
-				return new Move(this, Move.UP, field);
-			}
+			
 		}
 		else if(keys[1])
 		{
-			if(isEnemyAtDir(Move.LEFT))return new MeleeAttack(this, Move.LEFT);
-			else/* if(!isMoving)*/
-			{
-				return new Move(this, Move.LEFT, field);
-			}
+			
 		}
 		else if(keys[2])
 		{
-			if(isEnemyAtDir(Move.DOWN))return new MeleeAttack(this, Move.DOWN);
-			else/* if(!isMoving)*/
-			{
-				return new Move(this, Move.DOWN, field);
-			}
+			
 		}
 		else if(keys[3])
 		{
-			if(isEnemyAtDir(Move.RIGHT))return new MeleeAttack(this, Move.RIGHT);
-			else/* if(!isMoving)*/
-			{
-				return new Move(this, Move.RIGHT, field);
-			}
+			
 		}
 		else if(keys[4])
 		{
-			if(isEnemyAtDir(Move.UPRIGHT))return new MeleeAttack(this, Move.UPRIGHT);
-			else/* if(!isMoving)*/
-			{
-				return new Move(this, Move.UPRIGHT, field);
-			}
+			
 		}
 		else if(keys[5])
 		{
-			if(isEnemyAtDir(Move.UPLEFT))return new MeleeAttack(this, Move.UPLEFT);
-			else/* if(!isMoving)*/
-			{
-				return new Move(this, Move.UPLEFT, field);
-			}
+			
 			
 		}
 		else if(keys[6])
 		{
-			if(isEnemyAtDir(Move.DOWNLEFT))return new MeleeAttack(this, Move.DOWNLEFT);
-			else/* if(!isMoving)*/
-			{
-				return new Move(this, Move.DOWNLEFT, field);
-			}
+
 		}
 		else if(keys[7])
 		{
-			if(isEnemyAtDir(Move.DOWNRIGHT))return new MeleeAttack(this, Move.DOWNRIGHT);
-			else/* if(!isMoving)*/
-			{
-				return new Move(this, Move.DOWNRIGHT, field);
-			}
+			
 		}
-		else if(keys[8])return new Move(this, Move.STAY, field);
-		else if(wantOpen)return new Open(this);
+		else if(keys[8])
+		else if(wantOpen)
 		else if(wantClose)return new Close(this);
 		else if(wantTake)return new Take(this, field);
 		else if(wantShoot) 
@@ -409,7 +376,11 @@ public class Killy extends ALiving implements IScreen
         {
         	public void onKeyDown()
         	{
-        		keys[0] = true;
+        		if(isEnemyAtDir(Move.UP))playerDecision = new MeleeAttack(k, Move.UP);
+    			else/* if(!isMoving)*/
+    			{
+    				playerDecision = new Move(k, Move.UP, field);
+    			}
         		isNextStep = true;
          	}
         });
@@ -425,7 +396,11 @@ public class Killy extends ALiving implements IScreen
         {
         	public void onKeyDown()
         	{
-        		keys[1] = true;
+        		if(isEnemyAtDir(Move.LEFT))playerDecision = new MeleeAttack(k, Move.LEFT);
+    			else/* if(!isMoving)*/
+    			{
+    				playerDecision = new Move(k, Move.LEFT, field);
+    			}
         		isNextStep = true;
         	}
         });
@@ -441,7 +416,11 @@ public class Killy extends ALiving implements IScreen
         {
         	public void onKeyDown()
         	{
-        		keys[2] = true;
+        		if(isEnemyAtDir(Move.DOWN))playerDecision = new MeleeAttack(k, Move.DOWN);
+    			else/* if(!isMoving)*/
+    			{
+    				playerDecision = new Move(k, Move.DOWN, field);
+    			}
         		isNextStep = true;
         	}
         });
@@ -457,7 +436,11 @@ public class Killy extends ALiving implements IScreen
         {
         	public void onKeyDown()
         	{
-        		keys[3] = true;
+        		if(isEnemyAtDir(Move.RIGHT))playerDecision = new MeleeAttack(k, Move.RIGHT);
+    			else/* if(!isMoving)*/
+    			{
+    				playerDecision = new Move(k, Move.RIGHT, field);
+    			}
         		isNextStep = true;
         	}
         });
@@ -473,7 +456,11 @@ public class Killy extends ALiving implements IScreen
         {
         	public void onKeyDown()
         	{
-        		keys[4] = true;
+        		if(isEnemyAtDir(Move.UPRIGHT))playerDecision = new MeleeAttack(k, Move.UPRIGHT);
+    			else/* if(!isMoving)*/
+    			{
+    				playerDecision = new Move(k, Move.UPRIGHT, field);
+    			}
         		isNextStep = true;
         	}
         });
@@ -481,7 +468,11 @@ public class Killy extends ALiving implements IScreen
         {
         	public void onKeyDown()
         	{
-        		keys[5] = true;
+        		if(isEnemyAtDir(Move.UPLEFT))playerDecision = new MeleeAttack(k, Move.UPLEFT);
+    			else/* if(!isMoving)*/
+    			{
+    				playerDecision = new Move(k, Move.UPLEFT, field);
+    			}
         		isNextStep = true;
         	}
         });
@@ -489,7 +480,11 @@ public class Killy extends ALiving implements IScreen
         {
         	public void onKeyDown()
         	{
-        		keys[6] = true;
+    			if(isEnemyAtDir(Move.DOWNLEFT))playerDecision = new MeleeAttack(k, Move.DOWNLEFT);
+    			else/* if(!isMoving)*/
+    			{
+    				playerDecision = new Move(k, Move.DOWNLEFT, field);
+    			}
         		isNextStep = true;
         	}
         });
@@ -497,7 +492,11 @@ public class Killy extends ALiving implements IScreen
         {
         	public void onKeyDown()
         	{
-        		keys[7] = true;
+        		if(isEnemyAtDir(Move.DOWNRIGHT))playerDecision = new MeleeAttack(k, Move.DOWNRIGHT);
+    			else/* if(!isMoving)*/
+    			{
+    				playerDecision = new Move(k, Move.DOWNRIGHT, field);
+    			}
         		isNextStep = true;
         	}
         });
@@ -505,7 +504,7 @@ public class Killy extends ALiving implements IScreen
         {
         	public void onKeyDown()
         	{
-        		keys[8] = true;
+        		playerDecision = new Move(k, Move.STAY, field);
         		isNextStep = true;
         	}
         });
@@ -513,7 +512,7 @@ public class Killy extends ALiving implements IScreen
         {
         	public void onKeyDown()
         	{
-        		wantOpen = true;
+        		playerDecision = new Open(k);
         		isNextStep = true;
         	}
         });
