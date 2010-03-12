@@ -75,7 +75,7 @@ public abstract class ALiving extends AObject
 				{*/
 					decision = livingAI();
 				/*}*/
-				if(decision != null)
+				if(decision != null && !decision.wasExecuted)
 				{
 					actionPeriod = decision.getActionPeriod();	// doAction AFTER getActionPeriod is necessary...
 					decision.doAction(cur_time);		// At least until I'd need getActionPeriod to obtain its result depends on doAction results
