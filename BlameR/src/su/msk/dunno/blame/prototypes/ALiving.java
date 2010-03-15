@@ -31,7 +31,9 @@ public abstract class ALiving extends AObject
 	public Inventory inventory;
 	public Weapon weapon;
 	
-	protected Point old_pos = cur_pos;	// previous position: set private to prevent some possibilities "to hack" the system :)
+	// previous position: set private to prevent some possibilities "to hack" the system :)
+	protected Point old_pos = cur_pos;	// not anymore :(	
+	
 	private int lastActionTime;
 	private int actionPeriod;
 	private ADecision decision;

@@ -63,7 +63,7 @@ public class Shoot extends ADecision implements ISelector
 				}
 			}
 		}
-		else if(al.isNearPlayer())Messages.instance().addPropMessage("decision.shoot.noenergy");
+		else if(al.isNearPlayer())Messages.instance().addPropMessage("decision.shoot.noenergy", al.getName());
 		wasExecuted = true;
 	}
 }
