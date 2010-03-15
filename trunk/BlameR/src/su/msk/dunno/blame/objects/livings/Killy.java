@@ -568,6 +568,6 @@ public class Killy extends ALiving implements IScreen
         		keyboardDecision = new GiveOrder(k, field);
         		isNextStep = true;
         	}
-        });			
+        });
 	}
 }
