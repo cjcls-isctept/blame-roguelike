@@ -10,7 +10,8 @@ object ScageTest {
   def main(args:Array[String]):Unit = {
     Engine.setDefaultHandlers
 
-    val hello_world = new TObject {
+    Engine.addObjects(
+      new TObject {
         private var coord = Vec(20, Engine.getIntProperty("height")-40)
 
         EventManager.addKeyListener(Keyboard.KEY_UP, 100, () => coord += Vec(0,10))
@@ -19,10 +20,7 @@ object ScageTest {
         EventManager.addKeyListener(Keyboard.KEY_LEFT, 100, () => coord -= Vec(10,0))
 
         override def render():Unit = TrueTypeFont.instance().drawString("hello world", coord.x, coord.y, Color.BLACK);
-    }
-
-    Engine.addObjects(
-      hello_world ::
+      } ::
       new TObject {
         val height = Engine.getIntProperty("height");
 
