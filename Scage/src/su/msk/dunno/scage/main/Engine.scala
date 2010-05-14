@@ -2,8 +2,6 @@ package su.msk.dunno.scage.main
 
 import java.util.Properties
 import java.io.FileInputStream
-import org.lwjgl.opengl.{GL11, DisplayMode, Display}
-import org.lwjgl.util.glu.GLU
 import su.msk.dunno.scage.prototypes.{THandler, TObject}
 import su.msk.dunno.scage.handlers.{Idler, Renderer}
 import su.msk.dunno.scage.handlers.eventmanager.EventManager
