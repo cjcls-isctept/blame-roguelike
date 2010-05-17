@@ -5,3 +5,6 @@ width = 640
 height = 480
 
 framerate = 60
+
+dt = 1
+gravity = -1

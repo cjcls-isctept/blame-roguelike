@@ -3,6 +3,29 @@
   <component name="DependencyValidationManager">
     <option name="SKIP_IMPORT_STATEMENTS" value="false" />
   </component>
+  <component name="FacetAutodetectingManager">
+    <autodetection-disabled>
+      <facet-type id="Scala">
+        <modules>
+          <module name="Scage">
+            <files>
+              <file url="file://$PROJECT_DIR$/src/TT.scala" />
+              <file url="file://$PROJECT_DIR$/src/scagetest/ScageTest.scala" />
+              <file url="file://$PROJECT_DIR$/src/su/msk/dunno/scage/handlers/Idler.scala" />
+              <file url="file://$PROJECT_DIR$/src/su/msk/dunno/scage/handlers/Renderer.scala" />
+              <file url="file://$PROJECT_DIR$/src/su/msk/dunno/scage/handlers/eventmanager/EventManager.scala" />
+              <file url="file://$PROJECT_DIR$/src/su/msk/dunno/scage/handlers/eventmanager/KeyListener.scala" />
+              <file url="file://$PROJECT_DIR$/src/su/msk/dunno/scage/handlers/eventmanager/TListener.scala" />
+              <file url="file://$PROJECT_DIR$/src/su/msk/dunno/scage/main/Engine.scala" />
+              <file url="file://$PROJECT_DIR$/src/su/msk/dunno/scage/prototypes/THandler.scala" />
+              <file url="file://$PROJECT_DIR$/src/su/msk/dunno/scage/prototypes/TObject.scala" />
+              <file url="file://$PROJECT_DIR$/src/su/msk/dunno/scage/support/Vec.scala" />
+            </files>
+          </module>
+        </modules>
+      </facet-type>
+    </autodetection-disabled>
+  </component>
   <component name="JavadocGenerationManager">
     <option name="OUTPUT_DIRECTORY" />
     <option name="OPTION_SCOPE" value="protected" />

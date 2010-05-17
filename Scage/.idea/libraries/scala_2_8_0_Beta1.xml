@@ -1,17 +1,16 @@
 <component name="libraryTable">
   <library name="scala-2.8.0.Beta1">
     <CLASSES>
-      <root url="file://$PROJECT_DIR$/lib/phys2d" />
       <root url="file://$PROJECT_DIR$/lib/lwjgl/jar" />
       <root url="file://$PROJECT_DIR$/lib/lwjgl/jar" />
-      <root url="file://$PROJECT_DIR$/lib/phys2d" />
       <root url="file://$PROJECT_DIR$/lib/lwjgl/jar" />
       <root url="file://$PROJECT_DIR$/lib/scala" />
+      <root url="file://$PROJECT_DIR$/lib" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />
+    <jarDirectory url="file://$PROJECT_DIR$/lib" recursive="false" />
     <jarDirectory url="file://$PROJECT_DIR$/lib/lwjgl/jar" recursive="false" />
-    <jarDirectory url="file://$PROJECT_DIR$/lib/phys2d" recursive="false" />
     <jarDirectory url="file://$PROJECT_DIR$/lib/scala" recursive="false" />
   </library>
 </component>

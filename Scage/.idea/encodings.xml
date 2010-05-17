@@ -1,18 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="Encoding" useUTFGuessing="true" native2AsciiForPropertiesFiles="false">
-    <file url="file://$PROJECT_DIR$/options.txt" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/scagetest/ScageTest.scala" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/src/su/msk/dunno/scage/handlers/Idler.scala" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/su/msk/dunno/scage/handlers/Renderer.scala" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/src/su/msk/dunno/scage/handlers/eventmanager/EventManager.scala" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/su/msk/dunno/scage/main/Engine.scala" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/su/msk/dunno/scage/objects/StaticLine.scala" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/su/msk/dunno/scage/prototypes/Movable.scala" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/su/msk/dunno/scage/prototypes/THandler.scala" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/src/su/msk/dunno/scage/prototypes/TObject.scala" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/src/su/msk/dunno/scage/support/Color.java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/src/su/msk/dunno/scage/support/TrueTypeFont.java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/src/su/msk/dunno/scage/support/TrueTypeFont.java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/src/su/msk/dunno/scage/support/Vec.scala" charset="UTF-8" />
   </component>
 </project>
 

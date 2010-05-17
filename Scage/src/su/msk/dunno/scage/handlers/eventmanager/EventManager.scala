@@ -3,8 +3,6 @@ package su.msk.dunno.scage.handlers.eventmanager
 import su.msk.dunno.scage.prototypes.THandler
 import org.lwjgl.opengl.Display
 import su.msk.dunno.scage.main.Engine
-import su.msk.dunno.scage.handlers.Renderer
-
 object EventManager extends THandler {
   var listeners = List[TListener]()
 

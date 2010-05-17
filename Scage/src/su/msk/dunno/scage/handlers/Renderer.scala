@@ -1,9 +1,10 @@
 package su.msk.dunno.scage.handlers
 
-import su.msk.dunno.scage.prototypes.THandler
 import su.msk.dunno.scage.main.Engine
 import org.lwjgl.opengl.{DisplayMode, Display, GL11}
 import org.lwjgl.util.glu.GLU
+import su.msk.dunno.scage.prototypes.{THandler}
+
 object Renderer extends THandler {
 
   val width = Engine.getIntProperty("width");
@@ -15,7 +16,7 @@ object Renderer extends THandler {
  Display.create();
 
  GL11.glEnable(GL11.GL_TEXTURE_2D);
- GL11.glClearColor(1,1,1,0);
+ GL11.glClearColor(0,0,0,0);
  GL11.glDisable(GL11.GL_DEPTH_TEST);
 
  GL11.glEnable(GL11.GL_BLEND);
