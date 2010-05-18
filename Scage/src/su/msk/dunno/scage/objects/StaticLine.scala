@@ -8,7 +8,7 @@ import org.lwjgl.opengl.GL11
 import net.phys2d.raw.{Body, StaticBody}
 
 class StaticLine(val start:Vec, val end:Vec) extends Physical {
-  val line = new Line(end.x, end.y)
+  val line = new Line((end-start).x, (end-start).y)
   val body = new StaticBody("line", line)
   body.setPosition(start.x, start.y)
 

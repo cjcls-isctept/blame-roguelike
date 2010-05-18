@@ -12,5 +12,5 @@ object Physics extends THandler {
   val world = new World(new Vector2f(0.0f, gravity), 10, new QuadSpaceStrategy(20,5));
   Engine.getObjects.foreach(o => world.add(o.body))
 
-  override def doAction() = world.step(dt)
+  override def doAction() = world.step(0.1f)
 }
