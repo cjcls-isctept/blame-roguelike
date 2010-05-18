@@ -4,30 +4,43 @@ import su.msk.dunno.scage.main.Engine
 import org.lwjgl.opengl.{DisplayMode, Display, GL11}
 import org.lwjgl.util.glu.GLU
 import su.msk.dunno.scage.prototypes.{THandler}
+import su.msk.dunno.scage.support.Color
 
 object Renderer extends THandler {
+  val CIRCLE = 1
 
   val width = Engine.getIntProperty("width");
   val height:Int = Engine.getIntProperty("height");
 
- Display.setDisplayMode(new DisplayMode(width, height));
- Display.setTitle(Engine.getProperty("name")+" - "+Engine.getProperty("version"));
- Display.setVSyncEnabled(true);
- Display.create();
+  Display.setDisplayMode(new DisplayMode(width, height));
+  Display.setTitle(Engine.getProperty("name")+" - "+Engine.getProperty("version"));
+  Display.setVSyncEnabled(true);
+  Display.create();
 
- GL11.glEnable(GL11.GL_TEXTURE_2D);
- GL11.glClearColor(0,0,0,0);
- GL11.glDisable(GL11.GL_DEPTH_TEST);
+  GL11.glEnable(GL11.GL_TEXTURE_2D);
+  GL11.glClearColor(1,1,1,0);
+  GL11.glDisable(GL11.GL_DEPTH_TEST);
 
- GL11.glEnable(GL11.GL_BLEND);
- GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+  GL11.glEnable(GL11.GL_BLEND);
+  GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 
- GL11.glMatrixMode(GL11.GL_PROJECTION); // Select The Projection Matrix
- GL11.glLoadIdentity(); // Reset The Projection Matrix
- GLU.gluOrtho2D(0, width, 0, height);
+  GL11.glMatrixMode(GL11.GL_PROJECTION); // Select The Projection Matrix
+  GL11.glLoadIdentity(); // Reset The Projection Matrix
+  GLU.gluOrtho2D(0, width, 0, height);
 
- GL11.glMatrixMode(GL11.GL_MODELVIEW);
- GL11.glLoadIdentity();
+  GL11.glMatrixMode(GL11.GL_MODELVIEW);
+  GL11.glLoadIdentity();
+
+  GL11.glNewList(CIRCLE, GL11.GL_COMPILE);
+		GL11.glBegin(GL11.GL_POLYGON);
+			for(i <- 0 to 100)
+			{
+				val cosine = Math.cos(i*2*Math.Pi/100).toFloat;
+				val sine = Math.sin(i*2*Math.Pi/100).toFloat;
+				GL11.glVertex2f(cosine*15, sine*15);
+			}
+	  GL11.glEnd();
+	GL11.glEndList();
 
   override def doAction() = {
     GL11.glClear(GL11.GL_COLOR_BUFFER_BIT/* | GL11.GL_DEPTH_BUFFER_BIT*/);
@@ -35,6 +48,8 @@ object Renderer extends THandler {
     Engine.getObjects.foreach(o => o.render)
     Display.update();
   }
+
+  def setColor(c:Color) = GL11.glColor3f(c.getRed, c.getGreen, c.getBlue) 
 
   override def exitSequence() = Display.destroy();
 }
