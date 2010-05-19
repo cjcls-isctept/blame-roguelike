@@ -13,13 +13,7 @@ class Ball(init_coord:Vec) extends Physical {
   body.setPosition(init_coord.x, init_coord.y)
 
   override def render() = {
-    val coord = body.getPosition
-    GL11.glDisable(GL11.GL_TEXTURE_2D);
-      GL11.glPushMatrix();
-      GL11.glTranslatef(coord.getX, coord.getY, 0.0f);
-        Renderer.setColor(Color.BLACK)    	
-     	  GL11.glCallList(Renderer.CIRCLE);
-      GL11.glPopMatrix()
-    GL11.glEnable(GL11.GL_TEXTURE_2D);
+    Renderer.setColor(Color.BLACK)
+    Renderer.drawCircle(coord, 15)
   }
 }

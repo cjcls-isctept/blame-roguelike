@@ -9,7 +9,7 @@ trait Physical {
 
   def render()
   def addForce(f:Vec) = body.addForce(new Vector2f(f.x, f.y))
-  def getCoord() = {
+  def coord() = {
     val pos = body.getPosition
     Vec(pos.getX, pos.getY)
   }

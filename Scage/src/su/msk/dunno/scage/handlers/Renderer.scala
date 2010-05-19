@@ -4,7 +4,7 @@ import su.msk.dunno.scage.main.Engine
 import org.lwjgl.opengl.{DisplayMode, Display, GL11}
 import org.lwjgl.util.glu.GLU
 import su.msk.dunno.scage.prototypes.{THandler}
-import su.msk.dunno.scage.support.Color
+import su.msk.dunno.scage.support.{Vec, Color}
 
 object Renderer extends THandler {
   val CIRCLE = 1
@@ -37,7 +37,7 @@ object Renderer extends THandler {
 			{
 				val cosine = Math.cos(i*2*Math.Pi/100).toFloat;
 				val sine = Math.sin(i*2*Math.Pi/100).toFloat;
-				GL11.glVertex2f(cosine*15, sine*15);
+				GL11.glVertex2f(cosine*1, sine*1);
 			}
 	  GL11.glEnd();
 	GL11.glEndList();
@@ -49,7 +49,24 @@ object Renderer extends THandler {
     Display.update();
   }
 
-  def setColor(c:Color) = GL11.glColor3f(c.getRed, c.getGreen, c.getBlue) 
+  def setColor(c:Color) = GL11.glColor3f(c.getRed, c.getGreen, c.getBlue)
+  def drawLine(v1:Vec, v2:Vec) = {
+    GL11.glDisable(GL11.GL_TEXTURE_2D);
+    	GL11.glBegin(GL11.GL_LINES);
+    		GL11.glVertex2f(v1.x, v1.y);
+    		GL11.glVertex2f(v2.x, v2.y);
+    	GL11.glEnd();
+    GL11.glEnable(GL11.GL_TEXTURE_2D);
+  }
+  def drawCircle(coord:Vec, radius:Float) = {
+    GL11.glDisable(GL11.GL_TEXTURE_2D);
+      GL11.glPushMatrix();
+      GL11.glTranslatef(coord.x, coord.y, 0.0f);
+      GL11.glScalef(radius,radius,radius)
+     	  GL11.glCallList(CIRCLE);
+      GL11.glPopMatrix()
+    GL11.glEnable(GL11.GL_TEXTURE_2D);
+  }
 
   override def exitSequence() = Display.destroy();
 }
