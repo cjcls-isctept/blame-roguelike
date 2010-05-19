@@ -1,7 +1,6 @@
 package su.msk.dunno.scage.objects
 
 import su.msk.dunno.scage.support.Vec
-import su.msk.dunno.scage.main.Engine
 class Movable(val coord:Vec,
               val velocity:Vec,
               val acceleration:Vec,

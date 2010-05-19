@@ -4,10 +4,11 @@ import su.msk.dunno.scage.prototypes.Physical
 import net.phys2d.raw.Body
 import org.lwjgl.opengl.GL11
 import net.phys2d.raw.shapes.Box
-import net.phys2d.math.{Vector2f, ROVector2f}
+import net.phys2d.math.{Vector2f}
 import util.Random
 import su.msk.dunno.scage.handlers.Renderer
-import su.msk.dunno.scage.support.{TrueTypeFont, Color, Vec}
+import su.msk.dunno.scage.support.{Color, Vec}
+import su.msk.dunno.scage.support.messages.TrueTypeFont
 
 class DynaBox(val init_coord:Vec) extends Physical {
   val box = new Box(20,30)

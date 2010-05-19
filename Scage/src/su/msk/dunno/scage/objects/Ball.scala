@@ -3,8 +3,6 @@ package su.msk.dunno.scage.objects
 import su.msk.dunno.scage.prototypes.Physical
 import net.phys2d.raw.Body
 import net.phys2d.raw.shapes.Circle
-import java.lang.Math
-import org.lwjgl.opengl.GL11
 import su.msk.dunno.scage.handlers.Renderer
 import su.msk.dunno.scage.support.{Color, Vec}
 
@@ -15,5 +13,6 @@ class Ball(init_coord:Vec) extends Physical {
   override def render() = {
     Renderer.setColor(Color.BLACK)
     Renderer.drawCircle(coord, 15)
+    Renderer.drawLine(coord, coord+velocity)
   }
 }

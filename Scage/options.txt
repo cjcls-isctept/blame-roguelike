@@ -4,7 +4,7 @@ version = 0.0.1
 width = 640
 height = 480
 
-framerate = 60
+framerate = 100
 
 dt = 5
-gravity = -1
+gravity = -5

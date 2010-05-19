@@ -4,7 +4,7 @@ import su.msk.dunno.scage.prototypes.Physical
 import net.phys2d.raw.shapes.Line
 import net.phys2d.math.Vector2f
 import org.lwjgl.opengl.GL11
-import net.phys2d.raw.{Body, StaticBody}
+import net.phys2d.raw.{StaticBody}
 import su.msk.dunno.scage.handlers.Renderer
 import su.msk.dunno.scage.support.{Color, Vec}
 

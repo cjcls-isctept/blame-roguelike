@@ -1,11 +1,10 @@
-package su.msk.dunno.scage.support;
+package su.msk.dunno.scage.support.messages;
 
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.glu.GLU;
 
 import javax.imageio.ImageIO;
-import java.awt.Color;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBuffer;

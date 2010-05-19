@@ -17,6 +17,7 @@ object Engine {
   }
   def getProperty(key:String):String = properties.getProperty(key)
   def getIntProperty(key:String):Int = Integer.valueOf(properties.getProperty(key)).intValue
+  def getFloatProperty(key:String):Float = java.lang.Float.valueOf(properties.getProperty(key)).floatValue
 
   private var objects = List[Physical]()
   def getObjects() = objects
@@ -36,10 +37,23 @@ object Engine {
   }
   def stop() = {isRunning = false}
 
+  private var msek = System.currentTimeMillis
+  private var frames:Int = 0
+  var fps:Int = 0
+  def countFPS() = {
+    frames += 1
+    if(System.currentTimeMillis - msek >= 1000) {
+      fps = frames
+      frames = 0
+      msek = System.currentTimeMillis
+    }
+  }
+
   def run():Unit = {
     if(!isRunning) handlers.foreach(h => h.exitSequence)
     else {
       handlers.foreach(h => h.doAction)
+      countFPS
       run
     }
   }
