@@ -1,6 +1,5 @@
 package su.msk.dunno.scage.handlers
 
-import renderer.Texture
 import su.msk.dunno.scage.main.Engine
 import org.lwjgl.opengl.{DisplayMode, Display, GL11}
 import org.lwjgl.util.glu.GLU
@@ -8,9 +7,10 @@ import su.msk.dunno.scage.support.{Vec, Color}
 import su.msk.dunno.scage.prototypes.{Drawable, THandler}
 import su.msk.dunno.scage.support.messages.Message
 import javax.imageio.ImageIO
-import java.io.File
 import java.awt.image.{DataBufferByte, BufferedImage}
 import java.nio.{IntBuffer, ByteOrder, ByteBuffer}
+import java.io.{InputStream, File}
+import org.newdawn.slick.opengl.{TextureLoader, Texture}
 
 object Renderer extends THandler {
   val CIRCLE = 1
@@ -90,38 +90,29 @@ object Renderer extends THandler {
 
   override def exitSequence() = Display.destroy();
 
-  // Offset are in term off pixel, not byte, the image loader figure out alone what is the bytesPerPixel
-  def loadTexture(path:String, xOffSet:Int, yOffSet:Int, textWidth:Int, textHeight:Int):Texture = {
-    val buffImage:BufferedImage = ImageIO.read(new File(path))
-    val bytesPerPixel = buffImage.getColorModel().getPixelSize() / 8;
-    val scratch:ByteBuffer = ByteBuffer.allocateDirect(textWidth*textHeight*bytesPerPixel).order(ByteOrder.nativeOrder())
-    val data:DataBufferByte = (buffImage.getRaster().getDataBuffer()).asInstanceOf[DataBufferByte]
-    for(i <- 0 to textHeight) {
-      scratch.put(data.getData(),(xOffSet+(yOffSet+i)*buffImage.getWidth())*bytesPerPixel, textWidth * bytesPerPixel)
-    }
-    scratch.rewind()
-    // Create A IntBuffer For Image Address In Memory
-    val buf:IntBuffer = ByteBuffer.allocateDirect(4).order(ByteOrder.nativeOrder()).asIntBuffer()
-    GL11.glGenTextures(buf); // Create Texture In OpenGL
+  def createList(list_name:Int, texture:Texture, game_width:Float, game_height:Float, start_x:Float, start_y:Float, real_width:Float, real_height:Float)
+	{
+		val t_width:Float = texture.getImageWidth
+		val t_height:Float = texture.getImageHeight
 
-    // Create Nearest Filtered Texture
-    GL11.glBindTexture(GL11.GL_TEXTURE_2D, buf.get(0));
-    GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_LINEAR);
-    GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_LINEAR);
-    //GL11.glTexEnvf(GL11.GL_TEXTURE_ENV, GL11.GL_TEXTURE_ENV_MODE, GL11.GL_MODULATE);
-    GL11.glTexImage2D(GL11.GL_TEXTURE_2D,
-     				  	      0,
-     				  	      GL11.GL_RGBA,
-     				  	      textWidth,
-     				  	      textHeight,
-     				  	      0,
-     				  	      GL11.GL_RGBA,
-     				  	      GL11.GL_UNSIGNED_BYTE,
-     				  	      scratch);
-    val newTexture = new Texture()
-    newTexture.textureId = buf.get(0);     // Return Image Addresses In Memory
-    newTexture.textureHeight = textHeight;
-    newTexture.textureWidth = textWidth;
-    newTexture
-  }
+		GL11.glNewList(list_name, GL11.GL_COMPILE);
+		//texture.bind
+    GL11.glBindTexture(GL11.GL_TEXTURE_2D, texture.getTextureID)
+		GL11.glBegin(GL11.GL_QUADS);
+			GL11.glTexCoord2f(start_x/t_width, start_y/t_height);
+	    GL11.glVertex2f(-game_width, game_height);
+
+			GL11.glTexCoord2f((start_x+real_width)/t_width, start_y/t_height);
+			GL11.glVertex2f(game_width, game_height);
+
+			GL11.glTexCoord2f((start_x+real_width)/t_width, (start_y+real_height)/t_height);
+			GL11.glVertex2f(game_width, -game_height);
+
+	    GL11.glTexCoord2f(start_x/t_width, (start_y+real_height)/t_height);
+			GL11.glVertex2f(-game_width, -game_height);
+		GL11.glEnd();
+		GL11.glEndList();
+	}
+
+  def getTexture(format:String, in:InputStream):Texture = TextureLoader.getTexture(format, in)
 }

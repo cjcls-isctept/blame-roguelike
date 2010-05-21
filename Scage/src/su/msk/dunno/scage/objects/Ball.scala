@@ -7,7 +7,7 @@ import su.msk.dunno.scage.handlers.Renderer
 import su.msk.dunno.scage.support.{Color, Vec}
 
 class Ball(init_coord:Vec) extends Physical {
-  val body = new Body(new Circle(15), 2);
+  val body = new Body(new Circle(20), 2);
   body.setPosition(init_coord.x, init_coord.y)
 
   override def render() = {
