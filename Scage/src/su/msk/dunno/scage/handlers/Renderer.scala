@@ -4,12 +4,8 @@ import su.msk.dunno.scage.main.Engine
 import org.lwjgl.opengl.{DisplayMode, Display, GL11}
 import org.lwjgl.util.glu.GLU
 import su.msk.dunno.scage.support.{Vec, Color}
-import su.msk.dunno.scage.prototypes.{Drawable, THandler}
-import su.msk.dunno.scage.support.messages.Message
-import javax.imageio.ImageIO
-import java.awt.image.{DataBufferByte, BufferedImage}
-import java.nio.{IntBuffer, ByteOrder, ByteBuffer}
-import java.io.{InputStream, File}
+import su.msk.dunno.scage.prototypes.{THandler}
+import java.io.{InputStream}
 import org.newdawn.slick.opengl.{TextureLoader, Texture}
 
 object Renderer extends THandler {
@@ -54,18 +50,16 @@ object Renderer extends THandler {
 	  GL11.glEnd();
 	GL11.glEndList();
 
-  var interface:List[Drawable] = List[Drawable]()
+  var interface:List[() => Unit] = List[() => Unit]()
   def addInterfaceElement(renderFunc: () => Unit) = {
-    interface = new Drawable(){ def render = renderFunc() } :: interface
+    interface = renderFunc :: interface
   }
-  def addInterfaceElement(element:Drawable) = {interface = element :: interface}
-  def addInterfaceElements(elements:List[Drawable]) = {interface = elements ::: interface}
 
-  override def doAction() = {
+  override def actionSequence() = {
     GL11.glClear(GL11.GL_COLOR_BUFFER_BIT/* | GL11.GL_DEPTH_BUFFER_BIT*/);
 		GL11.glLoadIdentity();
       Engine.getObjects.foreach(o => o.render)
-      interface.foreach(d => d.render)
+      interface.foreach(renderFunc => renderFunc())
     Display.update();
   }
 

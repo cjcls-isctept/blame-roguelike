@@ -33,6 +33,7 @@ object Engine {
   private var isRunning = true
   def start() = {
     isRunning = true
+    handlers.foreach(h => h.initSequence)
     run()
   }
   def stop() = {isRunning = false}
@@ -52,7 +53,7 @@ object Engine {
   def run():Unit = {
     if(!isRunning) handlers.foreach(h => h.exitSequence)
     else {
-      handlers.foreach(h => h.doAction)
+      handlers.foreach(h => h.actionSequence)
       countFPS
       run
     }

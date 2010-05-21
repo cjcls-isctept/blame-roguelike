@@ -22,7 +22,8 @@ object EventManager extends THandler {
     to_remove = new KeyListener(key, repeatTime, onKeyDown) :: to_remove
   }
 
-  override def doAction():Unit = {
+  var last_key:Int = 0
+  override def actionSequence():Unit = {
     if(Display.isCloseRequested())Engine.stop
     if(to_add.length > 0) {
       listeners = to_add ::: listeners

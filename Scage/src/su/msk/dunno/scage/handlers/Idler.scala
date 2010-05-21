@@ -6,5 +6,5 @@ import su.msk.dunno.scage.main.Engine
 object Idler extends THandler {
   val framerate:Int = Engine.getIntProperty("framerate");
 
-  override def doAction() = Thread.sleep(1000/framerate)
+  override def actionSequence() = Thread.sleep(1000/framerate)
 }

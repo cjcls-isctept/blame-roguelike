@@ -18,6 +18,7 @@ case class KeyListener(
     if(Keyboard.isKeyDown(key)) {
       if(!wasPressed || (isRepeatable && System.currentTimeMillis()-lastPressed > repeatTime)) {
         onKeyDown()
+        EventManager.last_key = key
         wasPressed = true
         lastPressed = System.currentTimeMillis
       }

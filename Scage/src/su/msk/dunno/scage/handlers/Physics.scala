@@ -12,6 +12,7 @@ object Physics extends THandler {
   val dt = Engine.getIntProperty("dt")
   val gravity = Engine.getIntProperty("gravity")
   val world = new World(new Vector2f(0.0f, gravity), 10, new QuadSpaceStrategy(20,5));
+  world.enableRestingBodyDetection(0.01f, 0.000001f, 0.01f)
 
   def addBody(b:Body) = if(!world.getBodies.contains(b))world.add(b) 
   Engine.addObjects(
@@ -21,7 +22,16 @@ object Physics extends THandler {
     new StaticLine(Vec(0,Renderer.height), Vec(0,0))
   )
 
-  def update() = Engine.getObjects.foreach(o => world.add(o.body))
+  def update() = initSequence
 
-  override def doAction() = for(i <- 1 to dt)world.step()
+  override def initSequence() = {
+    val objects = Engine.getObjects
+    val bodies = world.getBodies
+    objects.foreach(o => if(!bodies.contains(o.body))world.add(o.body))
+    for(i <- 0 to bodies.size-1; val this_body = bodies.get(i)) objects.find(obj => obj.body.equals(this_body)) match {
+      case None => world.remove(this_body)
+      case _ =>
+    }
+  }
+  override def actionSequence() = for(i <- 1 to dt)world.step()
 }
