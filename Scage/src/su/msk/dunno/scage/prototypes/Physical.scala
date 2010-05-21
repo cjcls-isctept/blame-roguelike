@@ -19,6 +19,7 @@ trait Physical extends Drawable {
     Vec(vel.getX, vel.getY)
   }
   def isTouching():Boolean = {
+    //body.getTouching.size > 0
     for(i <- 0 to body.getTouching.size-1; val b:Body = body.getTouching.get(i))if(b.isStatic)return true
     false
   }
