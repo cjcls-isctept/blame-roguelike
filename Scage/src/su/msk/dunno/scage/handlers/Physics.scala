@@ -22,8 +22,6 @@ object Physics extends THandler {
     new StaticLine(Vec(0,Renderer.height), Vec(0,0))
   )
 
-  def update() = initSequence
-
   override def initSequence() = {
     val objects = Engine.getObjects
     val bodies = world.getBodies
@@ -33,5 +31,6 @@ object Physics extends THandler {
       case _ =>
     }
   }
-  override def actionSequence() = for(i <- 1 to dt)world.step()
+  override def updateSequence() = initSequence
+  override def actionSequence() = if(!Engine.onPause)for(i <- 1 to dt)world.step()
 }

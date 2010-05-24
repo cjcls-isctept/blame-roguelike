@@ -6,9 +6,9 @@ import su.msk.dunno.scage.support.Vec
 trait Physical extends Drawable {
   val body:Body
 
-  def addForce(f:Vec) = {
+  def addForce(force:Vec) = {
     body.setIsResting(false)
-    body.addForce(new Vector2f(f.x, f.y))
+    body.addForce(new Vector2f(force.x, force.y))
   }
   def coord() = {
     val pos = body.getPosition

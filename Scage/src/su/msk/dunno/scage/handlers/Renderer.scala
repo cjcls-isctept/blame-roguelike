@@ -1,12 +1,16 @@
 package su.msk.dunno.scage.handlers
 
+import eventmanager.EventManager
 import su.msk.dunno.scage.main.Engine
 import org.lwjgl.opengl.{DisplayMode, Display, GL11}
 import org.lwjgl.util.glu.GLU
 import su.msk.dunno.scage.support.{Vec, Color}
-import su.msk.dunno.scage.prototypes.{THandler}
-import java.io.{InputStream}
 import org.newdawn.slick.opengl.{TextureLoader, Texture}
+import java.io.{FileInputStream, InputStream}
+import su.msk.dunno.scage.prototypes.{Physical, THandler}
+import su.msk.dunno.scage.objects.StaticBall
+import org.lwjgl.input.Keyboard
+import su.msk.dunno.scage.support.messages.Message
 
 object Renderer extends THandler {
   val CIRCLE = 1
@@ -19,6 +23,11 @@ object Renderer extends THandler {
 
   val width = Engine.getIntProperty("width");
   val height = Engine.getIntProperty("height");
+  val center = Vec(width/2, height/2)
+  private var central_object:Physical = new StaticBall(center)
+  def setCentral(obj:Physical) = {
+    central_object = obj
+  }
 
   Display.setDisplayMode(new DisplayMode(width, height));
   Display.setTitle(Engine.getProperty("name")+" - "+Engine.getProperty("version"));
@@ -54,11 +63,29 @@ object Renderer extends THandler {
   def addInterfaceElement(renderFunc: () => Unit) = {
     interface = renderFunc :: interface
   }
+  addInterfaceElement(() => if(Engine.onPause)Message.print("PAUSE", Vec(width/2-20, height/2+60)))  
 
+  val auto_scaling = Engine.getBooleanProperty("auto_scaling")
+  private var scale:Float = 2
+  EventManager.addKeyListener(Keyboard.KEY_ADD, 10, () => if(scale < 2)scale += 0.01f)
+  EventManager.addKeyListener(Keyboard.KEY_SUBTRACT, 10, () => if(scale > 0.5f)scale -= 0.01f)
   override def actionSequence() = {
     GL11.glClear(GL11.GL_COLOR_BUFFER_BIT/* | GL11.GL_DEPTH_BUFFER_BIT*/);
 		GL11.glLoadIdentity();
+      GL11.glPushMatrix
+
+      if(auto_scaling && EventManager.last_key != Keyboard.KEY_ADD && EventManager.last_key != Keyboard.KEY_SUBTRACT) {
+        val factor = -3.0f/2000*central_object.velocity.norma2 + 2
+        if(factor > scale+0.1f && scale < 2)scale += 0.01f
+        else if(factor < scale-0.1f && scale > 0.5f)scale -=0.01f
+      }
+
+      val coord = center - central_object.coord*scale
+      GL11.glTranslatef(coord.x, coord.y, 0.0f)
+      GL11.glScalef(scale, scale, 1)
       Engine.getObjects.foreach(o => o.render)
+      GL11.glPopMatrix
+
       interface.foreach(renderFunc => renderFunc())
     Display.update();
   }
@@ -84,8 +111,14 @@ object Renderer extends THandler {
 
   override def exitSequence() = Display.destroy();
 
-  def createList(list_name:Int, texture:Texture, game_width:Float, game_height:Float, start_x:Float, start_y:Float, real_width:Float, real_height:Float)
-	{
+  def getTexture(format:String, in:InputStream):Texture = TextureLoader.getTexture(format, in)
+
+  def getTexture(filename:String):Texture = {
+    val format:String = filename.substring(filename.length-3)
+    getTexture(format, new FileInputStream(filename))
+  }
+
+  def createList(list_name:Int, texture:Texture, game_width:Float, game_height:Float, start_x:Float, start_y:Float, real_width:Float, real_height:Float):Unit = {
 		val t_width:Float = texture.getImageWidth
 		val t_height:Float = texture.getImageHeight
 
@@ -108,5 +141,8 @@ object Renderer extends THandler {
 		GL11.glEndList();
 	}
 
-  def getTexture(format:String, in:InputStream):Texture = TextureLoader.getTexture(format, in)
+  def createList(list_name:Int, filename:String, game_width:Float, game_height:Float, start_x:Float, start_y:Float, real_width:Float, real_height:Float):Unit = {
+    val format:String = filename.substring(filename.length-3)
+    createList(list_name, getTexture(filename), game_width, game_height, start_x, start_y, real_width, real_height)
+  }
 }

@@ -39,7 +39,7 @@ public class TrueTypeFont
 	/** Array that holds necessary information about the font characters */
 	private IntObject[] charArray = new IntObject[256];
 
-	/** Map of user defined font characters (Character <-> IntObject) */
+	/** GameMap of user defined font characters (Character <-> IntObject) */
 	private Map<Character, IntObject> customChars = new HashMap<Character, IntObject>();
 
 	/** Boolean flag on whether AntiAliasing is enabled or not */

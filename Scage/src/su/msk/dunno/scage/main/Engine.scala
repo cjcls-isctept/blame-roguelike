@@ -4,7 +4,8 @@ import java.util.Properties
 import java.io.FileInputStream
 import su.msk.dunno.scage.handlers.eventmanager.EventManager
 import su.msk.dunno.scage.prototypes.{Physical, THandler}
-import su.msk.dunno.scage.handlers.{Physics, Idler, Renderer}
+import su.msk.dunno.scage.handlers.{AI, Physics, Idler, Renderer}
+import org.lwjgl.input.Keyboard
 
 object Engine {
   private val properties:Properties = {
@@ -18,6 +19,7 @@ object Engine {
   def getProperty(key:String):String = properties.getProperty(key)
   def getIntProperty(key:String):Int = Integer.valueOf(properties.getProperty(key)).intValue
   def getFloatProperty(key:String):Float = java.lang.Float.valueOf(properties.getProperty(key)).floatValue
+  def getBooleanProperty(key:String):Boolean = properties.getProperty(key).equalsIgnoreCase("yes")
 
   private var objects = List[Physical]()
   def getObjects() = objects
@@ -26,9 +28,12 @@ object Engine {
 
   private var handlers = List[THandler]()
   def getHandlers() = handlers
-  def setDefaultHandlers() = {handlers = EventManager :: Physics :: Renderer :: Idler :: Nil}
+  def setDefaultHandlers() = {handlers = EventManager :: Physics :: AI :: Renderer :: Idler :: Nil}
   def addHandler(h:THandler) = {handlers = h :: handlers}
   def addHandlers(h:List[THandler]) = {handlers = h ::: handlers}
+
+  var onPause:Boolean = false
+  EventManager.addKeyListener(Keyboard.KEY_P,() => onPause = !onPause)
 
   private var isRunning = true
   def start() = {

@@ -1,6 +1,9 @@
 package su.msk.dunno.scage.support
 
+import net.phys2d.math.{ROVector2f, Vector2f}
+
 case class Vec(val x:Float, val y:Float) {
+  def this(v:ROVector2f) = this(v.getX, v.getY)
   def this(x:Double, y:Double) = this(x.toFloat, y.toFloat)
   def this(x:Int, y:Int) = this(x.toFloat, y.toFloat)
   def this() = this(0,0)
@@ -16,7 +19,7 @@ case class Vec(val x:Float, val y:Float) {
   def /(k:Double):Float = this/k.toFloat
   def /(k:Int):Float = this/k.toFloat
 
-  def norma2() = x*x + y*y
+  def norma2():Float = x*x + y*y
   def norma() = Math.sqrt(norma2).toFloat
   def n() = this/norma
 
