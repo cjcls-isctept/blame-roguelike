@@ -82,10 +82,10 @@ public class Blame
 			killy_point = field.getRandomPos();
 			if(killy_point != null)killy = new Killy(killy_point, field);
 			else continue;
-			cibo_point = field.getRandomPos(killy.cur_pos.plus(-2,2), killy.cur_pos.plus(2,-2));
+			cibo_point = field.getRandomPos(killy.cur_pos.plus(-2,2), killy.cur_pos.plus(2,-2));	// generate cibo near killy
 			if(cibo_point != null)
 			{
-				cibo = new Cibo(cibo_point, field);	// generate cibo near killy
+				cibo = new Cibo(cibo_point, field);
 				break;
 			}
 		}

@@ -25,7 +25,7 @@ public class PlayerCorpse extends AItem
 		return true;
 	}
 	
-	@Override public int getCode()
+	@Override public int getSymbol()
 	{
 		return MyFont.PLAYER;
 	}

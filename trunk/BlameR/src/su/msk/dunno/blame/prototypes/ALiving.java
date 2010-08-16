@@ -7,11 +7,11 @@ import su.msk.dunno.blame.decisions.Move;
 import su.msk.dunno.blame.main.Blame;
 import su.msk.dunno.blame.map.Field;
 import su.msk.dunno.blame.objects.Livings;
-import su.msk.dunno.blame.objects.items.ColdPart;
-import su.msk.dunno.blame.objects.items.FirePart;
-import su.msk.dunno.blame.objects.items.LightningPart;
-import su.msk.dunno.blame.objects.items.PoisonPart;
-import su.msk.dunno.blame.objects.items.SocketExtender;
+import su.msk.dunno.blame.objects.items.ImpCold;
+import su.msk.dunno.blame.objects.items.ImpFire;
+import su.msk.dunno.blame.objects.items.ImpLightning;
+import su.msk.dunno.blame.objects.items.ImpPoison;
+import su.msk.dunno.blame.objects.items.ImpSocketExtender;
 import su.msk.dunno.blame.screens.Inventory;
 import su.msk.dunno.blame.screens.Weapon;
 import su.msk.dunno.blame.support.Color;
@@ -168,11 +168,11 @@ public abstract class ALiving extends AObject
 			int rand = (int)(Math.random()*5);
 			switch(rand)
 			{
-			case 0: field.addObject(new ColdPart(cur_pos)); return isDead;
-			case 1: field.addObject(new FirePart(cur_pos)); return isDead;
-			case 2: field.addObject(new LightningPart(cur_pos)); return isDead;
-			case 3: field.addObject(new PoisonPart(cur_pos)); return isDead;
-			case 4: field.addObject(new SocketExtender(cur_pos)); return isDead;			
+			case 0: field.addObject(new ImpCold(cur_pos)); return isDead;
+			case 1: field.addObject(new ImpFire(cur_pos)); return isDead;
+			case 2: field.addObject(new ImpLightning(cur_pos)); return isDead;
+			case 3: field.addObject(new ImpPoison(cur_pos)); return isDead;
+			case 4: field.addObject(new ImpSocketExtender(cur_pos)); return isDead;			
 			}
 		}
 		return isDead;

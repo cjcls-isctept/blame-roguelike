@@ -56,11 +56,11 @@ public class Shoot extends ADecision implements ISelector
 			LinkedList<AObject> lao = field.getObjectsAtPoint(shootTo).clone();		// clone() due to some bugs if not...
 			for(AObject ao: lao)
 			{
-				if(al.isEnemy(ao) || ao.isEnemy(al))
-				{
+				/*if(al.isEnemy(ao) || ao.isEnemy(al))	// enemy status must be checked in livingAI() section, not here!
+				{*/
 					if(al.isNearPlayer()) Messages.instance().addPropMessage("decision.shoot", al.getName(), ao.getName());
 					ao.changeState(al, args);
-				}
+				/*}*/
 			}
 		}
 		else if(al.isNearPlayer())Messages.instance().addPropMessage("decision.shoot.noenergy", al.getName());

@@ -15,7 +15,7 @@ public class MainSelector extends MinorSelector
 		return "MainSelector";
 	}
 	
-	@Override public int getCode()
+	@Override public int getSymbol()
 	{
 		return MyFont.MAINSELECTOR;
 	}
