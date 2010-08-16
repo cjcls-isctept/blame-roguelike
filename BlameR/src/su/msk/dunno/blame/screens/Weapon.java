@@ -8,12 +8,12 @@ import org.lwjgl.opengl.GL11;
 
 import su.msk.dunno.blame.decisions.Drop;
 import su.msk.dunno.blame.main.Blame;
-import su.msk.dunno.blame.objects.items.ColdPart;
-import su.msk.dunno.blame.objects.items.FirePart;
-import su.msk.dunno.blame.objects.items.LightningPart;
-import su.msk.dunno.blame.objects.items.MindPart;
-import su.msk.dunno.blame.objects.items.PoisonPart;
-import su.msk.dunno.blame.objects.items.SocketExtender;
+import su.msk.dunno.blame.objects.items.ImpCold;
+import su.msk.dunno.blame.objects.items.ImpFire;
+import su.msk.dunno.blame.objects.items.ImpLightning;
+import su.msk.dunno.blame.objects.items.ImpMind;
+import su.msk.dunno.blame.objects.items.ImpPoison;
+import su.msk.dunno.blame.objects.items.ImpSocketExtender;
 import su.msk.dunno.blame.objects.symbols.EmptySpace;
 import su.msk.dunno.blame.objects.symbols.MinorSelector;
 import su.msk.dunno.blame.objects.symbols.SocketSymbol;
@@ -102,14 +102,14 @@ public class Weapon implements IScreen
 			{
 				if(!"Empty".equals(weaponView[i][j].getName()) && 
 				  (!"SocketPlace".equals(weaponView[i][j].getName()) || isSelectSocket))
-					MyFont.instance().drawDisplayList(/*isSelectSocket?*/weaponView[i][j].getCode()/*:MyFont.WEAPONBASE*/, 
+					MyFont.instance().drawDisplayList(/*isSelectSocket?*/weaponView[i][j].getSymbol()/*:MyFont.WEAPONBASE*/, 
 													  i*100*3/4, j*100, 
 											   		  weaponView[i][j].getColor());
 			}
 		}
 		if(isSelectSocket)
 		{
-			MyFont.instance().drawDisplayList(selector.getCode(), 
+			MyFont.instance().drawDisplayList(selector.getSymbol(), 
 			 								  selector.cur_pos.x*100*3/4, 
 			 								  selector.cur_pos.y*100, 
 			 								  selector.getColor());
@@ -265,7 +265,7 @@ public class Weapon implements IScreen
 				{
 					if(noBasePartsNear(weaponView[i][j], null))weaponView[i][j] = new EmptySpace(i,j);
 				}
-				else if(weaponView[i][j].getState().containsKey("Part"))
+				else if(weaponView[i][j].getState().containsKey("Imp"))
 				{
 					if(noBasePartsNear(weaponView[i][j], null))
 					{
@@ -393,7 +393,7 @@ public class Weapon implements IScreen
 		if(p != null)
 		{
 			selector.cur_pos = p;
-			addImp(new MindPart(p));
+			addImp(new ImpMind(p));
 		}
 		for(int i = 0; i < amount-1; i++)
 		{
@@ -404,11 +404,11 @@ public class Weapon implements IScreen
 				selector.cur_pos = p;
 				switch(rand)
 				{
-				case 0: ao = new ColdPart(p); addImp(ao); continue;
-				case 1: ao = new FirePart(p); addImp(ao); continue;
-				case 2: ao = new LightningPart(p); addImp(ao); continue;
-				case 3: ao = new PoisonPart(p); addImp(ao); continue;
-				case 4: ao = new SocketExtender(p); addImp(ao); continue;			
+				case 0: ao = new ImpCold(p); addImp(ao); continue;
+				case 1: ao = new ImpFire(p); addImp(ao); continue;
+				case 2: ao = new ImpLightning(p); addImp(ao); continue;
+				case 3: ao = new ImpPoison(p); addImp(ao); continue;
+				case 4: ao = new ImpSocketExtender(p); addImp(ao); continue;			
 				}
 			}
 		}
@@ -589,7 +589,7 @@ public class Weapon implements IScreen
         		{
         			Messages.instance().addPropMessage("weapon.cantremove");
         		}
-        		else if(weaponView[selector.cur_pos.x][selector.cur_pos.y].getState().containsKey("Part"))
+        		else if(weaponView[selector.cur_pos.x][selector.cur_pos.y].getState().containsKey("Imp"))
         		{
         			removeImp(weaponView[selector.cur_pos.x][selector.cur_pos.y]);
         		}

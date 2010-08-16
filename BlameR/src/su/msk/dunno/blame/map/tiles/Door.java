@@ -26,7 +26,7 @@ public class Door extends AObject
 		return isOpen;
 	}
 	
-	@Override public int getCode()
+	@Override public int getSymbol()
 	{
 		if(isOpen)return MyFont.DOOR_OPENED;
 		else return MyFont.DOOR_CLOSED;

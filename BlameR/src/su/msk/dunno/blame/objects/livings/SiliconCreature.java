@@ -83,7 +83,7 @@ public class SiliconCreature extends ALiving
 		return "Silicon Creature";
 	}
 	
-	@Override public int getCode()
+	@Override public int getSymbol()
 	{
 		return MyFont.SILICONCREATURE;
 	}

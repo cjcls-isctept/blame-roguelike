@@ -20,7 +20,7 @@ public class Wall extends AObject
 		return false;
 	}
 	
-	@Override public int getCode()
+	@Override public int getSymbol()
 	{
 		return MyFont.WALL;
 	}

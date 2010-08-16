@@ -21,7 +21,7 @@ public class MinorSelector extends AObject
 		return "MinorSelecter";
 	}
 	
-	@Override public int getCode()
+	@Override public int getSymbol()
 	{
 		return MyFont.MINORSELECTOR;
 	}

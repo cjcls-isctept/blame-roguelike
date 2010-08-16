@@ -113,7 +113,7 @@ public class Field
 				   player_point.y - y < center_y/(Blame.scale)-4 &&
 				   y - player_point.y < center_y/(Blame.scale)-4)
 				{
-					MyFont.instance().drawDisplayList(objects[x][y].getLast().getCode(), 
+					MyFont.instance().drawDisplayList(objects[x][y].getLast().getSymbol(), 
 											   		  x*100*3/4, 
 											   		  y*100, 
 											   		  objects[x][y].getLast().getColor());
@@ -179,7 +179,7 @@ public class Field
 			{
 				/*if(objects[i][j].getLast().wasDrawed)
 				{
-					*/MyFont.instance().drawDisplayList(objects[i][j].getLast().getCode(), 
+					*/MyFont.instance().drawDisplayList(objects[i][j].getLast().getSymbol(), 
 											     		i*100*3/4, 
 											     		j*100, 
 											     		objects[i][j].getLast().getColor());
@@ -207,14 +207,14 @@ public class Field
 			{
 				if(objects[i][j].getLast().isAlwaysDraw())
 				{
-					MyFont.instance().drawDisplayList(objects[i][j].getLast().getCode(), 
+					MyFont.instance().drawDisplayList(objects[i][j].getLast().getSymbol(), 
 													  i*100*3/4, 
 													  j*100, 
 													  objects[i][j].getLast().getColor());
 				}
 				else if(objects[i][j].getFirst().wasDrawed && !objects[i][j].getFirst().isDrawPrevented())
 				{
-					MyFont.instance().drawDisplayList(objects[i][j].getFirst().getCode(), 
+					MyFont.instance().drawDisplayList(objects[i][j].getFirst().getSymbol(), 
 						 							  i*100*3/4, 
 						 							  j*100, 
 						 							  Color.GRAY);
@@ -273,7 +273,7 @@ public class Field
 		GL11.glScalef(Blame.scale*0.01f, Blame.scale*0.01f, 1.0f);
 		for(AObject ao: selectLine)
 		{
-			MyFont.instance().drawDisplayList(ao.getCode(), ao.cur_pos.x*100*3/4, ao.cur_pos.y*100, ao.getColor());
+			MyFont.instance().drawDisplayList(ao.getSymbol(), ao.cur_pos.x*100*3/4, ao.cur_pos.y*100, ao.getColor());
 		}
 		GL11.glPopMatrix();
 	}

@@ -24,7 +24,7 @@ public abstract class AObject
 		cur_pos = p;
 	}
 	
-	public abstract int getCode();
+	public abstract int getSymbol();
 	
 	public abstract boolean getTransparency();
 	

@@ -84,7 +84,7 @@ public class RebuildStation extends ALiving implements IScreen
 
 	private void dropGuards() 
 	{
-		
+		// TODO: drop guards
 		isGuardsDropped = true;
 	}
 
@@ -93,7 +93,7 @@ public class RebuildStation extends ALiving implements IScreen
 		return "Rebuild Station";
 	}
 
-	@Override public int getCode()
+	@Override public int getSymbol()
 	{
 		return MyFont.STATION;
 	}

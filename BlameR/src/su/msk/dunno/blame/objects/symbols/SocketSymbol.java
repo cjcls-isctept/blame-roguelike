@@ -27,7 +27,7 @@ public class SocketSymbol extends AObject
 		return true;
 	}
 	
-	@Override public int getCode()
+	@Override public int getSymbol()
 	{
 		return MyFont.SOCKET;
 	}

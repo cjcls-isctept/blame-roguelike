@@ -5,21 +5,21 @@ import su.msk.dunno.blame.support.Color;
 import su.msk.dunno.blame.support.MyFont;
 import su.msk.dunno.blame.support.Point;
 
-public class ColdPart extends AItem 
+public class ImpPoison extends AItem 
 {
-	public ColdPart(Point p) 
+	public ImpPoison(Point p) 
 	{
 		super(p);
-		item_properties.put("Part");
-		item_properties.putString("Info", "Adds cold damage to weapon (damage +1)");
+		item_properties.put("Imp");
+		item_properties.putString("Info", "Adds poison damage to weapon (damage +3)");
 		item_properties.putInt("EffectsCapacity", 1);
 		item_properties.putString("Effect1", "Damage");
-		item_properties.putFloat("Damage", 1);
+		item_properties.putFloat("Damage", 3);
 	}
 
 	@Override public String getName() 
 	{
-		return "Cold";
+		return "Poison";
 	}
 
 	@Override public boolean getPassability() 
@@ -27,7 +27,7 @@ public class ColdPart extends AItem
 		return true;
 	}
 	
-	@Override public int getCode()
+	@Override public int getSymbol()
 	{
 		return MyFont.IMP;
 	}
@@ -39,6 +39,6 @@ public class ColdPart extends AItem
 	
 	@Override public Color getColor()
 	{
-		return Color.CYAN;
+		return Color.GREEN;
 	}
 }

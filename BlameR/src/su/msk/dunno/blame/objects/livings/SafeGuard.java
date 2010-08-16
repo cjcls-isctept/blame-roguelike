@@ -29,7 +29,7 @@ public class SafeGuard extends SiliconCreature
 		return null;
 	}
 
-	@Override public int getCode() 
+	@Override public int getSymbol() 
 	{
 		return MyFont.SAFEGUARD;
 	}

@@ -28,7 +28,7 @@ public class EmptySpace extends AObject
 		return true;
 	}
 	
-	@Override public int getCode()
+	@Override public int getSymbol()
 	{
 		return MyFont.EMPTY;
 	}

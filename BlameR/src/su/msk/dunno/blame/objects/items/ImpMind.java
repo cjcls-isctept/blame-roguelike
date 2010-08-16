@@ -5,13 +5,13 @@ import su.msk.dunno.blame.support.Color;
 import su.msk.dunno.blame.support.MyFont;
 import su.msk.dunno.blame.support.Point;
 
-public class MindPart extends AItem 
+public class ImpMind extends AItem 
 {
 
-	public MindPart(Point p) 
+	public ImpMind(Point p) 
 	{
 		super(p);
-		item_properties.put("Part");
+		item_properties.put("Imp");
 		item_properties.putString("Info", "Allows to enter to target's mind");
 		item_properties.putInt("EffectsCapacity", 1);
 		item_properties.putString("Effect1", "MindHack");
@@ -28,7 +28,7 @@ public class MindPart extends AItem
 		return true;
 	}
 	
-	@Override public int getCode()
+	@Override public int getSymbol()
 	{
 		return MyFont.IMP;
 	}

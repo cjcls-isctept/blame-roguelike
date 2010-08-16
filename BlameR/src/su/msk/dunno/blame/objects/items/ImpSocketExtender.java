@@ -4,13 +4,13 @@ import su.msk.dunno.blame.prototypes.AItem;
 import su.msk.dunno.blame.support.MyFont;
 import su.msk.dunno.blame.support.Point;
 
-public class SocketExtender extends AItem 
+public class ImpSocketExtender extends AItem 
 {
 
-	public SocketExtender(Point p) 
+	public ImpSocketExtender(Point p) 
 	{
 		super(p);
-		item_properties.put("Part");
+		item_properties.put("Imp");
 		item_properties.putString("Info", "Adds new socket places to weapon");
 		item_properties.putInt("EffectsCapacity", 1);
 		item_properties.putString("Effect1", "Extender");
@@ -27,7 +27,7 @@ public class SocketExtender extends AItem
 		return true;
 	}
 	
-	@Override public int getCode()
+	@Override public int getSymbol()
 	{
 		return MyFont.WEAPONBASE;
 	}

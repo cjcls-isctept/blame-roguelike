@@ -8,6 +8,7 @@ import org.lwjgl.opengl.GL11;
 
 import su.msk.dunno.blame.decisions.Close;
 import su.msk.dunno.blame.decisions.GiveOrder;
+import su.msk.dunno.blame.decisions.OpenInventory;
 import su.msk.dunno.blame.decisions.SelectEmitter;
 import su.msk.dunno.blame.decisions.EmitterShoot;
 import su.msk.dunno.blame.decisions.EnterStation;
@@ -23,8 +24,8 @@ import su.msk.dunno.blame.map.Field;
 import su.msk.dunno.blame.map.path.PathFinder;
 import su.msk.dunno.blame.map.path.astar.AStarPathFinder;
 import su.msk.dunno.blame.objects.Livings;
-import su.msk.dunno.blame.objects.items.EmitterPart;
-import su.msk.dunno.blame.objects.items.KickPart;
+import su.msk.dunno.blame.objects.items.ImpEmitter;
+import su.msk.dunno.blame.objects.items.ImpKick;
 import su.msk.dunno.blame.objects.items.PlayerCorpse;
 import su.msk.dunno.blame.prototypes.ADecision;
 import su.msk.dunno.blame.prototypes.ALiving;
@@ -68,7 +69,7 @@ public class Killy extends ALiving implements IScreen
 		health = 100;
 		speed = 4;
 		find = new AStarPathFinder(field);
-		inventory.addItem(new EmitterPart(new Point()));
+		inventory.addItem(new ImpEmitter(new Point()));
 	}
 
 	@Override public ADecision livingAI() 
@@ -106,7 +107,7 @@ public class Killy extends ALiving implements IScreen
 		return keyboardDecision;		
 	}
 	
-	@Override public int getCode()
+	@Override public int getSymbol()
 	{
 		return MyFont.PLAYER;
 	}
@@ -232,10 +233,15 @@ public class Killy extends ALiving implements IScreen
 		else infection_level += infection_expansion_rate_move;
 	}
 	
+	public void cancelMove()
+	{
+		isCancelMove = true;
+	}
+	
 	public void process()
 	{
-		if(inventory.isOpen())inventory.process();
-		else if(weapon.isOpen())weapon.process();
+		/*if(inventory.isOpen())inventory.process();
+		else */if(weapon.isOpen())weapon.process();
 		else if(HelpScreen.instance().isOpen())HelpScreen.instance().process();
 		else
 		{
@@ -512,15 +518,17 @@ public class Killy extends ALiving implements IScreen
         {
         	public void onKeyDown()
         	{
-        		inventory.openInventory(Inventory.TO_CHECK);
-        		//isNextStep = true;
+        		inventory.setMode(Inventory.TO_CHECK);
+        		keyboardDecision = new OpenInventory(k, inventory);
+        		isNextStep = true;
         	}
         });
 		playerEvents.addListener(Keyboard.KEY_D, new KeyListener(0)
         {
         	public void onKeyDown()
         	{
-        		inventory.openInventory(Inventory.TO_DROP);
+        		inventory.setMode(Inventory.TO_DROP);
+        		keyboardDecision = new OpenInventory(k, inventory);
         		isNextStep = true;
         	}
         });
