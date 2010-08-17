@@ -344,7 +344,7 @@ public class TrueTypeFont
 		int i = startIndex, d, c;
 		float startY = 0;
 
-		FloatBuffer default_color = FloatBuffer.allocate(16);
+		FloatBuffer default_color = BufferUtils.createFloatBuffer(16);
 		GL11.glGetFloat(GL11.GL_CURRENT_COLOR, default_color);
 		
 		switch (format) {

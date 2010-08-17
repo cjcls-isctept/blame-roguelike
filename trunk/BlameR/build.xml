@@ -5,8 +5,8 @@
 		<delete file="blamer-${project.version}.zip" />
 		<mkdir dir="blamer-${project.version}" />
 		<mkdir dir="blamer-${project.version}/res" />
-		<mkdir dir="blamer-${project.version}/res/i" />
-		<mkdir dir="blamer-${project.version}/res/lib" />
+		<mkdir dir="blamer-${project.version}/img" />
+		<mkdir dir="blamer-${project.version}/lib/lwjgl" />
 		<jar destfile="blamer-${project.version}/Blame.jar" filesetmanifest="mergewithoutmain">
 			<manifest>
 				<attribute name="Built-By" value="dunno"/>
@@ -14,15 +14,15 @@
 				<attribute name="Class-Path" value="."/>
 			</manifest>
 			<fileset dir="E:/Java/workspace/BlameR/bin"/>
-			<zipfileset excludes="META-INF/*.SF" src="E:/Java/workspace/BlameR/res/lib/jar/jinput.jar"/>
-			<zipfileset excludes="META-INF/*.SF" src="E:/Java/workspace/BlameR/res/lib/jar/lwjgl_util.jar"/>
-			<zipfileset excludes="META-INF/*.SF" src="E:/Java/workspace/BlameR/res/lib/jar/lwjgl.jar"/>
-			<zipfileset excludes="META-INF/*.SF" src="E:/Java/workspace/BlameR/res/lib/jar/rlforj.0.2.jar"/>
+			<zipfileset excludes="META-INF/*.SF" src="E:/Java/workspace/BlameR/lib/lwjgl/jar/jinput.jar"/>
+			<zipfileset excludes="META-INF/*.SF" src="E:/Java/workspace/BlameR/lib/lwjgl/jar/lwjgl_util.jar"/>
+			<zipfileset excludes="META-INF/*.SF" src="E:/Java/workspace/BlameR/lib/lwjgl/jar/lwjgl.jar"/>
+			<zipfileset excludes="META-INF/*.SF" src="E:/Java/workspace/BlameR/lib/rlforj.0.2.jar"/>
 		</jar>
 		<copy file="options.txt" tofile="blamer-${project.version}/options.txt" />
-		<copy file="res/i/font.png" tofile="blamer-${project.version}/res/i/font.png" />
-		<copy toDir="blamer-${project.version}/res/lib">
-			<fileset dir="res/lib/" excludes="jar/" />
+		<copy file="img/font.png" tofile="blamer-${project.version}/img/font.png" />
+		<copy toDir="blamer-${project.version}/lib/lwjgl">
+			<fileset dir="lib/lwjgl/" excludes="jar/" />
 		</copy>
 		<copy file="run.bat" tofile="blamer-${project.version}/run.bat" />
 		<zip destfile="blamer-${project.version}.zip" basedir="blamer-${project.version}" />

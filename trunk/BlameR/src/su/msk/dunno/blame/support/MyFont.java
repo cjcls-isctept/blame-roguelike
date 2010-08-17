@@ -52,7 +52,7 @@ public class MyFont
 	
 	public MyFont()
 	{
-		myFont = loadTexture("res/i/font.png",0, 0, 1024, 1024);
+		myFont = loadTexture("img/font.png",0, 0, 1024, 1024);
 	}
 	
 	public void initDisplayLists()
