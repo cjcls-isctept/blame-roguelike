@@ -36,7 +36,6 @@ public class Weapon implements IScreen
 	private int weapon_height = 32;
 	
 	private ALiving owner;
-	private Inventory inventory;
 	private EventManager weaponEvents = new EventManager();
 	private AObject[][] weaponView = new AObject[weapon_width][weapon_height];
 	private LinkedList<AObject> sockets = new LinkedList<AObject>();
@@ -55,11 +54,11 @@ public class Weapon implements IScreen
 	private int shield;
 	
 	private float damage;
+	private boolean isRunning;
 	
-	public Weapon(ALiving l, Inventory inv)
+	public Weapon(ALiving l)
 	{
 		owner = l;
-		inventory = inv;
 		initEvents();
 		initWeaponView();
 		fillWeapon(11);
@@ -67,8 +66,8 @@ public class Weapon implements IScreen
 	
 	public void process()
 	{
-		if(inventory.isOpen())inventory.process();
-		else 
+		isRunning = true;
+		while(isRunning)
 		{
 			weaponEvents.checkEvents();
 			showWeapon();
@@ -79,6 +78,7 @@ public class Weapon implements IScreen
 	{
 		GL11.glClear(GL11.GL_COLOR_BUFFER_BIT/* | GL11.GL_DEPTH_BUFFER_BIT*/);		
 		GL11.glLoadIdentity();
+		
 		TrueTypeFont.instance().drawString(owner.getName()+"'s weapon", 20, Blame.height-25, Color.WHITE);
 		int k = Blame.height-40;
 		for(String key: effects.getKeys())
@@ -114,6 +114,7 @@ public class Weapon implements IScreen
 			 								  selector.cur_pos.y*100, 
 			 								  selector.getColor());
 		}
+		
 		Display.sync(Blame.framerate);
 		Display.update();
 	}
@@ -242,9 +243,9 @@ public class Weapon implements IScreen
 		{			
 			removeSockets(ao);
 		}
-		if(!inventory.isFull())
+		if(!owner.inventory.isFull())
 		{			
-			inventory.addItem(ao);			
+			owner.inventory.addItem(ao);			
 			return true;
 		}
 		else 
@@ -584,7 +585,10 @@ public class Weapon implements IScreen
         	public void onKeyDown()
         	{
         		if("SocketPlace".equals(weaponView[selector.cur_pos.x][selector.cur_pos.y].getName()))
-        				inventory.openInventory(Inventory.TO_SELECT_SOCKET);
+        		{
+        			owner.inventory.setMode(Inventory.TO_SELECT_IMP);
+        			owner.inventory.process();
+        		}
         		else if("Weapon Sceleton".equals(weaponView[selector.cur_pos.x][selector.cur_pos.y].getName()))
         		{
         			Messages.instance().addPropMessage("weapon.cantremove");
@@ -602,7 +606,7 @@ public class Weapon implements IScreen
         	public void onKeyDown()
         	{
         		if(isSelectSocket)isSelectSocket = false;
-        		else isWeaponView = false;
+        		else isRunning = false;
         	}
         });
 	}

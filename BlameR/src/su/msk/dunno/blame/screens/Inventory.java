@@ -22,7 +22,7 @@ public class Inventory implements IScreen
 {
 	public static final int TO_DROP = 0;
 	public static final int TO_CHECK = 1;
-	public static final int TO_SELECT_SOCKET = 2;
+	public static final int TO_SELECT_IMP = 2;
 	
 	private ALiving owner;
 	private Field field;
@@ -48,17 +48,16 @@ public class Inventory implements IScreen
 		isRunning = true;
 		while(isRunning)
 		{
-			inventoryEvents.checkEvents();
-			GL11.glClear(GL11.GL_COLOR_BUFFER_BIT/* | GL11.GL_DEPTH_BUFFER_BIT*/);		
-			GL11.glLoadIdentity();			
+			inventoryEvents.checkEvents();					
 			showInventory();
-			Display.sync(Blame.framerate);
-			Display.update();
 		}
 	}
 	
 	private void showInventory()
 	{
+		GL11.glClear(GL11.GL_COLOR_BUFFER_BIT/* | GL11.GL_DEPTH_BUFFER_BIT*/);		
+		GL11.glLoadIdentity();	
+		
 		int k = Blame.height-25;
 		int num = 1;
 		TrueTypeFont.instance().drawString(owner.getName()+"'s inventory", 20, k, Color.WHITE); k -= 30;
@@ -67,7 +66,7 @@ public class Inventory implements IScreen
 			TrueTypeFont.instance().drawString(selectedItem.getName()+":", 20, k, Color.WHITE); k -= 30;
 			TrueTypeFont.instance().drawString(selectedItem.getState().getString("Info"), 20, k, Color.WHITE);
 		}
-		else if(mode == TO_SELECT_SOCKET)
+		else if(mode == TO_SELECT_IMP)
 		{
 			for(AObject i: items)
 			{
@@ -86,6 +85,9 @@ public class Inventory implements IScreen
 				num++;
 			}
 		}
+		
+		Display.sync(Blame.framerate);
+		Display.update();
 	}
 	
 	public boolean addItem(AObject o)
@@ -136,7 +138,7 @@ public class Inventory implements IScreen
 	{
 		switch(mode)
 		{
-		case TO_SELECT_SOCKET:
+		case TO_SELECT_IMP:
 			int i = 0;
 			for(AObject ao: items)
 			{
@@ -166,9 +168,9 @@ public class Inventory implements IScreen
         			if(items.size() > 0)owner.setDecision(new Drop(owner, items.get(0)));
         			isRunning = false;
     			}
-        		else if(mode == TO_SELECT_SOCKET)
+        		else if(mode == TO_SELECT_IMP)
     			{
-    				AObject item = getItem(TO_SELECT_SOCKET, 0);
+    				AObject item = getItem(TO_SELECT_IMP, 0);
     				if(item != null)
     				{
     					owner.weapon.addImp(item);
@@ -191,9 +193,9 @@ public class Inventory implements IScreen
         			if(items.size() > 1)owner.setDecision(new Drop(owner, items.get(1)));
         			isRunning = false;
     			}
-        		else if(mode == TO_SELECT_SOCKET)
+        		else if(mode == TO_SELECT_IMP)
     			{
-    				AObject item = getItem(TO_SELECT_SOCKET, 1);
+    				AObject item = getItem(TO_SELECT_IMP, 1);
     				if(item != null)
     				{
     					owner.weapon.addImp(item);
@@ -216,9 +218,9 @@ public class Inventory implements IScreen
         			if(items.size() > 2)owner.setDecision(new Drop(owner, items.get(2)));
         			isRunning = false;
     			}
-        		else if(mode == TO_SELECT_SOCKET)
+        		else if(mode == TO_SELECT_IMP)
     			{
-    				AObject item = getItem(TO_SELECT_SOCKET, 2);
+    				AObject item = getItem(TO_SELECT_IMP, 2);
     				if(item != null)
     				{
     					owner.weapon.addImp(item);
@@ -241,9 +243,9 @@ public class Inventory implements IScreen
         			if(items.size() > 3)owner.setDecision(new Drop(owner, items.get(3)));
         			isRunning = false;
     			}
-        		else if(mode == TO_SELECT_SOCKET)
+        		else if(mode == TO_SELECT_IMP)
     			{
-    				AObject item = getItem(TO_SELECT_SOCKET, 3);
+    				AObject item = getItem(TO_SELECT_IMP, 3);
     				if(item != null)
     				{
     					owner.weapon.addImp(item);
@@ -266,9 +268,9 @@ public class Inventory implements IScreen
         			if(items.size() > 4)owner.setDecision(new Drop(owner, items.get(4)));
         			isRunning = false;
     			}
-        		else if(mode == TO_SELECT_SOCKET)
+        		else if(mode == TO_SELECT_IMP)
     			{
-    				AObject item = getItem(TO_SELECT_SOCKET, 4);
+    				AObject item = getItem(TO_SELECT_IMP, 4);
     				if(item != null)
     				{
     					owner.weapon.addImp(item);
@@ -291,9 +293,9 @@ public class Inventory implements IScreen
         			if(items.size() > 5)owner.setDecision(new Drop(owner, items.get(5)));
         			isRunning = false;
     			}
-        		else if(mode == TO_SELECT_SOCKET)
+        		else if(mode == TO_SELECT_IMP)
     			{
-    				AObject item = getItem(TO_SELECT_SOCKET, 5);
+    				AObject item = getItem(TO_SELECT_IMP, 5);
     				if(item != null)
     				{
     					owner.weapon.addImp(item);
@@ -316,9 +318,9 @@ public class Inventory implements IScreen
         			if(items.size() > 6)owner.setDecision(new Drop(owner, items.get(60)));
         			isRunning = false;
     			}
-        		else if(mode == TO_SELECT_SOCKET)
+        		else if(mode == TO_SELECT_IMP)
     			{
-    				AObject item = getItem(TO_SELECT_SOCKET, 6);
+    				AObject item = getItem(TO_SELECT_IMP, 6);
     				if(item != null)
     				{
     					owner.weapon.addImp(item);
@@ -341,9 +343,9 @@ public class Inventory implements IScreen
         			if(items.size() > 7)owner.setDecision(new Drop(owner, items.get(7)));
         			isRunning = false;
     			}
-        		else if(mode == TO_SELECT_SOCKET)
+        		else if(mode == TO_SELECT_IMP)
     			{
-    				AObject item = getItem(TO_SELECT_SOCKET, 7);
+    				AObject item = getItem(TO_SELECT_IMP, 7);
     				if(item != null)
     				{
     					owner.weapon.addImp(item);
@@ -366,9 +368,9 @@ public class Inventory implements IScreen
         			if(items.size() > 8)owner.setDecision(new Drop(owner, items.get(8)));
         			isRunning = false;
     			}
-        		else if(mode == TO_SELECT_SOCKET)
+        		else if(mode == TO_SELECT_IMP)
     			{
-    				AObject item = getItem(TO_SELECT_SOCKET, 8);
+    				AObject item = getItem(TO_SELECT_IMP, 8);
     				if(item != null)
     				{
     					owner.weapon.addImp(item);
@@ -391,9 +393,9 @@ public class Inventory implements IScreen
         			if(items.size() > 9)owner.setDecision(new Drop(owner, items.get(9)));
         			isRunning = false;
     			}
-        		else if(mode == TO_SELECT_SOCKET)
+        		else if(mode == TO_SELECT_IMP)
     			{
-    				AObject item = getItem(TO_SELECT_SOCKET, 9);
+    				AObject item = getItem(TO_SELECT_IMP, 9);
     				if(item != null)
     				{
     					owner.weapon.addImp(item);

@@ -44,7 +44,7 @@ public abstract class ALiving extends AObject
 	{
 		super(i, j);
 		inventory = new Inventory(this, field);
-		weapon = new Weapon(this, inventory);
+		weapon = new Weapon(this);
 		this.field = field;
 		field.addObject(this);
 	}
