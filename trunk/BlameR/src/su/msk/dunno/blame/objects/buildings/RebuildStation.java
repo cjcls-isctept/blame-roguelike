@@ -37,9 +37,13 @@ public class RebuildStation extends ALiving implements IScreen
 	public RebuildStation(int i, int j, Field field) 
 	{
 		super(i, j, field);
-		health = 50;
 		dov = 2;
 		initEvents();		
+	}
+	
+	@Override protected void initStats() 
+	{
+		setStat("Health", 50);
 	}
 
 	@Override public Color getColor() 
@@ -125,7 +129,7 @@ public class RebuildStation extends ALiving implements IScreen
 		if(args.containsKey("Damage"))
 		{
 			int d = (int)(Math.random()*args.getInt("Damage"));
-			health -= d;
+			decreaseStat("Health", d);
 			if(isNearPlayer())Messages.instance().addPropMessage("living.receivedamage", getName(), d+"");
 			
 		}
@@ -133,10 +137,10 @@ public class RebuildStation extends ALiving implements IScreen
 	
 	@Override public boolean checkStatus(ListIterator<ALiving> li) 
 	{
-		if(health <= 0)
+		if(getStat("Health") <= 0)
 		{
 			isCorrupted = !isCorrupted;
-			health = 50;
+			setStat("Health", 50);
 			if(isNearPlayer())Messages.instance().addMessage(getName()+" was liberated");
 		}
 		return false;
@@ -171,7 +175,7 @@ public class RebuildStation extends ALiving implements IScreen
 		for(int i = 0; i < n; i++)sb.append("#");
 		TrueTypeFont.instance().drawString(sb.toString(), 20, k, c); k-=20; k-=20;
 		
-		TrueTypeFont.instance().drawString(Messages.instance().getPropMessage("rebuild.player.health", player.getName(), player.getHealth()+""), 20, k, Color.WHITE); k-=20;
+		TrueTypeFont.instance().drawString(Messages.instance().getPropMessage("rebuild.player.health", player.getName(), player.getStat("Health")+""), 20, k, Color.WHITE); k-=20;
 		TrueTypeFont.instance().drawString(Messages.instance().getPropMessage("rebuild.player.infection", player.getName(), player.getInfectionLevel()), 20, k, Color.WHITE); k-=20; k-=20;
 		TrueTypeFont.instance().drawString("1. Improve health by 10", 20, k, Color.WHITE); k-=20;
 		TrueTypeFont.instance().drawString("2. Improve health by 1", 20, k, Color.WHITE); k-=20;

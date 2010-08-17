@@ -68,7 +68,7 @@ public class Move extends ADecision
 		{
 			al.changeState(al, new StateMap("MoveFail"));
 		}
-		else if(!al.isPlayer() && al.isNearPlayer() && dir != Move.STAY)
+		else if(/*!al.isPlayer() && */al.isNearPlayer() && dir != STAY)
 		{
 			field.playAnimation(new Moving(actionMoment, field, al, old, al.cur_pos));
 		}

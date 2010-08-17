@@ -9,7 +9,6 @@ import org.lwjgl.opengl.GL11;
 import su.msk.dunno.blame.main.Blame;
 import su.msk.dunno.blame.map.Field;
 import su.msk.dunno.blame.objects.Livings;
-import su.msk.dunno.blame.prototypes.ADecision;
 import su.msk.dunno.blame.prototypes.ALiving;
 import su.msk.dunno.blame.prototypes.AObject;
 import su.msk.dunno.blame.support.Color;

@@ -17,7 +17,7 @@ public class Drop extends ADecision
 
 	@Override public void doAction(int actionMoment) 
 	{
-		al.inventory.removeItem(toDrop);
+		al.getInventory().removeItem(toDrop);
 		if(al.isNearPlayer())Messages.instance().addPropMessage("decision.drop", al.getName(), toDrop.getName());
 		wasExecuted = true;
 	}

@@ -22,11 +22,11 @@ public class Take extends ADecision
 		AObject item = al.getObjectsAtDir(Move.STAY).getLast();
 		if(item.getState().containsKey("Item"))
 		{
-			if(!al.inventory.isFull())
+			if(!al.getInventory().isFull())
 			{
 				if(field.removeObject(item))
 				{
-					al.inventory.addItem(item);
+					al.getInventory().addItem(item);
 					if(al.isNearPlayer())Messages.instance().addPropMessage("decision.take", al.getName(), item.getName());
 				}
 				else if(al.isNearPlayer())Messages.instance().addPropMessage("decision.take.wrongitem", item.getName());

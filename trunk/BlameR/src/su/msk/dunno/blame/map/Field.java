@@ -41,7 +41,6 @@ public class Field
 	private PrecisePermissive pp = new PrecisePermissive();
 	
 	public Vector2D playerMovingCoord;
-	public int playerMoves;
 	
 	private int center_x = (Blame.width-195)/2;		// variables for draw methods 
 	private int center_y = (Blame.height-75)/2+75;
@@ -193,8 +192,8 @@ public class Field
 	public void draw(Point player_point)
 	{
 		GL11.glPushMatrix();
-		if(playerMoves == 0)playerMovingCoord = new Vector2D(player_point.x*(Blame.scale*3/4), 
-															 player_point.y*Blame.scale);
+		if(!Blame.getCurrentPlayer().isDrawPrevented())playerMovingCoord = new Vector2D(player_point.x*(Blame.scale*3/4), 
+															 							player_point.y*Blame.scale);
 		GL11.glTranslatef(center_x-playerMovingCoord.x, 
 			  		  	  center_y-playerMovingCoord.y, 
 			  		  	  0.0f);
@@ -280,18 +279,18 @@ public class Field
 	
 	public boolean changeLocation(ALiving al)	// add checks for edges and passability!
 	{
-		if(!al.getOld_pos().equals(al.cur_pos))
+		if(!al.getOldPos().equals(al.cur_pos))
 		{
 			if(!al.isDead && getPassability(al.cur_pos))
 			{
-				objects[al.getOld_pos().x][al.getOld_pos().y].remove(al);
+				objects[al.getOldPos().x][al.getOldPos().y].remove(al);
 				objects[al.cur_pos.x][al.cur_pos.y].add(al);
 				//if(al.isNearPlayer())Messages.instance().addMessage(al.getName()+" moves "+getDirection(al.getOld_pos(), al.cur_pos));
 			}
 			else
 			{
 				//if(al.isNearPlayer())Messages.instance().addMessage(al.getName()+" fails to move "+getDirection(al.getOld_pos(), al.cur_pos));
-				al.cur_pos = al.getOld_pos();
+				al.cur_pos = al.getOldPos();
 				return false;	// if Player fails to go - there is no move (see nextStep@LivingLinkedList)!
 			}
 		}

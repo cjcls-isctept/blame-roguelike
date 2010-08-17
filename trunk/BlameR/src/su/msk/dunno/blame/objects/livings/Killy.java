@@ -7,16 +7,15 @@ import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
 
 import su.msk.dunno.blame.decisions.Close;
+import su.msk.dunno.blame.decisions.EnterStation;
 import su.msk.dunno.blame.decisions.GiveOrder;
+import su.msk.dunno.blame.decisions.MeleeAttack;
+import su.msk.dunno.blame.decisions.Move;
+import su.msk.dunno.blame.decisions.Open;
 import su.msk.dunno.blame.decisions.OpenHelpScreen;
 import su.msk.dunno.blame.decisions.OpenInventory;
 import su.msk.dunno.blame.decisions.OpenWeapon;
 import su.msk.dunno.blame.decisions.SelectEmitter;
-import su.msk.dunno.blame.decisions.EmitterShoot;
-import su.msk.dunno.blame.decisions.EnterStation;
-import su.msk.dunno.blame.decisions.MeleeAttack;
-import su.msk.dunno.blame.decisions.Move;
-import su.msk.dunno.blame.decisions.Open;
 import su.msk.dunno.blame.decisions.SelectLook;
 import su.msk.dunno.blame.decisions.SelectTarget;
 import su.msk.dunno.blame.decisions.Shoot;
@@ -27,13 +26,11 @@ import su.msk.dunno.blame.map.path.PathFinder;
 import su.msk.dunno.blame.map.path.astar.AStarPathFinder;
 import su.msk.dunno.blame.objects.Livings;
 import su.msk.dunno.blame.objects.items.ImpEmitter;
-import su.msk.dunno.blame.objects.items.ImpKick;
 import su.msk.dunno.blame.objects.items.PlayerCorpse;
 import su.msk.dunno.blame.prototypes.ADecision;
 import su.msk.dunno.blame.prototypes.ALiving;
 import su.msk.dunno.blame.prototypes.AObject;
 import su.msk.dunno.blame.prototypes.IScreen;
-import su.msk.dunno.blame.screens.HelpScreen;
 import su.msk.dunno.blame.screens.Inventory;
 import su.msk.dunno.blame.support.Color;
 import su.msk.dunno.blame.support.Messages;
@@ -68,10 +65,14 @@ public class Killy extends ALiving implements IScreen
 		super(p.x, p.y, field);
 		initEvents();
 		dov = 5;
-		health = 100;
-		speed = 4;
 		find = new AStarPathFinder(field);
 		inventory.addItem(new ImpEmitter(new Point()));
+	}
+	
+	@Override protected void initStats() 
+	{
+		setStat("Health", 100);
+		setStat("Speed", 4);
 	}
 
 	@Override public ADecision livingAI() 
@@ -138,12 +139,12 @@ public class Killy extends ALiving implements IScreen
 	{
 		if(args.containsKey("Damage"))
 		{
-			health -= args.getInt("Damage");
+			decreaseStat("Health", args.getInt("Damage"));
 			if(isNearPlayer())Messages.instance().addPropMessage("living.receivedamage", getName(), args.getString("Damage"));
 		}
 		if(args.containsKey("HealthPlus"))
 		{
-			health += args.getInt("HealthPlus");
+			increaseStat("Health", args.getInt("HealthPlus"));
 		}
 		if(args.containsKey("InfectionHeal"))
 		{
@@ -211,7 +212,7 @@ public class Killy extends ALiving implements IScreen
 	
 	@Override public boolean checkStatus(ListIterator<ALiving> li) 
 	{
-		if(health < 0)
+		if(getStat("Health") < 0)
 		{
 			isDead = true;
 			if(isNearPlayer())Messages.instance().addPropMessage("living.dies", getName());
@@ -263,7 +264,7 @@ public class Killy extends ALiving implements IScreen
 		// statistics
 		int k = Blame.height-25;
 		TrueTypeFont.instance().drawString(getName(), Blame.width-200, k, Color.WHITE); k-= 20;
-		TrueTypeFont.instance().drawString(Messages.instance().getPropMessage("interface.hp", health+""), Blame.width-200, k, Color.WHITE); k-= 20;
+		TrueTypeFont.instance().drawString(Messages.instance().getPropMessage("interface.hp", getStat("Health")+""), Blame.width-200, k, Color.WHITE); k-= 20;
 		TrueTypeFont.instance().drawString(Messages.instance().getPropMessage("interface.damage", weapon.showDamage()+""), Blame.width-200, k, Color.WHITE); k-= 20;
 		TrueTypeFont.instance().drawString(Messages.instance().getPropMessage("interface.energy", weapon.showEnergy()+""), Blame.width-200, k, Color.WHITE); k-= 20;
 		if(infection_level < 35)
@@ -285,7 +286,6 @@ public class Killy extends ALiving implements IScreen
 		TrueTypeFont.instance().drawString("Time: "+Livings.instance().getTime(), Blame.width-200, k, Color.WHITE); k-= 20;
 		TrueTypeFont.instance().drawString("FPS: "+Blame.fps, Blame.width-200, k, Color.WHITE); k-= 20;
 		TrueTypeFont.instance().drawString("Anima: "+field.animations.size(), Blame.width-200, k, Color.WHITE); k-= 20;
-		TrueTypeFont.instance().drawString("PlayerMoves: "+field.playerMoves, Blame.width-200, k, Color.WHITE); k-= 20;
 		if(isFollowPlayer)
 		{
 			TrueTypeFont.instance().drawString("Following "+("Killy".equals(getName())?"Cibo":"Killy"), Blame.width-200, k, Color.WHITE); k-= 20;
@@ -296,9 +296,9 @@ public class Killy extends ALiving implements IScreen
 		}
 	}
 
-	@Override public boolean isPlayer() 
+	@Override public boolean isPlayer()
 	{
-		return true;
+		return this.equals(Blame.getCurrentPlayer());
 	}
 	
 	public void initEvents()

@@ -44,7 +44,7 @@ public class Weapon implements IScreen
 	
 	private MinorSelector selector = new MinorSelector(0, 0);
 	private boolean isSelectSocket;	
-	private boolean isWeaponView;
+	private boolean isWeaponOpen;
 	
 	private float maxEnergy;
 	private float energy;
@@ -54,7 +54,6 @@ public class Weapon implements IScreen
 	private int shield;
 	
 	private float damage;
-	private boolean isRunning;
 	
 	public Weapon(ALiving l)
 	{
@@ -66,8 +65,8 @@ public class Weapon implements IScreen
 	
 	public void process()
 	{
-		isRunning = true;
-		while(isRunning)
+		isWeaponOpen = true;
+		while(isWeaponOpen)
 		{
 			weaponEvents.checkEvents();
 			showWeapon();
@@ -243,9 +242,9 @@ public class Weapon implements IScreen
 		{			
 			removeSockets(ao);
 		}
-		if(!owner.inventory.isFull())
+		if(!owner.getInventory().isFull())
 		{			
-			owner.inventory.addItem(ao);			
+			owner.getInventory().addItem(ao);			
 			return true;
 		}
 		else 
@@ -375,13 +374,13 @@ public class Weapon implements IScreen
 	
 	public boolean isOpen()
 	{
-		return isWeaponView;
+		return isWeaponOpen;
 	}
 	
 	public void openWeaponView()
 	{
 		Messages.instance().clear();
-		isWeaponView = true;
+		isWeaponOpen = true;
 	}
 	
 	private void fillWeapon(int num)
@@ -586,8 +585,8 @@ public class Weapon implements IScreen
         	{
         		if("SocketPlace".equals(weaponView[selector.cur_pos.x][selector.cur_pos.y].getName()))
         		{
-        			owner.inventory.setMode(Inventory.TO_SELECT_IMP);
-        			owner.inventory.process();
+        			owner.getInventory().setMode(Inventory.TO_SELECT_IMP);
+        			owner.getInventory().process();
         		}
         		else if("Weapon Sceleton".equals(weaponView[selector.cur_pos.x][selector.cur_pos.y].getName()))
         		{
@@ -606,7 +605,7 @@ public class Weapon implements IScreen
         	public void onKeyDown()
         	{
         		if(isSelectSocket)isSelectSocket = false;
-        		else isRunning = false;
+        		else isWeaponOpen = false;
         	}
         });
 	}
