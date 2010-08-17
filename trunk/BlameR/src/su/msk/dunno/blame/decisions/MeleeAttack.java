@@ -20,11 +20,11 @@ public class MeleeAttack extends ADecision
 	{
 		for(AObject ao: al.getObjectsAtDir(dir))
 		{
-			/*if(al.isEnemy(ao) || ao.isEnemy(al))	// enemy status must be checked in livingAI() section, not here!
-			{*/
+			if(al.isEnemy(ao) || ao.isEnemy(al))	// needs to avoid messages about shooting to floor, door, etc ("Killy shoots to floor")
+			{
 				if(al.isNearPlayer())if(al.isNearPlayer())Messages.instance().addPropMessage("decision.melee", al.getName(), ao.getName());
 				ao.changeState(al, new StateMap("Damage", (int)(Math.random()*20)));
-			/*}*/
+			}
 		}
 		wasExecuted = true;
 	}

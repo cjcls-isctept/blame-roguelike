@@ -8,7 +8,9 @@ import org.lwjgl.opengl.GL11;
 
 import su.msk.dunno.blame.decisions.Close;
 import su.msk.dunno.blame.decisions.GiveOrder;
+import su.msk.dunno.blame.decisions.OpenHelpScreen;
 import su.msk.dunno.blame.decisions.OpenInventory;
+import su.msk.dunno.blame.decisions.OpenWeapon;
 import su.msk.dunno.blame.decisions.SelectEmitter;
 import su.msk.dunno.blame.decisions.EmitterShoot;
 import su.msk.dunno.blame.decisions.EnterStation;
@@ -240,26 +242,20 @@ public class Killy extends ALiving implements IScreen
 	
 	public void process()
 	{
-		/*if(inventory.isOpen())inventory.process();
-		else */if(weapon.isOpen())weapon.process();
-		else if(HelpScreen.instance().isOpen())HelpScreen.instance().process();
-		else
+		playerEvents.checkEvents();
+		if(isNextStep)
 		{
-			playerEvents.checkEvents();
-			if(isNextStep)
-			{
-				Livings.instance().nextStep();
-				isNextStep = false;
-			}
-			GL11.glClear(GL11.GL_COLOR_BUFFER_BIT/* | GL11.GL_DEPTH_BUFFER_BIT*/);		
-			GL11.glLoadIdentity();
-			
-			field.draw(cur_pos/*Blame.scale*/);
-			drawStats();
-			Messages.instance().showMessages();
-			Display.sync(Blame.framerate);
-			Display.update();
+			Livings.instance().nextStep();
+			isNextStep = false;
 		}
+		GL11.glClear(GL11.GL_COLOR_BUFFER_BIT/* | GL11.GL_DEPTH_BUFFER_BIT*/);		
+		GL11.glLoadIdentity();
+		
+		field.draw(cur_pos/*Blame.scale*/);
+		drawStats();
+		Messages.instance().showMessages();
+		Display.sync(Blame.framerate);
+		Display.update();
 	}
 	
 	public void drawStats()
@@ -519,7 +515,7 @@ public class Killy extends ALiving implements IScreen
         	public void onKeyDown()
         	{
         		inventory.setMode(Inventory.TO_CHECK);
-        		keyboardDecision = new OpenInventory(k, inventory);
+        		keyboardDecision = new OpenInventory(k);
         		isNextStep = true;
         	}
         });
@@ -528,7 +524,7 @@ public class Killy extends ALiving implements IScreen
         	public void onKeyDown()
         	{
         		inventory.setMode(Inventory.TO_DROP);
-        		keyboardDecision = new OpenInventory(k, inventory);
+        		keyboardDecision = new OpenInventory(k);
         		isNextStep = true;
         	}
         });
@@ -536,15 +532,16 @@ public class Killy extends ALiving implements IScreen
         {
         	public void onKeyDown()
         	{
-        		weapon.openWeaponView();
-        		//isNextStep = true;
+        		keyboardDecision = new OpenWeapon(k);
+        		isNextStep = true;
         	}
         });
 		playerEvents.addListener(Keyboard.KEY_F1, new KeyListener(0)
         {
         	public void onKeyDown()
         	{
-        		HelpScreen.instance().openHelp();
+        		keyboardDecision = new OpenHelpScreen(k);
+        		isNextStep = true;
         	}
         });
 		playerEvents.addListener(Keyboard.KEY_F5, new KeyListener(0)
