@@ -30,9 +30,8 @@ public class Inventory implements IScreen
 	private EventManager inventoryEvents = new EventManager();
 	private int inventoryCapacity = 10;
 	
-	private boolean showInventory;
+	private boolean isInventoryOpen;
 	private int mode;
-	private boolean isRunning;
 	
 	public AObject selectedItem;	
 	
@@ -45,8 +44,8 @@ public class Inventory implements IScreen
 	
 	public void process()
 	{
-		isRunning = true;
-		while(isRunning)
+		isInventoryOpen = true;
+		while(isInventoryOpen)
 		{
 			inventoryEvents.checkEvents();					
 			showInventory();
@@ -113,20 +112,20 @@ public class Inventory implements IScreen
 	
 	public boolean isOpen()
 	{
-		return showInventory;
+		return isInventoryOpen;
 	}
 	
 	private void closeInventory()
 	{
 		selectedItem = null;
-		showInventory = false;
+		isInventoryOpen = false;
 	}
 	
 	public void openInventory(int mode)
 	{
 		Messages.instance().clear();
 		this.mode = mode;
-		showInventory = true;		
+		isInventoryOpen = true;		
 	}
 	
 	public void setMode(int mode)
@@ -166,17 +165,17 @@ public class Inventory implements IScreen
         		if(mode == TO_DROP)
     			{
         			if(items.size() > 0)owner.setDecision(new Drop(owner, items.get(0)));
-        			isRunning = false;
+        			isInventoryOpen = false;
     			}
         		else if(mode == TO_SELECT_IMP)
     			{
     				AObject item = getItem(TO_SELECT_IMP, 0);
     				if(item != null)
     				{
-    					owner.weapon.addImp(item);
+    					owner.getWeapon().addImp(item);
     					items.remove(item);
     				}
-    				isRunning = false;
+    				isInventoryOpen = false;
     			}
     			else
     			{
@@ -191,17 +190,17 @@ public class Inventory implements IScreen
         		if(mode == TO_DROP)
     			{
         			if(items.size() > 1)owner.setDecision(new Drop(owner, items.get(1)));
-        			isRunning = false;
+        			isInventoryOpen = false;
     			}
         		else if(mode == TO_SELECT_IMP)
     			{
     				AObject item = getItem(TO_SELECT_IMP, 1);
     				if(item != null)
     				{
-    					owner.weapon.addImp(item);
+    					owner.getWeapon().addImp(item);
     					items.remove(item);
     				}
-    				isRunning = false;
+    				isInventoryOpen = false;
     			}
     			else
     			{
@@ -216,17 +215,17 @@ public class Inventory implements IScreen
         		if(mode == TO_DROP)
     			{
         			if(items.size() > 2)owner.setDecision(new Drop(owner, items.get(2)));
-        			isRunning = false;
+        			isInventoryOpen = false;
     			}
         		else if(mode == TO_SELECT_IMP)
     			{
     				AObject item = getItem(TO_SELECT_IMP, 2);
     				if(item != null)
     				{
-    					owner.weapon.addImp(item);
+    					owner.getWeapon().addImp(item);
     					items.remove(item);
     				}
-    				isRunning = false;
+    				isInventoryOpen = false;
     			}
     			else
     			{
@@ -241,17 +240,17 @@ public class Inventory implements IScreen
         		if(mode == TO_DROP)
     			{
         			if(items.size() > 3)owner.setDecision(new Drop(owner, items.get(3)));
-        			isRunning = false;
+        			isInventoryOpen = false;
     			}
         		else if(mode == TO_SELECT_IMP)
     			{
     				AObject item = getItem(TO_SELECT_IMP, 3);
     				if(item != null)
     				{
-    					owner.weapon.addImp(item);
+    					owner.getWeapon().addImp(item);
     					items.remove(item);
     				}
-    				isRunning = false;
+    				isInventoryOpen = false;
     			}
     			else
     			{
@@ -266,17 +265,17 @@ public class Inventory implements IScreen
         		if(mode == TO_DROP)
     			{
         			if(items.size() > 4)owner.setDecision(new Drop(owner, items.get(4)));
-        			isRunning = false;
+        			isInventoryOpen = false;
     			}
         		else if(mode == TO_SELECT_IMP)
     			{
     				AObject item = getItem(TO_SELECT_IMP, 4);
     				if(item != null)
     				{
-    					owner.weapon.addImp(item);
+    					owner.getWeapon().addImp(item);
     					items.remove(item);
     				}
-    				isRunning = false;
+    				isInventoryOpen = false;
     			}
     			else
     			{
@@ -291,17 +290,17 @@ public class Inventory implements IScreen
         		if(mode == TO_DROP)
     			{
         			if(items.size() > 5)owner.setDecision(new Drop(owner, items.get(5)));
-        			isRunning = false;
+        			isInventoryOpen = false;
     			}
         		else if(mode == TO_SELECT_IMP)
     			{
     				AObject item = getItem(TO_SELECT_IMP, 5);
     				if(item != null)
     				{
-    					owner.weapon.addImp(item);
+    					owner.getWeapon().addImp(item);
     					items.remove(item);
     				}
-    				isRunning = false;
+    				isInventoryOpen = false;
     			}
     			else
     			{
@@ -316,17 +315,17 @@ public class Inventory implements IScreen
         		if(mode == TO_DROP)
     			{
         			if(items.size() > 6)owner.setDecision(new Drop(owner, items.get(60)));
-        			isRunning = false;
+        			isInventoryOpen = false;
     			}
         		else if(mode == TO_SELECT_IMP)
     			{
     				AObject item = getItem(TO_SELECT_IMP, 6);
     				if(item != null)
     				{
-    					owner.weapon.addImp(item);
+    					owner.getWeapon().addImp(item);
     					items.remove(item);
     				}
-    				isRunning = false;
+    				isInventoryOpen = false;
     			}
     			else
     			{
@@ -341,17 +340,17 @@ public class Inventory implements IScreen
         		if(mode == TO_DROP)
     			{
         			if(items.size() > 7)owner.setDecision(new Drop(owner, items.get(7)));
-        			isRunning = false;
+        			isInventoryOpen = false;
     			}
         		else if(mode == TO_SELECT_IMP)
     			{
     				AObject item = getItem(TO_SELECT_IMP, 7);
     				if(item != null)
     				{
-    					owner.weapon.addImp(item);
+    					owner.getWeapon().addImp(item);
     					items.remove(item);
     				}
-    				isRunning = false;
+    				isInventoryOpen = false;
     			}
     			else
     			{
@@ -366,17 +365,17 @@ public class Inventory implements IScreen
         		if(mode == TO_DROP)
     			{
         			if(items.size() > 8)owner.setDecision(new Drop(owner, items.get(8)));
-        			isRunning = false;
+        			isInventoryOpen = false;
     			}
         		else if(mode == TO_SELECT_IMP)
     			{
     				AObject item = getItem(TO_SELECT_IMP, 8);
     				if(item != null)
     				{
-    					owner.weapon.addImp(item);
+    					owner.getWeapon().addImp(item);
     					items.remove(item);
     				}
-    				isRunning = false;
+    				isInventoryOpen = false;
     			}
     			else
     			{
@@ -391,17 +390,17 @@ public class Inventory implements IScreen
         		if(mode == TO_DROP)
     			{
         			if(items.size() > 9)owner.setDecision(new Drop(owner, items.get(9)));
-        			isRunning = false;
+        			isInventoryOpen = false;
     			}
         		else if(mode == TO_SELECT_IMP)
     			{
     				AObject item = getItem(TO_SELECT_IMP, 9);
     				if(item != null)
     				{
-    					owner.weapon.addImp(item);
+    					owner.getWeapon().addImp(item);
     					items.remove(item);
     				}
-    				isRunning = false;
+    				isInventoryOpen = false;
     			}
     			else
     			{
@@ -414,7 +413,7 @@ public class Inventory implements IScreen
         	public void onKeyDown()
         	{
         		if(selectedItem != null)selectedItem = null;
-        		else isRunning = false;
+        		else isInventoryOpen = false;
         	}
         });
 	}

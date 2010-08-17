@@ -28,12 +28,10 @@ public class Moving extends AAnimation
 		duration = Blame.fps/4;
 		frames = duration;
 		
-		if((Blame.playCibo?"Cibo":"Killy").equals(ao.getName()))
+		if(ao.equals(Blame.getCurrentPlayer()))
 		{
-			field.playerMoves++;
-			if(field.playerMovingCoord == null)
-				field.playerMovingCoord = new Vector2D(pFrom.x*Blame.scale*3/4, 
-													   pFrom.y*Blame.scale);
+			if(field.playerMovingCoord == null) field.playerMovingCoord = new Vector2D(pFrom.x*Blame.scale*3/4, 
+													   								   pFrom.y*Blame.scale);
 		}
 	}
 
@@ -55,7 +53,5 @@ public class Moving extends AAnimation
 	@Override public void stop()
 	{
 		ao.allowDraw();
-		if("Cibo".equals(ao.getName()) || "Killy".equals(ao.getName()))field.playerMoves--;
-		if(field.playerMoves < 0)field.playerMoves = 0;
 	}
 }

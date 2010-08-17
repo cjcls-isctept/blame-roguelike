@@ -6,7 +6,6 @@ import su.msk.dunno.blame.animations.BulletFlight;
 import su.msk.dunno.blame.animations.Moving;
 import su.msk.dunno.blame.map.Field;
 import su.msk.dunno.blame.objects.symbols.EmitterBullet;
-import su.msk.dunno.blame.prototypes.ADecision;
 import su.msk.dunno.blame.prototypes.ALiving;
 import su.msk.dunno.blame.support.Point;
 

@@ -5,7 +5,6 @@ import java.util.LinkedList;
 import su.msk.dunno.blame.main.Blame;
 import su.msk.dunno.blame.map.Field;
 import su.msk.dunno.blame.objects.symbols.Bullet;
-import su.msk.dunno.blame.objects.symbols.EmitterBullet;
 import su.msk.dunno.blame.prototypes.AAnimation;
 import su.msk.dunno.blame.support.Point;
 

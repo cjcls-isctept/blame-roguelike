@@ -1,5 +1,6 @@
 package su.msk.dunno.blame.prototypes;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.ListIterator;
 
@@ -22,14 +23,13 @@ import su.msk.dunno.blame.support.Point;
 public abstract class ALiving extends AObject 
 {
 	// stats
-	protected int health;
-	protected int speed;	
+	private HashMap<String, Integer> stats = new HashMap<String, Integer>();
 	
 	// effects
 	public boolean isDead;
 	
-	public Inventory inventory;
-	public Weapon weapon;
+	protected Inventory inventory;
+	protected Weapon weapon;
 	
 	// previous position: set private to prevent some possibilities "to hack" the system :)
 	protected Point old_pos = cur_pos;	// not anymore :(	
@@ -43,6 +43,7 @@ public abstract class ALiving extends AObject
 	public ALiving(int i, int j, Field field) 
 	{
 		super(i, j);
+		initStats();
 		inventory = new Inventory(this, field);
 		weapon = new Weapon(this);
 		this.field = field;
@@ -159,7 +160,7 @@ public abstract class ALiving extends AObject
 
 	public boolean checkStatus(ListIterator<ALiving> li) 
 	{
-		if(health <= 0)isDead = true;
+		if(getStat("Health") <= 0)isDead = true;
 		if(isDead)
 		{
 			if(isNearPlayer())Messages.instance().addPropMessage("living.dead", getName());
@@ -180,7 +181,7 @@ public abstract class ALiving extends AObject
 	
 	@Override public abstract boolean isEnemy(AObject ao);
 	
-	public abstract boolean isPlayer();	
+	public abstract boolean isPlayer();
 	
 	@Override public boolean getPassability() // all livings are impossible to pass through
 	{
@@ -192,14 +193,14 @@ public abstract class ALiving extends AObject
 		return true;
 	}
 
-	public Point getOld_pos() 
+	public Point getOldPos() 
 	{
 		return old_pos;
 	}
 
 	public boolean isNearPlayer()
 	{
-		if("Cibo".equals(getName()) || "Killy".equals(getName()))return true;
+		if(isPlayer())return true;
 		for(AObject ao: Blame.getCurrentPlayer().getMyNeighbours())
 		{
 			if(this.equals(ao))return true;
@@ -225,15 +226,44 @@ public abstract class ALiving extends AObject
 		if(!this.getState().containsKey("CancelMove"))lastActionTime = cur_time;
 	}
 	
-	public int getHealth() 
-	{
-		return health;
-	}	
+	protected abstract void initStats();
 	
-	public int getStat(String s)
+	public int getStat(String key)
 	{
-		if("Health".equals(s))return health;
-		if("Speed".equals(s))return speed;
-		return 0;
+		if(stats.containsKey(key)) return stats.get(key);
+		else return 0;
+	}
+	
+	protected void setStat(String key, int value)
+	{
+		stats.put(key, value);
+	}
+	
+	public void increaseStat(String key, int delta)
+	{
+		if(stats.containsKey(key)) 
+		{
+			int oldValue = stats.get(key);
+			stats.put(key, oldValue + delta);
+		}
+	}
+	
+	public void decreaseStat(String key, int delta)
+	{
+		if(stats.containsKey(key)) 
+		{
+			int oldValue = stats.get(key);
+			stats.put(key, oldValue - delta);
+		}
+	}
+	
+	public Inventory getInventory()
+	{
+		return inventory;
+	}
+	
+	public Weapon getWeapon()
+	{
+		return weapon;
 	}
 }

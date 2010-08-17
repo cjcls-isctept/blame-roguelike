@@ -26,10 +26,14 @@ public class SiliconCreature extends ALiving
 	public SiliconCreature(Point p, Field field) 
 	{
 		super(p, field);
-		health = 20;
 		dov = 8;	// higher than player's - they' sense player earlier than he do
-		speed = 3;
 		find = new AStarPathFinder(field);
+	}
+	
+	@Override protected void initStats() 
+	{
+		setStat("Health", 20);
+		setStat("Speed", 3);
 	}
 
 	@Override public ADecision livingAI() 
@@ -98,7 +102,7 @@ public class SiliconCreature extends ALiving
 		if(args.containsKey("Damage"))
 		{
 			int d = (int)(Math.random()*args.getInt("Damage"));
-			health -= d;
+			decreaseStat("Health", d);
 			if(isNearPlayer())Messages.instance().addPropMessage("living.receivedamage", getName(), d+"");
 			
 		}

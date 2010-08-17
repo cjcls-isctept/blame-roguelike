@@ -12,7 +12,7 @@ public class OpenWeapon extends ADecision
 
 	@Override public void doAction(int actionMoment) 
 	{
-		al.weapon.process();
+		al.getWeapon().process();
 		wasExecuted = true;
 	}
 }

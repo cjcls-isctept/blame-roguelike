@@ -37,7 +37,7 @@ public class Shoot extends ADecision implements ISelector
 
 	@Override public void doAction(int actionMoment) 
 	{
-		args = al.weapon.applyEffects();
+		args = al.getWeapon().applyEffects();
 		if(args != null)
 		{
 			LinkedList<Point> line = field.getLine(al.cur_pos, shootTo);

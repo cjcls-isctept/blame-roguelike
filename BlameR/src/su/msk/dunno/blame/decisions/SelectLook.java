@@ -1,7 +1,5 @@
 package su.msk.dunno.blame.decisions;
 
-import java.util.LinkedList;
-
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
@@ -10,7 +8,6 @@ import su.msk.dunno.blame.main.Blame;
 import su.msk.dunno.blame.map.Field;
 import su.msk.dunno.blame.prototypes.ADecision;
 import su.msk.dunno.blame.prototypes.ALiving;
-import su.msk.dunno.blame.prototypes.AObject;
 import su.msk.dunno.blame.support.Messages;
 import su.msk.dunno.blame.support.Point;
 import su.msk.dunno.blame.support.StateMap;

@@ -15,7 +15,6 @@ import su.msk.dunno.blame.prototypes.ALiving;
 import su.msk.dunno.blame.prototypes.AObject;
 import su.msk.dunno.blame.prototypes.IScreen;
 import su.msk.dunno.blame.support.Messages;
-import su.msk.dunno.blame.support.MyFont;
 import su.msk.dunno.blame.support.Point;
 import su.msk.dunno.blame.support.StateMap;
 import su.msk.dunno.blame.support.listeners.EventManager;
