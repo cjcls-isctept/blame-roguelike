@@ -85,20 +85,21 @@ public class Livings
 			}
 		}
 		
-		// update state of the second player (if not CancelMove)
-		if(!(Blame.playCibo?killy:cibo).isDead)
-		{
-			(Blame.playCibo?killy:cibo).increaseInfectionLevel();
-			if(!(Blame.playCibo?killy:cibo).checkStatus(null))
-			{
-				(Blame.playCibo?killy:cibo).nextStep();
-				(Blame.playCibo?killy:cibo).updateOldPos();
-			}
-		}
-		
-		// update monsters
+		// update other livings
 		while(time - (Blame.playCibo?cibo:killy).getLastActionTime() < (Blame.playCibo?cibo:killy).getActionPeriod())
 		{
+			// update state of the second player (if not CancelMove)
+			if(!(Blame.playCibo?killy:cibo).isDead)
+			{
+				(Blame.playCibo?killy:cibo).increaseInfectionLevel();
+				if(!(Blame.playCibo?killy:cibo).checkStatus(null))
+				{
+					(Blame.playCibo?killy:cibo).nextStep();
+					(Blame.playCibo?killy:cibo).updateOldPos();
+				}
+			}
+			
+			// update monsters
 			for(ListIterator<ALiving> li = livings.listIterator(); li.hasNext();)
 			{
 				ALiving al = li.next();
