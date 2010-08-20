@@ -25,15 +25,15 @@ public class SiliconCreature extends ALiving
 	
 	public SiliconCreature(Point p, Field field) 
 	{
-		super(p, field);
-		dov = 8;	// higher than player's - they' sense player earlier than he do
+		super(p, field);	
 		find = new AStarPathFinder(field);
 	}
 	
 	@Override protected void initStats() 
 	{
+		setStat("Dov", 6);		// higher than player's - they' sense player earlier than he do
 		setStat("Health", 20);
-		setStat("Speed", 3);
+		setStat("Speed", 3);	// lower the parameter - faster mob
 	}
 
 	@Override public ADecision livingAI() 

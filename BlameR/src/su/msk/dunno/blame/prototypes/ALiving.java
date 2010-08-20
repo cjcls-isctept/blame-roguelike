@@ -21,10 +21,7 @@ import su.msk.dunno.blame.support.Point;
 
 
 public abstract class ALiving extends AObject 
-{
-	// stats
-	private HashMap<String, Integer> stats = new HashMap<String, Integer>();
-	
+{	
 	// effects
 	public boolean isDead;
 	
@@ -227,35 +224,6 @@ public abstract class ALiving extends AObject
 	}
 	
 	protected abstract void initStats();
-	
-	public int getStat(String key)
-	{
-		if(stats.containsKey(key)) return stats.get(key);
-		else return 0;
-	}
-	
-	protected void setStat(String key, int value)
-	{
-		stats.put(key, value);
-	}
-	
-	public void increaseStat(String key, int delta)
-	{
-		if(stats.containsKey(key)) 
-		{
-			int oldValue = stats.get(key);
-			stats.put(key, oldValue + delta);
-		}
-	}
-	
-	public void decreaseStat(String key, int delta)
-	{
-		if(stats.containsKey(key)) 
-		{
-			int oldValue = stats.get(key);
-			stats.put(key, oldValue - delta);
-		}
-	}
 	
 	public Inventory getInventory()
 	{

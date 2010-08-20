@@ -12,11 +12,11 @@ public class SafeGuard extends SiliconCreature
 	public SafeGuard(Point p, Field field) 
 	{
 		super(p, field);
-		dov = 5;
 	}
 	
 	@Override protected void initStats() 
 	{
+		setStat("Dov", 5);
 		setStat("Health", 20);
 		setStat("Speed", 3);
 	}
