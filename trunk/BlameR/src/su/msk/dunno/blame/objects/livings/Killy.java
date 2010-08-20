@@ -64,13 +64,13 @@ public class Killy extends ALiving implements IScreen
 	{
 		super(p.x, p.y, field);
 		initEvents();
-		dov = 5;
 		find = new AStarPathFinder(field);
 		inventory.addItem(new ImpEmitter(new Point()));
 	}
 	
 	@Override protected void initStats() 
 	{
+		setStat("Dov", 5);
 		setStat("Health", 100);
 		setStat("Speed", 4);
 	}

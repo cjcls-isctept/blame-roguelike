@@ -10,7 +10,7 @@ public class Bullet extends AObject
 	public Bullet(Point p) 
 	{
 		super(p);
-		dov = 3;
+		setStat("Dov", 3);
 	}
 
 	@Override public String getName() 

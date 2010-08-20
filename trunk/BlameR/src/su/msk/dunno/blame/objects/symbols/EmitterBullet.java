@@ -8,7 +8,7 @@ public class EmitterBullet extends Bullet
 	public EmitterBullet(Point p) 
 	{
 		super(p);
-		dov = 7;
+		setStat("Dov", 7);
 	}
 	
 	@Override public Color getColor()

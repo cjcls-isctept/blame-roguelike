@@ -37,13 +37,13 @@ public class RebuildStation extends ALiving implements IScreen
 	public RebuildStation(int i, int j, Field field) 
 	{
 		super(i, j, field);
-		dov = 2;
 		initEvents();		
 	}
 	
 	@Override protected void initStats() 
 	{
 		setStat("Health", 50);
+		setStat("Dov", 2);
 	}
 
 	@Override public Color getColor() 

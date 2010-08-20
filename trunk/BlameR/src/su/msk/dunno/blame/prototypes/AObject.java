@@ -1,5 +1,7 @@
 package su.msk.dunno.blame.prototypes;
 
+import java.util.HashMap;
+
 import su.msk.dunno.blame.support.Color;
 import su.msk.dunno.blame.support.Point;
 import su.msk.dunno.blame.support.StateMap;
@@ -11,8 +13,6 @@ public abstract class AObject
 	
 	public boolean wasDrawed/* = true*/;
 	private int preventDrawRequests;
-	
-	protected int dov;	// dov = depth of vision
 	
 	public AObject(int i, int j)
 	{
@@ -56,11 +56,6 @@ public abstract class AObject
 	{
 		return false;
 	}
-
-	public int getDov()	// dov = depth of vision
-	{
-		return dov;
-	}
 	
 	public boolean isAlwaysDraw()
 	{
@@ -80,6 +75,38 @@ public abstract class AObject
 	public boolean isDrawPrevented()
 	{
 		return preventDrawRequests > 0;
+	}
+	
+	// stats
+	private HashMap<String, Integer> stats = new HashMap<String, Integer>();
+	public int getStat(String key)
+	{
+		if(stats.containsKey(key)) return stats.get(key);
+		else return 0;
+	}	
+	protected void setStat(String key, int value)
+	{
+		stats.put(key, value);
+	}	
+	public void increaseStat(String key, int delta)
+	{
+		if(stats.containsKey(key)) 
+		{
+			int oldValue = stats.get(key);
+			stats.put(key, oldValue + delta);
+		}
+	}	
+	public void decreaseStat(String key, int delta)
+	{
+		if(stats.containsKey(key)) 
+		{
+			int oldValue = stats.get(key);
+			stats.put(key, oldValue - delta);
+		}
+	}
+	public int getDov()	// dov = depth of vision
+	{
+		return getStat("Dov");
 	}
 	
 	/*public boolean equals(AObject ao)
