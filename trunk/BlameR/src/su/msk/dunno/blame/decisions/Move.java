@@ -1,9 +1,13 @@
 package su.msk.dunno.blame.decisions;
 
+import java.util.LinkedList;
+
 import su.msk.dunno.blame.animations.Moving;
 import su.msk.dunno.blame.map.Field;
 import su.msk.dunno.blame.prototypes.ADecision;
 import su.msk.dunno.blame.prototypes.ALiving;
+import su.msk.dunno.blame.prototypes.AObject;
+import su.msk.dunno.blame.support.Messages;
 import su.msk.dunno.blame.support.Point;
 import su.msk.dunno.blame.support.StateMap;
 
@@ -68,9 +72,17 @@ public class Move extends ADecision
 		{
 			al.changeState(al, new StateMap("MoveFail"));
 		}
-		else if(!al.isPlayer() && al.isNearPlayer() && dir != STAY)
+		else if(al.isNearPlayer() && dir != STAY)
 		{
-			field.playAnimation(new Moving(actionMoment, field, al, old, al.cur_pos));
+			LinkedList<AObject> items = al.getObjectsAtDir(STAY);
+			if(items.size() == 2)
+			{
+				AObject item = al.getObjectsAtDir(STAY).getLast();
+				if(item.getState().containsKey("Item")) Messages.instance().addMessage(al.getName()+" found "+item.getName()+" on the floor");
+			}
+			else if(items.size() > 2) Messages.instance().addMessage(al.getName()+" found several items on the floor");
+			
+			if(!al.isPlayer()) field.playAnimation(new Moving(actionMoment, field, al, old, al.cur_pos));
 		}
 		wasExecuted = true;				
 	}
