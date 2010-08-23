@@ -68,7 +68,6 @@ public class Blame
 		Display.sync(Blame.framerate);
 		Display.update();
 		
-		MyFont.instance().initDisplayLists();
 		initEvents();
 
 		Point killy_point = null;
@@ -121,7 +120,7 @@ public class Blame
 		Display.destroy();
 	}
 	
-	public void checkRequests()
+	private void checkRequests()
 	{
     	if (Display.isCloseRequested()) 
 	    {
@@ -130,7 +129,8 @@ public class Blame
     	EventManager.instance().checkEvents();
 	}
 	
-	public void initGL() {
+	private void initGL() 
+	{
 		try {
 			if(isFullscreen)Display.setFullscreen(true);
 			else Display.setDisplayMode(new DisplayMode(width, height));
@@ -160,7 +160,7 @@ public class Blame
         GL11.glLoadIdentity();
     }
 	
-	public void initEvents()
+	private void initEvents()
 	{		
 		EventManager.instance().addListener(Keyboard.KEY_ADD, new KeyListener(1)
         {

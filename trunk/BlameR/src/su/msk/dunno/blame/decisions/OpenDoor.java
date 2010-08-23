@@ -8,9 +8,9 @@ import su.msk.dunno.blame.prototypes.AObject;
 import su.msk.dunno.blame.support.Messages;
 
 
-public class Open extends ADecision 
+public class OpenDoor extends ADecision 
 {
-	public Open(ALiving al) 
+	public OpenDoor(ALiving al) 
 	{
 		super(al);
 		args.put("Open");
@@ -21,7 +21,7 @@ public class Open extends ADecision
 		LinkedList<AObject> neighbours = al.getMyNearestNeighbours();
 		for(AObject ao: neighbours)
 		{
-			if("Close door".equals(ao.getName()))
+			if("Close door".equals(ao.getName()))	// rewrite this!
 			{
 				ao.changeState(al, args);
 				if(al.isNearPlayer())Messages.instance().addPropMessage("decision.open", al.getName());

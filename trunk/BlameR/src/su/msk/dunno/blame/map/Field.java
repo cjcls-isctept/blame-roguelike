@@ -248,7 +248,7 @@ public class Field
 		}
 	}
 	
-	public void playAnimations()
+	private void playAnimations()
 	{
 		if(animations.size() > 0)
 		{
