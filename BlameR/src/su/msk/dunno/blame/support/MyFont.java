@@ -53,9 +53,10 @@ public class MyFont
 	public MyFont()
 	{
 		myFont = loadTexture("img/font.png",0, 0, 1024, 1024);
+		initDisplayLists();
 	}
 	
-	public void initDisplayLists()
+	private void initDisplayLists()
 	{
 		createList(myFont, '#', WALL);
 		createList(myFont, '.', FLOOR);

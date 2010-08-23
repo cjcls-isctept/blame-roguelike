@@ -6,12 +6,12 @@ import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
 
-import su.msk.dunno.blame.decisions.Close;
+import su.msk.dunno.blame.decisions.CloseDoor;
 import su.msk.dunno.blame.decisions.EnterStation;
 import su.msk.dunno.blame.decisions.GiveOrder;
 import su.msk.dunno.blame.decisions.MeleeAttack;
 import su.msk.dunno.blame.decisions.Move;
-import su.msk.dunno.blame.decisions.Open;
+import su.msk.dunno.blame.decisions.OpenDoor;
 import su.msk.dunno.blame.decisions.OpenHelpScreen;
 import su.msk.dunno.blame.decisions.OpenInventory;
 import su.msk.dunno.blame.decisions.OpenWeapon;
@@ -98,7 +98,7 @@ public class Killy extends ALiving implements IScreen
 			{
 				if("Close door".equals(field.getObjectsAtPoint(find.path.getFirst()).getFirst().getName()))
 				{	//found a door near us
-					return new Open(this);	// open it
+					return new OpenDoor(this);	// open it
 				}
 				else if(!field.getPassability(find.path.getFirst()))
 				{
@@ -459,7 +459,7 @@ public class Killy extends ALiving implements IScreen
         {
         	public void onKeyDown()
         	{
-        		keyboardDecision = new Open(k);
+        		keyboardDecision = new OpenDoor(k);
         		isNextStep = true;
         	}
         });
@@ -467,7 +467,7 @@ public class Killy extends ALiving implements IScreen
         {
         	public void onKeyDown()
         	{
-        		keyboardDecision = new Close(k);
+        		keyboardDecision = new CloseDoor(k);
         		isNextStep = true;
         	}
         });

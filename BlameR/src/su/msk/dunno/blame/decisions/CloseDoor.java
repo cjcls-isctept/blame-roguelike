@@ -8,9 +8,9 @@ import su.msk.dunno.blame.prototypes.AObject;
 import su.msk.dunno.blame.support.Messages;
 
 
-public class Close extends ADecision 
+public class CloseDoor extends ADecision 
 {
-	public Close(ALiving al) 
+	public CloseDoor(ALiving al) 
 	{
 		super(al);
 		args.put("Close");
