@@ -31,7 +31,7 @@ import su.msk.dunno.blame.prototypes.ADecision;
 import su.msk.dunno.blame.prototypes.ALiving;
 import su.msk.dunno.blame.prototypes.AObject;
 import su.msk.dunno.blame.prototypes.IScreen;
-import su.msk.dunno.blame.screens.Inventory;
+import su.msk.dunno.blame.screens.InventoryScreen;
 import su.msk.dunno.blame.support.Color;
 import su.msk.dunno.blame.support.Messages;
 import su.msk.dunno.blame.support.MyFont;
@@ -514,7 +514,7 @@ public class Killy extends ALiving implements IScreen
         {
         	public void onKeyDown()
         	{
-        		inventory.setMode(Inventory.TO_CHECK);
+        		inventory.setMode(InventoryScreen.TO_CHECK);
         		keyboardDecision = new OpenInventory(k);
         		isNextStep = true;
         	}
@@ -523,7 +523,7 @@ public class Killy extends ALiving implements IScreen
         {
         	public void onKeyDown()
         	{
-        		inventory.setMode(Inventory.TO_DROP);
+        		inventory.setMode(InventoryScreen.TO_DROP);
         		keyboardDecision = new OpenInventory(k);
         		isNextStep = true;
         	}

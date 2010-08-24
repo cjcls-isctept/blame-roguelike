@@ -18,7 +18,7 @@ import su.msk.dunno.blame.support.TrueTypeFont;
 import su.msk.dunno.blame.support.listeners.EventManager;
 import su.msk.dunno.blame.support.listeners.KeyListener;
 
-public class Inventory implements IScreen
+public class InventoryScreen implements IScreen
 {
 	public static final int TO_DROP = 0;
 	public static final int TO_CHECK = 1;
@@ -35,7 +35,7 @@ public class Inventory implements IScreen
 	
 	public AObject selectedItem;	
 	
-	public Inventory(ALiving l, Field field)
+	public InventoryScreen(ALiving l, Field field)
 	{
 		owner = l;
 		this.field = field;
@@ -44,6 +44,7 @@ public class Inventory implements IScreen
 	
 	public void process()
 	{
+		Messages.instance().clear();
 		isInventoryOpen = true;
 		while(isInventoryOpen)
 		{
@@ -115,19 +116,6 @@ public class Inventory implements IScreen
 		return isInventoryOpen;
 	}
 	
-	private void closeInventory()
-	{
-		selectedItem = null;
-		isInventoryOpen = false;
-	}
-	
-	public void openInventory(int mode)
-	{
-		Messages.instance().clear();
-		this.mode = mode;
-		isInventoryOpen = true;		
-	}
-	
 	public void setMode(int mode)
 	{
 		this.mode = mode;
@@ -156,7 +144,7 @@ public class Inventory implements IScreen
 		return null;
 	}
 	
-	public void initEvents()
+	private void initEvents()
 	{
 		inventoryEvents.addListener(Keyboard.KEY_1, new KeyListener(0)
         {
