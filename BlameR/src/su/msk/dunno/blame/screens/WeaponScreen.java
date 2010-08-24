@@ -8,11 +8,11 @@ import org.lwjgl.opengl.GL11;
 
 import su.msk.dunno.blame.decisions.Drop;
 import su.msk.dunno.blame.main.Blame;
-import su.msk.dunno.blame.objects.items.ImpCold;
-import su.msk.dunno.blame.objects.items.ImpFire;
-import su.msk.dunno.blame.objects.items.ImpLightning;
+import su.msk.dunno.blame.objects.items.ImpBio;
+import su.msk.dunno.blame.objects.items.ImpLaser;
+import su.msk.dunno.blame.objects.items.ImpEnergy;
 import su.msk.dunno.blame.objects.items.ImpMind;
-import su.msk.dunno.blame.objects.items.ImpPoison;
+import su.msk.dunno.blame.objects.items.ImpAcid;
 import su.msk.dunno.blame.objects.items.ImpSocketExtender;
 import su.msk.dunno.blame.objects.symbols.EmptySpace;
 import su.msk.dunno.blame.objects.symbols.MinorSelector;
@@ -39,6 +39,8 @@ public class WeaponScreen implements IScreen
 	private EventManager weaponEvents = new EventManager();
 	private AObject[][] weaponView = new AObject[weapon_width][weapon_height];
 	private LinkedList<AObject> sockets = new LinkedList<AObject>();
+	
+	private StateMap modifiers = new StateMap();
 	private StateMap effects = new StateMap();
 	private StateMap bonuses = new StateMap();
 	
@@ -50,7 +52,7 @@ public class WeaponScreen implements IScreen
 	private float energy;
 	public float energy_fill_rate;
 	
-	private float damage;
+	//private float damage;
 	
 	public WeaponScreen(ALiving l)
 	{
@@ -82,6 +84,12 @@ public class WeaponScreen implements IScreen
 		{
 			TrueTypeFont.instance().drawString(key+": "+effects.getInt(key)+
 											   (bonuses.containsKey(key)?" (+"+(int)(bonuses.getFloat(key)/effects.getFloat(key)*100)+"% bonus)":""), 
+											   20, k, Color.GREEN); k -= 15;
+		}
+		for(String key: modifiers.getKeys())
+		{
+			TrueTypeFont.instance().drawString(key+": "+modifiers.getInt(key)+
+											   (bonuses.containsKey(key)?" (+"+(int)(bonuses.getFloat(key)/modifiers.getFloat(key)*100)+"% bonus)":""), 
 											   20, k, Color.GREEN); k -= 15;
 		}
 		if(isSelectSocket)
@@ -118,54 +126,62 @@ public class WeaponScreen implements IScreen
 	
 	private void calculateEffects()
 	{
+		modifiers.clear();
 		effects.clear();
 		bonuses.clear();
-		for(AObject ao: sockets)
+		for(AObject socket: sockets)
 		{
-			int num = Integer.valueOf(ao.getState().getInt("EffectsCapacity"));
-			for(int i = 1; i <= num; i++)
-			{
-				String effect = ao.getState().getString("Effect"+i);
-				float toAdd = ao.getState().getFloat(effect);
-				int sameImps = sameImpsNear(ao, ao.cur_pos, null);
-				if(effects.containsKey(effect))
-				{
-					float value = effects.getFloat(effect) + toAdd;
-					if(sameImps > 0 && !ao.getState().containsKey("Extender"))
-					{
-						effects.putFloat(effect, (value+sameImps*toAdd/10.0f));
-						if(bonuses.containsKey(effect))
-							bonuses.putFloat(effect, (bonuses.getFloat(effect)+sameImps*toAdd/10.0f));
-						else 
-							bonuses.putFloat(effect, sameImps*toAdd/10.0f);
-					}
-					else effects.putFloat(effect, value);
-				}
-				else 
-				{
-					if(sameImps > 0 && !ao.getState().containsKey("Extender"))
-					{
-						effects.putFloat(effect, (toAdd+sameImps*toAdd/10.0f));
-						if(bonuses.containsKey(effect))bonuses.putFloat(effect, (bonuses.getFloat(effect)+sameImps*toAdd/10.0f));
-						else bonuses.putFloat(effect, sameImps*toAdd/10.0f);
-					}
-					else effects.putFloat(effect, toAdd);
-				}
-			}
+			if(socket.getState().containsKey("Effect")) addEffect(effects, socket);
+			else if(socket.getState().containsKey("Modfier")) addEffect(modifiers, socket);
 		}
-		if(effects.containsKey("Damage"))damage = effects.getFloat("Damage");
-		else damage = 0;
-		if(effects.containsKey("Energy"))maxEnergy = effects.getFloat("Energy");
+		
+		if(modifiers.containsKey("Energy"))maxEnergy = effects.getFloat("Energy");
 		else maxEnergy = 0;
 		if(energy > maxEnergy)energy = maxEnergy;
 		energy_fill_rate = maxEnergy/20.0f;
 	}
 	
+	private void addEffect(StateMap container, AObject socket)
+	{
+		String effect = socket.getState().getString("Effect");
+		float toAdd = socket.getState().getFloat(effect);
+		int sameImps = sameImpsNear(socket, socket.cur_pos, null);
+		if(container.containsKey(effect))
+		{
+			float value = container.getFloat(effect) + toAdd;
+			if(sameImps > 0)
+			{
+				container.putFloat(effect, (value+sameImps*toAdd/10.0f));
+				if(bonuses.containsKey(effect))
+					bonuses.putFloat(effect, (bonuses.getFloat(effect)+sameImps*toAdd/10.0f));
+				else 
+					bonuses.putFloat(effect, sameImps*toAdd/10.0f);
+			}
+			else container.putFloat(effect, value);
+		}
+		else 
+		{
+			if(sameImps > 0)
+			{
+				container.putFloat(effect, (toAdd+sameImps*toAdd/10.0f));
+				if(bonuses.containsKey(effect))bonuses.putFloat(effect, (bonuses.getFloat(effect)+sameImps*toAdd/10.0f));
+				else bonuses.putFloat(effect, sameImps*toAdd/10.0f);
+			}
+			else container.putFloat(effect, toAdd);
+		}
+	}
+	
+	public float getModifier(String modifierName)
+	{
+		if(modifiers.containsKey(modifierName)) return modifiers.getFloat(modifierName);
+		else return 0;
+	}
+	
 	public StateMap applyEffects()
 	{
-		if(energy - damage/5 > 0)
+		if(energy - 1 > 0)
 		{
-			energy -= damage/5;
+			energy -= 1;
 			return effects;
 		}
 		else return null;
@@ -174,11 +190,6 @@ public class WeaponScreen implements IScreen
 	public StateMap showEffects()
 	{
 		return effects;
-	}
-	
-	public int showDamage()
-	{
-		return (int)damage;
 	}
 	
 	public String showEnergy()
@@ -197,7 +208,7 @@ public class WeaponScreen implements IScreen
 		ao.cur_pos = selector.cur_pos;
 		sockets.add(ao);
 		weaponView[selector.cur_pos.x][selector.cur_pos.y] = ao;
-		if("Socket Extender".equals(ao.getName()))
+		if(ao.getState().containsKey("Extender"))
 		{
 			addNewSockets(ao);
 		}
@@ -233,24 +244,24 @@ public class WeaponScreen implements IScreen
 		else return false;
 	}
 	
-	public boolean removeImp(AObject ao)
+	public boolean removeImp(AObject socket)
 	{
-		sockets.remove(ao);
-		weaponView[ao.cur_pos.x][ao.cur_pos.y] = new SocketSymbol(ao.cur_pos);
+		sockets.remove(socket);
+		weaponView[socket.cur_pos.x][socket.cur_pos.y] = new SocketSymbol(socket.cur_pos);
 		calculateEffects();
-		if("Socket Extender".equals(ao.getName()))
+		if(socket.getState().containsKey("Extender"))
 		{			
-			removeSockets(ao);
+			removeSockets(socket);
 		}
 		if(!owner.getInventory().isFull())
 		{			
-			owner.getInventory().addItem(ao);			
+			owner.getInventory().addItem(socket);			
 			return true;
 		}
 		else 
 		{
 			Messages.instance().addPropMessage("weapon.inventoryfull");
-			owner.setDecision(new Drop(owner, ao));
+			owner.setDecision(new Drop(owner, socket));
 			return false;
 		}
 	}
@@ -393,10 +404,10 @@ public class WeaponScreen implements IScreen
 				selector.cur_pos = p;
 				switch(rand)
 				{
-				case 0: ao = new ImpCold(p); addImp(ao); continue;
-				case 1: ao = new ImpFire(p); addImp(ao); continue;
-				case 2: ao = new ImpLightning(p); addImp(ao); continue;
-				case 3: ao = new ImpPoison(p); addImp(ao); continue;
+				case 0: ao = new ImpBio(p); addImp(ao); continue;
+				case 1: ao = new ImpLaser(p); addImp(ao); continue;
+				case 2: ao = new ImpEnergy(p); addImp(ao); continue;
+				case 3: ao = new ImpAcid(p); addImp(ao); continue;
 				case 4: ao = new ImpSocketExtender(p); addImp(ao); continue;			
 				}
 			}

@@ -12,8 +12,7 @@ public class ImpKick extends AItem
 	 		super(p);
 	 		item_properties.put("Imp");
 	 		item_properties.putString("Info", "Kicks enemies back!");
-	 		item_properties.putInt("EffectsCapacity", 1);
-	 		item_properties.putString("Effect1", "Kick");
+	 		item_properties.putString("Effect", "Kick");
 	 		item_properties.putFloat("Kick", 1);
 	 	}
 

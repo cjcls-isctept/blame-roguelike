@@ -8,10 +8,10 @@ import su.msk.dunno.blame.decisions.Move;
 import su.msk.dunno.blame.main.Blame;
 import su.msk.dunno.blame.map.Field;
 import su.msk.dunno.blame.objects.Livings;
-import su.msk.dunno.blame.objects.items.ImpCold;
-import su.msk.dunno.blame.objects.items.ImpFire;
-import su.msk.dunno.blame.objects.items.ImpLightning;
-import su.msk.dunno.blame.objects.items.ImpPoison;
+import su.msk.dunno.blame.objects.items.ImpBio;
+import su.msk.dunno.blame.objects.items.ImpLaser;
+import su.msk.dunno.blame.objects.items.ImpEnergy;
+import su.msk.dunno.blame.objects.items.ImpAcid;
 import su.msk.dunno.blame.objects.items.ImpSocketExtender;
 import su.msk.dunno.blame.screens.InventoryScreen;
 import su.msk.dunno.blame.screens.WeaponScreen;
@@ -166,10 +166,10 @@ public abstract class ALiving extends AObject
 			int rand = (int)(Math.random()*5);
 			switch(rand)
 			{
-			case 0: field.addObject(new ImpCold(cur_pos)); return isDead;
-			case 1: field.addObject(new ImpFire(cur_pos)); return isDead;
-			case 2: field.addObject(new ImpLightning(cur_pos)); return isDead;
-			case 3: field.addObject(new ImpPoison(cur_pos)); return isDead;
+			case 0: field.addObject(new ImpBio(cur_pos)); return isDead;
+			case 1: field.addObject(new ImpLaser(cur_pos)); return isDead;
+			case 2: field.addObject(new ImpEnergy(cur_pos)); return isDead;
+			case 3: field.addObject(new ImpAcid(cur_pos)); return isDead;
 			case 4: field.addObject(new ImpSocketExtender(cur_pos)); return isDead;			
 			}
 		}
@@ -224,6 +224,10 @@ public abstract class ALiving extends AObject
 	}
 	
 	protected abstract void initStats();
+	@Override public int getStat(String key)
+	{
+		return super.getStat(key) + (int)weapon.getModifier(key);
+	}
 	
 	public InventoryScreen getInventory()
 	{

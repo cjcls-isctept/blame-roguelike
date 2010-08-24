@@ -5,21 +5,20 @@ import su.msk.dunno.blame.support.Color;
 import su.msk.dunno.blame.support.MyFont;
 import su.msk.dunno.blame.support.Point;
 
-public class ImpLightning extends AItem 
+public class ImpLaser extends AItem
 {
-	public ImpLightning(Point p) 
+	public ImpLaser(Point p) 
 	{
 		super(p);
 		item_properties.put("Imp");
-		item_properties.putString("Info", "Adds lightning energy to weapon (energy capacity +10)");
-		item_properties.putInt("EffectsCapacity", 1);
-		item_properties.putString("Effect1", "Energy");
-		item_properties.putFloat("Energy", 10);
+		item_properties.putString("Info", "Adds fire damage to weapon (damage +2)");
+		item_properties.putString("Effect", "FireDamage");
+		item_properties.putFloat("FireDamage", 2);
 	}
 
 	@Override public String getName() 
 	{
-		return "Light";
+		return "Fire Imp";
 	}
 
 	@Override public boolean getPassability() 
@@ -36,9 +35,9 @@ public class ImpLightning extends AItem
 	{
 		return true;
 	}
-	
+
 	@Override public Color getColor()
 	{
-		return Color.YELLOW;
+		return Color.PURPLE;
 	}
 }

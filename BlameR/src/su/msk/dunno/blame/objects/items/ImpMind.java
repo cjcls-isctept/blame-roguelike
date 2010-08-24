@@ -13,8 +13,7 @@ public class ImpMind extends AItem
 		super(p);
 		item_properties.put("Imp");
 		item_properties.putString("Info", "Allows to enter to target's mind");
-		item_properties.putInt("EffectsCapacity", 1);
-		item_properties.putString("Effect1", "MindHack");
+		item_properties.putString("Effect", "MindHack");
 		item_properties.putFloat("MindHack", 1);
 	}
 

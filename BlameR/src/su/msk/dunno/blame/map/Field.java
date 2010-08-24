@@ -509,7 +509,7 @@ public class Field
     			p1.x, p1.y, p2.x, p2.y, false);
 	}
 	
-	public boolean isMapVisible(Point p1, Point p2, int dov)
+	public boolean isMapPointVisible(Point p1, Point p2, int dov)
 	{
 		//if(p2.getDist2(p1) > dov*dov)return false;
     	if(p2.equals(p1))return true;
