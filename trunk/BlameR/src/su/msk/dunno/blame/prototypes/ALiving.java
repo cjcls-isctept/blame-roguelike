@@ -13,8 +13,8 @@ import su.msk.dunno.blame.objects.items.ImpFire;
 import su.msk.dunno.blame.objects.items.ImpLightning;
 import su.msk.dunno.blame.objects.items.ImpPoison;
 import su.msk.dunno.blame.objects.items.ImpSocketExtender;
-import su.msk.dunno.blame.screens.Inventory;
-import su.msk.dunno.blame.screens.Weapon;
+import su.msk.dunno.blame.screens.InventoryScreen;
+import su.msk.dunno.blame.screens.WeaponScreen;
 import su.msk.dunno.blame.support.Color;
 import su.msk.dunno.blame.support.Messages;
 import su.msk.dunno.blame.support.Point;
@@ -25,8 +25,8 @@ public abstract class ALiving extends AObject
 	// effects
 	public boolean isDead;
 	
-	protected Inventory inventory;
-	protected Weapon weapon;
+	protected InventoryScreen inventory;
+	protected WeaponScreen weapon;
 	
 	// previous position: set private to prevent some possibilities "to hack" the system :)
 	protected Point old_pos = cur_pos;	// not anymore :(	
@@ -41,8 +41,8 @@ public abstract class ALiving extends AObject
 	{
 		super(i, j);
 		initStats();
-		inventory = new Inventory(this, field);
-		weapon = new Weapon(this);
+		inventory = new InventoryScreen(this, field);
+		weapon = new WeaponScreen(this);
 		this.field = field;
 		field.addObject(this);
 	}
@@ -225,12 +225,12 @@ public abstract class ALiving extends AObject
 	
 	protected abstract void initStats();
 	
-	public Inventory getInventory()
+	public InventoryScreen getInventory()
 	{
 		return inventory;
 	}
 	
-	public Weapon getWeapon()
+	public WeaponScreen getWeapon()
 	{
 		return weapon;
 	}

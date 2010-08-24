@@ -30,7 +30,7 @@ import su.msk.dunno.blame.support.TrueTypeFont;
 import su.msk.dunno.blame.support.listeners.EventManager;
 import su.msk.dunno.blame.support.listeners.KeyListener;
 
-public class Weapon implements IScreen
+public class WeaponScreen implements IScreen
 {
 	private int weapon_width = 52;
 	private int weapon_height = 32;
@@ -50,12 +50,9 @@ public class Weapon implements IScreen
 	private float energy;
 	public float energy_fill_rate;
 	
-	private int maxShield;
-	private int shield;
-	
 	private float damage;
 	
-	public Weapon(ALiving l)
+	public WeaponScreen(ALiving l)
 	{
 		owner = l;
 		initEvents();
@@ -65,6 +62,7 @@ public class Weapon implements IScreen
 	
 	public void process()
 	{
+		Messages.instance().clear();
 		isWeaponOpen = true;
 		while(isWeaponOpen)
 		{
@@ -73,7 +71,7 @@ public class Weapon implements IScreen
 		}
 	}
 	
-	public void showWeapon()
+	private void showWeapon()
 	{
 		GL11.glClear(GL11.GL_COLOR_BUFFER_BIT/* | GL11.GL_DEPTH_BUFFER_BIT*/);		
 		GL11.glLoadIdentity();
@@ -118,7 +116,7 @@ public class Weapon implements IScreen
 		Display.update();
 	}
 	
-	public void calculateEffects()
+	private void calculateEffects()
 	{
 		effects.clear();
 		bonuses.clear();
@@ -136,8 +134,10 @@ public class Weapon implements IScreen
 					if(sameImps > 0 && !ao.getState().containsKey("Extender"))
 					{
 						effects.putFloat(effect, (value+sameImps*toAdd/10.0f));
-						if(bonuses.containsKey(effect))bonuses.putFloat(effect, (bonuses.getFloat(effect)+sameImps*toAdd/10.0f));
-						else bonuses.putFloat(effect, sameImps*toAdd/10.0f);
+						if(bonuses.containsKey(effect))
+							bonuses.putFloat(effect, (bonuses.getFloat(effect)+sameImps*toAdd/10.0f));
+						else 
+							bonuses.putFloat(effect, sameImps*toAdd/10.0f);
 					}
 					else effects.putFloat(effect, value);
 				}
@@ -334,7 +334,7 @@ public class Weapon implements IScreen
 		return b;
 	}
 
-	public void initWeaponView()
+	private void initWeaponView()
 	{
 		for(int i = 0; i < weaponView.length; i++)
 		{
@@ -372,24 +372,13 @@ public class Weapon implements IScreen
 				 																	 weaponView[0].length/2);
 	}
 	
-	public boolean isOpen()
-	{
-		return isWeaponOpen;
-	}
-	
-	public void openWeaponView()
-	{
-		Messages.instance().clear();
-		isWeaponOpen = true;
-	}
-	
 	private void fillWeapon(int num)
 	{
 		int amount = Math.min(getFreeSocketsNum(), num);
 		Point p;
 		int rand;
 		AObject ao;
-		p = getFreeRandomSocket();
+		p = getRandomFreeSocket();
 		if(p != null)
 		{
 			selector.cur_pos = p;
@@ -397,7 +386,7 @@ public class Weapon implements IScreen
 		}
 		for(int i = 0; i < amount-1; i++)
 		{
-			p = getFreeRandomSocket();
+			p = getRandomFreeSocket();
 			if(p != null)
 			{
 				rand = (int)(Math.random()*5);
@@ -429,7 +418,7 @@ public class Weapon implements IScreen
 		return sum;
 	}
 	
-	private Point getFreeRandomSocket()
+	private Point getRandomFreeSocket()
 	{
 		if(getFreeSocketsNum() > 0)
 		{
@@ -445,7 +434,7 @@ public class Weapon implements IScreen
 		return null;
 	}
 		
-	public void initEvents()
+	private void initEvents()
 	{
 		weaponEvents.addListener(Keyboard.KEY_NUMPAD9, new KeyListener(100)
         {
@@ -585,7 +574,7 @@ public class Weapon implements IScreen
         	{
         		if("SocketPlace".equals(weaponView[selector.cur_pos.x][selector.cur_pos.y].getName()))
         		{
-        			owner.getInventory().setMode(Inventory.TO_SELECT_IMP);
+        			owner.getInventory().setMode(InventoryScreen.TO_SELECT_IMP);
         			owner.getInventory().process();
         		}
         		else if("Weapon Sceleton".equals(weaponView[selector.cur_pos.x][selector.cur_pos.y].getName()))
