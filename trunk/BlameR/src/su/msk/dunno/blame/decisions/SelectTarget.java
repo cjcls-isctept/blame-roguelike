@@ -220,7 +220,7 @@ public class SelectTarget extends ADecision implements IScreen
 		{
 			i++;
 			if(line.size() > 1 && i == 1)continue;	//	skip the first element if amount of elements is more than 1
-			if(field.onArea(p) && field.isMapVisible(p, al.cur_pos, al.getDov()))
+			if(field.onArea(p) && field.isMapPointVisible(p, al.cur_pos, al.getDov()))
 			{
 				MinorSelector s = new MinorSelector(p);
 				selectLine.add(s);

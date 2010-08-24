@@ -5,21 +5,20 @@ import su.msk.dunno.blame.support.Color;
 import su.msk.dunno.blame.support.MyFont;
 import su.msk.dunno.blame.support.Point;
 
-public class ImpPoison extends AItem 
+public class ImpEnergy extends AItem 
 {
-	public ImpPoison(Point p) 
+	public ImpEnergy(Point p) 
 	{
 		super(p);
 		item_properties.put("Imp");
-		item_properties.putString("Info", "Adds poison damage to weapon (damage +3)");
-		item_properties.putInt("EffectsCapacity", 1);
-		item_properties.putString("Effect1", "Damage");
-		item_properties.putFloat("Damage", 3);
+		item_properties.putString("Info", "Energy capacitor for weapon (capacity +10)");
+		item_properties.putString("Modifier", "Energy");
+		item_properties.putFloat("Energy", 10);
 	}
 
 	@Override public String getName() 
 	{
-		return "Poison";
+		return "Energy";
 	}
 
 	@Override public boolean getPassability() 
@@ -39,6 +38,6 @@ public class ImpPoison extends AItem
 	
 	@Override public Color getColor()
 	{
-		return Color.GREEN;
+		return Color.YELLOW;
 	}
 }

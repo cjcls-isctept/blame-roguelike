@@ -12,8 +12,6 @@ public class ImpSocketExtender extends AItem
 		super(p);
 		item_properties.put("Imp");
 		item_properties.putString("Info", "Adds new socket places to weapon");
-		item_properties.putInt("EffectsCapacity", 1);
-		item_properties.putString("Effect1", "Extender");
 		item_properties.putFloat("Extender", 1);
 	}
 

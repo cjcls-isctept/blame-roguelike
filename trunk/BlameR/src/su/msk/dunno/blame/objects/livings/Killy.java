@@ -265,7 +265,6 @@ public class Killy extends ALiving implements IScreen
 		int k = Blame.height-25;
 		TrueTypeFont.instance().drawString(getName(), Blame.width-200, k, Color.WHITE); k-= 20;
 		TrueTypeFont.instance().drawString(Messages.instance().getPropMessage("interface.hp", getStat("Health")+""), Blame.width-200, k, Color.WHITE); k-= 20;
-		TrueTypeFont.instance().drawString(Messages.instance().getPropMessage("interface.damage", weapon.showDamage()+""), Blame.width-200, k, Color.WHITE); k-= 20;
 		TrueTypeFont.instance().drawString(Messages.instance().getPropMessage("interface.energy", weapon.showEnergy()+""), Blame.width-200, k, Color.WHITE); k-= 20;
 		if(infection_level < 35)
 		{

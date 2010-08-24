@@ -13,8 +13,7 @@ public class ImpEmitter extends AItem
 		super(p);
 		item_properties.put("Imp");
 		item_properties.putString("Info", "Killy's emitter module");
-		item_properties.putInt("EffectsCapacity", 1);
-		item_properties.putString("Effect1", "Level2");
+		item_properties.putString("Effect", "Level2");
 		item_properties.putFloat("Level2", 1);
 	}
 
