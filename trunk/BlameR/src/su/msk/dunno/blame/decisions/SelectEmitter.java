@@ -249,6 +249,6 @@ public class SelectEmitter extends SelectTarget
 	
 	@Override public int getActionPeriod()
 	{
-		return al.getStat("Speed");
+		return (int)al.getStat("Speed");
 	}
 }

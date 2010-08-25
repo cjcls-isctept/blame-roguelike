@@ -78,35 +78,35 @@ public abstract class AObject
 	}
 	
 	// stats
-	private HashMap<String, Integer> stats = new HashMap<String, Integer>();
-	public int getStat(String key)
+	private HashMap<String, Float> stats = new HashMap<String, Float>();
+	public float getStat(String key)
 	{
 		if(stats.containsKey(key)) return stats.get(key);
 		else return 0;
 	}	
-	protected void setStat(String key, int value)
+	protected void setStat(String key, float value)
 	{
 		stats.put(key, value);
 	}	
-	public void increaseStat(String key, int delta)
+	public void increaseStat(String key, float delta)
 	{
 		if(stats.containsKey(key)) 
 		{
-			int oldValue = stats.get(key);
+			float oldValue = stats.get(key);
 			stats.put(key, oldValue + delta);
 		}
 	}	
-	public void decreaseStat(String key, int delta)
+	public void decreaseStat(String key, float delta)
 	{
 		if(stats.containsKey(key)) 
 		{
-			int oldValue = stats.get(key);
+			float oldValue = stats.get(key);
 			stats.put(key, oldValue - delta);
 		}
 	}
 	public int getDov()	// dov = depth of vision
 	{
-		return getStat("Dov");
+		return (int)getStat("Dov");
 	}
 	
 	/*public boolean equals(AObject ao)

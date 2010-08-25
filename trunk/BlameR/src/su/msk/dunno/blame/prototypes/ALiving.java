@@ -224,9 +224,9 @@ public abstract class ALiving extends AObject
 	}
 	
 	protected abstract void initStats();
-	@Override public int getStat(String key)
+	@Override public float getStat(String key)
 	{
-		return super.getStat(key) + (int)weapon.getModifier(key);
+		return super.getStat(key) + weapon.getModifier(key);
 	}
 	
 	public InventoryScreen getInventory()

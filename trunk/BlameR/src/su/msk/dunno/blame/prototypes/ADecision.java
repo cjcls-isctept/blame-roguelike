@@ -24,7 +24,7 @@ public abstract class ADecision
 
 	public int getActionPeriod()
 	{
-		return al.getStat("Speed");
+		return (int)al.getStat("Speed");
 	}
 
 	public void setSelectPoint(Point selectPoint) 

@@ -225,20 +225,10 @@ public class Blame
 			dungeonType = p.getProperty("dungeon_type");
 			lang = p.getProperty("lang");
 		} 
-		catch (FileNotFoundException e) 
+		catch (Exception e) 
 		{
-			framerate = 70;
-			isFullscreen = false;
-			width = 800;
-			height = 600;
+			e.printStackTrace();
 		} 
-		catch (IOException e) 
-		{
-			framerate = 70;
-			isFullscreen = false;
-			width = 800;
-			height = 600;
-		}
 	}
 	
 	public static void main(String args[])

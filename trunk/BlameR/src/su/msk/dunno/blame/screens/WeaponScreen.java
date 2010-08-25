@@ -131,19 +131,26 @@ public class WeaponScreen implements IScreen
 		bonuses.clear();
 		for(AObject socket: sockets)
 		{
-			if(socket.getState().containsKey("Effect")) addEffect(effects, socket);
-			else if(socket.getState().containsKey("Modfier")) addEffect(modifiers, socket);
+			if(socket.getState().containsKey("Effect")) 
+			{
+				String effect = socket.getState().getString("Effect");
+				addEffect(effects, effect, socket);
+			}
+			else if(socket.getState().containsKey("Modifier")) 
+			{
+				String modifier = socket.getState().getString("Modifier");
+				addEffect(modifiers, modifier, socket);
+			}
 		}
 		
-		if(modifiers.containsKey("Energy"))maxEnergy = effects.getFloat("Energy");
+		if(modifiers.containsKey("Energy"))maxEnergy = modifiers.getFloat("Energy");
 		else maxEnergy = 0;
 		if(energy > maxEnergy)energy = maxEnergy;
 		energy_fill_rate = maxEnergy/20.0f;
 	}
 	
-	private void addEffect(StateMap container, AObject socket)
+	private void addEffect(StateMap container, String effect, AObject socket)
 	{
-		String effect = socket.getState().getString("Effect");
 		float toAdd = socket.getState().getFloat(effect);
 		int sameImps = sameImpsNear(socket, socket.cur_pos, null);
 		if(container.containsKey(effect))
