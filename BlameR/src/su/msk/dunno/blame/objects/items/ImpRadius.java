@@ -5,31 +5,32 @@ import su.msk.dunno.blame.support.Color;
 import su.msk.dunno.blame.support.MyFont;
 import su.msk.dunno.blame.support.Point;
 
-public class ImpAcid extends AItem 
+public class ImpRadius extends AItem 
 {
-	public ImpAcid(Point p) 
+	public ImpRadius(Point p) 
 	{
 		super(p);
+		
 		item_properties.put("Imp");
-		item_properties.putString("Info", "Adds acid damage");
-		item_properties.putString("Effect", "AcidDamage");
-		item_properties.putFloat("AcidDamage", 3);
+		item_properties.putString("Info", "Increase depth of vision");
+		item_properties.putString("Effect", "Dov");
+		item_properties.putFloat("Dov", 3);
 	}
 
 	@Override public String getName() 
 	{
-		return "Acid Imp";
+		return "Radius";
+	}
+	
+	@Override public int getSymbol() 
+	{
+		return MyFont.IMP;
 	}
 
 	@Override public boolean getPassability() 
 	{
 		return true;
-	}
-	
-	@Override public int getSymbol()
-	{
-		return MyFont.IMP;
-	}
+	}	
 
 	@Override public boolean getTransparency() 
 	{
@@ -38,6 +39,6 @@ public class ImpAcid extends AItem
 	
 	@Override public Color getColor()
 	{
-		return Color.CYAN;
+		return Color.BLUE_VIOLET;
 	}
 }

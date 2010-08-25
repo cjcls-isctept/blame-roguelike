@@ -11,14 +11,14 @@ public class ImpBio extends AItem
 	{
 		super(p);
 		item_properties.put("Imp");
-		item_properties.putString("Info", "Adds bio damage to weapon (damage +1)");
+		item_properties.putString("Info", "Adds bio damage");
 		item_properties.putString("Effect", "BioDamage");
-		item_properties.putFloat("BioDamage", 1);
+		item_properties.putFloat("BioDamage", 3);
 	}
 
 	@Override public String getName() 
 	{
-		return "Bio";
+		return "Bio Imp";
 	}
 
 	@Override public boolean getPassability() 

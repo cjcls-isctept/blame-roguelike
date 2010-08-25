@@ -11,14 +11,14 @@ public class ImpLaser extends AItem
 	{
 		super(p);
 		item_properties.put("Imp");
-		item_properties.putString("Info", "Adds fire damage to weapon (damage +2)");
-		item_properties.putString("Effect", "FireDamage");
-		item_properties.putFloat("FireDamage", 2);
+		item_properties.putString("Info", "Adds laser damage");
+		item_properties.putString("Effect", "LaserDamage");
+		item_properties.putFloat("LaserDamage", 3);
 	}
 
 	@Override public String getName() 
 	{
-		return "Fire Imp";
+		return "Laser Imp";
 	}
 
 	@Override public boolean getPassability() 

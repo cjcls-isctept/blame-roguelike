@@ -233,25 +233,15 @@ public class SelectTarget extends ADecision implements IScreen
 			selectPoint = selectLine.getLast().cur_pos;
 		}
 		for(AObject s: selectLine)
-		{
 			for(AObject ao: field.getObjectsAtPoint(s.cur_pos))
-			{
 				ao.preventDraw();
-			}
-			//field.addObject(s);
-		}
 	}
 	
 	protected void clearLine()
 	{
 		for(AObject s: selectLine)
-		{
 			for(AObject ao: field.getObjectsAtPoint(s.cur_pos))
-			{
 				ao.allowDraw();
-			}
-			//field.removeObject(s);
-		}
 		selectLine.clear();
 	}
 	
