@@ -1,5 +1,6 @@
 package su.msk.dunno.blame.support;
 
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Locale;
 import java.util.ResourceBundle;
@@ -80,8 +81,9 @@ public class Messages
 	public void showMessages()
 	{
 		int h = 75;
-		for(String mes: messages)
+		for(Iterator<String> i = messages.descendingIterator(); i.hasNext();)
 		{
+			String mes = i.next();
 			TrueTypeFont.instance().drawString(mes, 20, h, Color.WHITE); h -=15;
 		}
 	}
