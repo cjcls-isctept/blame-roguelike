@@ -49,9 +49,9 @@ public class Killy extends ALiving implements IScreen
 	
 	private boolean isCancelMove;
 	
-	private float infection_level;
+	/*private float infection_level;
 	private float infection_expansion_rate_move = 1/3.0f;
-	private float infection_expansion_rate_stay = 1/6.0f;
+	private float infection_expansion_rate_stay = 1/6.0f;*/
 	
 	protected PathFinder find;
 	protected boolean isFollowPlayer = false;
@@ -126,14 +126,14 @@ public class Killy extends ALiving implements IScreen
 		else */return Color.RED;
 	}
 	
-	public String getInfectionLevel()
+	/*public String getInfectionLevel()
 	{
 		if(infection_level < 35)return "Low";
 		else if(infection_level >= 35 && infection_level < 75)return "Medium";
 		else if(infection_level >= 75 && infection_level < 100)return "High!";
 		else if(infection_level >= 100)return "Mortal";
 		return "";
-	}
+	}*/
 	
 	@Override public void changeState(ALiving changer, StateMap args)
 	{
@@ -146,11 +146,11 @@ public class Killy extends ALiving implements IScreen
 		{
 			increaseStat("Health", args.getInt("HealthPlus"));
 		}
-		if(args.containsKey("InfectionHeal"))
+		/*if(args.containsKey("InfectionHeal"))
 		{
 			infection_level -= args.getInt("InfectionHeal");
 			if(infection_level < 0)infection_level = 0;
-		}
+		}*/
 		if(args.containsKey("MoveFail"))
 		{
 			isCancelMove = true;
@@ -217,11 +217,11 @@ public class Killy extends ALiving implements IScreen
 			isDead = true;
 			if(isNearPlayer())Messages.instance().addPropMessage("living.dies", getName());
 		}
-		if(infection_level >= 100)
+		/*if(infection_level >= 100)
 		{
 			isDead = true;
 			if(isNearPlayer())Messages.instance().addPropMessage("player.infectiondeath", getName());
-		}
+		}*/
 		if(isDead)
 		{
 			field.removeObject(this);
@@ -230,11 +230,11 @@ public class Killy extends ALiving implements IScreen
 		return isDead;
 	}	
 	
-	public void increaseInfectionLevel()
+	/*public void increaseInfectionLevel()
 	{
 		if(cur_pos.equals(old_pos))infection_level += infection_expansion_rate_stay;
 		else infection_level += infection_expansion_rate_move;
-	}
+	}*/
 	
 	public void cancelMove()
 	{
@@ -266,7 +266,7 @@ public class Killy extends ALiving implements IScreen
 		TrueTypeFont.instance().drawString(getName(), Blame.width-200, k, Color.WHITE); k-= 20;
 		TrueTypeFont.instance().drawString(Messages.instance().getPropMessage("interface.hp", getStat("Health")+""), Blame.width-200, k, Color.WHITE); k-= 20;
 		TrueTypeFont.instance().drawString(Messages.instance().getPropMessage("interface.energy", weapon.showEnergy()+""), Blame.width-200, k, Color.WHITE); k-= 20;
-		if(infection_level < 35)
+		/*if(infection_level < 35)
 		{
 			TrueTypeFont.instance().drawString(Messages.instance().getPropMessage("interface.infection.low"), Blame.width-200, k, Color.GREEN); k-= 20;
 		}
@@ -281,7 +281,7 @@ public class Killy extends ALiving implements IScreen
 		else if(infection_level >= 100)
 		{
 			TrueTypeFont.instance().drawString(Messages.instance().getPropMessage("interface.infection.mortal"), Blame.width-200, k, Color.WHITE); k-= 20;
-		}
+		}*/
 		TrueTypeFont.instance().drawString("Time: "+Livings.instance().getTime(), Blame.width-200, k, Color.WHITE); k-= 20;
 		TrueTypeFont.instance().drawString("FPS: "+Blame.fps, Blame.width-200, k, Color.WHITE); k-= 20;
 		TrueTypeFont.instance().drawString("Anima: "+field.animations.size(), Blame.width-200, k, Color.WHITE); k-= 20;

@@ -176,7 +176,7 @@ public class RebuildStation extends ALiving implements IScreen
 		TrueTypeFont.instance().drawString(sb.toString(), 20, k, c); k-=20; k-=20;
 		
 		TrueTypeFont.instance().drawString(Messages.instance().getPropMessage("rebuild.player.health", player.getName(), player.getStat("Health")+""), 20, k, Color.WHITE); k-=20;
-		TrueTypeFont.instance().drawString(Messages.instance().getPropMessage("rebuild.player.infection", player.getName(), player.getInfectionLevel()), 20, k, Color.WHITE); k-=20; k-=20;
+		/*TrueTypeFont.instance().drawString(Messages.instance().getPropMessage("rebuild.player.infection", player.getName(), player.getInfectionLevel()), 20, k, Color.WHITE); k-=20; k-=20;*/
 		TrueTypeFont.instance().drawString("1. Improve health by 10", 20, k, Color.WHITE); k-=20;
 		TrueTypeFont.instance().drawString("2. Improve health by 1", 20, k, Color.WHITE); k-=20;
 		TrueTypeFont.instance().drawString("3. Reduce infection level by 10", 20, k, Color.WHITE); k-=20;
