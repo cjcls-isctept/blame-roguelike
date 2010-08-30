@@ -18,6 +18,7 @@ import su.msk.dunno.blame.screens.WeaponScreen;
 import su.msk.dunno.blame.support.Color;
 import su.msk.dunno.blame.support.Messages;
 import su.msk.dunno.blame.support.Point;
+import su.msk.dunno.blame.support.StateMap;
 
 
 public abstract class ALiving extends AObject 
@@ -237,5 +238,22 @@ public abstract class ALiving extends AObject
 	public WeaponScreen getWeapon()
 	{
 		return weapon;
+	}
+	
+	@Override public void changeState(ALiving changer, StateMap effects)
+	{
+		float acidDamage = effects.getFloat("AcidDamage");
+		float acidResist = Math.min(getStat("AcidResist"), 75)*0.01f;
+		
+		float bioDamage = effects.getFloat("BioDamage");
+		float bioResist = Math.min(getStat("BioResist"), 75)*0.01f;
+		
+		float electroDamage = effects.getFloat("ElectroDamage");
+		float electroResist = Math.min(getStat("ElectroResist"), 75)*0.01f;
+		
+		float laserDamage = effects.getFloat("LaserDamage");
+		float laserResist = Math.min(getStat("LaserResist"), 75)*0.01f;
+		
+		boolean isCritical = Math.random() <= Math.min(effects.getFloat("Critical"), 50)*0.01f;
 	}
 }
