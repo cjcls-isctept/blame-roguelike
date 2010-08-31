@@ -255,5 +255,23 @@ public abstract class ALiving extends AObject
 		float laserResist = Math.min(getStat("LaserResist"), 75)*0.01f;
 		
 		boolean isCritical = Math.random() <= Math.min(effects.getFloat("Critical"), 50)*0.01f;
+		
+		float damage = (acidDamage - acidDamage*acidResist) + 
+					   (bioDamage - bioDamage*bioResist) + 
+					   (electroDamage - electroDamage*electroResist) + 
+					   (laserDamage - laserDamage*laserResist);
+		decreaseStat("Health", isCritical?damage*2:damage);
+		if(damage > 0 && isNearPlayer())
+		{
+			if(!isCritical) Messages.instance().addPropMessage("living.receivedamage", getName(), damage);
+			else Messages.instance().addPropMessage("living.receivedamage", getName(), damage); // add different message!!
+		}
+		
+		boolean isKicked = Math.random() <= Math.min(effects.getFloat("Kick"), 33)*0.01f;
+		if(isKicked)
+		{
+			setDecision(new Move(this, field.getDirection(changer.cur_pos, cur_pos), field));
+			if(isNearPlayer())Messages.instance().addPropMessage("living.kickback", getName());
+		}
 	}
 }

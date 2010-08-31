@@ -92,4 +92,9 @@ public class Messages
 	{
 		messages.clear();
 	}
+
+	public void addPropMessage(String messageCode, String name, float damage) 
+	{
+		addPropMessage(messageCode, name, damage+"");
+	}
 }
