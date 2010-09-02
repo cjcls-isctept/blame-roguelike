@@ -25,10 +25,7 @@ public class Livings
 		return instance;
 	}
 	
-	private Livings()
-	{
-		
-	}
+	private Livings() {}
 	
 	private Field field;
 	
@@ -38,6 +35,8 @@ public class Livings
 	private LinkedList<ALiving> stations = new LinkedList<ALiving>();
 	private Killy killy;
 	private Cibo cibo;
+	
+	private int numSiliconCreatures = 0;
 	
 	public void addField(Field field)
 	{
@@ -100,11 +99,14 @@ public class Livings
 			}
 			
 			// update monsters
+			numSiliconCreatures = 0;
 			for(ListIterator<ALiving> li = livings.listIterator(); li.hasNext();)
 			{
 				ALiving al = li.next();
 				if(!al.checkStatus(li))
 				{
+					if(al.getState().containsKey("SiliconCreature")) numSiliconCreatures++;
+					
 					al.nextStep();
 					al.updateOldPos();
 				}

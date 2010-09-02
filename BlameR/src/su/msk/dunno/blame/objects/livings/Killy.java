@@ -137,15 +137,6 @@ public class Killy extends ALiving implements IScreen
 	
 	@Override public void changeState(ALiving changer, StateMap args)
 	{
-		if(args.containsKey("Damage"))
-		{
-			decreaseStat("Health", args.getInt("Damage"));
-			if(isNearPlayer())Messages.instance().addPropMessage("living.receivedamage", getName(), args.getString("Damage"));
-		}
-		if(args.containsKey("HealthPlus"))
-		{
-			increaseStat("Health", args.getInt("HealthPlus"));
-		}
 		/*if(args.containsKey("InfectionHeal"))
 		{
 			infection_level -= args.getInt("InfectionHeal");
