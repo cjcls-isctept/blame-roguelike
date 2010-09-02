@@ -1,6 +1,5 @@
 package su.msk.dunno.blame.prototypes;
 
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.ListIterator;
 
@@ -8,10 +7,10 @@ import su.msk.dunno.blame.decisions.Move;
 import su.msk.dunno.blame.main.Blame;
 import su.msk.dunno.blame.map.Field;
 import su.msk.dunno.blame.objects.Livings;
-import su.msk.dunno.blame.objects.items.ImpBio;
-import su.msk.dunno.blame.objects.items.ImpLaser;
-import su.msk.dunno.blame.objects.items.ImpEnergy;
 import su.msk.dunno.blame.objects.items.ImpAcid;
+import su.msk.dunno.blame.objects.items.ImpBio;
+import su.msk.dunno.blame.objects.items.ImpEnergy;
+import su.msk.dunno.blame.objects.items.ImpLaser;
 import su.msk.dunno.blame.objects.items.ImpSocketExtender;
 import su.msk.dunno.blame.screens.InventoryScreen;
 import su.msk.dunno.blame.screens.WeaponScreen;
@@ -167,11 +166,11 @@ public abstract class ALiving extends AObject
 			int rand = (int)(Math.random()*5);
 			switch(rand)
 			{
-			case 0: field.addObject(new ImpBio(cur_pos)); return isDead;
-			case 1: field.addObject(new ImpLaser(cur_pos)); return isDead;
-			case 2: field.addObject(new ImpEnergy(cur_pos)); return isDead;
-			case 3: field.addObject(new ImpAcid(cur_pos)); return isDead;
-			case 4: field.addObject(new ImpSocketExtender(cur_pos)); return isDead;			
+			case 0: field.addObject(new ImpBio(cur_pos)); break;
+			case 1: field.addObject(new ImpLaser(cur_pos)); break;
+			case 2: field.addObject(new ImpEnergy(cur_pos)); break;
+			case 3: field.addObject(new ImpAcid(cur_pos)); break;
+			case 4: field.addObject(new ImpSocketExtender(cur_pos)); break;			
 			}
 		}
 		return isDead;
