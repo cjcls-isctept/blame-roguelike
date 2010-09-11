@@ -28,7 +28,7 @@ public class SelectLook extends SelectTarget
 			selectEvents.checkEvents();
 			GL11.glClear(GL11.GL_COLOR_BUFFER_BIT/* | GL11.GL_DEPTH_BUFFER_BIT*/);		
 			GL11.glLoadIdentity();
-			field.draw(al.cur_pos);
+			field.draw(al.curPos);
 			field.drawLine(selectLine);
 			Blame.getCurrentPlayer().drawStats();
 			Messages.instance().showMessages();
@@ -162,7 +162,7 @@ public class SelectLook extends SelectTarget
 				}
 				else
 				{
-					selectPoint = al.cur_pos;
+					selectPoint = al.curPos;
 					buildLine();
 				}
 			}

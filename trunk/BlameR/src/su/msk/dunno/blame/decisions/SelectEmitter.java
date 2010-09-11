@@ -43,7 +43,7 @@ public class SelectEmitter extends SelectTarget
 				weaponPower += powerIncreaseSpeed;
 				isNextStep = false;
 			}
-			field.draw(al.cur_pos);
+			field.draw(al.curPos);
 			field.drawLine(selectLine);
 			Blame.getCurrentPlayer().drawStats();
 			Messages.instance().showMessages();
@@ -221,13 +221,13 @@ public class SelectEmitter extends SelectTarget
 				}
 				else
 				{
-					selectPoint = al.cur_pos;
+					selectPoint = al.curPos;
 					LinkedList<AObject> neighbours = al.getMyNeighbours();
 					for(AObject ao: neighbours)
 					{
 						if(al.isEnemy(ao) || ao.isEnemy(al))
 						{
-							selectPoint = ao.cur_pos;
+							selectPoint = ao.curPos;
 							break;
 						}
 					}

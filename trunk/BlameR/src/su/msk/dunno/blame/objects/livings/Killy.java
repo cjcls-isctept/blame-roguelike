@@ -25,7 +25,8 @@ import su.msk.dunno.blame.map.Field;
 import su.msk.dunno.blame.map.path.PathFinder;
 import su.msk.dunno.blame.map.path.astar.AStarPathFinder;
 import su.msk.dunno.blame.objects.Livings;
-import su.msk.dunno.blame.objects.items.ImpEmitter;
+import su.msk.dunno.blame.objects.items.ImpAcid;
+import su.msk.dunno.blame.objects.items.ImpAcidRes;
 import su.msk.dunno.blame.objects.items.PlayerCorpse;
 import su.msk.dunno.blame.prototypes.ADecision;
 import su.msk.dunno.blame.prototypes.ALiving;
@@ -65,7 +66,7 @@ public class Killy extends ALiving implements IScreen
 		super(p.x, p.y, field);
 		initEvents();
 		find = new AStarPathFinder(field);
-		inventory.addItem(new ImpEmitter(new Point()));
+		//inventory.addItem(new ImpEmitter(new Point()));
 	}
 	
 	@Override protected void initStats() 
@@ -74,6 +75,15 @@ public class Killy extends ALiving implements IScreen
 		setStat("Health", 100);
 		setStat("Speed", 4);
 	}
+	
+	@Override protected void initItemDrop() 
+	{
+		mustBeDropped.add(new PlayerCorpse(getName(), new Point(0,0)));
+		
+		itemProbabilities = new StateMap[2];
+		itemProbabilities[0] = new StateMap("Probability", 50).putObject("Item", new ImpAcid(new Point(0,0)));
+		itemProbabilities[1] = new StateMap("Probability", 50).putObject("Item", new ImpAcidRes(new Point(0,0)));
+	}
 
 	@Override public ADecision livingAI() 
 	{
@@ -81,15 +91,15 @@ public class Killy extends ALiving implements IScreen
 		{
 			for(AObject ao: getMyNeighbours())
 			{
-				if(isEnemy(ao) || ao.isEnemy(this))return new Shoot(this, field, ao.cur_pos);
+				if(isEnemy(ao) || ao.isEnemy(this))return new Shoot(this, field, ao.curPos);
 			}
 		}
 		if(isFollowPlayer)
 		{
-			Point near = field.getNearestFree(Blame.getCurrentPlayer().cur_pos, 1);
-			if(near != null)find.findPath(cur_pos, near);
+			Point near = field.getNearestFree(Blame.getCurrentPlayer().curPos, 1);
+			if(near != null)find.findPath(curPos, near);
 			// remove first point
-			if(!find.path.isEmpty() && cur_pos.equals(find.path.getFirst()))find.path.removeFirst();
+			if(!find.path.isEmpty() && curPos.equals(find.path.getFirst()))find.path.removeFirst();
 			if(find.path.isEmpty() || find.path.size() == 1)	
 			{// couldn't create a path - go to random direction or there is an obstacle on our way
 				return new Move(this, (int)(Math.random()*9), field);
@@ -104,7 +114,7 @@ public class Killy extends ALiving implements IScreen
 				{
 					return new Move(this, (int)(Math.random()*9), field);
 				}
-				else return new Move(this, field.getDirection(cur_pos, find.path.getFirst()), field);
+				else return new Move(this, field.getDirection(curPos, find.path.getFirst()), field);
 			}
 		}
 		return keyboardDecision;		
@@ -135,18 +145,19 @@ public class Killy extends ALiving implements IScreen
 		return "";
 	}*/
 	
-	@Override public void changeState(ALiving changer, StateMap args)
+	@Override public void changeState(ALiving changer, StateMap effects)
 	{
+		super.changeState(changer, effects);
 		/*if(args.containsKey("InfectionHeal"))
 		{
 			infection_level -= args.getInt("InfectionHeal");
 			if(infection_level < 0)infection_level = 0;
 		}*/
-		if(args.containsKey("MoveFail"))
+		if(effects.containsKey("MoveFail"))
 		{
 			isCancelMove = true;
 		}
-		if(args.containsKey("FollowMe"))
+		if(effects.containsKey("FollowMe"))
 		{
 			if(changer.getState().containsKey("Player"))
 			{
@@ -154,7 +165,7 @@ public class Killy extends ALiving implements IScreen
 				if(isNearPlayer())Messages.instance().addMessage(getName()+" будет следовать за "+changer.getName());
 			}
 		}
-		if(args.containsKey("Wait"))
+		if(effects.containsKey("Wait"))
 		{
 			if(changer.getState().containsKey("Player"))
 			{
@@ -162,7 +173,7 @@ public class Killy extends ALiving implements IScreen
 				if(isNearPlayer())Messages.instance().addMessage(getName()+" останавливается");
 			}
 		}
-		if(args.containsKey("ShootEnemies"))
+		if(effects.containsKey("ShootEnemies"))
 		{
 			if(changer.getState().containsKey("Player"))
 			{
@@ -170,7 +181,7 @@ public class Killy extends ALiving implements IScreen
 				if(isNearPlayer())Messages.instance().addMessage(getName()+" будет атаковать врагов в поле зрения ");
 			}
 		}
-		if(args.containsKey("StopShoot"))
+		if(effects.containsKey("StopShoot"))
 		{
 			if(changer.getState().containsKey("Player"))
 			{
@@ -216,7 +227,7 @@ public class Killy extends ALiving implements IScreen
 		if(isDead)
 		{
 			field.removeObject(this);
-			field.addObject(new PlayerCorpse(getName(), cur_pos));
+			field.addObject(new PlayerCorpse(getName(), curPos));
 		}
 		return isDead;
 	}	
@@ -243,7 +254,7 @@ public class Killy extends ALiving implements IScreen
 		GL11.glClear(GL11.GL_COLOR_BUFFER_BIT/* | GL11.GL_DEPTH_BUFFER_BIT*/);		
 		GL11.glLoadIdentity();
 		
-		field.draw(cur_pos/*Blame.scale*/);
+		field.draw(curPos/*Blame.scale*/);
 		drawStats();
 		Messages.instance().showMessages();
 		Display.sync(Blame.framerate);
@@ -257,6 +268,8 @@ public class Killy extends ALiving implements IScreen
 		TrueTypeFont.instance().drawString(getName(), Blame.width-200, k, Color.WHITE); k-= 20;
 		TrueTypeFont.instance().drawString(Messages.instance().getPropMessage("interface.hp", getStat("Health")+""), Blame.width-200, k, Color.WHITE); k-= 20;
 		TrueTypeFont.instance().drawString(Messages.instance().getPropMessage("interface.energy", weapon.showEnergy()+""), Blame.width-200, k, Color.WHITE); k-= 20;
+		TrueTypeFont.instance().drawString("Damage: "+weapon.getDamage(), Blame.width-200, k, Color.WHITE); k-= 20;
+		TrueTypeFont.instance().drawString("Chance to kick: "+weapon.getEffect("Kick")+"%", Blame.width-200, k, Color.WHITE); k-= 20;
 		/*if(infection_level < 35)
 		{
 			TrueTypeFont.instance().drawString(Messages.instance().getPropMessage("interface.infection.low"), Blame.width-200, k, Color.GREEN); k-= 20;
@@ -275,7 +288,7 @@ public class Killy extends ALiving implements IScreen
 		}*/
 		TrueTypeFont.instance().drawString("Time: "+Livings.instance().getTime(), Blame.width-200, k, Color.WHITE); k-= 20;
 		TrueTypeFont.instance().drawString("FPS: "+Blame.fps, Blame.width-200, k, Color.WHITE); k-= 20;
-		TrueTypeFont.instance().drawString("Anima: "+field.animations.size(), Blame.width-200, k, Color.WHITE); k-= 20;
+		//TrueTypeFont.instance().drawString("Anima: "+field.animations.size(), Blame.width-200, k, Color.WHITE); k-= 20;
 		if(isFollowPlayer)
 		{
 			TrueTypeFont.instance().drawString("Following "+("Killy".equals(getName())?"Cibo":"Killy"), Blame.width-200, k, Color.WHITE); k-= 20;

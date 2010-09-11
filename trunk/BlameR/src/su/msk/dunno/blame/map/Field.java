@@ -105,7 +105,7 @@ public class Field
 
 			public void visit(int x, int y) 
 			{
-				Point player_point = Blame.getCurrentPlayer().cur_pos;
+				Point player_point = Blame.getCurrentPlayer().curPos;
 				if(!objects[x][y].getLast().isDrawPrevented() &&
 				   player_point.x - x < center_x/(Blame.scale*3/4) &&
 				   x - player_point.x < center_x/(Blame.scale*3/4) &&
@@ -133,13 +133,13 @@ public class Field
 	
 	public void addObject(AObject ao)
 	{
-		objects[ao.cur_pos.x][ao.cur_pos.y].add(ao);
+		objects[ao.curPos.x][ao.curPos.y].add(ao);
 		if(ao.isLightSource())lightSources.add(ao);
 	}
 	
 	public void addObject(Point p, AObject ao)
 	{
-		ao.cur_pos = p;
+		ao.curPos = p;
 		objects[p.x][p.y].add(objects[p.x][p.y].size()-1, ao);
 		if(ao.isLightSource())lightSources.add(ao);
 	}
@@ -147,10 +147,10 @@ public class Field
 	public boolean removeObject(AObject ao)
 	{
 		if(ao.isLightSource())lightSources.remove(ao);
-		if(!objects[ao.cur_pos.x][ao.cur_pos.y].contains(ao))return false;
+		if(!objects[ao.curPos.x][ao.curPos.y].contains(ao))return false;
 		else
 		{
-			objects[ao.cur_pos.x][ao.cur_pos.y].remove(ao);
+			objects[ao.curPos.x][ao.curPos.y].remove(ao);
 			return true;
 		}
 	}
@@ -222,7 +222,7 @@ public class Field
 		}
 		for(AObject source: lightSources)
 		{
-			pp.visitFieldOfView(drawView, source.cur_pos.x, source.cur_pos.y, source.getDov());
+			pp.visitFieldOfView(drawView, source.curPos.x, source.curPos.y, source.getDov());
 		}
 		playAnimations();
 		/*MyFont.instance().drawString(""+Blame.scale,     
@@ -239,7 +239,7 @@ public class Field
 		{
 			GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);		
 			GL11.glLoadIdentity();			
-			draw(Blame.getCurrentPlayer().cur_pos);		
+			draw(Blame.getCurrentPlayer().curPos);		
 			Blame.getCurrentPlayer().drawStats();
 			Messages.instance().showMessages();
 			Display.sync(Blame.framerate);
@@ -272,25 +272,25 @@ public class Field
 		GL11.glScalef(Blame.scale*0.01f, Blame.scale*0.01f, 1.0f);
 		for(AObject ao: selectLine)
 		{
-			MyFont.instance().drawDisplayList(ao.getSymbol(), ao.cur_pos.x*100*3/4, ao.cur_pos.y*100, ao.getColor());
+			MyFont.instance().drawDisplayList(ao.getSymbol(), ao.curPos.x*100*3/4, ao.curPos.y*100, ao.getColor());
 		}
 		GL11.glPopMatrix();
 	}
 	
 	public boolean changeLocation(ALiving al)	// add checks for edges and passability!
 	{
-		if(!al.getOldPos().equals(al.cur_pos))
+		if(!al.getOldPos().equals(al.curPos))
 		{
-			if(!al.isDead && getPassability(al.cur_pos))
+			if(!al.isDead && getPassability(al.curPos))
 			{
 				objects[al.getOldPos().x][al.getOldPos().y].remove(al);
-				objects[al.cur_pos.x][al.cur_pos.y].add(al);
+				objects[al.curPos.x][al.curPos.y].add(al);
 				//if(al.isNearPlayer())Messages.instance().addMessage(al.getName()+" moves "+getDirection(al.getOld_pos(), al.cur_pos));
 			}
 			else
 			{
 				//if(al.isNearPlayer())Messages.instance().addMessage(al.getName()+" fails to move "+getDirection(al.getOld_pos(), al.cur_pos));
-				al.cur_pos = al.getOldPos();
+				al.curPos = al.getOldPos();
 				return false;	// if Player fails to go - there is no move (see nextStep@LivingLinkedList)!
 			}
 		}
@@ -339,13 +339,13 @@ public class Field
 	public LinkedList<AObject> getNeighbours(AObject player, int dov) // dov = depth of vision
 	{
 		LinkedList<AObject> neighbours = new LinkedList<AObject>();
-		for(int i = Math.max(0, player.cur_pos.x-dov); i <= Math.min(player.cur_pos.x+dov, N_x-1); i++)
+		for(int i = Math.max(0, player.curPos.x-dov); i <= Math.min(player.curPos.x+dov, N_x-1); i++)
 		{
-			for(int j = Math.max(0, player.cur_pos.y-dov); j <= Math.min(player.cur_pos.y+dov, N_y-1); j++)
+			for(int j = Math.max(0, player.curPos.y-dov); j <= Math.min(player.curPos.y+dov, N_y-1); j++)
 			{
 				for(AObject next: objects[i][j])
 				{
-					if(isVisible(player.cur_pos, next.cur_pos, dov) && !next.equals(player))neighbours.add(next);
+					if(isVisible(player.curPos, next.curPos, dov) && !next.equals(player))neighbours.add(next);
 				}
 			}
 		}
@@ -368,7 +368,7 @@ public class Field
 				if(objects[i][j].contains(ao))
 				{
 					p = new Point(i, j);
-					ao.cur_pos = p;
+					ao.curPos = p;
 				}
 			}
 		}

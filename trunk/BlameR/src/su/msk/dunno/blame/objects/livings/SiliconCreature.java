@@ -5,6 +5,9 @@ import su.msk.dunno.blame.decisions.Move;
 import su.msk.dunno.blame.map.Field;
 import su.msk.dunno.blame.map.path.PathFinder;
 import su.msk.dunno.blame.map.path.astar.AStarPathFinder;
+import su.msk.dunno.blame.objects.items.ImpAcid;
+import su.msk.dunno.blame.objects.items.ImpAcidRes;
+import su.msk.dunno.blame.objects.items.SiliconCorpse;
 import su.msk.dunno.blame.prototypes.ADecision;
 import su.msk.dunno.blame.prototypes.ALiving;
 import su.msk.dunno.blame.prototypes.AObject;
@@ -35,6 +38,15 @@ public class SiliconCreature extends ALiving
 		setStat("Health", 20);
 		setStat("Speed", 3);	// lower the parameter - faster mob
 	}
+	
+	@Override protected void initItemDrop() 
+	{
+		mustBeDropped.add(new SiliconCorpse(new Point(0,0)));
+		
+		itemProbabilities = new StateMap[2];
+		itemProbabilities[0] = new StateMap("Probability", 50).putObject("Item", new ImpAcid(new Point(0,0)));
+		itemProbabilities[1] = new StateMap("Probability", 50).putObject("Item", new ImpAcidRes(new Point(0,0)));
+	}
 
 	@Override public ADecision livingAI() 
 	{
@@ -43,8 +55,8 @@ public class SiliconCreature extends ALiving
 		{
 			if(isEnemy(ao) || ao.isEnemy(this))	// attack sequence
 			{
-				minDist = Math.min(this.cur_pos.getDist2(ao.cur_pos), minDist);
-				int dir = field.getDirection(cur_pos, ao.cur_pos);
+				minDist = Math.min(this.curPos.getDist2(ao.curPos), minDist);
+				int dir = field.getDirection(curPos, ao.curPos);
 				if(this.isEnemyAtDir(dir))return new MeleeAttack(this, dir)/*null*/;
 				else  
 				{
@@ -97,9 +109,10 @@ public class SiliconCreature extends ALiving
 		return Color.CYAN;
 	}
 	
-	@Override public void changeState(ALiving changer, StateMap args)
+	@Override public void changeState(ALiving changer, StateMap effects)
 	{
-		if(args.containsKey("MindHack"))
+		super.changeState(changer, effects);
+		if(effects.containsKey("MindHack"))
 		{
 			mind.process();
 			if(isNearPlayer())Messages.instance().addPropMessage("living.mindhack", getName());

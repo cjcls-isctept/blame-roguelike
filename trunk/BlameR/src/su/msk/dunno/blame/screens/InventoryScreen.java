@@ -103,7 +103,7 @@ public class InventoryScreen implements IScreen
 	public void removeItem(AObject o)
 	{
 		items.remove(o);
-		field.addObject(owner.cur_pos, o);
+		field.addObject(owner.curPos, o);
 	}
 	
 	public boolean isFull()

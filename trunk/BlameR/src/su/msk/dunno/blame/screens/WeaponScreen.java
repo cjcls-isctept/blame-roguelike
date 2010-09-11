@@ -8,11 +8,10 @@ import org.lwjgl.opengl.GL11;
 
 import su.msk.dunno.blame.decisions.Drop;
 import su.msk.dunno.blame.main.Blame;
-import su.msk.dunno.blame.objects.items.ImpBio;
-import su.msk.dunno.blame.objects.items.ImpLaser;
-import su.msk.dunno.blame.objects.items.ImpEnergy;
-import su.msk.dunno.blame.objects.items.ImpMind;
 import su.msk.dunno.blame.objects.items.ImpAcid;
+import su.msk.dunno.blame.objects.items.ImpBio;
+import su.msk.dunno.blame.objects.items.ImpEnergy;
+import su.msk.dunno.blame.objects.items.ImpLaser;
 import su.msk.dunno.blame.objects.items.ImpSocketExtender;
 import su.msk.dunno.blame.objects.symbols.EmptySpace;
 import su.msk.dunno.blame.objects.symbols.MinorSelector;
@@ -95,8 +94,8 @@ public class WeaponScreen implements IScreen
 		if(isSelectSocket)
 		{
 			k -= 15;
-			TrueTypeFont.instance().drawString(weaponView[selector.cur_pos.x][selector.cur_pos.y].getName(), 20, k, 
-										 	   weaponView[selector.cur_pos.x][selector.cur_pos.y].getColor());
+			TrueTypeFont.instance().drawString(weaponView[selector.curPos.x][selector.curPos.y].getName(), 20, k, 
+										 	   weaponView[selector.curPos.x][selector.curPos.y].getColor());
 		}
 		Messages.instance().showMessages();
 		GL11.glTranslatef((Blame.width-800)/2, (Blame.height-600)/2, 0.0f);
@@ -115,8 +114,8 @@ public class WeaponScreen implements IScreen
 		if(isSelectSocket)
 		{
 			MyFont.instance().drawDisplayList(selector.getSymbol(), 
-			 								  selector.cur_pos.x*100*3/4, 
-			 								  selector.cur_pos.y*100, 
+			 								  selector.curPos.x*100*3/4, 
+			 								  selector.curPos.y*100, 
 			 								  selector.getColor());
 		}
 		
@@ -152,7 +151,7 @@ public class WeaponScreen implements IScreen
 	private void addEffect(StateMap container, String effect, AObject socket)
 	{
 		float toAdd = socket.getState().getFloat(effect);
-		int sameImps = sameImpsNear(socket, socket.cur_pos, null);
+		int sameImps = sameImpsNear(socket, socket.curPos, null);
 		if(container.containsKey(effect))
 		{
 			float value = container.getFloat(effect) + toAdd;
@@ -178,9 +177,15 @@ public class WeaponScreen implements IScreen
 		}
 	}
 	
-	public float getModifier(String modifierName)
+	public int getEffect(String effectName)
 	{
-		if(modifiers.containsKey(modifierName)) return modifiers.getFloat(modifierName);
+		if(effects.containsKey(effectName)) return effects.getInt(effectName);
+		else return 0;
+	}
+	
+	public int getModifier(String modifierName)
+	{
+		if(modifiers.containsKey(modifierName)) return modifiers.getInt(modifierName);
 		else return 0;
 	}
 	
@@ -188,7 +193,7 @@ public class WeaponScreen implements IScreen
 	{
 		if(energy - 1 > 0)
 		{
-			energy -= 1;
+			energy -= Math.max(getDamage()/10, 1);
 			return effects;
 		}
 		else return null;
@@ -204,6 +209,14 @@ public class WeaponScreen implements IScreen
 		return (int)energy+"/"+(int)maxEnergy;
 	}
 	
+	public int getDamage()
+	{
+		return (int)(effects.getFloat("AcidDamage") + 
+					 effects.getFloat("BioDamage") +
+					 effects.getFloat("ElectroDamage") +
+					 effects.getFloat("LaserDamage"));
+	}
+	
 	public void energyRefill()
 	{
 		if(energy + energy_fill_rate < maxEnergy)energy += energy_fill_rate;
@@ -212,9 +225,9 @@ public class WeaponScreen implements IScreen
 	
 	public void addImp(AObject ao)
 	{
-		ao.cur_pos = selector.cur_pos;
+		ao.curPos = selector.curPos;
 		sockets.add(ao);
-		weaponView[selector.cur_pos.x][selector.cur_pos.y] = ao;
+		weaponView[selector.curPos.x][selector.curPos.y] = ao;
 		if(ao.getState().containsKey("Extender"))
 		{
 			addNewSockets(ao);
@@ -224,11 +237,11 @@ public class WeaponScreen implements IScreen
 	
 	private void addNewSockets(AObject ao) 
 	{
-		for(int i = Math.max(0, ao.cur_pos.x-1); i <= Math.min(weaponView.length-1, ao.cur_pos.x+1); i++)
+		for(int i = Math.max(0, ao.curPos.x-1); i <= Math.min(weaponView.length-1, ao.curPos.x+1); i++)
 		{
-			for(int j = Math.max(0, ao.cur_pos.y-1); j <= Math.min(weaponView[0].length-1, ao.cur_pos.y+1); j++)
+			for(int j = Math.max(0, ao.curPos.y-1); j <= Math.min(weaponView[0].length-1, ao.curPos.y+1); j++)
 			{
-				if("Empty".equals(weaponView[i][j].getName()) && !isRestrictedPlace(i, j) && !isDiagonal(ao.cur_pos, new Point(i,j)))
+				if("Empty".equals(weaponView[i][j].getName()) && !isRestrictedPlace(i, j) && !isDiagonal(ao.curPos, new Point(i,j)))
 				{
 					weaponView[i][j] = new SocketSymbol(i,j);
 				}
@@ -254,7 +267,7 @@ public class WeaponScreen implements IScreen
 	public boolean removeImp(AObject socket)
 	{
 		sockets.remove(socket);
-		weaponView[socket.cur_pos.x][socket.cur_pos.y] = new SocketSymbol(socket.cur_pos);
+		weaponView[socket.curPos.x][socket.curPos.y] = new SocketSymbol(socket.curPos);
 		calculateEffects();
 		if(socket.getState().containsKey("Extender"))
 		{			
@@ -275,9 +288,9 @@ public class WeaponScreen implements IScreen
 
 	private void removeSockets(AObject ao) 
 	{
-		for(int i = Math.max(0, ao.cur_pos.x-1); i <= Math.min(weaponView.length-1, ao.cur_pos.x+1); i++)
+		for(int i = Math.max(0, ao.curPos.x-1); i <= Math.min(weaponView.length-1, ao.curPos.x+1); i++)
 		{
-			for(int j = Math.max(0, ao.cur_pos.y-1); j <= Math.min(weaponView[0].length-1, ao.cur_pos.y+1); j++)
+			for(int j = Math.max(0, ao.curPos.y-1); j <= Math.min(weaponView[0].length-1, ao.curPos.y+1); j++)
 			{
 				if("SocketPlace".equals(weaponView[i][j].getName()))
 				{
@@ -297,10 +310,10 @@ public class WeaponScreen implements IScreen
 	
 	private int sameImpsNear(AObject ao, Point initP, AObject prev)
 	{
-		if(ao.cur_pos.equals(initP) && prev != null)return 0;	// prevents circularity
+		if(ao.curPos.equals(initP) && prev != null)return 0;	// prevents circularity
 		int num = 0;
-		int x = ao.cur_pos.x;
-		int y = ao.cur_pos.y;
+		int x = ao.curPos.x;
+		int y = ao.curPos.y;
 		if(x < weapon_width-1 && weaponView[x+1][y].getName().equals(ao.getName()) && (prev == null || !weaponView[x+1][y].equals(prev)))
 		{
 			num++;
@@ -327,8 +340,8 @@ public class WeaponScreen implements IScreen
 	private boolean noBasePartsNear(AObject ao, AObject prev)
 	{
 		boolean b = true;
-		int x = ao.cur_pos.x;
-		int y = ao.cur_pos.y;
+		int x = ao.curPos.x;
+		int y = ao.curPos.y;
 		if(x < weapon_width-1 && (prev == null || !weaponView[x+1][y].equals(prev)) && true)
 		{
 			if("Weapon Sceleton".equals(weaponView[x+1][y].getName()))return false;
@@ -396,19 +409,19 @@ public class WeaponScreen implements IScreen
 		Point p;
 		int rand;
 		AObject ao;
-		p = getRandomFreeSocket();
+		/*p = getRandomFreeSocket();
 		if(p != null)
 		{
 			selector.cur_pos = p;
 			addImp(new ImpMind(p));
-		}
+		}*/
 		for(int i = 0; i < amount-1; i++)
 		{
 			p = getRandomFreeSocket();
 			if(p != null)
 			{
 				rand = (int)(Math.random()*5);
-				selector.cur_pos = p;
+				selector.curPos = p;
 				switch(rand)
 				{
 				case 0: ao = new ImpBio(p); addImp(ao); continue;
@@ -451,6 +464,11 @@ public class WeaponScreen implements IScreen
 		}
 		return null;
 	}
+	
+	private boolean isFreeSocket(Point p)
+	{
+		return "SocketPlace".equalsIgnoreCase(weaponView[p.x][p.y].getName());
+	}
 		
 	private void initEvents()
 	{
@@ -458,9 +476,9 @@ public class WeaponScreen implements IScreen
         {
         	public void onKeyDown()
         	{
-        		if(selector.cur_pos.x < weaponView.length-1 && selector.cur_pos.y < weaponView[0].length-1)
+        		if(selector.curPos.x < weaponView.length-1 && selector.curPos.y < weaponView[0].length-1)
         		{
-        			selector.cur_pos = selector.cur_pos.plus(1,1);
+        			selector.curPos = selector.curPos.plus(1,1);
         			isSelectSocket = true;
         		}
         	}
@@ -469,9 +487,9 @@ public class WeaponScreen implements IScreen
         {
         	public void onKeyDown()
         	{
-        		if(selector.cur_pos.y < weaponView[0].length-1)
+        		if(selector.curPos.y < weaponView[0].length-1)
         		{
-        			selector.cur_pos = selector.cur_pos.plus(0,1);
+        			selector.curPos = selector.curPos.plus(0,1);
         			isSelectSocket = true;
         		}
         	}
@@ -480,9 +498,9 @@ public class WeaponScreen implements IScreen
         {
         	public void onKeyDown()
         	{
-        		if(selector.cur_pos.y < weaponView[0].length-1)
+        		if(selector.curPos.y < weaponView[0].length-1)
         		{
-        			selector.cur_pos = selector.cur_pos.plus(0,1);
+        			selector.curPos = selector.curPos.plus(0,1);
         			isSelectSocket = true;
         		}
         	}
@@ -491,9 +509,9 @@ public class WeaponScreen implements IScreen
         {
         	public void onKeyDown()
         	{
-        		if(selector.cur_pos.x > 0 && selector.cur_pos.y < weaponView[0].length-1)
+        		if(selector.curPos.x > 0 && selector.curPos.y < weaponView[0].length-1)
         		{
-        			selector.cur_pos = selector.cur_pos.plus(-1,1);
+        			selector.curPos = selector.curPos.plus(-1,1);
         			isSelectSocket = true;
         		}
         	}
@@ -502,9 +520,9 @@ public class WeaponScreen implements IScreen
         {
         	public void onKeyDown()
         	{
-        		if(selector.cur_pos.x < weaponView.length-1)
+        		if(selector.curPos.x < weaponView.length-1)
         		{
-        			selector.cur_pos = selector.cur_pos.plus(1,0);
+        			selector.curPos = selector.curPos.plus(1,0);
         			isSelectSocket = true;
         		}
         	}
@@ -513,9 +531,9 @@ public class WeaponScreen implements IScreen
         {
         	public void onKeyDown()
         	{
-        		if(selector.cur_pos.x < weaponView.length-1)
+        		if(selector.curPos.x < weaponView.length-1)
         		{
-        			selector.cur_pos = selector.cur_pos.plus(1,0);
+        			selector.curPos = selector.curPos.plus(1,0);
         			isSelectSocket = true;
         		}
         	}
@@ -524,9 +542,9 @@ public class WeaponScreen implements IScreen
         {
         	public void onKeyDown()
         	{
-        		if(selector.cur_pos.x > 0)
+        		if(selector.curPos.x > 0)
         		{
-        			selector.cur_pos = selector.cur_pos.plus(-1,0);
+        			selector.curPos = selector.curPos.plus(-1,0);
         			isSelectSocket = true;
         		}
         	}
@@ -535,9 +553,9 @@ public class WeaponScreen implements IScreen
         {
         	public void onKeyDown()
         	{
-        		if(selector.cur_pos.x > 0)
+        		if(selector.curPos.x > 0)
         		{
-        			selector.cur_pos = selector.cur_pos.plus(-1,0);
+        			selector.curPos = selector.curPos.plus(-1,0);
         			isSelectSocket = true;
         		}
         	}
@@ -546,9 +564,9 @@ public class WeaponScreen implements IScreen
         {
         	public void onKeyDown()
         	{
-        		if(selector.cur_pos.x < weaponView.length-1 && selector.cur_pos.y > 0)
+        		if(selector.curPos.x < weaponView.length-1 && selector.curPos.y > 0)
         		{
-        			selector.cur_pos = selector.cur_pos.plus(1,-1);
+        			selector.curPos = selector.curPos.plus(1,-1);
         			isSelectSocket = true;
         		}
         	}
@@ -557,9 +575,9 @@ public class WeaponScreen implements IScreen
         {
         	public void onKeyDown()
         	{
-        		if(selector.cur_pos.y > 0)
+        		if(selector.curPos.y > 0)
         		{
-        			selector.cur_pos = selector.cur_pos.plus(0,-1);
+        			selector.curPos = selector.curPos.plus(0,-1);
         			isSelectSocket = true;
         		}
         	}
@@ -568,9 +586,9 @@ public class WeaponScreen implements IScreen
         {
         	public void onKeyDown()
         	{
-        		if(selector.cur_pos.y > 0)
+        		if(selector.curPos.y > 0)
         		{
-        			selector.cur_pos = selector.cur_pos.plus(0,-1);
+        			selector.curPos = selector.curPos.plus(0,-1);
         			isSelectSocket = true;
         		}
         	}
@@ -579,9 +597,9 @@ public class WeaponScreen implements IScreen
         {
         	public void onKeyDown()
         	{
-        		if(selector.cur_pos.x > 0 && selector.cur_pos.y > 0)
+        		if(selector.curPos.x > 0 && selector.curPos.y > 0)
         		{
-        			selector.cur_pos = selector.cur_pos.plus(-1,-1);
+        			selector.curPos = selector.curPos.plus(-1,-1);
         			isSelectSocket = true;
         		}
         	}
@@ -590,18 +608,18 @@ public class WeaponScreen implements IScreen
         {
         	public void onKeyDown()
         	{
-        		if("SocketPlace".equals(weaponView[selector.cur_pos.x][selector.cur_pos.y].getName()))
+        		if("SocketPlace".equals(weaponView[selector.curPos.x][selector.curPos.y].getName()))
         		{
         			owner.getInventory().setMode(InventoryScreen.TO_SELECT_IMP);
         			owner.getInventory().process();
         		}
-        		else if("Weapon Sceleton".equals(weaponView[selector.cur_pos.x][selector.cur_pos.y].getName()))
+        		else if("Weapon Sceleton".equals(weaponView[selector.curPos.x][selector.curPos.y].getName()))
         		{
         			Messages.instance().addPropMessage("weapon.cantremove");
         		}
-        		else if(weaponView[selector.cur_pos.x][selector.cur_pos.y].getState().containsKey("Imp"))
+        		else if(weaponView[selector.curPos.x][selector.curPos.y].getState().containsKey("Imp"))
         		{
-        			removeImp(weaponView[selector.cur_pos.x][selector.cur_pos.y]);
+        			removeImp(weaponView[selector.curPos.x][selector.curPos.y]);
         		}
         		else
         			Messages.instance().addPropMessage("weapon.nosocket");

@@ -46,7 +46,7 @@ public class GiveOrder extends ADecision implements IScreen
 			orderEvents.checkEvents();
 			GL11.glClear(GL11.GL_COLOR_BUFFER_BIT/* | GL11.GL_DEPTH_BUFFER_BIT*/);		
 			GL11.glLoadIdentity();
-			field.draw(al.cur_pos);
+			field.draw(al.curPos);
 			Blame.getCurrentPlayer().drawStats();
 			int h = 75;
 			TrueTypeFont.instance().drawString("1. Follow me", 20, h, Color.WHITE); h -=15;

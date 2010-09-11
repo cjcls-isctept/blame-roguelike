@@ -20,7 +20,7 @@ public class EmitterShoot extends Shoot
 	{
 		if(args != null)
 		{
-			LinkedList<Point> line = field.getLine(al.cur_pos, shootTo);
+			LinkedList<Point> line = field.getLine(al.curPos, shootTo);
 			if(line.size() > 1)
 			{
 				// animation
@@ -28,13 +28,13 @@ public class EmitterShoot extends Shoot
 				// shooter's kickback
 				/*al.setDecision(new Move(al, field.getDirection(line.get(1), al.cur_pos), field));
 				al.setDecision(new Move(al, field.getDirection(line.get(1), al.cur_pos), field));*/
-				Point old = al.cur_pos;
-				al.cur_pos = al.cur_pos.mul(2).minus(line.get(1));
+				Point old = al.curPos;
+				al.curPos = al.curPos.mul(2).minus(line.get(1));
 				//al.cur_pos = (al.cur_pos.minus(line.get(1))).plus(al.cur_pos);				
 				//al.cur_pos = (al.cur_pos.minus(line.get(1))).mul(2).plus(al.cur_pos);				
 				if(field.changeLocation(al) && al.isNearPlayer())
 				{
-					field.playAnimation(new Moving(actionMoment, field, al, old, al.cur_pos));
+					field.playAnimation(new Moving(actionMoment, field, al, old, al.curPos));
 				}
 			}
 		}

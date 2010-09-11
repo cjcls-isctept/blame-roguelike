@@ -53,7 +53,7 @@ public class SelectTarget extends ADecision implements IScreen
 			selectEvents.checkEvents();
 			GL11.glClear(GL11.GL_COLOR_BUFFER_BIT/* | GL11.GL_DEPTH_BUFFER_BIT*/);		
 			GL11.glLoadIdentity();
-			field.draw(al.cur_pos);
+			field.draw(al.curPos);
 			field.drawLine(selectLine);
 			Blame.getCurrentPlayer().drawStats();
 			Messages.instance().showMessages();
@@ -185,13 +185,13 @@ public class SelectTarget extends ADecision implements IScreen
 				}
 				else
 				{
-					selectPoint = al.cur_pos;
+					selectPoint = al.curPos;
 					LinkedList<AObject> neighbours = al.getMyNeighbours();
 					for(AObject ao: neighbours)
 					{
 						if(al.isEnemy(ao) || ao.isEnemy(al))
 						{
-							selectPoint = ao.cur_pos;
+							selectPoint = ao.curPos;
 							break;
 						}
 					}
@@ -214,13 +214,13 @@ public class SelectTarget extends ADecision implements IScreen
 	protected void buildLine()
 	{
 		clearLine();
-		LinkedList<Point> line = field.getLine(al.cur_pos, selectPoint);
+		LinkedList<Point> line = field.getLine(al.curPos, selectPoint);
 		int i = 0;
 		for(Point p: line)
 		{
 			i++;
 			if(line.size() > 1 && i == 1)continue;	//	skip the first element if amount of elements is more than 1
-			if(field.onArea(p) && field.isMapPointVisible(p, al.cur_pos, al.getDov()))
+			if(field.onArea(p) && field.isMapPointVisible(p, al.curPos, al.getDov()))
 			{
 				MinorSelector s = new MinorSelector(p);
 				selectLine.add(s);
@@ -229,18 +229,18 @@ public class SelectTarget extends ADecision implements IScreen
 		}
 		if(selectLine.size() > 0)
 		{
-			selectLine.set(selectLine.size()-1, new MainSelector(selectLine.getLast().cur_pos));
-			selectPoint = selectLine.getLast().cur_pos;
+			selectLine.set(selectLine.size()-1, new MainSelector(selectLine.getLast().curPos));
+			selectPoint = selectLine.getLast().curPos;
 		}
 		for(AObject s: selectLine)
-			for(AObject ao: field.getObjectsAtPoint(s.cur_pos))
+			for(AObject ao: field.getObjectsAtPoint(s.curPos))
 				ao.preventDraw();
 	}
 	
 	protected void clearLine()
 	{
 		for(AObject s: selectLine)
-			for(AObject ao: field.getObjectsAtPoint(s.cur_pos))
+			for(AObject ao: field.getObjectsAtPoint(s.curPos))
 				ao.allowDraw();
 		selectLine.clear();
 	}
