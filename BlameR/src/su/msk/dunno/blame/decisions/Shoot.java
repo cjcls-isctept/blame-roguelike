@@ -40,17 +40,17 @@ public class Shoot extends ADecision implements ISelector
 		args = al.getWeapon().applyEffects();
 		if(args != null)
 		{
-			LinkedList<Point> line = field.getLine(al.cur_pos, shootTo);
+			LinkedList<Point> line = field.getLine(al.curPos, shootTo);
 			if(line.size() > 1)
 			{
 				// animation
 				field.playAnimation(new BulletFlight(new Bullet(line.getFirst()), actionMoment, line.get(1), shootTo, field));
 				// shooter's kickback
-				Point old = al.cur_pos;
-				al.cur_pos = al.cur_pos.mul(2).minus(line.get(1));
+				Point old = al.curPos;
+				al.curPos = al.curPos.mul(2).minus(line.get(1));
 				if(field.changeLocation(al) && al.isNearPlayer())
 				{
-					field.playAnimation(new Moving(actionMoment, field, al, old, al.cur_pos));
+					field.playAnimation(new Moving(actionMoment, field, al, old, al.curPos));
 				}			
 			}
 			LinkedList<AObject> lao = field.getObjectsAtPoint(shootTo).clone();		// clone() due to some bugs if not...

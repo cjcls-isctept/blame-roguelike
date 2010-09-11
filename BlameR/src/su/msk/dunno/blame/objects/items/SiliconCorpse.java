@@ -1,16 +1,15 @@
 package su.msk.dunno.blame.objects.items;
 
-import su.msk.dunno.blame.prototypes.AItem;
+import su.msk.dunno.blame.prototypes.AObject;
 import su.msk.dunno.blame.support.MyFont;
 import su.msk.dunno.blame.support.Point;
 
 
-public class Corpse extends AItem 
+public class SiliconCorpse extends AObject 
 {
-	public Corpse(Point p) 
+	public SiliconCorpse(Point p) 
 	{
 		super(p);
-		item_properties.putString("Info", "Piece of silicon shit");
 	}
 
 	@Override public String getName() 

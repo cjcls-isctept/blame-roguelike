@@ -29,7 +29,7 @@ public class BulletFlight extends AAnimation
 	@Override public void nextFrame() 
 	{
 		field.removeObject(b);
-		b.cur_pos = line.getFirst();
+		b.curPos = line.getFirst();
 		field.addObject(b);
 		line.removeFirst();
 	}

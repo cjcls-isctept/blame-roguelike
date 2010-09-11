@@ -37,32 +37,32 @@ public class Move extends ADecision
 
 	@Override public void doAction(int actionMoment) 
 	{
-		Point old = al.cur_pos;
+		Point old = al.curPos;
 		switch(dir)
 		{
 		case 0: // rewrite this with plus(int i, int j) from Point class
-			al.cur_pos = new Point(al.cur_pos.x, al.cur_pos.y+1); 
+			al.curPos = new Point(al.curPos.x, al.curPos.y+1); 
 			break;	// up
 		case 1: 
-			al.cur_pos = new Point(al.cur_pos.x-1, al.cur_pos.y); 
+			al.curPos = new Point(al.curPos.x-1, al.curPos.y); 
 			break;	// left
 		case 2: 
-			al.cur_pos = new Point(al.cur_pos.x, al.cur_pos.y-1); 
+			al.curPos = new Point(al.curPos.x, al.curPos.y-1); 
 			break;	// down
 		case 3: 
-			al.cur_pos = new Point(al.cur_pos.x+1, al.cur_pos.y); 
+			al.curPos = new Point(al.curPos.x+1, al.curPos.y); 
 			break;	// right
 		case 4:
-			al.cur_pos = new Point(al.cur_pos.x+1, al.cur_pos.y+1); 
+			al.curPos = new Point(al.curPos.x+1, al.curPos.y+1); 
 			break;	// up/right
 		case 5:
-			al.cur_pos = new Point(al.cur_pos.x-1, al.cur_pos.y+1); 
+			al.curPos = new Point(al.curPos.x-1, al.curPos.y+1); 
 			break;	// up/left
 		case 6:
-			al.cur_pos = new Point(al.cur_pos.x-1, al.cur_pos.y-1); 
+			al.curPos = new Point(al.curPos.x-1, al.curPos.y-1); 
 			break;	// down/left
 		case 7:
-			al.cur_pos = new Point(al.cur_pos.x+1, al.cur_pos.y-1); 
+			al.curPos = new Point(al.curPos.x+1, al.curPos.y-1); 
 			break;	// down/right
 		case 8:
 			//al.cur_pos = new Point(al.cur_pos.x, al.cur_pos.y); 
@@ -82,7 +82,7 @@ public class Move extends ADecision
 			}
 			else if(items.size() > 2) Messages.instance().addMessage(al.getName()+" found several items on the floor");
 			
-			if(!al.isPlayer()) field.playAnimation(new Moving(actionMoment, field, al, old, al.cur_pos));
+			if(!al.isPlayer()) field.playAnimation(new Moving(actionMoment, field, al, old, al.curPos));
 		}
 		wasExecuted = true;				
 	}

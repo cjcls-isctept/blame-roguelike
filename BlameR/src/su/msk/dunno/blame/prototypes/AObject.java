@@ -9,7 +9,7 @@ import su.msk.dunno.blame.support.StateMap;
 
 public abstract class AObject 
 {
-	public Point cur_pos;	// current position
+	public Point curPos;	// current position
 	
 	public boolean wasDrawed/* = true*/;
 	private int preventDrawRequests;
@@ -21,7 +21,7 @@ public abstract class AObject
 	
 	public AObject(Point p)
 	{
-		cur_pos = p;
+		curPos = p;
 	}
 	
 	public abstract int getSymbol();

@@ -45,6 +45,8 @@ public class RebuildStation extends ALiving implements IScreen
 		setStat("Health", 50);
 		setStat("Dov", 2);
 	}
+	
+	@Override protected void initItemDrop() {}
 
 	@Override public Color getColor() 
 	{

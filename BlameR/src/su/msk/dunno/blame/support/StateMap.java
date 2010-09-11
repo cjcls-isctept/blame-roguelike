@@ -46,56 +46,74 @@ public class StateMap
 	}
 	
 
-	public void put(String key) 
+	public StateMap put(String key) 
 	{
 		args.put(key, null);
+		return this;
 	}
 
-	public void putInt(String key, int int_num)
+	public StateMap putInt(String key, int int_num)
 	{
 		args.put(key, new StateData(int_num));
+		return this;
 	}
 	
-	public void putFloat(String key, float float_num)
+	public StateMap putFloat(String key, float float_num)
 	{
 		args.put(key, new StateData(float_num));
+		return this;
 	}
 	
-	public void putString(String key, String message)
+	public StateMap putString(String key, String message)
 	{
 		args.put(key, new StateData(message));
+		return this;
 	}
 	
-	public void putObject(String key, AObject ao)
+	public StateMap putObject(String key, AObject ao)
 	{
 		args.put(key, new StateData(ao));
+		return this;
 	}
 	
-	public void putLiving(String key, ALiving al)
+	public StateMap putLiving(String key, ALiving al)
 	{
 		args.put(key, new StateData(al));
+		return this;
 	}
 	
 	public int getInt(String key)	// args.containsKey(key) unchecked
 	{
-		if(args.get(key).getInt() != 0)return args.get(key).getInt();
-		else if(args.get(key).getFloat() != 0)return (int)args.get(key).getFloat();
-		else return 0;
+		if(args.containsKey(key))
+		{
+			StateData sd = args.get(key);
+			if(sd.getInt() != 0)return sd.getInt();
+			else if(sd.getFloat() != 0)return (int)sd.getFloat();
+		}
+		return 0;
 	}
 	
 	public float getFloat(String key)	// args.containsKey(key) unchecked
 	{
-		if(args.get(key).getFloat() != 0)return args.get(key).getFloat();
-		else if(args.get(key).getInt() != 0)return args.get(key).getInt();
-		else return 0;
+		if(args.containsKey(key))
+		{
+			StateData sd = args.get(key);
+			if(sd.getFloat() != 0)return sd.getFloat();
+			else if(sd.getInt() != 0)return sd.getInt();
+		}		
+		return 0;
 	}
 	
 	public String getString(String key)	// args.containsKey(key) unchecked
 	{
-		if(args.get(key).getString() != null)return args.get(key).getString();
-		else if(args.get(key).getInt() != 0)return args.get(key).getInt()+"";
-		else if(args.get(key).getFloat() != 0)return args.get(key).getFloat()+"";
-		else return "";
+		if(args.containsKey(key))
+		{
+			StateData sd = args.get(key);
+			if(!"".equals(sd.getString()))return sd.getString();
+			else if(sd.getInt() != 0)return sd.getInt()+"";
+			else if(sd.getFloat() != 0)return sd.getFloat()+"";
+		}		
+		return "";
 	}
 	
 	public AObject getObject(String key)
@@ -126,7 +144,7 @@ public class StateMap
 
 class StateData 
 {
-	private int int_num;
+	private int int_num = 0;
 	public StateData(int i)
 	{
 		int_num = i;
@@ -141,7 +159,7 @@ class StateData
 		return this;
 	}
 	
-	private float float_num;
+	private float float_num = 0;
 	public StateData(float f)
 	{
 		float_num = f;
@@ -156,7 +174,7 @@ class StateData
 		return this;
 	}
 	
-	private String message;
+	private String message = "";
 	public StateData(String s)
 	{
 		message = s;
@@ -171,7 +189,7 @@ class StateData
 		return this;
 	}
 	
-	private AObject ao;
+	private AObject ao = null;
 	public StateData(AObject ao)
 	{
 		this.ao = ao;
@@ -186,7 +204,7 @@ class StateData
 		return this;
 	}
 	
-	private ALiving l;
+	private ALiving l = null;
 	public StateData(ALiving al)
 	{
 		this.l = al;

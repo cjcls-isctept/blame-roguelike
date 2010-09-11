@@ -20,7 +20,7 @@ public class EnterStation extends ADecision
 
 	@Override public void doAction(int actionMoment) 
 	{
-		LinkedList<AObject> lao = field.getObjectsAtPoint(al.cur_pos); 
+		LinkedList<AObject> lao = field.getObjectsAtPoint(al.curPos); 
 		for(AObject ao: lao)
 		{
 			if(ao.getState().containsKey("Station"))

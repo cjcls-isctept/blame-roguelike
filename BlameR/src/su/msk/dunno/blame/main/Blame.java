@@ -1,8 +1,6 @@
 package su.msk.dunno.blame.main;
 
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.Properties;
 
 import org.lwjgl.LWJGLException;
@@ -81,7 +79,7 @@ public class Blame
 			killy_point = field.getRandomPos();
 			if(killy_point != null)killy = new Killy(killy_point, field);
 			else continue;
-			cibo_point = field.getRandomPos(killy.cur_pos.plus(-2,2), killy.cur_pos.plus(2,-2));	// generate cibo near killy
+			cibo_point = field.getRandomPos(killy.curPos.plus(-2,2), killy.curPos.plus(2,-2));	// generate cibo near killy
 			if(cibo_point != null)
 			{
 				cibo = new Cibo(cibo_point, field);

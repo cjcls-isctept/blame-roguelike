@@ -1,5 +1,6 @@
 package su.msk.dunno.blame.prototypes;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.ListIterator;
 
@@ -7,11 +8,6 @@ import su.msk.dunno.blame.decisions.Move;
 import su.msk.dunno.blame.main.Blame;
 import su.msk.dunno.blame.map.Field;
 import su.msk.dunno.blame.objects.Livings;
-import su.msk.dunno.blame.objects.items.ImpAcid;
-import su.msk.dunno.blame.objects.items.ImpBio;
-import su.msk.dunno.blame.objects.items.ImpEnergy;
-import su.msk.dunno.blame.objects.items.ImpLaser;
-import su.msk.dunno.blame.objects.items.ImpSocketExtender;
 import su.msk.dunno.blame.screens.InventoryScreen;
 import su.msk.dunno.blame.screens.WeaponScreen;
 import su.msk.dunno.blame.support.Color;
@@ -29,7 +25,7 @@ public abstract class ALiving extends AObject
 	protected WeaponScreen weapon;
 	
 	// previous position: set private to prevent some possibilities "to hack" the system :)
-	protected Point old_pos = cur_pos;	// not anymore :(	
+	protected Point old_pos = curPos;	// not anymore :(	
 	
 	private int lastActionTime;
 	private int actionPeriod;
@@ -41,6 +37,7 @@ public abstract class ALiving extends AObject
 	{
 		super(i, j);
 		initStats();
+		initItemDrop();
 		inventory = new InventoryScreen(this, field);
 		weapon = new WeaponScreen(this);
 		this.field = field;
@@ -56,11 +53,11 @@ public abstract class ALiving extends AObject
 	
 	public void updateOldPos()
 	{//	trying to predict some possible bugs... :3
-		if(!field.getObjectsAtPoint(cur_pos).contains(this))
+		if(!field.getObjectsAtPoint(curPos).contains(this))
 		{
 			field.findObject(this);	// fail. what a dumbass :)
 		}
-		old_pos = cur_pos;
+		old_pos = curPos;
 	}
 	
 	public void nextStep()
@@ -100,24 +97,24 @@ public abstract class ALiving extends AObject
 		switch(dir)
 		{
 		case Move.UP:
-			return field.getObjectsAtPoint(new Point(cur_pos.x, cur_pos.y+1));
+			return field.getObjectsAtPoint(new Point(curPos.x, curPos.y+1));
 		case Move.LEFT: 
-			return field.getObjectsAtPoint(new Point(cur_pos.x-1, cur_pos.y));
+			return field.getObjectsAtPoint(new Point(curPos.x-1, curPos.y));
 		case Move.DOWN: 
-			return field.getObjectsAtPoint(new Point(cur_pos.x, cur_pos.y-1));
+			return field.getObjectsAtPoint(new Point(curPos.x, curPos.y-1));
 		case Move.RIGHT: 
-			return field.getObjectsAtPoint(new Point(cur_pos.x+1, cur_pos.y));
+			return field.getObjectsAtPoint(new Point(curPos.x+1, curPos.y));
 		case Move.UPRIGHT: 
-			return field.getObjectsAtPoint(new Point(cur_pos.x+1, cur_pos.y+1));
+			return field.getObjectsAtPoint(new Point(curPos.x+1, curPos.y+1));
 		case Move.UPLEFT: 
-			return field.getObjectsAtPoint(new Point(cur_pos.x-1, cur_pos.y+1));
+			return field.getObjectsAtPoint(new Point(curPos.x-1, curPos.y+1));
 		case Move.DOWNLEFT: 
-			return field.getObjectsAtPoint(new Point(cur_pos.x-1, cur_pos.y-1));
+			return field.getObjectsAtPoint(new Point(curPos.x-1, curPos.y-1));
 		case Move.DOWNRIGHT: 
-			return field.getObjectsAtPoint(new Point(cur_pos.x+1, cur_pos.y-1));
+			return field.getObjectsAtPoint(new Point(curPos.x+1, curPos.y-1));
 		case Move.STAY:	//will not return this object, only other objects on the point
 			LinkedList<AObject> atPoint = new LinkedList<AObject>();
-			for(AObject ao: field.getObjectsAtPoint(new Point(cur_pos.x, cur_pos.y)))
+			for(AObject ao: field.getObjectsAtPoint(new Point(curPos.x, curPos.y)))
 			{
 				if(!ao.equals(this))atPoint.add(ao);
 			}
@@ -163,17 +160,58 @@ public abstract class ALiving extends AObject
 			if(isNearPlayer())Messages.instance().addPropMessage("living.dead", getName());
 			li.remove();
 			field.removeObject(this);
-			int rand = (int)(Math.random()*5);
-			switch(rand)
-			{
-			case 0: field.addObject(new ImpBio(cur_pos)); break;
-			case 1: field.addObject(new ImpLaser(cur_pos)); break;
-			case 2: field.addObject(new ImpEnergy(cur_pos)); break;
-			case 3: field.addObject(new ImpAcid(cur_pos)); break;
-			case 4: field.addObject(new ImpSocketExtender(cur_pos)); break;			
-			}
+			dropItem();
 		}
 		return isDead;
+	}
+	
+	protected ArrayList<AObject> mustBeDropped = new ArrayList<AObject>();
+	protected StateMap[] itemProbabilities = null;
+	protected abstract void initItemDrop();
+	private int OverallfProbabilitity()
+	{
+		int sum = 0;
+		if(itemProbabilities != null)
+		{
+			for(int i = 0; i < itemProbabilities.length; i++)
+			{
+				sum += itemProbabilities[i].getInt("Probability");
+			}
+		}
+		return sum;
+	}
+	protected void dropItem()
+	{
+		for(AObject item: mustBeDropped)
+		{
+			item.curPos = curPos;
+			field.addObject(item);
+		}
+		if(itemProbabilities != null)
+		{
+			int len = itemProbabilities.length;
+			int attempt = (int)(Math.random()*OverallfProbabilitity());
+			int currentStep = 0;
+			for(int i = 0; i < len-1; i++)
+			{
+				if(attempt >= currentStep && 
+				   attempt < itemProbabilities[i].getInt("Probability")+currentStep)
+				{
+					AObject item = itemProbabilities[i].getObject("Item");
+					item.curPos = curPos;
+					field.addObject(item);
+					return;
+				}
+				currentStep += itemProbabilities[i].getInt("Probability");
+			}
+			if(attempt >= currentStep)
+			{
+				AObject item = itemProbabilities[len-1].getObject("Item");
+				item.curPos = curPos;
+				field.addObject(item);
+				return;
+			}
+		}
 	}
 	
 	@Override public abstract boolean isEnemy(AObject ao);
@@ -255,21 +293,24 @@ public abstract class ALiving extends AObject
 		
 		boolean isCritical = Math.random() <= Math.min(effects.getFloat("Critical"), 50)*0.01f;
 		
-		float damage = (acidDamage - acidDamage*acidResist) + 
-					   (bioDamage - bioDamage*bioResist) + 
-					   (electroDamage - electroDamage*electroResist) + 
-					   (laserDamage - laserDamage*laserResist);
-		decreaseStat("Health", isCritical?damage*2:damage);
+		int damage = (int) ((acidDamage - acidDamage*acidResist) + 	// need to add accuracy modifier
+					   		(bioDamage - bioDamage*bioResist) + 
+					   		(electroDamage - electroDamage*electroResist) + 
+					   		(laserDamage - laserDamage*laserResist)*Math.random());
 		if(damage > 0 && isNearPlayer())
 		{
-			if(!isCritical) Messages.instance().addPropMessage("living.receivedamage", getName(), damage);
-			else Messages.instance().addPropMessage("living.receivedamage", getName(), damage); // add different message!!
+			decreaseStat("Health", isCritical?damage*2:damage);
+			if(isNearPlayer())
+			{
+				if(!isCritical) Messages.instance().addPropMessage("living.receivedamage", getName(), damage);
+				else Messages.instance().addPropMessage("living.receivedamage", getName(), damage); // add different message!!
+			}
 		}
 		
 		boolean isKicked = Math.random() <= Math.min(effects.getFloat("Kick"), 33)*0.01f;
 		if(isKicked)
 		{
-			setDecision(new Move(this, field.getDirection(changer.cur_pos, cur_pos), field));
+			setDecision(new Move(this, field.getDirection(changer.curPos, curPos), field));
 			if(isNearPlayer())Messages.instance().addPropMessage("living.kickback", getName());
 		}
 	}
