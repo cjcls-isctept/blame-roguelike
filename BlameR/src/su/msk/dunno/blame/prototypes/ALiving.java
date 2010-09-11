@@ -190,7 +190,7 @@ public abstract class ALiving extends AObject
 		if(itemProbabilities != null)
 		{
 			int len = itemProbabilities.length;
-			int attempt = (int)(Math.random()*OverallfProbabilitity());
+			int attempt = (int)(Math.random()*100);
 			int currentStep = 0;
 			for(int i = 0; i < len-1; i++)
 			{
@@ -204,7 +204,7 @@ public abstract class ALiving extends AObject
 				}
 				currentStep += itemProbabilities[i].getInt("Probability");
 			}
-			if(attempt >= currentStep)
+			if(attempt >= currentStep && attempt < itemProbabilities[len-1].getInt("Probability")+currentStep)
 			{
 				AObject item = itemProbabilities[len-1].getObject("Item");
 				item.curPos = curPos;
@@ -216,7 +216,10 @@ public abstract class ALiving extends AObject
 	
 	@Override public abstract boolean isEnemy(AObject ao);
 	
-	public abstract boolean isPlayer();
+	public boolean isPlayer()
+	{
+		return false;
+	}
 	
 	@Override public boolean getPassability() // all livings are impossible to pass through
 	{
@@ -308,10 +311,20 @@ public abstract class ALiving extends AObject
 		}
 		
 		boolean isKicked = Math.random() <= Math.min(effects.getFloat("Kick"), 33)*0.01f;
-		if(isKicked)
+		if(isKicked && isMovable())
 		{
 			setDecision(new Move(this, field.getDirection(changer.curPos, curPos), field));
-			if(isNearPlayer())Messages.instance().addPropMessage("living.kickback", getName());
+			if(isNearPlayer()) Messages.instance().addPropMessage("living.kickback", getName());
 		}
+	}
+
+	public boolean isMovable() // stations cannot move
+	{
+		return true;
+	}
+
+	public Color getDamageColor() 
+	{
+		return weapon.getDamageColor();
 	}
 }

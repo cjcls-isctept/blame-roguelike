@@ -45,7 +45,7 @@ public class SiliconCreature extends ALiving
 		
 		itemProbabilities = new StateMap[2];
 		itemProbabilities[0] = new StateMap("Probability", 50).putObject("Item", new ImpAcid(new Point(0,0)));
-		itemProbabilities[1] = new StateMap("Probability", 50).putObject("Item", new ImpAcidRes(new Point(0,0)));
+		itemProbabilities[1] = new StateMap("Probability", 10).putObject("Item", new ImpAcidRes(new Point(0,0)));
 	}
 
 	@Override public ADecision livingAI() 
@@ -126,11 +126,7 @@ public class SiliconCreature extends ALiving
 
 	@Override public boolean isEnemy(AObject ao) 
 	{
-		return ao.getState().containsKey("Player");
-	}
-
-	@Override public boolean isPlayer() 
-	{
-		return false;
+		StateMap sm = ao.getState();
+		return sm.containsKey("Player") || (sm.containsKey("Station") && !sm.containsKey("Corrupted"));
 	}
 }

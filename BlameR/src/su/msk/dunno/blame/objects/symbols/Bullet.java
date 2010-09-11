@@ -7,9 +7,11 @@ import su.msk.dunno.blame.support.Point;
 
 public class Bullet extends AObject
 {
-	public Bullet(Point p) 
+	private Color color;
+	public Bullet(Point p, Color c) 
 	{
 		super(p);
+		color = c;
 		setStat("Dov", 3);
 	}
 
@@ -35,7 +37,7 @@ public class Bullet extends AObject
 
 	@Override public Color getColor()
 	{
-		return Color.YELLOW;
+		return color;
 	}
 	
 	@Override public boolean isLightSource()

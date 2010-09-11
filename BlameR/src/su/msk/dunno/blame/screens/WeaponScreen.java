@@ -634,4 +634,14 @@ public class WeaponScreen implements IScreen
         	}
         });
 	}
+
+	public Color getDamageColor() 
+	{
+		float max_damage_type = Math.max(Math.max(effects.getFloat("AcidDamage"), effects.getFloat("BioDamage")), 
+										 Math.max(effects.getFloat("ElectroDamage"), effects.getFloat("LaserDamage")));
+		if(max_damage_type == effects.getFloat("AcidDamage")) return Color.CYAN;
+		else if(max_damage_type == effects.getFloat("BioDamage")) return Color.GREEN;
+		else if(max_damage_type == effects.getFloat("ElectroDamage")) return Color.BLUE_VIOLET;
+		else return Color.PURPLE;
+	}
 }
