@@ -56,14 +56,10 @@ public class RebuildStation extends ALiving implements IScreen
 
 	@Override public boolean isEnemy(AObject ao) 
 	{
-		if(ao.getState().containsKey("Player"))return isCorrupted;
-		else if(ao.getState().containsKey("SiliconCreature"))return !isCorrupted;
+		StateMap sm = ao.getState();
+		if(sm.containsKey("Player")) return isCorrupted;
+		else if(sm.containsKey("SiliconCreature")) return !isCorrupted;
 		else return false;
-	}
-
-	@Override public boolean isPlayer() 
-	{
-		return false;
 	}
 
 	@Override public ADecision livingAI() 
@@ -112,28 +108,22 @@ public class RebuildStation extends ALiving implements IScreen
 	@Override public StateMap getState()
 	{
 		StateMap sm = new StateMap("Station");
-		if(isCorrupted)sm.put("Corrupted");
+		if(isCorrupted) sm.put("Corrupted");
 		return sm;
 	}
 	
-	@Override public void changeState(ALiving changer, StateMap args)
+	@Override public void changeState(ALiving changer, StateMap effects)
 	{
-		if(args.containsKey("Enter"))
+		super.changeState(changer, effects);
+		if(effects.containsKey("Enter"))
 		{
 			if(!isCorrupted)
 			{
-				player = Blame.getPlayer(args.getString("Enter"));
+				player = Blame.getPlayer(effects.getString("Enter"));
 				Messages.instance().clear();
 				process();
 			}
-			else if(isNearPlayer())Messages.instance().addMessage("Cannot enter the corrupted station!");
-		}
-		if(args.containsKey("Damage"))
-		{
-			int d = (int)(Math.random()*args.getInt("Damage"));
-			decreaseStat("Health", d);
-			if(isNearPlayer())Messages.instance().addPropMessage("living.receivedamage", getName(), d+"");
-			
+			else if(isNearPlayer()) Messages.instance().addMessage("Cannot enter the corrupted station!");
 		}
 	}
 	
@@ -143,7 +133,11 @@ public class RebuildStation extends ALiving implements IScreen
 		{
 			isCorrupted = !isCorrupted;
 			setStat("Health", 50);
-			if(isNearPlayer())Messages.instance().addMessage(getName()+" was liberated");
+			if(isNearPlayer())
+			{
+				if(!isCorrupted) Messages.instance().addMessage(getName()+" was liberated");
+				else Messages.instance().addMessage(getName()+" was corrupted");
+			}
 		}
 		return false;
 	}
@@ -181,11 +175,16 @@ public class RebuildStation extends ALiving implements IScreen
 		/*TrueTypeFont.instance().drawString(Messages.instance().getPropMessage("rebuild.player.infection", player.getName(), player.getInfectionLevel()), 20, k, Color.WHITE); k-=20; k-=20;*/
 		TrueTypeFont.instance().drawString("1. Improve health by 10", 20, k, Color.WHITE); k-=20;
 		TrueTypeFont.instance().drawString("2. Improve health by 1", 20, k, Color.WHITE); k-=20;
-		TrueTypeFont.instance().drawString("3. Reduce infection level by 10", 20, k, Color.WHITE); k-=20;
-		TrueTypeFont.instance().drawString("4. Reduce infection level by 1", 20, k, Color.WHITE); k-=20;
+		/*TrueTypeFont.instance().drawString("3. Reduce infection level by 10", 20, k, Color.WHITE); k-=20;
+		TrueTypeFont.instance().drawString("4. Reduce infection level by 1", 20, k, Color.WHITE); k-=20;*/
 		TrueTypeFont.instance().drawString("5. Exit", 20, k, Color.WHITE); k-=20;
 		
 		Messages.instance().showMessages();
+	}
+	
+	@Override public boolean isMovable()  // stations cannot move
+	{
+		return false;
 	}
 	
 	private void initEvents() 
@@ -218,7 +217,7 @@ public class RebuildStation extends ALiving implements IScreen
 				else Messages.instance().addPropMessage("rebuild.nomixture");
 			}
 		});
-		events.addListener(Keyboard.KEY_3, new KeyListener(0)
+		/*events.addListener(Keyboard.KEY_3, new KeyListener(0)
 		{
 			public void onKeyDown()
 			{
@@ -245,7 +244,7 @@ public class RebuildStation extends ALiving implements IScreen
 				}
 				else Messages.instance().addPropMessage("rebuild.nomixture");
 			}
-		});
+		});*/
 		events.addListener(Keyboard.KEY_5, new KeyListener(0)
 		{
 			public void onKeyDown()

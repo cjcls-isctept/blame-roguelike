@@ -44,7 +44,7 @@ public class Shoot extends ADecision implements ISelector
 			if(line.size() > 1)
 			{
 				// animation
-				field.playAnimation(new BulletFlight(new Bullet(line.getFirst()), actionMoment, line.get(1), shootTo, field));
+				field.playAnimation(new BulletFlight(new Bullet(line.getFirst(), al.getDamageColor()), actionMoment, line.get(1), shootTo, field));
 				// shooter's kickback
 				Point old = al.curPos;
 				al.curPos = al.curPos.mul(2).minus(line.get(1));

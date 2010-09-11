@@ -36,7 +36,9 @@ public class Livings
 	private Killy killy;
 	private Cibo cibo;
 	
+	// mob statistics
 	private int numSiliconCreatures = 0;
+	private int numCorruptedStations = 0;
 	
 	public void addField(Field field)
 	{
@@ -99,18 +101,23 @@ public class Livings
 			}
 			
 			// update monsters
-			numSiliconCreatures = 0;
+			int numSiliconCreatures_new = 0;
+			int numCorruptedStations_new = 0;
 			for(ListIterator<ALiving> li = livings.listIterator(); li.hasNext();)
 			{
 				ALiving al = li.next();
 				if(!al.checkStatus(li))
 				{
-					if(al.getState().containsKey("SiliconCreature")) numSiliconCreatures++;
+					if(al.getState().containsKey("SiliconCreature")) numSiliconCreatures_new++;
+					if(al.getState().containsKey("Corrupted")) numCorruptedStations_new++;
 					
 					al.nextStep();
 					al.updateOldPos();
 				}
 			}
+			
+			numSiliconCreatures = numSiliconCreatures_new;
+			numCorruptedStations = numCorruptedStations_new;
 			time++;
 		}
 	}
