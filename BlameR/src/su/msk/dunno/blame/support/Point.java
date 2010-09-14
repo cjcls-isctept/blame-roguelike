@@ -57,4 +57,9 @@ public class Point
 		x = point.x;
 		y = point.y;
 	}
+	
+	@Override public String toString()
+	{
+		return x+" : "+y;
+	}
 }

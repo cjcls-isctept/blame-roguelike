@@ -31,8 +31,8 @@ import su.msk.dunno.blame.support.listeners.KeyListener;
 
 public class WeaponScreen implements IScreen
 {
-	private int weapon_width = 52;
-	private int weapon_height = 32;
+	private int weapon_width = 40;
+	private int weapon_height = 20;
 	
 	private ALiving owner;
 	private EventManager weaponEvents = new EventManager();
@@ -44,8 +44,10 @@ public class WeaponScreen implements IScreen
 	private StateMap bonuses = new StateMap();
 	
 	private MinorSelector selector = new MinorSelector(0, 0);
-	private boolean isSelectSocket;	
+	private boolean isSelectSocket;
+	
 	private boolean isWeaponOpen;
+	private boolean isShowWeapon;	// if false - show weapon stats
 	
 	private float maxEnergy;
 	private float energy;
@@ -58,16 +60,17 @@ public class WeaponScreen implements IScreen
 		owner = l;
 		initEvents();
 		initWeaponView();
-		fillWeapon(11);
+		//fillWeapon(11);
 	}
 	
 	public void process()
 	{
 		Messages.instance().clear();
 		isWeaponOpen = true;
+		isShowWeapon = false;
 		while(isWeaponOpen)
 		{
-			weaponEvents.checkEvents();
+			weaponEvents.checkEvents();			
 			showWeapon();
 		}
 	}
@@ -78,45 +81,52 @@ public class WeaponScreen implements IScreen
 		GL11.glLoadIdentity();
 		
 		TrueTypeFont.instance().drawString(owner.getName()+"'s weapon", 20, Blame.height-25, Color.WHITE);
-		int k = Blame.height-40;
-		for(String key: effects.getKeys())
+		int k = Blame.height-55;
+		
+		if(isShowWeapon)
 		{
-			TrueTypeFont.instance().drawString(key+": "+effects.getInt(key)+
-											   (bonuses.containsKey(key)?" (+"+(int)(bonuses.getFloat(key)/effects.getFloat(key)*100)+"% bonus)":""), 
-											   20, k, Color.GREEN); k -= 15;
-		}
-		for(String key: modifiers.getKeys())
-		{
-			TrueTypeFont.instance().drawString(key+": "+modifiers.getInt(key)+
-											   (bonuses.containsKey(key)?" (+"+(int)(bonuses.getFloat(key)/modifiers.getFloat(key)*100)+"% bonus)":""), 
-											   20, k, Color.GREEN); k -= 15;
-		}
-		if(isSelectSocket)
-		{
-			k -= 15;
-			TrueTypeFont.instance().drawString(weaponView[selector.curPos.x][selector.curPos.y].getName(), 20, k, 
-										 	   weaponView[selector.curPos.x][selector.curPos.y].getColor());
-		}
-		Messages.instance().showMessages();
-		GL11.glTranslatef((Blame.width-800)/2, (Blame.height-600)/2, 0.0f);
-		GL11.glScalef(0.2f, 0.2f, 1.0f);
-		for(int i = 0; i < weapon_width; i++)
-		{
-			for(int j = 0; j < weapon_height; j++)
+			if(isSelectSocket)
 			{
-				if(!"Empty".equals(weaponView[i][j].getName()) && 
-				  (!"SocketPlace".equals(weaponView[i][j].getName()) || isSelectSocket))
-					MyFont.instance().drawDisplayList(/*isSelectSocket?*/weaponView[i][j].getSymbol()/*:MyFont.WEAPONBASE*/, 
-													  i*100*3/4, j*100, 
-											   		  weaponView[i][j].getColor());
+				k -= 15;
+				TrueTypeFont.instance().drawString(weaponView[selector.curPos.x][selector.curPos.y].getName(), 20, k, 
+											 	   weaponView[selector.curPos.x][selector.curPos.y].getColor());
+			}		
+			GL11.glTranslatef((Blame.width - weapon_width*100*3/4/5)/2, (Blame.height - weapon_height*100/5)/2, 0.0f);
+			GL11.glScalef(0.2f, 0.2f, 1.0f);
+			for(int i = 0; i < weapon_width; i++)
+			{
+				for(int j = 0; j < weapon_height; j++)
+				{
+					if(!"Empty".equals(weaponView[i][j].getName()) && 
+					  (!"SocketPlace".equals(weaponView[i][j].getName()) || isSelectSocket))
+						MyFont.instance().drawDisplayList(/*isSelectSocket?*/weaponView[i][j].getSymbol()/*:MyFont.WEAPONBASE*/, 
+														  i*100*3/4, j*100, 
+												   		  weaponView[i][j].getColor());
+				}
 			}
+			if(isSelectSocket)
+			{
+				MyFont.instance().drawDisplayList(selector.getSymbol(), 
+				 								  selector.curPos.x*100*3/4, 
+				 								  selector.curPos.y*100, 
+				 								  selector.getColor());
+			}
+			Messages.instance().showMessages();
 		}
-		if(isSelectSocket)
+		else
 		{
-			MyFont.instance().drawDisplayList(selector.getSymbol(), 
-			 								  selector.curPos.x*100*3/4, 
-			 								  selector.curPos.y*100, 
-			 								  selector.getColor());
+			for(String key: effects.getKeys())
+			{
+				TrueTypeFont.instance().drawString(key+": "+effects.getInt(key)+
+												   (bonuses.containsKey(key)?" (+"+(int)(bonuses.getFloat(key)/effects.getFloat(key)*100)+"% bonus)":""), 
+												   20, k, effects.getColor(key)); k -= 15;
+			}
+			for(String key: modifiers.getKeys())
+			{
+				TrueTypeFont.instance().drawString(key+": "+modifiers.getInt(key)+
+												   (bonuses.containsKey(key)?" (+"+(int)(bonuses.getFloat(key)/modifiers.getFloat(key)*100)+"% bonus)":""), 
+												   20, k, modifiers.getColor(key)); k -= 15;
+			}
 		}
 		
 		Display.sync(Blame.framerate);
@@ -142,9 +152,9 @@ public class WeaponScreen implements IScreen
 			}
 		}
 		
-		if(modifiers.containsKey("Energy"))maxEnergy = modifiers.getFloat("Energy");
+		if(modifiers.containsKey("Energy")) maxEnergy = modifiers.getFloat("Energy");
 		else maxEnergy = 0;
-		if(energy > maxEnergy)energy = maxEnergy;
+		if(energy > maxEnergy) energy = maxEnergy;
 		energy_fill_rate = maxEnergy/20.0f;
 	}
 	
@@ -165,15 +175,16 @@ public class WeaponScreen implements IScreen
 			}
 			else container.putFloat(effect, value);
 		}
-		else 
+		else
 		{
 			if(sameImps > 0)
 			{
 				container.putFloat(effect, (toAdd+sameImps*toAdd/10.0f));
-				if(bonuses.containsKey(effect))bonuses.putFloat(effect, (bonuses.getFloat(effect)+sameImps*toAdd/10.0f));
-				else bonuses.putFloat(effect, sameImps*toAdd/10.0f);
+				if(bonuses.containsKey(effect)) bonuses.putFloat(effect, (bonuses.getFloat(effect)+sameImps*toAdd/10.0f));
+				else bonuses.putFloat(effect, sameImps*toAdd/10.0f);			
 			}
 			else container.putFloat(effect, toAdd);
+			container.putColor(effect, socket.getColor());
 		}
 	}
 	
@@ -225,7 +236,27 @@ public class WeaponScreen implements IScreen
 	
 	public void addImp(AObject ao)
 	{
-		ao.curPos = selector.curPos;
+		addImp(ao, false);
+	}
+	
+	public void addImpRandom(AObject ao)
+	{
+		addImp(ao, true);
+	}
+	
+	public void addImp(AObject ao, boolean isRandomPlace)
+	{
+		if(isRandomPlace)
+		{
+			Point p = getRandomFreeSocket();
+			if(p != null)
+			{
+				selector.curPos = p;
+				ao.curPos = p;
+			}
+			else return;
+		}
+		else ao.curPos = selector.curPos;
 		sockets.add(ao);
 		weaponView[selector.curPos.x][selector.curPos.y] = ao;
 		if(ao.getState().containsKey("Extender"))
@@ -269,10 +300,7 @@ public class WeaponScreen implements IScreen
 		sockets.remove(socket);
 		weaponView[socket.curPos.x][socket.curPos.y] = new SocketSymbol(socket.curPos);
 		calculateEffects();
-		if(socket.getState().containsKey("Extender"))
-		{			
-			removeSockets(socket);
-		}
+		if(socket.getState().containsKey("Extender")) removeSockets(socket);
 		if(!owner.getInventory().isFull())
 		{			
 			owner.getInventory().addItem(socket);			
@@ -300,8 +328,8 @@ public class WeaponScreen implements IScreen
 				{
 					if(noBasePartsNear(weaponView[i][j], null))
 					{
-						removeImp(weaponView[i][j]);
 						weaponView[i][j] = new EmptySpace(i,j);
+						removeImp(weaponView[i][j]);
 					}
 				}
 			}
@@ -436,7 +464,7 @@ public class WeaponScreen implements IScreen
 		energy_fill_rate = maxEnergy/20.0f;
 	}
 	
-	private int getFreeSocketsNum()
+	public int getFreeSocketsNum()
 	{
 		int sum = 0;
 		for(int i = 0; i < weapon_width; i++)
@@ -468,6 +496,21 @@ public class WeaponScreen implements IScreen
 	private boolean isFreeSocket(Point p)
 	{
 		return "SocketPlace".equalsIgnoreCase(weaponView[p.x][p.y].getName());
+	}
+	
+	public Color getDamageColor() 
+	{
+		float max_damage_type = Math.max(Math.max(effects.getFloat("AcidDamage"), effects.getFloat("BioDamage")), 
+										 Math.max(effects.getFloat("ElectroDamage"), effects.getFloat("LaserDamage")));
+		if(max_damage_type == effects.getFloat("AcidDamage")) return Color.CYAN;
+		else if(max_damage_type == effects.getFloat("BioDamage")) return Color.GREEN;
+		else if(max_damage_type == effects.getFloat("ElectroDamage")) return Color.BLUE_VIOLET;
+		else return Color.PURPLE;
+	}
+
+	public int getImpAmount() 
+	{
+		return sockets.size();
 	}
 		
 	private void initEvents()
@@ -633,15 +676,12 @@ public class WeaponScreen implements IScreen
         		else isWeaponOpen = false;
         	}
         });
-	}
-
-	public Color getDamageColor() 
-	{
-		float max_damage_type = Math.max(Math.max(effects.getFloat("AcidDamage"), effects.getFloat("BioDamage")), 
-										 Math.max(effects.getFloat("ElectroDamage"), effects.getFloat("LaserDamage")));
-		if(max_damage_type == effects.getFloat("AcidDamage")) return Color.CYAN;
-		else if(max_damage_type == effects.getFloat("BioDamage")) return Color.GREEN;
-		else if(max_damage_type == effects.getFloat("ElectroDamage")) return Color.BLUE_VIOLET;
-		else return Color.PURPLE;
+		weaponEvents.addListener(Keyboard.KEY_W, new KeyListener(0)
+        {
+        	public void onKeyDown()
+        	{
+        		isShowWeapon = !isShowWeapon;
+        	}
+        });
 	}
 }

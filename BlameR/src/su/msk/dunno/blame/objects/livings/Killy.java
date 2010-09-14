@@ -27,6 +27,17 @@ import su.msk.dunno.blame.map.path.astar.AStarPathFinder;
 import su.msk.dunno.blame.objects.Livings;
 import su.msk.dunno.blame.objects.items.ImpAcid;
 import su.msk.dunno.blame.objects.items.ImpAcidRes;
+import su.msk.dunno.blame.objects.items.ImpBio;
+import su.msk.dunno.blame.objects.items.ImpBioRes;
+import su.msk.dunno.blame.objects.items.ImpCritical;
+import su.msk.dunno.blame.objects.items.ImpElectro;
+import su.msk.dunno.blame.objects.items.ImpElectroRes;
+import su.msk.dunno.blame.objects.items.ImpEnergy;
+import su.msk.dunno.blame.objects.items.ImpHealth;
+import su.msk.dunno.blame.objects.items.ImpKick;
+import su.msk.dunno.blame.objects.items.ImpLaser;
+import su.msk.dunno.blame.objects.items.ImpLaserRes;
+import su.msk.dunno.blame.objects.items.ImpSocketExtender;
 import su.msk.dunno.blame.objects.items.PlayerCorpse;
 import su.msk.dunno.blame.prototypes.ADecision;
 import su.msk.dunno.blame.prototypes.ALiving;
@@ -67,12 +78,13 @@ public class Killy extends ALiving implements IScreen
 		initEvents();
 		find = new AStarPathFinder(field);
 		//inventory.addItem(new ImpEmitter(new Point()));
+		initWeapon(10);
 	}
 	
 	@Override protected void initStats() 
 	{
 		setStat("Dov", 5);
-		setStat("Health", 100);
+		setStat("Health", 50);
 		setStat("Speed", 4);
 	}
 	
@@ -266,6 +278,7 @@ public class Killy extends ALiving implements IScreen
 		// statistics
 		int k = Blame.height-25;
 		TrueTypeFont.instance().drawString(getName(), Blame.width-200, k, Color.WHITE); k-= 20;
+		TrueTypeFont.instance().drawString("Уровень: "+weapon.getImpAmount()/10, Blame.width-200, k, Color.WHITE); k-= 20;
 		TrueTypeFont.instance().drawString(Messages.instance().getPropMessage("interface.hp", getStat("Health")+""), Blame.width-200, k, Color.WHITE); k-= 20;
 		TrueTypeFont.instance().drawString(Messages.instance().getPropMessage("interface.energy", weapon.showEnergy()+""), Blame.width-200, k, Color.WHITE); k-= 20;
 		TrueTypeFont.instance().drawString("Damage: "+weapon.getDamage(), Blame.width-200, k, Color.WHITE); k-= 20;
@@ -301,7 +314,39 @@ public class Killy extends ALiving implements IScreen
 
 	@Override public boolean isPlayer()
 	{
-		return this.equals(Blame.getCurrentPlayer());
+		//return this.equals(Blame.getCurrentPlayer());
+		return true;
+	}
+	
+	private void initWeapon(int num)
+	{
+		AObject ao = null;
+		while(weapon.getFreeSocketsNum() < num)
+		{
+			ao = new ImpSocketExtender(new Point()); weapon.addImpRandom(ao);
+			num--;
+		}
+		System.out.println(num);
+		for(int i = 0; i < num; i++)
+		{
+			if(weapon.getFreeSocketsNum() == 1) return;
+			int rand = (int)(Math.random()*12);
+			switch(rand)
+			{
+			case 0: ao = new ImpAcid(new Point()); weapon.addImpRandom(ao); continue;
+			case 1: ao = new ImpAcidRes(new Point()); weapon.addImpRandom(ao); continue;
+			case 2: ao = new ImpBio(new Point()); weapon.addImpRandom(ao); continue;
+			case 3: ao = new ImpBioRes(new Point()); weapon.addImpRandom(ao); continue;
+			case 4: ao = new ImpCritical(new Point()); weapon.addImpRandom(ao); continue;
+			case 5: ao = new ImpElectro(new Point()); weapon.addImpRandom(ao); continue;
+			case 6: ao = new ImpElectroRes(new Point()); weapon.addImpRandom(ao); continue;
+			case 7: ao = new ImpEnergy(new Point()); weapon.addImpRandom(ao); continue;
+			case 8: ao = new ImpHealth(new Point()); weapon.addImpRandom(ao); continue;
+			case 9: ao = new ImpKick(new Point()); weapon.addImpRandom(ao); continue;
+			case 10: ao = new ImpLaser(new Point()); weapon.addImpRandom(ao); continue;
+			case 11: ao = new ImpLaserRes(new Point()); weapon.addImpRandom(ao); continue;			
+			}
+		}
 	}
 	
 	public void initEvents()
@@ -478,7 +523,7 @@ public class Killy extends ALiving implements IScreen
         {
         	public void onKeyDown()
         	{
-        		if(weapon.showEffects().containsKey("Level2"))keyboardDecision = new SelectEmitter(k, field);
+        		if(weapon.showEffects().containsKey("Level2")) keyboardDecision = new SelectEmitter(k, field);
     			else keyboardDecision = new SelectTarget(k, field, new Shoot(k, field));
         		isNextStep = true;
         	}

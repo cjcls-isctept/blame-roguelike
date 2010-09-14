@@ -14,7 +14,7 @@ public class ImpHealth extends AItem
 		item_properties.put("Imp");
 		item_properties.putString("Info", "Increase amount of health");
 		item_properties.putString("Modifier", "Health");
-		item_properties.putFloat("Health", 10);
+		item_properties.putFloat("Health", 20);
 	}
 
 	@Override public int getSymbol() 

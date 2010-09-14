@@ -120,10 +120,7 @@ public class Blame
 	
 	private void checkRequests()
 	{
-    	if (Display.isCloseRequested()) 
-	    {
-	    	isRunning = false;
-	    }
+    	if (Display.isCloseRequested()) isRunning = false;
     	EventManager.instance().checkEvents();
 	}
 	
@@ -160,7 +157,7 @@ public class Blame
 	
 	private void initEvents()
 	{		
-		EventManager.instance().addListener(Keyboard.KEY_ADD, new KeyListener(1)
+		/*EventManager.instance().addListener(Keyboard.KEY_ADD, new KeyListener(1)
         {
         	public void onKeyDown()
         	{
@@ -173,7 +170,7 @@ public class Blame
         	{
         		if(scale > 5)scale--;
         	}
-        });
+        });*/
 		EventManager.instance().addListener(Keyboard.KEY_TAB, new KeyListener(0)
         {
         	public void onKeyDown()

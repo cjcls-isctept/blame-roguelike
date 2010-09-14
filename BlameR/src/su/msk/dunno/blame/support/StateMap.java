@@ -19,70 +19,27 @@ public class StateMap
 	{
 		args.put(key, null);
 	}
-	
-	public StateMap(String s, int int_num)
-	{
-		args.put(s, new StateData(int_num));
-	}
-	
-	public StateMap(String s, float float_num)
-	{
-		args.put(s, new StateData(float_num));
-	}
-	
-	public StateMap(String s, String message)
-	{
-		args.put(s, new StateData(message));
-	}
-	
-	public StateMap(String s, AObject ao)
-	{
-		args.put(s, new StateData(ao));
-	}
-	
-	public StateMap(String s, ALiving al)
-	{
-		args.put(s, new StateData(al));
-	}
-	
-
 	public StateMap put(String key) 
 	{
 		args.put(key, null);
 		return this;
 	}
-
+	
+	public StateMap(String s, int int_num)
+	{
+		args.put(s, new StateData(int_num));
+	}
 	public StateMap putInt(String key, int int_num)
 	{
-		args.put(key, new StateData(int_num));
+		if(args.containsKey(key))
+		{
+			StateData sd = args.get(key);
+			args.put(key, sd.setInt(int_num));
+		}
+		else args.put(key, new StateData(int_num));
 		return this;
 	}
-	
-	public StateMap putFloat(String key, float float_num)
-	{
-		args.put(key, new StateData(float_num));
-		return this;
-	}
-	
-	public StateMap putString(String key, String message)
-	{
-		args.put(key, new StateData(message));
-		return this;
-	}
-	
-	public StateMap putObject(String key, AObject ao)
-	{
-		args.put(key, new StateData(ao));
-		return this;
-	}
-	
-	public StateMap putLiving(String key, ALiving al)
-	{
-		args.put(key, new StateData(al));
-		return this;
-	}
-	
-	public int getInt(String key)	// args.containsKey(key) unchecked
+	public int getInt(String key)
 	{
 		if(args.containsKey(key))
 		{
@@ -93,6 +50,20 @@ public class StateMap
 		return 0;
 	}
 	
+	public StateMap(String s, float float_num)
+	{
+		args.put(s, new StateData(float_num));
+	}
+	public StateMap putFloat(String key, float float_num)
+	{
+		if(args.containsKey(key))
+		{
+			StateData sd = args.get(key);
+			args.put(key, sd.setFloat(float_num));
+		}
+		else args.put(key, new StateData(float_num));
+		return this;
+	}
 	public float getFloat(String key)	// args.containsKey(key) unchecked
 	{
 		if(args.containsKey(key))
@@ -104,6 +75,20 @@ public class StateMap
 		return 0;
 	}
 	
+	public StateMap(String s, String message)
+	{
+		args.put(s, new StateData(message));
+	}
+	public StateMap putString(String key, String message)
+	{
+		if(args.containsKey(key))
+		{
+			StateData sd = args.get(key);
+			args.put(key, sd.setString(message));
+		}
+		else args.put(key, new StateData(message));
+		return this;
+	}
 	public String getString(String key)	// args.containsKey(key) unchecked
 	{
 		if(args.containsKey(key))
@@ -116,14 +101,63 @@ public class StateMap
 		return "";
 	}
 	
+	public StateMap(String s, AObject ao)
+	{
+		args.put(s, new StateData(ao));
+	}
+	public StateMap putObject(String key, AObject ao)
+	{
+		if(args.containsKey(key))
+		{
+			StateData sd = args.get(key);
+			args.put(key, sd.setObject(ao));
+		}
+		else args.put(key, new StateData(ao));
+		return this;
+	}
 	public AObject getObject(String key)
 	{
 		return args.get(key).getObject();
 	}
 	
+	public StateMap(String s, ALiving al)
+	{
+		args.put(s, new StateData(al));
+	}
+	public StateMap putLiving(String key, ALiving al)
+	{
+		if(args.containsKey(key))
+		{
+			StateData sd = args.get(key);
+			args.put(key, sd.setLiving(al));
+		}
+		else args.put(key, new StateData(al));
+		return this;
+	}
 	public ALiving getLiving(String key)
 	{
 		return args.get(key).getLiving();
+	}
+	
+	public StateMap(String s, Color c)
+	{
+		args.put(s, new StateData(c));
+	}
+	public StateMap putColor(String key, Color c)
+	{
+		if(args.containsKey(key))
+		{
+			StateData sd = args.get(key);
+			sd.setColor(c);
+			args.put(key, sd);
+		}
+		else args.put(key, new StateData(c));
+		return this;
+	}
+	public Color getColor(String key)
+	{
+		StateData sm = args.get(key);
+		return sm.getColor();
 	}
 
 	public boolean containsKey(String key) 
@@ -131,7 +165,7 @@ public class StateMap
 		return args.containsKey(key);
 	}
 
-	public Set<String> getKeys() 
+	public Set<String> getKeys()
 	{
 		return args.keySet();
 	}
@@ -216,6 +250,21 @@ class StateData
 	public StateData setLiving(ALiving al)
 	{
 		this.l = al;
+		return this;
+	}
+	
+	private Color c = null;
+	public StateData(Color c)
+	{
+		this.c = c;
+	}
+	public Color getColor()
+	{
+		return c;
+	}
+	public StateData setColor(Color c)
+	{
+		this.c = c;
 		return this;
 	}
 }

@@ -23,7 +23,8 @@ public class MeleeAttack extends ADecision
 			if(al.isEnemy(ao) || ao.isEnemy(al))	// needs to avoid messages about shooting to floor, door, etc ("Killy shoots to floor")
 			{
 				if(al.isNearPlayer())if(al.isNearPlayer())Messages.instance().addPropMessage("decision.melee", al.getName(), ao.getName());
-				ao.changeState(al, new StateMap("Damage", (int)(Math.random()*20)));
+				args = al.getWeapon().showEffects();
+				if(args != null) ao.changeState(al, args);
 			}
 		}
 		wasExecuted = true;
