@@ -322,9 +322,4 @@ public abstract class ALiving extends AObject
 	{
 		return true;
 	}
-
-	public Color getDamageColor() 
-	{
-		return weapon.getDamageColor();
-	}
 }

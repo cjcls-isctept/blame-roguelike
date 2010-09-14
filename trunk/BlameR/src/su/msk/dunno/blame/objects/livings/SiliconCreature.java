@@ -35,7 +35,7 @@ public class SiliconCreature extends ALiving
 	@Override protected void initStats() 
 	{
 		setStat("Dov", 6);		// higher than player's - they' sense player earlier than he do
-		setStat("Health", 20);
+		setStat("Health", 50);
 		setStat("Speed", 3);	// lower the parameter - faster mob
 	}
 	

@@ -78,7 +78,8 @@ public class Move extends ADecision
 			if(items.size() == 2)
 			{
 				AObject item = al.getObjectsAtDir(STAY).getLast();
-				if(item.getState().containsKey("Item")) Messages.instance().addMessage(al.getName()+" found "+item.getName()+" on the floor");
+				if(item.getState().containsKey("Item") || item.getState().containsKey("OnFloor")) 
+					Messages.instance().addMessage(al.getName()+" found "+item.getName()+" on the floor");
 			}
 			else if(items.size() > 2) Messages.instance().addMessage(al.getName()+" found several items on the floor");
 			

@@ -147,7 +147,7 @@ public class RebuildStation extends ALiving implements IScreen
 		isRunning = true;
 		while(isRunning)
 		{
-			events.checkEvents();
+			events.checkEvents();			
 			GL11.glClear(GL11.GL_COLOR_BUFFER_BIT/* | GL11.GL_DEPTH_BUFFER_BIT*/);		
 			GL11.glLoadIdentity();
 			showStationInterface();

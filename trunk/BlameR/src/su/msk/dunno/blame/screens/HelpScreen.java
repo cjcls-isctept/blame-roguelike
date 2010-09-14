@@ -54,18 +54,18 @@ public class HelpScreen implements IScreen
 		isHelpOn = true;
 		while(isHelpOn)
 		{
-			helpEvents.checkEvents();
+			helpEvents.checkEvents();			
 			GL11.glClear(GL11.GL_COLOR_BUFFER_BIT/* | GL11.GL_DEPTH_BUFFER_BIT*/);		
 			GL11.glLoadIdentity();
 			int k = Blame.height-25;
 			TrueTypeFont.instance().drawString("Arrow Keys/Numpad Keys - movement", 20, k, Color.WHITE); k -=25;
 			TrueTypeFont.instance().drawString("Tab - switch between characters", 20, k, Color.WHITE); k -=25;
 			TrueTypeFont.instance().drawString("F - shoot", 20, k, Color.WHITE); k -=25;
-			TrueTypeFont.instance().drawString("L - look at target", 20, k, Color.WHITE); k -=25;
+			TrueTypeFont.instance().drawString("L - look", 20, k, Color.WHITE); k -=25;
 			TrueTypeFont.instance().drawString("I - open Inventory", 20, k, Color.WHITE); k -=25;
-			TrueTypeFont.instance().drawString("W - open weapon", 20, k, Color.WHITE); k -=25;
+			TrueTypeFont.instance().drawString("W - open Weapon", 20, k, Color.WHITE); k -=25;
 			TrueTypeFont.instance().drawString(", - pick up item from the floor", 20, k, Color.WHITE); k -=25;
-			TrueTypeFont.instance().drawString("D - drop item from the inventory", 20, k, Color.WHITE); k -=25;
+			TrueTypeFont.instance().drawString("D - drop item from the Inventory", 20, k, Color.WHITE); k -=25;
 			TrueTypeFont.instance().drawString("Esc - exit from current screen", 20, k, Color.WHITE); k -=25;
 			TrueTypeFont.instance().drawString("      (Weapon, Inventory, etc)", 20, k, Color.WHITE); k -=25;
 			TrueTypeFont.instance().drawString("F1 - open this screen", 20, k, Color.WHITE); k -=25;
@@ -73,7 +73,7 @@ public class HelpScreen implements IScreen
 			TrueTypeFont.instance().drawString("F6 - attack enemies on sight on/off", 20, k, Color.WHITE); k -=25;
 			TrueTypeFont.instance().drawString("F12 - exit game", 20, k, Color.WHITE); k -=25;
 			TrueTypeFont.instance().drawString("Enter - enter to Rebuild Station", 20, k, Color.WHITE); k -=25;
-			TrueTypeFont.instance().drawString("+/- - scale up/down", 20, k, Color.WHITE); k -=25;
+			//TrueTypeFont.instance().drawString("+/- - scale up/down", 20, k, Color.WHITE); k -=25;
 			Display.sync(Blame.framerate);
 			Display.update();
 		}

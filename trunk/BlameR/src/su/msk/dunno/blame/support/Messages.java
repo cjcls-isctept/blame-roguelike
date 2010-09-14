@@ -81,9 +81,8 @@ public class Messages
 	public void showMessages()
 	{
 		int h = 75;
-		for(Iterator<String> i = messages.descendingIterator(); i.hasNext();)
+		for(String mes: messages)
 		{
-			String mes = i.next();
 			TrueTypeFont.instance().drawString(mes, 20, h, Color.WHITE); h -=15;
 		}
 	}

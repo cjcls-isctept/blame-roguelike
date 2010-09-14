@@ -48,7 +48,7 @@ public class InventoryScreen implements IScreen
 		isInventoryOpen = true;
 		while(isInventoryOpen)
 		{
-			inventoryEvents.checkEvents();					
+			inventoryEvents.checkEvents();			
 			showInventory();
 		}
 	}
