@@ -55,24 +55,54 @@ class Weapon(val owner:Living) extends PointTracer[FieldObject] (
     }
   }
 
-  private def init = {
+  private var free_sockets:List[Vec] = Nil
+  override def addPointTrace(fo:FieldObject) = {
+    if(fo.getState.contains("socket")) {
+      free_sockets = fo.getPoint :: free_sockets
+      //println(free_sockets)
+    }
+    super.addPointTrace(fo)
+  }
+  override def removeTraceFromPoint(trace_id:Int, point:Vec) = {
+    coord_matrix(point.ix)(point.iy).find(_.id == trace_id) match {
+      case Some(fo) => if(fo.getState.contains("socket")) {
+        free_sockets = free_sockets.filterNot(_ == point)
+        //println(free_sockets)
+      }
+      case _ =>
+    }
+    super.removeTraceFromPoint(trace_id, point)
+  }
+
+  private def getRandomFreeSocket = {
+    if(free_sockets.isEmpty) None
+    else Some(free_sockets((math.random*free_sockets.length).toInt))
+  }
+  private def fillWeapon(num:Int) = {
+
+  }
+
+  /*private def init = */{
     val points = List(Vec(-5,0), Vec(-4,0), Vec(-3,0), Vec(-2,0), Vec(-1,0), Vec(0,0), Vec(1,0), Vec(2,0), Vec(3,0), Vec(4,0), Vec(5,0), Vec(6,0)) :::
                  List(Vec(-4,-1), Vec(-3,-1), Vec(-2,-1), Vec(-1,-1), Vec(0,-1)) :::
                  List(Vec(-4,-2), Vec(-3,-2)) :::
                  List(Vec(-4,-3), Vec(-3,-3))
+    for(point <- points) addBasePart(point + Vec(N_x/2, N_y/2))
+
     val restricted_points = List(Vec(-5,-1), Vec(-5,-2), Vec(-5,-3), Vec(-2, -2), Vec(-2,-3))
-    points.foreach(point => addBasePart(point + Vec(N_x/2, N_y/2)))
-    restricted_points.foreach(point => {
-      val restricted_point = point + Vec(N_x/2, N_y/2)
+    for {
+      point <- restricted_points
+      restricted_point = point + Vec(N_x/2, N_y/2)
+    } {
       removeAllTracesFromPoint(restricted_point)
       addTrace({
         val rp = new RestrictedPlace
         rp.changeState(new State("point", restricted_point))
         rp
       })
-    })
+    }
   }
-  init
+  /*init*/
 
   private def addBasePart(point:Vec) = {
     removeAllTracesFromPoint(point)
@@ -86,30 +116,30 @@ class Weapon(val owner:Living) extends PointTracer[FieldObject] (
 
   private def addSockets(point:Vec) = {
     val points = List(Vec(-1,0)+point, Vec(1,0)+point, Vec(0,-1)+point, Vec(0,1)+point)
-    for(cur_point <- points) {
-      if(isPointOnArea(cur_point)) {
-        val objects_at_point = coord_matrix(cur_point.ix)(cur_point.iy)
-        if(objects_at_point.isEmpty) {
-          addTrace({
-            val fs = new FreeSocket
-            fs.changeState(new State("point", cur_point))
-            fs
-          })
-        }
-      }
+    for {
+      cur_point <- points
+      if isPointOnArea(cur_point)
+      objects_at_point = coord_matrix(cur_point.ix)(cur_point.iy)
+      if objects_at_point.isEmpty
+    } {
+      addTrace({
+        val fs = new FreeSocket
+        fs.changeState(new State("point", cur_point))
+        fs
+      })
     }
   }
 
   private def removeSockets(point:Vec):Unit = {
     val points = List(Vec(-1,0)+point, Vec(1,0)+point, Vec(0,-1)+point, Vec(0,1)+point)
-    for(cur_point <- points) {
-      if(isPointOnArea(cur_point) && isNoBasePartConnection(cur_point)) {
-        coord_matrix(cur_point.ix)(cur_point.iy).filterNot(_.getState.contains("restricted")).foreach(item => {
-          removeTraceFromPoint(item.id, item.getPoint)
-          if(!item.getState.contains("socket")) owner.inventory.addItem(item)
-          if(item.getState.contains("extender")) removeSockets(item.getPoint)
-        })
-      }
+    for {
+      cur_point <- points
+      if isPointOnArea(cur_point) && isNoBasePartConnection(cur_point)
+      item <- coord_matrix(cur_point.ix)(cur_point.iy).filterNot(_.getState.contains("restricted"))
+    } {
+      removeTraceFromPoint(item.id, item.getPoint)
+      if(!item.getState.contains("socket")) owner.inventory.addItem(item)
+      if(item.getState.contains("extender")) removeSockets(item.getPoint)
     }
   }
 
@@ -170,36 +200,37 @@ class Weapon(val owner:Living) extends PointTracer[FieldObject] (
                  (field_to_y - field_from_y)/2)
     addRender(new ScageRender {
       override def render = {
-        for(x <- 0 to N_x-1) {
-          for(y <- 0 to N_y-1) {
-            val coord = pointCenter(x, y)
-            if(coord_matrix(x)(y).length > 0) {
-                if(is_show_cursor ||
-                   (!coord_matrix(x)(y).head.getState.contains("socket") &&
-                   !coord_matrix(x)(y).head.getState.contains("restricted"))) {
-                  GL11.glDisable(GL11.GL_TEXTURE_2D);
-                  GL11.glPushMatrix();
-                  Renderer.color = coord_matrix(x)(y).head.getColor
-                  GL11.glTranslatef(coord.x, coord.y, 0.0f);
-                  GL11.glRectf(-h_x/2+1, -h_y/2+1, h_x/2-1, h_y/2-1);
-                  GL11.glPopMatrix();
-                  GL11.glEnable(GL11.GL_TEXTURE_2D);
-                }
-            }
-            if(is_show_cursor && cursor == Vec(x,y)) {
+        for {
+          x <- 0 until N_x
+          y <- 0 until N_y
+          coord = pointCenter(x, y)
+        } {
+          if(coord_matrix(x)(y).length > 0) {
+            if(is_show_cursor ||
+               (!coord_matrix(x)(y).head.getState.contains("socket") &&
+                !coord_matrix(x)(y).head.getState.contains("restricted"))) {
               GL11.glDisable(GL11.GL_TEXTURE_2D);
               GL11.glPushMatrix();
-              Renderer.color = GREEN
+              Renderer.color = coord_matrix(x)(y).head.getColor
               GL11.glTranslatef(coord.x, coord.y, 0.0f);
-              GL11.glBegin(GL11.GL_LINE_LOOP)
-                GL11.glVertex2f(-h_x/2, -h_y/2)
-                GL11.glVertex2f(-h_x/2, h_y/2)
-                GL11.glVertex2f(h_x/2, h_y/2)
-                GL11.glVertex2f(h_x/2, -h_y/2)
-              GL11.glEnd
+              GL11.glRectf(-h_x/2+1, -h_y/2+1, h_x/2-1, h_y/2-1);
               GL11.glPopMatrix();
               GL11.glEnable(GL11.GL_TEXTURE_2D);
             }
+          }
+          if(is_show_cursor && cursor == Vec(x,y)) {
+            GL11.glDisable(GL11.GL_TEXTURE_2D);
+            GL11.glPushMatrix();
+            Renderer.color = GREEN
+            GL11.glTranslatef(coord.x, coord.y, 0.0f);
+            GL11.glBegin(GL11.GL_LINE_LOOP)
+              GL11.glVertex2f(-h_x/2, -h_y/2)
+              GL11.glVertex2f(-h_x/2, h_y/2)
+              GL11.glVertex2f(h_x/2, h_y/2)
+              GL11.glVertex2f(h_x/2, -h_y/2)
+            GL11.glEnd
+            GL11.glPopMatrix();
+            GL11.glEnable(GL11.GL_TEXTURE_2D);
           }
         }
       }
@@ -244,8 +275,8 @@ class Weapon(val owner:Living) extends PointTracer[FieldObject] (
                 conditions.remove(key)
               }*/
             })
-            /*checkConditions
-            owner.checkMax*/
+            /*checkConditions*/
+            owner.checkMax
             if(state.contains("extender")) removeSockets(item.getPoint)
             owner.inventory.addItem(item)
           }

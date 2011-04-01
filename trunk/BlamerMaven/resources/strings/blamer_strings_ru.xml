@@ -34,20 +34,12 @@ Megastructure may be controlled.
         Сибо
     </message>
 
-    <message code="player.cibo.description">
-
-    </message>
-
     <message code="player.cibo.dead.name">
         Мертвая Сибо
     </message>
 
     <message code="enemy.siliconcreature.name">
         Силиконовое устройство
-    </message>
-
-    <message code="enemy.siliconcreature.description">
-
     </message>
 
     <message code="enemy.siliconcreature.dead.name">
@@ -195,19 +187,19 @@ Megastructure may be controlled.
         Закрытый слот
     </message>
 
-    <message code="tile.wall">
+    <message code="tile.wall.name">
         Стена
     </message>
 
-    <message code="tile.floor">
+    <message code="tile.floor.name">
         Пол
     </message>
 
-    <message code="tile.door.open">
+    <message code="tile.door.open.name">
         Открытая дверь
     </message>
 
-    <message code="tile.door.close">
+    <message code="tile.door.close.name">
         Закрытая дверь
     </message>
 

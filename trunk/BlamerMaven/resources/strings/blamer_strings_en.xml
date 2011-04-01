@@ -4,10 +4,6 @@
         Killy
     </message>
 
-    <message code="player.killy.description">
-
-    </message>
-
     <message code="player.killy.dead.name">
         Dead Killy
     </message>
@@ -16,20 +12,12 @@
         Cibo
     </message>
 
-    <message code="player.cibo.description">
-
-    </message>
-
     <message code="player.killy.dead.name">
         Dead Cibo
     </message>
 
     <message code="enemy.siliconcreature.name">
         Silicon Creature
-    </message>
-
-    <message code="enemy.siliconcreature.description">
-
     </message>
 
     <message code="enemy.siliconcreature.dead.name">
@@ -173,19 +161,19 @@
         ?'s Weapon
     </message>
 
-    <message code="tile.wall">
+    <message code="tile.wall.name">
         Wall
     </message>
 
-    <message code="tile.floor">
+    <message code="tile.floor.name">
         Floor
     </message>
 
-    <message code="tile.door.open">
+    <message code="tile.door.open.name">
         Open door
     </message>
 
-    <message code="tile.door.close">
+    <message code="tile.door.close.name">
         Closed door
     </message>
 
