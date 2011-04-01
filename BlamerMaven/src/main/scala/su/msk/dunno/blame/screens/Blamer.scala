@@ -21,7 +21,10 @@ object Blamer extends ScageScreen(
   
   // map
   private val maze = GenLib.CreateStandardDunegon(FieldTracer.N_x, FieldTracer.N_y)
-  (0 to FieldTracer.N_x-1).foreachpair(0 to FieldTracer.N_y-1)((i, j) => {
+  for {
+    i <- 0 until FieldTracer.N_x
+    j <- 0 until FieldTracer.N_y
+  } {
     maze(i)(j) match {
       case '#' => new Wall(i, j)
       case '.' => new Floor(i, j)
@@ -29,7 +32,7 @@ object Blamer extends ScageScreen(
       case '+' => new Door(i, j)
       case _ =>
     }
-  })
+  }
   
   // players
   private var is_play_cibo = false
@@ -52,12 +55,10 @@ object Blamer extends ScageScreen(
   def currentPlayer = if(is_play_cibo) cibo else killy
   
   // enemies
-  (1 to 50).foreach(i => {
-    FieldTracer.randomPassablePoint() match {
-      case Some(point) => new SiliconCreature(point)
-      case None =>
-    }
-  })
+  for(i <- 1 to 50) FieldTracer.randomPassablePoint() match {
+    case Some(point) => new SiliconCreature(point)
+    case None =>
+  }
 
   // controls on main screen
   private var is_key_pressed = false

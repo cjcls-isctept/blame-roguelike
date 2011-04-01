@@ -21,7 +21,9 @@ class Wall(x:Int, y:Int) {
     def isTransparent = false
     def isPassable = false
 
-    def getState = new State("tile").put("wall").put("name", ScageMessage.xml("tile.wall"))
+    def getState = new State("tile").put("wall")
+                                    .put("name", ScageMessage.xml("tile.wall.name"))
+                                    .put("description", ScageMessage.xml("tile.wall.description"))
     def changeState(s:State) = changeColorState(s)
   })
 }
@@ -33,7 +35,9 @@ class Floor(x:Int, y:Int) {
     def isTransparent = true
     def isPassable = true
 
-    def getState = new State("tile").put("floor").put("name", ScageMessage.xml("tile.floor"))
+    def getState = new State("tile").put("floor")
+                                    .put("name", ScageMessage.xml("tile.floor.name"))
+                                    .put("description", ScageMessage.xml("tile.floor.description"))
     def changeState(s:State) = changeColorState(s)
   })
 }
@@ -48,9 +52,10 @@ class Door(x:Int, y:Int) {
     def isPassable = is_open
 
     def getState = new State("tile").put("door")
-                   .put(if(is_open) "open" else "close")
-                   .put("name", if(is_open) ScageMessage.xml("tile.door.open")
-                                else ScageMessage.xml("tile.door.close"))
+                                    .put(if(is_open) "open" else "close")
+                                    .put("name", if(is_open) ScageMessage.xml("tile.door.name.open") else ScageMessage.xml("tile.door.name.close"))
+                                    .put("description", ScageMessage.xml("tile.door.description"))
+
     def changeState(s:State) = {
       changeColorState(s)
       if(s.contains("door_open")) {

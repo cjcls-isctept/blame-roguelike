@@ -109,7 +109,7 @@ object SelectTarget {
       }
     })
 
-    private def description_screen = new ScageScreen("Description Screen") {
+    private val description_screen = new ScageScreen("Description Screen") {
         addRender(new ScageRender {
           override def interface = {
             FieldTracer.objectsAtPoint(target_point) match {
