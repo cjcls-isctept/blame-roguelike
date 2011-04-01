@@ -53,7 +53,11 @@
     </message>
     
     <message code="selecttarget.helpmessage">
-        [Arrow keys, Numpad keys] - Select target [Esc] - Cancel
+        [Arrow keys, Numpad keys] - Select target [I] - Target's Description [Esc] - Cancel
+    </message>
+
+    <message code="selecttarget.description.helpmessage">
+        [ESC] - Cancel
     </message>
 
     <message code="selecttarget.target">
@@ -85,8 +89,12 @@
         ? dies
     </message>
 
-    <message code="changestatus.damage">
+    <message code="changestatus.damage.noshield">
         ? receives ? damage
+    </message>
+
+    <message code="changestatus.damage.shield">
+        ?'s shield consumes ? damage
     </message>
 
     <message code="inventory.ownership">

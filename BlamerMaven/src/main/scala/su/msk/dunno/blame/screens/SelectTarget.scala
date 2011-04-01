@@ -108,5 +108,25 @@ object SelectTarget {
         Blamer.drawInterface
       }
     })
+
+    private def description_screen = new ScageScreen("Description Screen") {
+        addRender(new ScageRender {
+          override def interface = {
+            FieldTracer.objectsAtPoint(target_point) match {
+              case head :: tail => {
+                print(head.getState.getString("name")+"\n\n"+
+                      head.getState.getString("description"), 10, Renderer.height-row_height, WHITE)
+              }
+              case _ =>
+            }
+            print(xml("selecttarget.description.helpmessage"), 10, row_height, GREEN)
+          }
+        })
+
+        keyListener(Keyboard.KEY_ESCAPE, onKeyDown = stop)
+      }
+    keyListener(Keyboard.KEY_I, onKeyDown = {
+      description_screen.run
+    })
   }
 }
