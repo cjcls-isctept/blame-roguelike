@@ -17,7 +17,13 @@
     </message>
 
     <message code="player.killy.description">
-
+Looking to be in his early to mid 20s, he is a glum looking person, never smiling
+(except madly when shooting on occasion) and has a slight slouch in his normal
+standing position.
+He is tasked by an unknown agency with finding a human in the 32-AU radius
+Megastructure who still possesses the Net Terminal Gene, a genetic marker
+necessary for safe access to the Netsphere, from which the functions of the
+Megastructure may be controlled.
     </message>
 
     <message code="player.killy.dead.name">
@@ -61,7 +67,11 @@
     </message>
 
     <message code="selecttarget.helpmessage">
-        [Стрелки, Цифровые клавиши] - Выбрать цель [Esc] - Отмена
+        [Стрелки, Цифровые клавиши] - Выбрать цель [I] - Информация о цели [Esc] - Отмена
+    </message>
+
+    <message code="selecttarget.description.helpmessage">
+        [ESC] - Назад
     </message>
 
     <message code="selecttarget.target">
@@ -97,7 +107,11 @@
         Оружие ?
     </message>
 
-    <message code="changestatus.damage">
+    <message code="changestatus.damage.shield">
+        Щит ? поглощает ? единиц урона
+    </message>
+
+    <message code="changestatus.damage.noshield">
         ? получает ? единиц урона
     </message>
 
