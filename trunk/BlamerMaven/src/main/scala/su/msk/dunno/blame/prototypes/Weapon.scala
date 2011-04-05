@@ -50,7 +50,7 @@ class Weapon(val owner:Living) extends PointTracer[FieldObject] (
   N_y             = property("weapon.N_y",    12),
   are_solid_edges = true
 ) {
-  private def removeAllTracesFromPoint(point:Vec) = {
+  private def removeAllTracesFromPoint(point:Vec) {
     if(isPointOnArea(point)) {
       coord_matrix(point.ix)(point.iy) = Nil
       free_sockets = free_sockets.filterNot(_ == point)
@@ -65,7 +65,7 @@ class Weapon(val owner:Living) extends PointTracer[FieldObject] (
     else free_sockets = free_sockets.filterNot(_ == fo.getPoint)
     super.addPointTrace(fo)
   }
-  override def removeTraceFromPoint(trace_id:Int, point:Vec) = {
+  override def removeTraceFromPoint(trace_id:Int, point:Vec) {
     coord_matrix(point.ix)(point.iy).find(_.id == trace_id) match {
       case Some(fo) => if(fo.getState.contains("socket")) {
         free_sockets = free_sockets.filterNot(_ == point)
@@ -79,7 +79,7 @@ class Weapon(val owner:Living) extends PointTracer[FieldObject] (
     if(free_sockets.isEmpty) None
     else Some(free_sockets((math.random*free_sockets.length).toInt))
   }
-  private def fillWeapon(num:Int) = {
+  private def fillWeapon(num:Int) {
     for {
       i <- 0 until num
       free_socket_point = getRandomFreeSocket
@@ -120,7 +120,7 @@ class Weapon(val owner:Living) extends PointTracer[FieldObject] (
     fillWeapon(90)
   }
 
-  private def addBasePart(point:Vec) = {
+  private def addBasePart(point:Vec) {
     removeAllTracesFromPoint(point)
     addTrace({
       val fs = new BasePart
@@ -130,7 +130,7 @@ class Weapon(val owner:Living) extends PointTracer[FieldObject] (
     addSockets(point)
   }
 
-  private def addSockets(point:Vec) = {
+  private def addSockets(point:Vec) {
     val points = List(Vec(-1,0)+point, Vec(1,0)+point, Vec(0,-1)+point, Vec(0,1)+point)
     for {
       cur_point <- points
@@ -146,7 +146,7 @@ class Weapon(val owner:Living) extends PointTracer[FieldObject] (
     }
   }
 
-  private def removeSockets(point:Vec):Unit = {
+  private def removeSockets(point:Vec) {
     val points = List(Vec(-1,0)+point, Vec(1,0)+point, Vec(0,-1)+point, Vec(0,1)+point)
     for {
       cur_point <- points
@@ -208,7 +208,7 @@ class Weapon(val owner:Living) extends PointTracer[FieldObject] (
   private lazy val weapon_screen = new ScageScreen("Weapon Screen") {
     private var cursor = new Vec(N_x/2, N_y/2)
     private var is_show_cursor = false
-    private def moveCursor(delta:Vec) = {
+    private def moveCursor(delta:Vec) {
       is_show_cursor = true
       val new_point = cursor + delta
       if(isPointOnArea(new_point)) cursor is new_point
@@ -217,7 +217,7 @@ class Weapon(val owner:Living) extends PointTracer[FieldObject] (
     center = Vec((field_to_x - field_from_x)/2,
                  (field_to_y - field_from_y)/2)
     addRender(new ScageRender {
-      override def render = {
+      override def render {
         for {
           x <- 0 until N_x
           y <- 0 until N_y
@@ -246,14 +246,14 @@ class Weapon(val owner:Living) extends PointTracer[FieldObject] (
               GL11.glVertex2f(-h_x/2, h_y/2)
               GL11.glVertex2f(h_x/2, h_y/2)
               GL11.glVertex2f(h_x/2, -h_y/2)
-            GL11.glEnd
+            GL11.glEnd()
             GL11.glPopMatrix();
             GL11.glEnable(GL11.GL_TEXTURE_2D);
           }
         }
       }
 
-      override def interface ={
+      override def interface {
         print(xml("weapon.ownership", owner.stat("name")), 10, Renderer.height-20)
         if(is_show_cursor) {
           if(!coord_matrix(cursor.ix)(cursor.iy).isEmpty)
@@ -304,5 +304,7 @@ class Weapon(val owner:Living) extends PointTracer[FieldObject] (
     })
   }
 
-  def showWeapon = weapon_screen.run
+  def showWeapon() {
+    weapon_screen.run
+  }
 }

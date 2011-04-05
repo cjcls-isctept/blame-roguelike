@@ -70,7 +70,7 @@ object Blamer extends ScageScreen(
     }
     else 300
   }
-  private def move(point:Vec) = {
+  private def move(point:Vec) {
     if(!is_key_pressed) {
       is_key_pressed = true
       pressed_start_time = System.currentTimeMillis
@@ -107,7 +107,7 @@ object Blamer extends ScageScreen(
     keyListener(Keyboard.KEY_ESCAPE, onKeyDown = stop)
 
     addRender(new ScageRender {
-      override def interface = {
+      override def interface {
         print(xml("helpscreen.tutorial.keys"),           10,  Renderer.height-20)
         print(xml("helpscreen.tutorial.description"),    300, Renderer.height-65)
         print(xml("helpscreen.helpmessage"), 10, row_height, GREEN)
@@ -124,7 +124,7 @@ object Blamer extends ScageScreen(
   
   Renderer.backgroundColor = BLACK
 
-  def drawInterface = {
+  def drawInterface() {
     def intStat(key:String) = currentPlayer.intStat(key).toString
 
     //messages on the right side of the screen
@@ -143,11 +143,13 @@ object Blamer extends ScageScreen(
   } 
 
   addRender(new ScageRender {
-    override def render = FieldTracer.drawField(currentPlayer.getPoint)
+    override def render {
+      FieldTracer.drawField(currentPlayer.getPoint)
+    }
 
-    override def interface = {
+    override def interface {
       BottomMessages.showBottomMessages(0)
-      drawInterface
+      drawInterface()
     }
   })
   
@@ -155,5 +157,7 @@ object Blamer extends ScageScreen(
   BottomMessages.addPropMessage("mainscreen.openhelp")
   BottomMessages.addPropMessage("greetings.helloworld", currentPlayer.stat("name"))
   
-  def main(args:Array[String]):Unit = run
+  def main(args:Array[String]) {
+    run
+  }
 }
