@@ -12,6 +12,7 @@ import su.msk.dunno.blame.support.MyFont._
 import su.msk.dunno.scage.screens.support.tracer.{PointTracer, State}
 import org.lwjgl.opengl.GL11
 import su.msk.dunno.blame.support.BottomMessages
+import su.msk.dunno.blame.items._
 
 private class RestrictedPlace extends Item(
   name = xml("item.restricted.name"),
@@ -52,6 +53,7 @@ class Weapon(val owner:Living) extends PointTracer[FieldObject] (
   private def removeAllTracesFromPoint(point:Vec) = {
     if(isPointOnArea(point)) {
       coord_matrix(point.ix)(point.iy) = Nil
+      free_sockets = free_sockets.filterNot(_ == point)
     }
   }
 
@@ -59,15 +61,14 @@ class Weapon(val owner:Living) extends PointTracer[FieldObject] (
   override def addPointTrace(fo:FieldObject) = {
     if(fo.getState.contains("socket")) {
       free_sockets = fo.getPoint :: free_sockets
-      //println(free_sockets)
     }
+    else free_sockets = free_sockets.filterNot(_ == fo.getPoint)
     super.addPointTrace(fo)
   }
   override def removeTraceFromPoint(trace_id:Int, point:Vec) = {
     coord_matrix(point.ix)(point.iy).find(_.id == trace_id) match {
       case Some(fo) => if(fo.getState.contains("socket")) {
         free_sockets = free_sockets.filterNot(_ == point)
-        //println(free_sockets)
       }
       case _ =>
     }
@@ -79,10 +80,25 @@ class Weapon(val owner:Living) extends PointTracer[FieldObject] (
     else Some(free_sockets((math.random*free_sockets.length).toInt))
   }
   private def fillWeapon(num:Int) = {
-
+    for {
+      i <- 0 until num
+      free_socket_point = getRandomFreeSocket
+    } {
+      free_socket_point match {
+        case Some(point) => {
+          (math.random*4).toInt match {
+            case 0 => addToWeapon(new DamageItem, point)
+            case 1 => addToWeapon(new EnergyItem, point)
+            case 2 => addToWeapon(new ShieldItem, point)
+            case 3 => addToWeapon(new SocketExtender, point)
+          }
+        }
+        case None =>
+      }
+    }
   }
 
-  /*private def init = */{
+  {
     val points = List(Vec(-5,0), Vec(-4,0), Vec(-3,0), Vec(-2,0), Vec(-1,0), Vec(0,0), Vec(1,0), Vec(2,0), Vec(3,0), Vec(4,0), Vec(5,0), Vec(6,0)) :::
                  List(Vec(-4,-1), Vec(-3,-1), Vec(-2,-1), Vec(-1,-1), Vec(0,-1)) :::
                  List(Vec(-4,-2), Vec(-3,-2)) :::
@@ -101,8 +117,8 @@ class Weapon(val owner:Living) extends PointTracer[FieldObject] (
         rp
       })
     }
+    fillWeapon(90)
   }
-  /*init*/
 
   private def addBasePart(point:Vec) = {
     removeAllTracesFromPoint(point)
@@ -138,7 +154,6 @@ class Weapon(val owner:Living) extends PointTracer[FieldObject] (
       item <- coord_matrix(cur_point.ix)(cur_point.iy).filterNot(_.getState.contains("restricted"))
     } {
       removeTraceFromPoint(item.id, item.getPoint)
-      if(!item.getState.contains("socket")) owner.inventory.addItem(item)
       if(item.getState.contains("extender")) removeSockets(item.getPoint)
     }
   }
@@ -166,26 +181,29 @@ class Weapon(val owner:Living) extends PointTracer[FieldObject] (
     _isNoExtenderOrBasePartNear(point, Nil)
   }
 
- /* private var conditions:State = new State
-  private def checkConditions = {
-    conditions.keys.foreach(effect_name => {
-      println(effect_name)
-      val effect = conditions.getState(effect_name)
-      val effect_coord = conditions.getVec(effect_name)
-      val condition_satisfied = effect.keys.foldLeft(true)((is_satisfied, condition_number) => {
-        println(condition_number)
-        val condition = effect.getState(condition_number)
-        val condition_effect = condition.keys.head
-        val condition_coord = condition.getVec(condition_effect) + effect_coord
-        val condition_item = coord_matrix(condition_coord.ix)(condition_coord.iy).head
-        condition_item.getState.contains(condition_effect) && is_satisfied
-      })
-      println(condition_satisfied)
-      if(condition_satisfied) owner.setStat(effect_name)
-      else owner.removeStat(effect_name)
-    })
-    //println(conditions)
-  }*/
+  private def removeFromWeapon(item:FieldObject, cursor:Vec) {
+    removeTraceFromPoint(item.id, cursor)
+    val state = item.getState
+    for {
+      key <- state.keys
+      if state.getState(key).contains("effect")
+    } owner.changeStat(key, -state.getState(key).getFloat("effect"))
+    owner.checkMax
+    if(state.contains("extender")) removeSockets(item.getPoint)
+  }
+
+  private def addToWeapon(item:FieldObject, cursor:Vec) {
+     addPointTrace({
+       item.changeState(new State("point", cursor))
+       item
+     })
+     val state = item.getState
+     for {
+       key <- state.keys
+       if state.getState(key).contains("effect")
+     } owner.changeStat(key, state.getState(key).getFloat("effect"))
+     if(state.contains("extender")) addSockets(item.getPoint)
+  }
 
   private lazy val weapon_screen = new ScageScreen("Weapon Screen") {
     private var cursor = new Vec(N_x/2, N_y/2)
@@ -265,41 +283,14 @@ class Weapon(val owner:Living) extends PointTracer[FieldObject] (
       if(objects_at_cursor.exists(item => item.getState.contains("socket"))) {
         objects_at_cursor.find(!_.getState.contains("socket")) match {
           case Some(item) => {
-            removeTraceFromPoint(item.id, cursor)
-            val state = item.getState
-            state.keys.foreach(key => {
-              if(state.getState(key).contains("effect")) {
-                owner.changeStat(key, -state.getState(key).getFloat("effect"))
-              }
-              /*if(state.getState(key).contains("conditions")) {
-                conditions.remove(key)
-              }*/
-            })
-            /*checkConditions*/
-            owner.checkMax
-            if(state.contains("extender")) removeSockets(item.getPoint)
+            removeFromWeapon(item, cursor)
             owner.inventory.addItem(item)
           }
           case None => {
             owner.inventory.selectItem(xml("weapon.selectmodifier"), fo => fo.getState.contains("modifier")) match {
               case Some(item) => {
                 owner.inventory.removeItem(item)
-                addPointTrace({
-                  item.changeState(new State("point", cursor))
-                  item
-                })
-                val state = item.getState
-                state.keys.foreach(key => {
-                  if(state.getState(key).contains("effect")) {
-                    owner.changeStat(key, state.getState(key).getFloat("effect"))
-                  }
-                  /*if(state.getState(key).contains("conditions")) {
-                    conditions.put(key, state.getState(key).getState("conditions"))
-                    conditions.put(key, cursor.copy)
-                  }*/
-                })
-                //checkConditions
-                if(state.contains("extender")) addSockets(item.getPoint)
+                addToWeapon(item, cursor)
               }
               case None =>
             }
@@ -314,11 +305,4 @@ class Weapon(val owner:Living) extends PointTracer[FieldObject] (
   }
 
   def showWeapon = weapon_screen.run
-  /*def shoot(target_point:Vec) = {
-    val damage = (math.random * owner.floatStat("damage")).toFloat
-    val energy_cost = math.max(damage/10f, 1)
-    val energy = owner.floatStat("energy")
-    if(energy > energy_cost) new State("damage", owner.intStat("damage"))
-    else new State
-  }*/
 }
