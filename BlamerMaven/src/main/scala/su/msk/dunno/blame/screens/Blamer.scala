@@ -55,10 +55,10 @@ object Blamer extends ScageScreen(
   def currentPlayer = if(is_play_cibo) cibo else killy
   
   // enemies
-  for(i <- 1 to 50) FieldTracer.randomPassablePoint() match {
+  /*for(i <- 1 to 50) FieldTracer.randomPassablePoint() match {
     case Some(point) => new SiliconCreature(point)
     case None =>
-  }
+  }*/
 
   // controls on main screen
   private var is_key_pressed = false
