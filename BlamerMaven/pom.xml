@@ -93,7 +93,7 @@
     <testSourceDirectory>src/test/scala</testSourceDirectory>
     <filters>
             <filter>build.properties</filter>
-          </filters>
+    </filters>
       <resources>
             <resource>
               <directory>src/main/resources</directory>
