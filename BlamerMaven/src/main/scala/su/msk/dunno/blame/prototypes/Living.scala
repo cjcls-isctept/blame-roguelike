@@ -7,6 +7,7 @@ import su.msk.dunno.blame.support.BottomMessages
 import su.msk.dunno.blame.support.MyFont._
 import su.msk.dunno.scage.single.support.ScageColors._
 import su.msk.dunno.blame.screens.{SelectTarget, Blamer}
+import su.msk.dunno.blame.items.{DamageItem, EnergyItem, ShieldItem, SocketExtender}
 
 abstract class Living(val name:String,
                       val description:String,
@@ -67,17 +68,17 @@ extends FieldObject(point) with HaveStats {
   def isCurrentPlayer = /*haveStat("player") && point == Blamer.currentPlayer.getPoint*/ id == Blamer.currentPlayer.id
   def isPlayer = haveStat("player")
 
-  def checkMax(effect_name:String, max_effect_name:String) = {
+  def checkMax(effect_name:String, max_effect_name:String) {
     if(floatStat(effect_name) > floatStat(max_effect_name))
       setStat(effect_name, floatStat(max_effect_name))
   }
-  def checkMax:Unit = {  // TODO: rename this one!!!
+  def checkMax() {  // TODO: rename this one!!!
     checkMax("energy", "max_energy")
     checkMax("shield", "max_shield")
     checkMax("health", "max_health")
   }
 
-  def processTemporaryEffects = { // TODO: rename this one!!!
+  def processTemporaryEffects { // TODO: rename this one!!!
     def _process(effect_name:String, max_effect_name:String, effect_increase_rate_name:String) = {
       if(floatStat(effect_name) < floatStat(max_effect_name)) {
         changeStat(effect_name, floatStat(effect_increase_rate_name))

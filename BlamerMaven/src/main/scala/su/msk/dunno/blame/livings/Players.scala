@@ -15,7 +15,7 @@ extends Player(name        = xml("player.killy.name"),
     setStat("name", xml("player.killy.dead.name"))
   }
   
-  inventory.addItem(new TestItem)
+  /*inventory.addItem(new TestItem)
   inventory.addItem(new TestItem)
   inventory.addItem(new TestItem)
   inventory.addItem(new KickItem)
@@ -31,7 +31,7 @@ extends Player(name        = xml("player.killy.name"),
   inventory.addItem(new DamageItem)
 
   for(i <- 1 to 100)
-    inventory.addItem(new SocketExtender)
+    inventory.addItem(new SocketExtender)*/
 }
 
 class Cibo(point:Vec)
@@ -43,6 +43,6 @@ extends Player(name        = xml("player.cibo.name"),
     setStat("name", xml("player.cibo.dead.name"))
   }
 
-  inventory.addItem(new SecondTestItem)
-  inventory.addItem(new SecondTestItem)
+  /*inventory.addItem(new SecondTestItem)
+  inventory.addItem(new SecondTestItem)*/
 }

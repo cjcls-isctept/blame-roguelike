@@ -100,7 +100,7 @@ Megastructure may be controlled.
     </message>
 
     <message code="changestatus.damage.shield">
-        Щит ? поглощает ? единиц урона
+        Энергетический щит обволакивает ?, поглощая ? единиц урона
     </message>
 
     <message code="changestatus.damage.noshield">
@@ -264,5 +264,9 @@ ESC
 
     <message code="mainscreen.stats.health">
         Хитпоинты: ?/?
+    </message>
+
+    <message code="mainscreen.stats.damage">
+        Урон: ?
     </message>
 </messages>

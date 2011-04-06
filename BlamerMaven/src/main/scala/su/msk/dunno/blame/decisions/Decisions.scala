@@ -46,9 +46,7 @@ class CloseDoor(living:Living) extends Decision(living) {
   }
 }
 
-class Shoot(living:Living, private val target_point:Vec) extends Decision(living) {
-  def this(living:Living) = this(living, Vec(-1,-1))
-
+class Shoot(living:Living, target_point:Vec = Vec(-1,-1)) extends Decision(living) {
   def doAction = {
     val target = if(target_point != Vec(-1, -1)) target_point else living.selectTarget(Keyboard.KEY_F)
     if(target != living.getPoint) {

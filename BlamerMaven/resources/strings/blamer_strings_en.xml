@@ -227,4 +227,20 @@ Exit program
     <message code="commands.helpmessage">
         [1-4] - Issue Command [ESC] - Cancel
     </message>
+
+    <message code="mainscreen.stats.energy">
+        Energy: ?/? +?/move
+    </message>
+
+    <message code="mainscreen.stats.shield">
+        Shield: ?/? +?/move
+    </message>
+
+    <message code="mainscreen.stats.health">
+        Health: ?/?
+    </message>
+
+    <message code="mainscreen.stats.damage">
+        Damage: ?
+    </message>
 </messages>

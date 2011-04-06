@@ -59,16 +59,10 @@ class Weapon(val owner:Living) extends PointTracer[FieldObject] (
 
   private var free_sockets:List[Vec] = Nil
   override def addPointTrace(fo:FieldObject) = {
-    println("incoming object "+fo+" to point "+fo.getPoint+"; free_sockets size="+free_sockets.size)
-    var tmp = free_sockets.size
     if(fo.getState.contains("socket")) {
       free_sockets = fo.getPoint :: free_sockets
     }
     else free_sockets = free_sockets.filterNot(_ == fo.getPoint)
-    println("object received; free_sockets size="+free_sockets.size)
-    if(free_sockets.size == tmp) {
-      println("HURR DURR!!!")
-    }
     super.addPointTrace(fo)
   }
   override def removeTraceFromPoint(trace_id:Int, point:Vec) {
@@ -81,33 +75,27 @@ class Weapon(val owner:Living) extends PointTracer[FieldObject] (
     super.removeTraceFromPoint(trace_id, point)
   }
 
-  private var tmp = 0
   private def randomFreeSocket = {
     if(free_sockets.isEmpty) None
     else {
       val position = (math.random*free_sockets.length).toInt
       val free_point = free_sockets(position)
-      if(!free_sockets.contains(free_point)) {
-        println("HURR DURR!!")
-      }
       Some(free_point)
     }
   }
   private def fillWeapon(num:Int) {
-    println("started to add modifiers; free_sockets size="+free_sockets.size)
-    for {
-      i <- 0 until num
-      free_socket_point = randomFreeSocket
-    } {
-      free_socket_point match {
+    for (i <- 0 until num) {
+      randomFreeSocket match {
         case Some(point) => {
-          (math.random*4).toInt match {
-            case 0 => addToWeapon(new DamageItem,     point)
-            case 1 => addToWeapon(new EnergyItem,     point)
-            case 2 => addToWeapon(new ShieldItem,     point)
-            case 3 => addToWeapon(new SocketExtender, point)
+          if(free_sockets.length == 1) addToWeapon(new SocketExtender, point)
+          else  {
+            (math.random*4).toInt match {
+              case 0 => addToWeapon(new DamageItem,     point)
+              case 1 => addToWeapon(new EnergyItem,     point)
+              case 2 => addToWeapon(new ShieldItem,     point)
+              case 3 => addToWeapon(new SocketExtender, point)
+            }
           }
-          println("added "+point+"; fres_sockets size="+free_sockets.size)
         }
         case None =>
       }
@@ -119,7 +107,18 @@ class Weapon(val owner:Living) extends PointTracer[FieldObject] (
                  List(Vec(-4,-1), Vec(-3,-1), Vec(-2,-1), Vec(-1,-1), Vec(0,-1)) :::
                  List(Vec(-4,-2), Vec(-3,-2)) :::
                  List(Vec(-4,-3), Vec(-3,-3))
-    for(point <- points) addBasePart(point + Vec(N_x/2, N_y/2))
+    for {
+      point <- points
+      base_point = point + Vec(N_x/2, N_y/2)
+    } {
+      removeAllTracesFromPoint(base_point)
+      addTrace({
+        val fs = new BasePart
+        fs.changeState(new State("point", base_point))
+        fs
+      })
+      addSockets(base_point)
+    }
 
     val restricted_points = List(Vec(-5,-1), Vec(-5,-2), Vec(-5,-3), Vec(-2, -2), Vec(-2,-3))
     for {
@@ -133,17 +132,8 @@ class Weapon(val owner:Living) extends PointTracer[FieldObject] (
         rp
       })
     }
-    fillWeapon(90)
-  }
-
-  private def addBasePart(point:Vec) {
-    removeAllTracesFromPoint(point)
-    addTrace({
-      val fs = new BasePart
-      fs.changeState(new State("point", point))
-      fs
-    })
-    addSockets(point)
+    
+    fillWeapon(10)
   }
 
   private def addSockets(point:Vec) {
@@ -167,10 +157,18 @@ class Weapon(val owner:Living) extends PointTracer[FieldObject] (
     for {
       cur_point <- points
       if isPointOnArea(cur_point) && isNoBasePartConnection(cur_point)
-      item <- coord_matrix(cur_point.ix)(cur_point.iy).filterNot(_.getState.contains("restricted"))
+      item <- coord_matrix(cur_point.ix)(cur_point.iy).filterNot(item => item.getState.contains("restricted") && item.getState.contains("base"))
     } {
-      removeTraceFromPoint(item.id, item.getPoint)
-      if(item.getState.contains("extender")) removeSockets(item.getPoint)
+      if(item.getState.contains("socket")) removeTraceFromPoint(item.id, item.getPoint)
+      else if(item.getState.contains("extender")) {
+        removeTraceFromPoint(item.id, item.getPoint)
+        owner.inventory.addItem(item)
+        removeSockets(item.getPoint)
+      }
+      else {
+        removeFromWeapon(item)
+        owner.inventory.addItem(item)
+      }
     }
   }
 
@@ -197,8 +195,8 @@ class Weapon(val owner:Living) extends PointTracer[FieldObject] (
     _isNoExtenderOrBasePartNear(point, Nil)
   }
 
-  private def removeFromWeapon(item:FieldObject, cursor:Vec) {
-    removeTraceFromPoint(item.id, cursor)
+  private def removeFromWeapon(item:FieldObject) {
+    removeTraceFromPoint(item.id, item.getPoint)
     val state = item.getState
     for {
       key <- state.keys
@@ -296,10 +294,10 @@ class Weapon(val owner:Living) extends PointTracer[FieldObject] (
 
     keyListener(Keyboard.KEY_RETURN, onKeyDown = {
       val objects_at_cursor = coord_matrix(cursor.ix)(cursor.iy)
-      if(objects_at_cursor.exists(item => item.getState.contains("socket"))) {
+      if(objects_at_cursor.exists(_.getState.contains("socket"))) {
         objects_at_cursor.find(!_.getState.contains("socket")) match {
           case Some(item) => {
-            removeFromWeapon(item, cursor)
+            removeFromWeapon(item)
             owner.inventory.addItem(item)
           }
           case None => {
