@@ -59,10 +59,16 @@ class Weapon(val owner:Living) extends PointTracer[FieldObject] (
 
   private var free_sockets:List[Vec] = Nil
   override def addPointTrace(fo:FieldObject) = {
+    println("incoming object "+fo+" to point "+fo.getPoint+"; free_sockets size="+free_sockets.size)
+    var tmp = free_sockets.size
     if(fo.getState.contains("socket")) {
       free_sockets = fo.getPoint :: free_sockets
     }
     else free_sockets = free_sockets.filterNot(_ == fo.getPoint)
+    println("object received; free_sockets size="+free_sockets.size)
+    if(free_sockets.size == tmp) {
+      println("HURR DURR!!!")
+    }
     super.addPointTrace(fo)
   }
   override def removeTraceFromPoint(trace_id:Int, point:Vec) {
@@ -75,23 +81,33 @@ class Weapon(val owner:Living) extends PointTracer[FieldObject] (
     super.removeTraceFromPoint(trace_id, point)
   }
 
-  private def getRandomFreeSocket = {
+  private var tmp = 0
+  private def randomFreeSocket = {
     if(free_sockets.isEmpty) None
-    else Some(free_sockets((math.random*free_sockets.length).toInt))
+    else {
+      val position = (math.random*free_sockets.length).toInt
+      val free_point = free_sockets(position)
+      if(!free_sockets.contains(free_point)) {
+        println("HURR DURR!!")
+      }
+      Some(free_point)
+    }
   }
   private def fillWeapon(num:Int) {
+    println("started to add modifiers; free_sockets size="+free_sockets.size)
     for {
       i <- 0 until num
-      free_socket_point = getRandomFreeSocket
+      free_socket_point = randomFreeSocket
     } {
       free_socket_point match {
         case Some(point) => {
           (math.random*4).toInt match {
-            case 0 => addToWeapon(new DamageItem, point)
-            case 1 => addToWeapon(new EnergyItem, point)
-            case 2 => addToWeapon(new ShieldItem, point)
+            case 0 => addToWeapon(new DamageItem,     point)
+            case 1 => addToWeapon(new EnergyItem,     point)
+            case 2 => addToWeapon(new ShieldItem,     point)
             case 3 => addToWeapon(new SocketExtender, point)
           }
+          println("added "+point+"; fres_sockets size="+free_sockets.size)
         }
         case None =>
       }
