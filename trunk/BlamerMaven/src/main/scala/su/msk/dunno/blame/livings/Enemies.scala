@@ -3,10 +3,12 @@ package su.msk.dunno.blame.livings
 import su.msk.dunno.scage.single.support.Vec
 import su.msk.dunno.blame.support.MyFont._
 import su.msk.dunno.scage.single.support.ScageColors._
-import su.msk.dunno.blame.field.FieldTracer
 import su.msk.dunno.blame.decisions.{Shoot, Move}
 import su.msk.dunno.scage.single.support.messages.ScageMessage._
 import su.msk.dunno.blame.prototypes.{Decision, Npc}
+import su.msk.dunno.blame.field.{FieldObject, FieldTracer}
+import su.msk.dunno.scage.screens.support.tracer.State
+import su.msk.dunno.blame.items.{ShieldItem, EnergyItem, DamageItem, SocketExtender}
 
 class SiliconCreature(point:Vec)
 extends Npc(name        = xml("enemy.siliconcreature.name"),
@@ -36,5 +38,22 @@ extends Npc(name        = xml("enemy.siliconcreature.name"),
   override def onDeath = {
     super.onDeath
     setStat("name", xml("enemy.siliconcreature.dead.name"))
+    dropItem()
+  }
+
+  protected def dropItem() {
+    def addItem(item:FieldObject) {
+      item.changeState(new State("point", point))
+      FieldTracer.addPointTrace(item)
+    }
+
+    val fate = math.random
+    if(fate < 0.7) {
+      val fate = math.random
+      if(fate < 0.1)      addItem(new SocketExtender)
+      else if(fate < 0.4) addItem(new DamageItem)
+      else if(fate < 0.7) addItem(new EnergyItem)
+      else if(fate < 1)   addItem(new ShieldItem)
+    }
   }
 }

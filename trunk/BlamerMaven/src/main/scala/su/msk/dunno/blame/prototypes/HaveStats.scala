@@ -30,6 +30,7 @@ trait HaveStats {
 
   def changeStat(key:String, delta:Float) = {
     val old_value = stats.getFloat(key)
-    stats.put(key, old_value + delta)
+    val new_value = old_value + delta
+    stats.put(key, new_value)
   }
 }

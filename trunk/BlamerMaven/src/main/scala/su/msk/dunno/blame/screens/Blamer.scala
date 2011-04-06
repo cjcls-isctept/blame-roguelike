@@ -55,10 +55,10 @@ object Blamer extends ScageScreen(
   def currentPlayer = if(is_play_cibo) cibo else killy
   
   // enemies
-  /*for(i <- 1 to 50) FieldTracer.randomPassablePoint() match {
+  for(i <- 1 to 50) FieldTracer.randomPassablePoint() match {
     case Some(point) => new SiliconCreature(point)
     case None =>
-  }*/
+  }
 
   // controls on main screen
   private var is_key_pressed = false
@@ -129,17 +129,19 @@ object Blamer extends ScageScreen(
 
     //messages on the right side of the screen
     print(currentPlayer.stat("name"),             width - right_messages_width, height-25, WHITE)
-    print("FPS: "+Renderer.fps,                   width - right_messages_width, height-45, WHITE)
-    print("time: "+TimeUpdater.time,              width - right_messages_width, height-65, WHITE)
+    /*print("FPS: "+Renderer.fps,                   width - right_messages_width, height-45, WHITE)
+    print("time: "+TimeUpdater.time,              width - right_messages_width, height-65, WHITE)*/
     print(xml("mainscreen.stats.health", intStat("health"), intStat("max_health")),
-      width - right_messages_width, height-85, WHITE)
-    print("Follow: "+currentPlayer.boolStat("follow"), width - right_messages_width, height-105, WHITE)
+      width - right_messages_width, height-65, WHITE)
+    /*print("Follow: "+currentPlayer.boolStat("follow"), width - right_messages_width, height-105, WHITE)
     print("Attack: "+currentPlayer.boolStat("attack"), width - right_messages_width, height-125, WHITE)
-    print("Last Action: "+currentPlayer.lastActionTime, width - right_messages_width, height-145, WHITE)
+    print("Last Action: "+currentPlayer.lastActionTime, width - right_messages_width, height-145, WHITE)*/
+    print(xml("mainscreen.stats.damage", intStat("damage")),
+      width - right_messages_width, height-85, WHITE)
     print(xml("mainscreen.stats.energy", intStat("energy"), intStat("max_energy"), intStat("energy_increase_rate")),
-      width - right_messages_width, height-165, WHITE)
+      width - right_messages_width, height-105, WHITE)
     print(xml("mainscreen.stats.shield", intStat("shield"), intStat("max_shield"), intStat("shield_increase_rate")),
-      width - right_messages_width, height-185, WHITE)
+      width - right_messages_width, height-125, WHITE)
   } 
 
   addRender(new ScageRender {
