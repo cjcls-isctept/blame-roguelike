@@ -52,17 +52,17 @@ extends FieldObject(point) with HaveStats {
   def lastActionTime = last_action_time
   def lastActionTime_=(action_time:Int) = last_action_time = action_time
 
-  val inventory = new Inventory(this)
-  val weapon = new Weapon(this)
-
   def selectTarget(stop_key:Int):Vec = SelectTarget(this, stop_key)
 
   setStat("living")
   setStat("name", name)
   setStat("description", description)
   setStat("dov", ScageProperties.property("dov.default", 5))
-  setStat("health", 100); setStat("max_health", 100);
+  setStat("health", 75); setStat("max_health", 75);
   setStat("blood", RED)
+
+  val inventory = new Inventory(this)
+  val weapon = new Weapon(this)
 
   def isAlive = intStat("health") > 0
   def isCurrentPlayer = /*haveStat("player") && point == Blamer.currentPlayer.getPoint*/ id == Blamer.currentPlayer.id

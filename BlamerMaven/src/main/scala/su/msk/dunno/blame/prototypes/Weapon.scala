@@ -195,6 +195,8 @@ class Weapon(val owner:Living) extends PointTracer[FieldObject] (
     _isNoExtenderOrBasePartNear(point, Nil)
   }
 
+  private var modifiers_installed = 0
+
   private def removeFromWeapon(item:FieldObject) {
     removeTraceFromPoint(item.id, item.getPoint)
     val state = item.getState
@@ -203,20 +205,28 @@ class Weapon(val owner:Living) extends PointTracer[FieldObject] (
       if state.getState(key).contains("effect")
     } owner.changeStat(key, -state.getState(key).getFloat("effect"))
     owner.checkMax
+    modifiers_installed -= 1
     if(state.contains("extender")) removeSockets(item.getPoint)
   }
 
   private def addToWeapon(item:FieldObject, cursor:Vec) {
-     addPointTrace({
-       item.changeState(new State("point", cursor))
-       item
-     })
-     val state = item.getState
-     for {
-       key <- state.keys
-       if state.getState(key).contains("effect")
-     } owner.changeStat(key, state.getState(key).getFloat("effect"))
-     if(state.contains("extender")) addSockets(item.getPoint)
+    addPointTrace({
+      item.changeState(new State("point", cursor))
+      item
+    })
+    val state = item.getState
+    for {
+      key <- state.keys
+      if state.getState(key).contains("effect")
+    } owner.changeStat(key, state.getState(key).getFloat("effect"))
+    modifiers_installed += 1
+    val level = owner.intStat("level")
+    if(modifiers_installed/10 > level && level < 10) {
+      owner.changeStat("level", 1)
+      owner.changeStat("max_health", 25)
+      owner.changeStat("speed", 1)
+    }
+    if(state.contains("extender")) addSockets(item.getPoint)
   }
 
   private lazy val weapon_screen = new ScageScreen("Weapon Screen") {
