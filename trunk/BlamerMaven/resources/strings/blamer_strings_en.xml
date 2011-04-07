@@ -85,6 +85,10 @@
         ?'s shield consumes ? damage
     </message>
 
+    <message code="changestatus.damage.destroyshield">
+        ?'s shield was destroyed
+    </message>
+
     <message code="inventory.ownership">
         ?'s Inventory
     </message>
@@ -242,5 +246,13 @@ Exit program
 
     <message code="mainscreen.stats.damage">
         Damage: ?
+    </message>
+
+    <message code="mainscreen.stats.level">
+        Level: ?
+    </message>
+
+    <message code="mainscreen.stats.speed">
+        Speed: ?
     </message>
 </messages>

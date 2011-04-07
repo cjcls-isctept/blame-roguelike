@@ -100,15 +100,23 @@ Megastructure may be controlled.
     </message>
 
     <message code="changestatus.damage.shield">
-        Энергетический щит обволакивает ?, поглощая ? единиц урона
+        Энергощит обволакивает ?, поглощая ? единиц урона
     </message>
 
     <message code="changestatus.damage.noshield">
         ? получает ? единиц урона
     </message>
 
+    <message code="changestatus.damage.destroyshield">
+        ? лишается энергощита
+    </message>
+
     <message code="changestatus.dead">
         ? умирает
+    </message>
+
+    <message code="changestatus.levelup">
+        ? повышает свой уровень!
     </message>
 
     <message code="decision.shoot">
