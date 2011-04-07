@@ -269,4 +269,12 @@ ESC
     <message code="mainscreen.stats.damage">
         Урон: ?
     </message>
+
+    <message code="mainscreen.stats.level">
+        Уровень: ?
+    </message>
+
+    <message code="mainscreen.stats.speed">
+        Скорость: ?
+    </message>
 </messages>

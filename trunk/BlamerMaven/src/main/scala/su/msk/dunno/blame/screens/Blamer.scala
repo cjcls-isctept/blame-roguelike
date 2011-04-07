@@ -142,6 +142,8 @@ object Blamer extends ScageScreen(
       width - right_messages_width, height-105, WHITE)
     print(xml("mainscreen.stats.shield", intStat("shield"), intStat("max_shield"), intStat("shield_increase_rate")),
       width - right_messages_width, height-125, WHITE)
+    print(xml("mainscreen.stats.level", intStat("level")), width - right_messages_width, height-145, WHITE)
+    print(xml("mainscreen.stats.speed", intStat("speed")), width - right_messages_width, height-165, WHITE)
   } 
 
   addRender(new ScageRender {
