@@ -16,7 +16,7 @@ import su.msk.dunno.blame.decisions._
 object Blamer extends ScageScreen(
   screen_name = "Blamer",
   is_main_screen = true,
-  properties = "blame-properties.txt") {
+  properties = "blame.properties") {
   val right_messages_width = property("rightmessages.width", 200)
   
   // map
