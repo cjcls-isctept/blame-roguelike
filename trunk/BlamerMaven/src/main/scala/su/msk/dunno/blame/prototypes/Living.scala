@@ -10,10 +10,10 @@ import su.msk.dunno.blame.support.{TimeUpdater, BottomMessages}
 
 abstract class Living(val name:String,
                       val description:String,
-                      point:Vec,
+                      init_point:Vec,
                       private val symbol:Int,
                       private val color:ScageColor)
-extends FieldObject(point) with HaveStats {
+extends FieldObject with HaveStats {
   def getSymbol = if(isAlive) symbol else CORPSE
   def getColor = if(isAlive) color else WHITE
   def isTransparent = true
@@ -56,7 +56,7 @@ extends FieldObject(point) with HaveStats {
     if(FieldTracer.isLightSource(trace)) FieldTracer.removeLightSource(trace)
   }
 
-  val trace = FieldTracer.addTrace(this)
+  FieldTracer.addTrace(init_point, this)
   
   protected var last_action_time = 0
   def lastActionTime = last_action_time

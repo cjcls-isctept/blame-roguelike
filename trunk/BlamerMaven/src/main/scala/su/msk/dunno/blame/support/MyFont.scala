@@ -1,6 +1,6 @@
 package su.msk.dunno.blame.support
 
-import su.msk.dunno.scage.screens.handlers.Renderer
+import su.msk.dunno.scage.screens.handlers.Renderer._
 import su.msk.dunno.scage.single.support.Vec
 import su.msk.dunno.scage.single.support.ScageProperties._
 import org.apache.log4j.Logger
@@ -39,6 +39,6 @@ object MyFont {
   def symbol(ch:Char) = {
     val char_coord = charCoord(ch)
     log.info("creating display list for symbol "+ch)
-    Renderer.createDisplayList(font_file, symbol_width, symbol_height, char_coord.ix, char_coord.iy, 32, 32)
+    image(font_file, symbol_width, symbol_height, char_coord.ix, char_coord.iy, 32, 32)
   }
 }
