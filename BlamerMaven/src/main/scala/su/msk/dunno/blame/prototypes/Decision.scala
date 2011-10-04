@@ -8,11 +8,11 @@ abstract class Decision(val living:Living) {
   protected var was_executed = false
   def wasExecuted = was_executed
   
-  protected def doAction
+  protected def doAction:Boolean
   def execute = {
-    doAction
+    was_executed = doAction
     if(wasExecuted) {
-      living.processTemporaryEffects
+      living.processTemporaryEffects()
       living.lastActionTime += actionPeriod
     }
   }

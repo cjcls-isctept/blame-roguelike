@@ -7,8 +7,8 @@ import su.msk.dunno.scage.screens.support.tracer.State
 import su.msk.dunno.blame.screens.{Blamer, CommandScreen}
 import su.msk.dunno.blame.decisions.{DoNothing, OpenDoor, Shoot, Move}
 
-abstract class Player(name:String, description:String, point:Vec, color:ScageColor)
-extends Npc(name, description, point, PLAYER, color) {
+abstract class Player(name:String, description:String, init_point:Vec, color:ScageColor)
+extends Npc(name, description, init_point, PLAYER, color) {
   override def getSymbol = PLAYER
   setStat("player")
   FieldTracer.addLightSource(point, intStat("dov"), trace)

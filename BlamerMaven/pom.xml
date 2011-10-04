@@ -238,7 +238,7 @@
                           <finalName>${artifactId}-${version}-${os.type}</finalName>
                           <outputDirectory>${assembly.dir}</outputDirectory>
                             <descriptors>
-                                <descriptor>src/main/assembly/blamer.xml</descriptor>
+                                <descriptor>assembly.xml</descriptor>
                             </descriptors>
                         </configuration>
                         <executions>

@@ -38,8 +38,8 @@ class Cibo(point:Vec)
 extends Player(name        = xml("player.cibo.name"),
                description = xml("player.cibo.description"),
                point, BLUE) {
-  override def onDeath = {
-    super.onDeath
+  override def onDeath() {
+    super.onDeath()
     setStat("name", xml("player.cibo.dead.name"))
   }
 

@@ -1,14 +1,16 @@
 package su.msk.dunno.blame.screens
 
 import su.msk.dunno.scage.screens.ScageScreen
+import su.msk.dunno.scage.screens.ScageScreen._
 import su.msk.dunno.scage.single.support.messages.ScageMessage._
-import su.msk.dunno.scage.screens.support.ScageLibrary._
-import org.lwjgl.input.Keyboard
+import org.lwjgl.input.Keyboard._
 import su.msk.dunno.scage.single.support.Vec
+import su.msk.dunno.scage.single.support.ScageColors._
+import su.msk.dunno.scage.single.support.ScageProperties._
 import su.msk.dunno.blame.field.FieldTracer
 import su.msk.dunno.blame.field.tiles.{Door, Wall, Floor}
-import su.msk.dunno.scage.screens.prototypes.ScageRender
-import su.msk.dunno.scage.screens.handlers.Renderer
+
+import su.msk.dunno.scage.screens.handlers.Renderer._
 import su.msk.dunno.blame.support.{BottomMessages, TimeUpdater, GenLib}
 import su.msk.dunno.blame.livings.{SiliconCreature, Cibo, Killy}
 import su.msk.dunno.blame.decisions._
@@ -44,7 +46,7 @@ object Blamer extends ScageScreen(
       null
     }
   }
-  val cibo = FieldTracer.randomPassablePoint(killy.getPoint - Vec(2,2), killy.getPoint + Vec(2,2)) match {
+  val cibo = FieldTracer.randomPassablePoint(killy.point - Vec(2,2), killy.point + Vec(2,2)) match {
     case Some(point) => new Cibo(point)
     case None => {
       log.error("failed to place cibo to the field, the programm will exit")
@@ -70,59 +72,57 @@ object Blamer extends ScageScreen(
     }
     else 300
   }
-  private def move(point:Vec) {
+  private def move(step:Vec) {
     if(!is_key_pressed) {
       is_key_pressed = true
       pressed_start_time = System.currentTimeMillis
     }
-    TimeUpdater.addDecision(new Move(currentPlayer, point))
+    TimeUpdater.addDecision(new Move(currentPlayer, step))
   }
   
-  keyListener(Keyboard.KEY_NUMPAD9, repeatTime, onKeyDown = move(Vec(1,1)),   onKeyUp = is_key_pressed = false)
-  keyListener(Keyboard.KEY_UP,      repeatTime, onKeyDown = move(Vec(0,1)),   onKeyUp = is_key_pressed = false)
-  keyListener(Keyboard.KEY_NUMPAD8, repeatTime, onKeyDown = move(Vec(0,1)),   onKeyUp = is_key_pressed = false)
-  keyListener(Keyboard.KEY_NUMPAD7, repeatTime, onKeyDown = move(Vec(-1,1)),  onKeyUp = is_key_pressed = false)
-  keyListener(Keyboard.KEY_RIGHT,   repeatTime, onKeyDown = move(Vec(1,0)),   onKeyUp = is_key_pressed = false)
-  keyListener(Keyboard.KEY_NUMPAD6, repeatTime, onKeyDown = move(Vec(1,0)),   onKeyUp = is_key_pressed = false)
-  keyListener(Keyboard.KEY_NUMPAD5, repeatTime, onKeyDown = move(Vec(0,0)),   onKeyUp = is_key_pressed = false)
-  keyListener(Keyboard.KEY_LEFT,    repeatTime, onKeyDown = move(Vec(-1,0)),  onKeyUp = is_key_pressed = false)
-  keyListener(Keyboard.KEY_NUMPAD4, repeatTime, onKeyDown = move(Vec(-1,0)),  onKeyUp = is_key_pressed = false)
-  keyListener(Keyboard.KEY_NUMPAD3, repeatTime, onKeyDown = move(Vec(1,-1)),  onKeyUp = is_key_pressed = false)
-  keyListener(Keyboard.KEY_DOWN,    repeatTime, onKeyDown = move(Vec(0,-1)),  onKeyUp = is_key_pressed = false)
-  keyListener(Keyboard.KEY_NUMPAD2, repeatTime, onKeyDown = move(Vec(0,-1)),  onKeyUp = is_key_pressed = false)
-  keyListener(Keyboard.KEY_NUMPAD1, repeatTime, onKeyDown = move(Vec(-1,-1)), onKeyUp = is_key_pressed = false)
+  key(KEY_NUMPAD9, repeatTime, onKeyDown = move(Vec(1,1)),   onKeyUp = is_key_pressed = false)
+  key(KEY_UP,      repeatTime, onKeyDown = move(Vec(0,1)),   onKeyUp = is_key_pressed = false)
+  key(KEY_NUMPAD8, repeatTime, onKeyDown = move(Vec(0,1)),   onKeyUp = is_key_pressed = false)
+  key(KEY_NUMPAD7, repeatTime, onKeyDown = move(Vec(-1,1)),  onKeyUp = is_key_pressed = false)
+  key(KEY_RIGHT,   repeatTime, onKeyDown = move(Vec(1,0)),   onKeyUp = is_key_pressed = false)
+  key(KEY_NUMPAD6, repeatTime, onKeyDown = move(Vec(1,0)),   onKeyUp = is_key_pressed = false)
+  key(KEY_NUMPAD5, repeatTime, onKeyDown = move(Vec(0,0)),   onKeyUp = is_key_pressed = false)
+  key(KEY_LEFT,    repeatTime, onKeyDown = move(Vec(-1,0)),  onKeyUp = is_key_pressed = false)
+  key(KEY_NUMPAD4, repeatTime, onKeyDown = move(Vec(-1,0)),  onKeyUp = is_key_pressed = false)
+  key(KEY_NUMPAD3, repeatTime, onKeyDown = move(Vec(1,-1)),  onKeyUp = is_key_pressed = false)
+  key(KEY_DOWN,    repeatTime, onKeyDown = move(Vec(0,-1)),  onKeyUp = is_key_pressed = false)
+  key(KEY_NUMPAD2, repeatTime, onKeyDown = move(Vec(0,-1)),  onKeyUp = is_key_pressed = false)
+  key(KEY_NUMPAD1, repeatTime, onKeyDown = move(Vec(-1,-1)), onKeyUp = is_key_pressed = false)
   
-  keyListener(Keyboard.KEY_O,     onKeyDown = TimeUpdater.addDecision(new OpenDoor(currentPlayer)))
-  keyListener(Keyboard.KEY_C,     onKeyDown = TimeUpdater.addDecision(new CloseDoor(currentPlayer)))
-  keyListener(Keyboard.KEY_F,     onKeyDown = TimeUpdater.addDecision(new Shoot(currentPlayer)))
-  keyListener(Keyboard.KEY_I,     onKeyDown = TimeUpdater.addDecision(new OpenInventory(currentPlayer)))
-  keyListener(Keyboard.KEY_W,     onKeyDown = TimeUpdater.addDecision(new OpenWeapon(currentPlayer)))
-  keyListener(Keyboard.KEY_D,     onKeyDown = TimeUpdater.addDecision(new DropItem(currentPlayer)))
-  keyListener(Keyboard.KEY_COMMA, onKeyDown = TimeUpdater.addDecision(new PickUpItem(currentPlayer)))
+  key(KEY_O,     onKeyDown = TimeUpdater.addDecision(new OpenDoor(currentPlayer)))
+  key(KEY_C,     onKeyDown = TimeUpdater.addDecision(new CloseDoor(currentPlayer)))
+  key(KEY_F,     onKeyDown = TimeUpdater.addDecision(new Shoot(currentPlayer)))
+  key(KEY_I,     onKeyDown = TimeUpdater.addDecision(new OpenInventory(currentPlayer)))
+  key(KEY_W,     onKeyDown = TimeUpdater.addDecision(new OpenWeapon(currentPlayer)))
+  key(KEY_D,     onKeyDown = TimeUpdater.addDecision(new DropItem(currentPlayer)))
+  key(KEY_COMMA, onKeyDown = TimeUpdater.addDecision(new PickUpItem(currentPlayer)))
   
-  keyListener(Keyboard.KEY_TAB,    onKeyDown = is_play_cibo = !is_play_cibo)
-  keyListener(Keyboard.KEY_ESCAPE, onKeyDown = allStop)
+  key(KEY_TAB,    onKeyDown = is_play_cibo = !is_play_cibo)
+  key(KEY_ESCAPE, onKeyDown = stopApp())
 
   private lazy val help_screen = new ScageScreen("Help Screen") {
-    keyListener(Keyboard.KEY_ESCAPE, onKeyDown = stop)
+    key(KEY_ESCAPE, onKeyDown = stop())
 
-    addRender(new ScageRender {
-      override def interface {
-        print(xml("helpscreen.tutorial.keys"),           10,  Renderer.height-20)
-        print(xml("helpscreen.tutorial.description"),    300, Renderer.height-65)
+    interface {
+        print(xml("helpscreen.tutorial.keys"),           10,  screen_height-20)
+        print(xml("helpscreen.tutorial.description"),    300, screen_height-65)
         print(xml("helpscreen.helpmessage"), 10, row_height, GREEN)
-      }
-    })
+    }
   }
-  keyListener(Keyboard.KEY_F1, onKeyDown = help_screen.run)
-  keyListener(Keyboard.KEY_T, onKeyDown = TimeUpdater.addDecision(new IssueCommand(currentPlayer)))
+  key(KEY_F1, onKeyDown = help_screen.run())
+  key(KEY_T, onKeyDown = TimeUpdater.addDecision(new IssueCommand(currentPlayer)))
 
   // render on main screen
   windowCenter = Vec((width - right_messages_width)/2, 
   		     BottomMessages.bottom_messages_height + (height - BottomMessages.bottom_messages_height)/2)
   center = FieldTracer.pointCenter(currentPlayer.getPoint)
   
-  Renderer.backgroundColor = BLACK
+  backgroundColor = BLACK
 
   def drawInterface() {
     def intStat(key:String) = currentPlayer.intStat(key).toString
@@ -146,22 +146,18 @@ object Blamer extends ScageScreen(
     print(xml("mainscreen.stats.speed", intStat("speed")), width - right_messages_width, height-165, WHITE)
   } 
 
-  addRender(new ScageRender {
-    override def render {
-      FieldTracer.drawField(currentPlayer.getPoint)
-    }
+  render {
+    FieldTracer.drawField(currentPlayer.getPoint)
+  }
 
-    override def interface {
+  interface {
       BottomMessages.showBottomMessages(0)
       drawInterface()
-    }
-  })
+  }
   
   // initial message
   BottomMessages.addPropMessage("mainscreen.openhelp")
   BottomMessages.addPropMessage("greetings.helloworld", currentPlayer.stat("name"))
   
-  def main(args:Array[String]) {
-    run
-  }
+  def main(args:Array[String]) {run()}
 }

@@ -24,15 +24,15 @@ extends Npc(name        = xml("enemy.siliconcreature.name"),
     FieldTracer.visibleObjectsNear(trace, point, dov, obj => {
       obj.getState.contains("player") && obj.getState.getInt("health") > 0
     }).foreach(neighbour => {
-      if((point dist neighbour.getPoint) > 3) {
-    	  val step = FieldTracer.direction(point, neighbour.getPoint)
+      if((point dist neighbour.point) > 3) {
+    	  val step = FieldTracer.direction(point, neighbour.point)
         if(FieldTracer.isPointPassable(point+step))
           return new Move(this, step)
         else return new Move(living = this, randomDir)
       }
-      else return new Shoot(this, neighbour.getPoint)
+      else return new Shoot(this, neighbour.point)
     })    
-    return new Move(living = this, randomDir)
+    new Move(living = this, randomDir)
   }
 
   override def onDeath = {
