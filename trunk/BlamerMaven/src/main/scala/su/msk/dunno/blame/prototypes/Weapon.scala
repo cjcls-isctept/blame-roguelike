@@ -3,15 +3,16 @@ package su.msk.dunno.blame.prototypes
 import su.msk.dunno.blame.field.FieldObject
 import su.msk.dunno.scage.screens.ScageScreen
 import su.msk.dunno.scage.single.support.messages.ScageMessage._
-import su.msk.dunno.scage.screens.handlers.Renderer
+import su.msk.dunno.scage.screens.handlers.Renderer._
 import org.lwjgl.input.Keyboard._
 import su.msk.dunno.scage.single.support.Vec
+import su.msk.dunno.scage.single.support.ScageColors._
+import su.msk.dunno.scage.single.support.ScageProperties._
 import su.msk.dunno.blame.support.MyFont._
 import org.lwjgl.opengl.GL11
 import su.msk.dunno.blame.support.BottomMessages
 import su.msk.dunno.blame.items._
 import su.msk.dunno.scage.screens.support.tracer.{ScageTracer, State}
-import javax.management.remote.rmi._RMIConnection_Stub
 
 private class RestrictedPlace extends Item(
   name = xml("item.restricted.name"),
@@ -45,13 +46,13 @@ class Weapon(val owner:Living) extends ScageTracer[FieldObject] (
   field_to_x      = property("weapon.to.x",   800),
   field_from_y    = property("weapon.from.y", 0),
   field_to_y      = property("weapon.to.y",   600),
-  N_x             = property("weapon.N_x",    16),
-  N_y             = property("weapon.N_y",    12),
+  init_N_x        = property("weapon.N_x",    16),
+  init_N_y        = property("weapon.N_y",    12),
   are_solid_edges = true
 ) {
   private def removeAllTracesFromPoint(point:Vec) {
     if(isPointOnArea(point)) {
-      coord_matrix(point.ix)(point.iy) = Nil
+      point_matrix(point.ix)(point.iy) = Nil
       free_sockets = free_sockets.filterNot(_ == point)
     }
   }
@@ -64,10 +65,10 @@ class Weapon(val owner:Living) extends ScageTracer[FieldObject] (
     else free_sockets = free_sockets.filterNot(_ == fo.point)
     super.addTrace(point, fo)
   }
-  override def removeTraces(trace_ids:Int*) {
+  override def removeTracesById(trace_ids:Int*) {
     val sockets = trace_ids.filter(traces_by_ids.contains(_)).map(traces_by_ids(_)).filter(_.getState.contains("socket"))
     free_sockets = free_sockets.filterNot(sockets.contains(_))
-    super.removeTraces(trace_ids:_*)
+    super.removeTracesById(trace_ids:_*)
   }
 
   private def randomFreeSocket = {
@@ -107,11 +108,7 @@ class Weapon(val owner:Living) extends ScageTracer[FieldObject] (
       base_point = point + Vec(N_x/2, N_y/2)
     } {
       removeAllTracesFromPoint(base_point)
-      addTrace({
-        val fs = new BasePart
-        fs.changeState(new State("point", base_point))
-        fs
-      })
+      addTrace(base_point, new BasePart)
       addSockets(base_point)
     }
 
@@ -121,11 +118,7 @@ class Weapon(val owner:Living) extends ScageTracer[FieldObject] (
       restricted_point = point + Vec(N_x/2, N_y/2)
     } {
       removeAllTracesFromPoint(restricted_point)
-      addTrace({
-        val rp = new RestrictedPlace
-        rp.changeState(new State("point", restricted_point))
-        rp
-      })
+      addTrace(restricted_point, new RestrictedPlace)
     }
     
     fillWeapon(10)
@@ -136,14 +129,10 @@ class Weapon(val owner:Living) extends ScageTracer[FieldObject] (
     for {
       cur_point <- points
       if isPointOnArea(cur_point)
-      objects_at_point = coord_matrix(cur_point.ix)(cur_point.iy)
+      objects_at_point = point_matrix(cur_point.ix)(cur_point.iy)
       if objects_at_point.isEmpty
     } {
-      addTrace({
-        val fs = new FreeSocket
-        fs.changeState(new State("point", cur_point))
-        fs
-      })
+      addTrace(cur_point, new FreeSocket)
     }
   }
 
@@ -152,13 +141,13 @@ class Weapon(val owner:Living) extends ScageTracer[FieldObject] (
     for {
       cur_point <- points
       if isPointOnArea(cur_point) && isNoBasePartConnection(cur_point)
-      item <- coord_matrix(cur_point.ix)(cur_point.iy).filterNot(item => item.getState.contains("restricted") && item.getState.contains("base"))
+      item <- point_matrix(cur_point.ix)(cur_point.iy).filterNot(item => item.getState.contains("restricted") && item.getState.contains("base"))
     } {
-      if(item.getState.contains("socket")) removeTraceFromPoint(item.id, item.getPoint)
+      if(item.getState.contains("socket")) removeTraces(item)
       else if(item.getState.contains("extender")) {
-        removeTraceFromPoint(item.id, item.getPoint)
+        removeTraces(item)
         owner.inventory.addItem(item)
-        removeSockets(item.getPoint)
+        removeSockets(item.point)
       }
       else {
         removeFromWeapon(item)
@@ -169,20 +158,20 @@ class Weapon(val owner:Living) extends ScageTracer[FieldObject] (
 
   private def isNoBasePartConnection(point:Vec):Boolean = {
     def _isNoExtenderOrBasePartNear(point:Vec, excluded:List[FieldObject]):Boolean = {
-      val point1 = checkPointEdges(point + Vec(-1,0))
-      val point2 = checkPointEdges(point + Vec(1,0))
-      val point3 = checkPointEdges(point + Vec(0,-1))
-      val point4 = checkPointEdges(point + Vec(0,1))
+      val point1 = outsidePoint(point + Vec(-1,0))
+      val point2 = outsidePoint(point + Vec(1,0))
+      val point3 = outsidePoint(point + Vec(0,-1))
+      val point4 = outsidePoint(point + Vec(0,1))
 
-      val items:List[FieldObject] = coord_matrix(point1.ix)(point1.iy) :::
-                                    coord_matrix(point2.ix)(point2.iy) :::
-                                    coord_matrix(point3.ix)(point3.iy) :::
-                                    coord_matrix(point4.ix)(point4.iy)
+      val items:List[FieldObject] = point_matrix(point1.ix)(point1.iy) :::
+                                    point_matrix(point2.ix)(point2.iy) :::
+                                    point_matrix(point3.ix)(point3.iy) :::
+                                    point_matrix(point4.ix)(point4.iy)
       items.find(_.getState.contains("base")) match {
         case Some(item) => false
         case None => {
           items.filter(item => item.getState.contains("extender") && !excluded.contains(item)).foldLeft(true)((result, extender) => {
-            result && _isNoExtenderOrBasePartNear(extender.getPoint, extender :: excluded)
+            result && _isNoExtenderOrBasePartNear(extender.point, extender :: excluded)
           })
         }
       }
@@ -193,7 +182,7 @@ class Weapon(val owner:Living) extends ScageTracer[FieldObject] (
   private var modifiers_installed = 0
 
   private def removeFromWeapon(item:FieldObject) {
-    removeTraces(item.id)
+    removeTraces(item)
     val state = item.getState
     for {
       key <- state.keys
@@ -232,15 +221,16 @@ class Weapon(val owner:Living) extends ScageTracer[FieldObject] (
         for {
           x <- 0 until N_x
           y <- 0 until N_y
-          coord = pointCenter(x, y)
+          vec = Vec(x,y)
+          coord = pointCenter(vec)
         } {
-          if(coord_matrix(x)(y).length > 0) {
+          if(point_matrix(x)(y).length > 0) {
             if(is_show_cursor ||
-               (!coord_matrix(x)(y).head.getState.contains("socket") &&
-                !coord_matrix(x)(y).head.getState.contains("restricted"))) {
+               (!point_matrix(x)(y).head.getState.contains("socket") &&
+                !point_matrix(x)(y).head.getState.contains("restricted"))) {
               GL11.glDisable(GL11.GL_TEXTURE_2D);
               GL11.glPushMatrix();
-              Renderer.color = coord_matrix(x)(y).head.getColor
+              color = point_matrix(x)(y).head.getColor
               GL11.glTranslatef(coord.x, coord.y, 0.0f);
               GL11.glRectf(-h_x/2+1, -h_y/2+1, h_x/2-1, h_y/2-1);
               GL11.glPopMatrix();
@@ -250,7 +240,7 @@ class Weapon(val owner:Living) extends ScageTracer[FieldObject] (
           if(is_show_cursor && cursor == Vec(x,y)) {
             GL11.glDisable(GL11.GL_TEXTURE_2D);
             GL11.glPushMatrix();
-            Renderer.color = GREEN
+            color = GREEN
             GL11.glTranslatef(coord.x, coord.y, 0.0f);
             GL11.glBegin(GL11.GL_LINE_LOOP)
               GL11.glVertex2f(-h_x/2, -h_y/2)
@@ -265,13 +255,13 @@ class Weapon(val owner:Living) extends ScageTracer[FieldObject] (
     }
 
     interface {
-        print(xml("weapon.ownership", owner.stat("name")), 10, Renderer.height-20)
+        print(xml("weapon.ownership", owner.stat("name")), 10, screen_height-20)
         if(is_show_cursor) {
-          if(!coord_matrix(cursor.ix)(cursor.iy).isEmpty)
-              print(coord_matrix(cursor.ix)(cursor.iy).head.getState.getString("name"),
-                    10, BottomMessages.bottom_messages_height - row_height)
+          if(!point_matrix(cursor.ix)(cursor.iy).isEmpty)
+              print(point_matrix(cursor.ix)(cursor.iy).head.getState.getString("name"),
+                    10, BottomMessages.bottom_messages_height - (font_size+2))
         }
-        print(xml("weapon.helpmessage"), 10, row_height*2, GREEN)
+        print(xml("weapon.helpmessage"), 10, (font_size+2)*2, GREEN)
     }
 
     key(KEY_UP,    100, onKeyDown = moveCursor(Vec(0,1)))
@@ -289,7 +279,7 @@ class Weapon(val owner:Living) extends ScageTracer[FieldObject] (
     key(KEY_NUMPAD1, 100, onKeyDown = moveCursor(Vec(-1,-1)))
 
     key(KEY_RETURN, onKeyDown = {
-      val objects_at_cursor = coord_matrix(cursor.ix)(cursor.iy)
+      val objects_at_cursor = point_matrix(cursor.ix)(cursor.iy)
       if(objects_at_cursor.exists(_.getState.contains("socket"))) {
         objects_at_cursor.find(!_.getState.contains("socket")) match {
           case Some(item) => {

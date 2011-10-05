@@ -1,7 +1,7 @@
 package su.msk.dunno.blame.prototypes
 
 import collection.mutable.HashMap
-import su.msk.dunno.scage.screens.handlers.Renderer
+import su.msk.dunno.scage.screens.handlers.Renderer._
 import su.msk.dunno.scage.single.support.messages.ScageMessage._
 import su.msk.dunno.scage.single.support.ScageColors._
 import org.lwjgl.input.Keyboard._
@@ -86,24 +86,24 @@ class Inventory(val owner:Living) {
     }
 
     interface {
-      print(xml("inventory.ownership", owner.stat("name")), 10, Renderer.height-20)
+      print(xml("inventory.ownership", owner.stat("name")), 10, screen_height-20)
       if(item_selector == -1) {
         item_positions.foreachi((key, i) => {
           print((i+1) + ". " + key + " (" + items(key).size+")",
-            10, Renderer.height-row_height*4-i*row_height, items(key).head.getColor)
+            10, screen_height-(font_size+2)*4-i*(font_size+2), items(key).head.getColor)
         })
         if(is_item_selection) {
-          print(purpose, 10, Renderer.height-20-row_height)
-          print(xml("inventory.selection.helpmessage"), 10, row_height, GREEN)
+          print(purpose, 10, screen_height-20-(font_size+2))
+          print(xml("inventory.selection.helpmessage"), 10, (font_size+2), GREEN)
         }
-        else print(xml("inventory.show.helpmessage"), 10, row_height, GREEN)
+        else print(xml("inventory.show.helpmessage"), 10, (font_size+2), GREEN)
       }
       else if(item_selector >= 1 && item_selector <= item_positions.size &&
               !items(item_positions(item_selector-1)).isEmpty) {
         val selected_item = items(item_positions(item_selector-1)).head
         print(selected_item.getState.getString("name")+":\n"+
-              selected_item.getState.getString("description"), 10, Renderer.height-60, selected_item.getColor)
-        print(xml("inventory.description.helpmessage"), 10, row_height, GREEN)
+              selected_item.getState.getString("description"), 10, screen_height-60, selected_item.getColor)
+        print(xml("inventory.description.helpmessage"), 10, (font_size+2), GREEN)
       }
     }
 

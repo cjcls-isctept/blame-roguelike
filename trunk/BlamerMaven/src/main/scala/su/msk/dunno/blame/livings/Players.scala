@@ -10,8 +10,8 @@ class Killy(point:Vec)
 extends Player(name        = xml("player.killy.name"),
                description = xml("player.killy.description"),
                point, RED) {
-  override def onDeath = {
-    super.onDeath
+  override def onDeath() {
+    super.onDeath()
     setStat("name", xml("player.killy.dead.name"))
   }
   

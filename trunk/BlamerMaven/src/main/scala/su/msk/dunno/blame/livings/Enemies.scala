@@ -21,7 +21,7 @@ extends Npc(name        = xml("enemy.siliconcreature.name"),
 
   def livingAI:Decision = {
     val dov = intStat("dov")
-    FieldTracer.visibleObjectsNear(trace, point, dov, obj => {
+    FieldTracer.visibleObjectsNear(point, dov, obj => {
       obj.getState.contains("player") && obj.getState.getInt("health") > 0
     }).foreach(neighbour => {
       if((point dist neighbour.point) > 3) {
@@ -35,16 +35,15 @@ extends Npc(name        = xml("enemy.siliconcreature.name"),
     new Move(living = this, randomDir)
   }
 
-  override def onDeath = {
-    super.onDeath
+  override def onDeath() {
+    super.onDeath()
     setStat("name", xml("enemy.siliconcreature.dead.name"))
     dropItem()
   }
 
   protected def dropItem() {
     def addItem(item:FieldObject) {
-      item.changeState(new State("point", point))
-      FieldTracer.addPointTrace(item)
+      FieldTracer.addTrace(point, item)
     }
 
     val fate = math.random

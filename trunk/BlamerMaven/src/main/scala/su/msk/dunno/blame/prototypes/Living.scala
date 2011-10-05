@@ -1,12 +1,12 @@
 package su.msk.dunno.blame.prototypes
 
-import su.msk.dunno.scage.screens.support.tracer.State
 import su.msk.dunno.blame.field.{FieldTracer, FieldObject}
 import su.msk.dunno.scage.single.support.{ScageProperties, Vec, ScageColor}
 import su.msk.dunno.blame.support.MyFont._
 import su.msk.dunno.scage.single.support.ScageColors._
 import su.msk.dunno.blame.screens.{SelectTarget, Blamer}
 import su.msk.dunno.blame.support.{TimeUpdater, BottomMessages}
+import su.msk.dunno.scage.screens.support.tracer.{Trace, State}
 
 abstract class Living(val name:String,
                       val description:String,
@@ -20,7 +20,7 @@ extends FieldObject with HaveStats {
   def isPassable = if(isAlive) false else true
 
   def getState = stats
-  def changeState(s:State) {
+  def changeState(changer:Trace, s:State) {
     if(isAlive) {
       if(s.contains("damage")) {
         val damage = s.getFloat("damage")
@@ -28,7 +28,7 @@ extends FieldObject with HaveStats {
         if(shield == 0) {
           changeStat("health", -damage)
           BottomMessages.addPropMessageSameString("changestatus.damage.noshield", stat("name"), s.getNumAsString("damage"))
-          FieldTracer.pourBlood(trace, point, colorStat("blood"))
+          FieldTracer.pourBlood(point, colorStat("blood"))
         }
         else if(shield > damage) {
           changeStat("shield", -damage)
@@ -44,7 +44,7 @@ extends FieldObject with HaveStats {
           BottomMessages.addPropMessageSameString("changestatus.damage.destroyshield", stat("name"))
           changeStat("health", -(damage - shield))
           BottomMessages.addPropMessage("changestatus.damage.noshield", stat("name"), (damage - shield).toInt.toString)
-          FieldTracer.pourBlood(trace, point, colorStat("blood"))
+          FieldTracer.pourBlood(point, colorStat("blood"))
         }
       }
       if(!isAlive) onDeath()
@@ -53,7 +53,7 @@ extends FieldObject with HaveStats {
 
   def onDeath() {
     BottomMessages.addPropMessage("changestatus.dead", stat("name"))
-    if(FieldTracer.isLightSource(trace)) FieldTracer.removeLightSource(trace)
+    if(FieldTracer.isLightSource(id)) FieldTracer.removeLightSources(id)
   }
 
   FieldTracer.addTrace(init_point, this)

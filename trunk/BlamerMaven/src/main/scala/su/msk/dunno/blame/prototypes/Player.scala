@@ -3,15 +3,15 @@ package su.msk.dunno.blame.prototypes
 import su.msk.dunno.scage.single.support.{Vec, ScageColor}
 import su.msk.dunno.blame.support.MyFont._
 import su.msk.dunno.blame.field.FieldTracer
-import su.msk.dunno.scage.screens.support.tracer.State
 import su.msk.dunno.blame.screens.{Blamer, CommandScreen}
 import su.msk.dunno.blame.decisions.{DoNothing, OpenDoor, Shoot, Move}
+import su.msk.dunno.scage.screens.support.tracer.{Trace, State}
 
 abstract class Player(name:String, description:String, init_point:Vec, color:ScageColor)
 extends Npc(name, description, init_point, PLAYER, color) {
   override def getSymbol = PLAYER
   setStat("player")
-  FieldTracer.addLightSource(point, intStat("dov"), trace)
+  FieldTracer.addLightSource(point, intStat("dov"), id)
 
   private lazy val command_screen = new CommandScreen(this)
   def selectCommand = command_screen.selectCommand
@@ -19,15 +19,15 @@ extends Npc(name, description, init_point, PLAYER, color) {
   def livingAI:Decision = {
     if(!isCurrentPlayer) {
       if(boolStat("attack")) {
-        FieldTracer.findVisibleObject(trace, point, intStat("dov"), obj => {
+        FieldTracer.findVisibleObject(point, intStat("dov"), obj => {
           obj.getState.contains("enemy") && obj.getState.getInt("health") > 0
         }) match {
-          case Some(live_enemy) => return new Shoot(this, live_enemy.getPoint)
+          case Some(live_enemy) => return new Shoot(this, live_enemy.point)
           case None =>
         }
       }
       if(boolStat("follow")) {
-        FieldTracer.findPath(point, Blamer.currentPlayer.getPoint) match {
+        FieldTracer.findPath(point, Blamer.currentPlayer.point) match {
           case step1 :: step2 :: tail => {
             FieldTracer.findObjectAtPoint(step1, "door") match {
               case Some(door) => if(door.getState.contains("close")) return new OpenDoor(this)
@@ -40,11 +40,11 @@ extends Npc(name, description, init_point, PLAYER, color) {
       }
       return new DoNothing(this)
     }
-    return null
+    null
   }
 
-  override def changeState(s:State) = {
-    super.changeState(s)
+  override def changeState(changer:Trace, s:State) {
+    super.changeState(changer, s)
     if(s.contains("follow")) setStat("follow", true)
     if(s.contains("stay")) setStat("follow", false)
     if(s.contains("attack")) setStat("attack", true)
