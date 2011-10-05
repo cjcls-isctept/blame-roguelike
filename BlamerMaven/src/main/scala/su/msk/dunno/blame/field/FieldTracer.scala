@@ -110,7 +110,7 @@ object FieldTracer extends ScageTracer[FieldObject] {
   def findObjectAtPoint(point:Vec, object_type:String) = objectsAtPoint(point).find(_.getState.contains(object_type))
 
   def isNearPlayer(point:Vec) = (Blamer.currentPlayer.point dist point) < visibility_distance
-  def pourBlood(trace_id:Int, point:Vec, color:ScageColor) {
+  def pourBlood(point:Vec, color:ScageColor) {
     traces(point, -1 to 1, (fieldObject) => fieldObject.getState.contains("tile")) match {
       case Nil =>
       case tiles:List[FieldObject] => {
@@ -140,7 +140,7 @@ object FieldTracer extends ScageTracer[FieldObject] {
     if(!point_matrix(point.ix)(point.iy).isEmpty) point_matrix(point.ix)(point.iy).foreach(_.is_draw_prevented = true)
   }
   def allowDraw(point:Vec) {
-    if(!point_matrix(point.ix)(point.iy).isEmpty) point_matrix(point.ix)(point.iy).foreach(_.is_draw_prevented = true)
+    if(!point_matrix(point.ix)(point.iy).isEmpty) point_matrix(point.ix)(point.iy).foreach(_.is_draw_prevented = false)
   }
 
   private var light_sources:List[(() => Vec, () => Int, Int)] = Nil
@@ -187,11 +187,11 @@ object FieldTracer extends ScageTracer[FieldObject] {
     for {
       x <- from_x to to_x
       y <- from_y to to_y
+      if !point_matrix(x)(y).isEmpty
+      tile = point_matrix(x)(y).last
+      if tile.wasDrawed && tile.getSymbol != MyFont.FLOOR
     } {
-      if(!point_matrix(x)(y).isEmpty) {
-        val tile = point_matrix(x)(y).last
-        if(tile.wasDrawed && tile.getSymbol != MyFont.FLOOR) point_matrix(x)(y).head.drawGray(this)
-      }
+      point_matrix(x)(y).head.drawGray(this)
     }
   }
 

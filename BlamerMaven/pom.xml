@@ -3,11 +3,12 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>su.msk.dunno</groupId>
   <artifactId>blamer</artifactId>
-  <version>0.2</version>
+  <version>0.3</version>
   <inceptionYear>2008</inceptionYear>
 
   <name>Blamer</name>
   <description>roguelike based on Tsutomu Nuhei's manga "Blame!" written in Scala</description>
+  <url>http://fzeulf.netris.ru/bor/${project.artifactId}</url>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -92,15 +93,27 @@
   <build>
     <sourceDirectory>src/main/scala</sourceDirectory>
     <testSourceDirectory>src/test/scala</testSourceDirectory>
-    <filters>
-            <filter>build.properties</filter>
-    </filters>
+
     <resources>
         <resource>
             <directory>src/main/resources</directory>
+            <includes>
+            	<include>log4j.properties</include>
+            </includes>
             <filtering>true</filtering>
-         </resource>
+        </resource>
+        <resource>
+            <directory>src/main/resources</directory>
+            <excludes>
+            	<exclude>log4j.properties</exclude>
+            </excludes>
+            <filtering>false</filtering>
+        </resource>
     </resources>
+
+    <filters>
+        <filter>build.properties</filter>
+    </filters>
 
     <plugins>
       <plugin>
@@ -212,9 +225,6 @@
                              <mainClass>${jar.mainclass}</mainClass>
                           </manifest>
                        </archive>
-                       <excludes>
-                           <exclude>log4j.properties</exclude>
-                       </excludes>
                     </configuration>
         </plugin>
     </plugins>
@@ -261,7 +271,7 @@
                   <resource>
                       <directory>.</directory>
                       <includes>
-                          <include>wired.properties</include>
+                          <include>blame.properties</include>
                       </includes>
                   </resource>
               </resources>
